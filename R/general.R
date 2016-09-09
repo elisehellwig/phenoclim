@@ -27,18 +27,39 @@ extracttemp <- function(tdat, years, starts, ends, tempname=NA,
                         yearname='year', dayname='day') {
 
 
-    if (length(starts)==1) { #checks if there is a start day for each year
-        starts <- rep(starts, length(years))
+    #checks if there is a start day for each year
+    if (length(starts)==length(years)) {
+        start <- starts
+
+    #checks if the start day is the same for each year
+    } else if (length(starts)==1) {
+        start <- rep(starts, length(years))
+
+    } else { #if not there is a problem
+        stop('Starts must either have a start day for each year or the start date must be the same for all years')
+
     }
 
-    if (length(ends)==1) {
+
+    #checks if there is a end day for each year
+    if (length(ends)==length(years)) {
+        end <- ends
+
+    #checks if the end day is the same for each year
+    } else if (length(ends)==1) {
         ends <- rep(ends, length(starts))
+
+    } else { #if not there is a problem
+        stop('Starts must either have an end day for each year or the end day must be the same for all years')
+
     }
 
     #print(years)
 
+    #checking to see if the function needs to dectect the temperature column
     if (is.na(tempname)) {
 
+        #detecting the temperature column
         if ('temp' %in% names(tdat)) {
             tnames <- 'temp'
 
@@ -50,15 +71,20 @@ extracttemp <- function(tdat, years, starts, ends, tempname=NA,
                     temp, tmin and tmax, or it must be specified with the
                     tempname argument.')
         }
+
     } else {
         tnames <- tempname
     }
 
+    #extracting the temperature data from the data frame and putting it
+    #in a list
     tlist <- lapply(1:length(years), function(i) {
-        rows <- which(tdat[,yearname]==years[i] & tdat[,dayname]>=starts[i] & tdat[,dayname]<=ends[i])
+        rows <- which(tdat[,yearname]==years[i] & tdat[,dayname]>=start[i] & tdat[,dayname]<=end[i])
+
         tdat[rows,tnames]
     })
 
+    #nameing the elements of the list
     names(tlist) <- years
 	return(tlist)
 }
