@@ -104,9 +104,13 @@ is.leapyear <- function(year){
 }
 
 
-
-head.list <- function(obj, n = 6L, ...)
-{
+#' Alternate implementation of head for lists
+#'
+#' @param obj a list
+#' @param n the number of elements of the list to display.
+#' @param ... other arguments to pass to head(), see \code{\link[base]{head}}.
+#' @export
+head.list <- function(obj, n = 6L, ...) {
     stopifnot(length(n) == 1L)
     origN <- n
     n <- if (n < 0L)
