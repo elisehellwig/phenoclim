@@ -32,9 +32,7 @@ thermalEval <- function(temp, pars, method) {
     return(TT)
 }
 
-collateTT <- function(tempvec, pardat, methods, parnums) {
-    require(reshape2)
-    
+collateTT <- function(tempvec, pardat, methods, parnums) {    
     
     tt <- sapply(1:length(methods), function(i) {
         params <- as.vector(t(pardat[pardat$form==methods[i], 1:3]))
