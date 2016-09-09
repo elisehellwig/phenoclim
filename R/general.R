@@ -98,27 +98,13 @@ extracttemp <- function(tdat, years, starts, ends, tempname=NA,
 #' @examples
 #' y <- seq(1990, 2010)
 #' is.leapyear(y)
+#' @export
 is.leapyear <- function(year){
   #http://en.wikipedia.org/wiki/Leap_year
   return(((year %% 4 == 0) & (year %% 100 != 0)) | (year %% 400 == 0))
 }
 
-
-#' Alternate implementation of head for lists
-#'
-#' @param obj a list
-#' @param n the number of elements of the list to display.
-#' @param ... other arguments to pass to \code{head}.
-#' @export
-head.list <- function(x, n = 6L, ...) {
-    stopifnot(length(n) == 1L)
-    origN <- n
-    n <- if (n < 0L)
-        max(length(x) + n, 0L)
-    else min(n, length(x))
-    lapply(x[seq_len(n)], head, origN, ...)
-}
-
+##############################################
 
 #' Calculates the Root Mean Squared Deviation/Error
 #'
