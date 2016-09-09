@@ -11,7 +11,7 @@
 
 \item{n}{the number of elements of the list to display.}
 
-\item{...}{other arguments to pass to head(), see \code{\link[base]{head}}.}
+\item{...}{other arguments to pass to \code{head}.}
 }
 \description{
 Alternate implementation of head for lists
