@@ -1,9 +1,3 @@
-fit <- function(a, b, dat) {
-	f <- a + b*dat
-	return(f)
-} 
-
-
 extracttemp <- function(tdat, years, starts, ends, tempname=NA, 
                         yearname='year', dayname='day') {
 	
