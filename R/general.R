@@ -89,6 +89,15 @@ extracttemp <- function(tdat, years, starts, ends, tempname=NA,
 	return(tlist)
 }
 
+
+##############################################
+
+#' Checks if a year is a leap year
+#' @param year a numeric vector of years to test
+#' @return A logical vector. True indicates the year is a leap year.
+#' @examples
+#' y <- seq(1990, 2010)
+#' is.leapyear(y)
 is.leapyear <- function(year){
   #http://en.wikipedia.org/wiki/Leap_year
   return(((year %% 4 == 0) & (year %% 100 != 0)) | (year %% 400 == 0))
