@@ -110,13 +110,13 @@ is.leapyear <- function(year){
 #' @param n the number of elements of the list to display.
 #' @param ... other arguments to pass to \code{head}.
 #' @export
-head.list <- function(obj, n = 6L, ...) {
+head.list <- function(x, n = 6L, ...) {
     stopifnot(length(n) == 1L)
     origN <- n
     n <- if (n < 0L)
-        max(length(obj) + n, 0L)
-    else min(n, length(obj))
-    lapply(obj[seq_len(n)], head, origN, ...)
+        max(length(x) + n, 0L)
+    else min(n, length(x))
+    lapply(x[seq_len(n)], head, origN, ...)
 }
 
 
