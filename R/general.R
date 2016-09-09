@@ -73,36 +73,3 @@ rmsd <- function(fit, dat, na.rm=FALSE) {
 	rmsd <- sqrt(sum((fit1-dat1)^2)/length(fit1))	
 	return(rmsd)
 }
-
-r2 <- function(fit, dat, n, p, adj=TRUE, na.rm=FALSE) {
-
-	if (na.rm) {
-		frows <- which(is.na(fit))
-		fit1 <- fit[-frows]
-
-		drows <- which(is.na(dat))
-		dat1 <- dat[-drows]	
-	} else {
-		fit1 <- fit
-		dat1 <- dat
-	}
-
-	m <-mean(dat)
-
-	tot <- sum((dat-m)^2)
-	res <- sum((dat-fit)^2)
-
-	rs <- 1-((res )/ tot)
-	
-	if (adj) {
-
-		return( rs - (1-rs)*(p/(n-p-1)) )
-
-	} else {
-
-		return(rs)
-		
-		}
-	 
-}
-

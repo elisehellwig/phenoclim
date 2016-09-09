@@ -1,6 +1,3 @@
-source('functions/generalfunctions.R')
-source('functions/yearsums.R')
-
 #extractpars
 
 importpars <- function(path, varieties, absolutepath=NA) {
@@ -16,8 +13,6 @@ importpars <- function(path, varieties, absolutepath=NA) {
 }
 
 extractpars <- function(x, value=FALSE, names=TRUE) {
-    require(plyr)
-    
         
     if (class(x)=='list' & class(x)[[1]]=='numeric') {
         
@@ -363,7 +358,6 @@ cardinalcrossvalcomb <- function(pl, wdat, tempdat, type, avgrmse=TRUE) {
 
 
 comparecv <- function(rmselist, types) {
-    require(plyr)
     la <- ldply(1:length(rmselist), function(i) {
         data.frame(cultivar=names(rmselist[[i]]),
                    length=apply(rmselist[[i]], 2, which.min),

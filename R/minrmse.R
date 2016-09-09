@@ -1,5 +1,3 @@
-source('functions/yearsums.R')
-
 minrmse <- function(pars, fdat, tdat, type='nocrit', sumlength=NA,
                     def.rmse=Inf, flowername='flower', 
                     harvestname='harvest', negative=FALSE) {    

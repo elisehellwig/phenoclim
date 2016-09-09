@@ -2,7 +2,6 @@
 
 avgdate <- function(datev) {
     #averages 2 dates together
-    require(lubridate)
     
     d <- as.integer(datev)
     ad <- ceiling(sum(d, na.rm=TRUE)/sum(!is.na(datev)))
@@ -39,7 +38,6 @@ missingDays <- function(x, days, limits) {
 
 
 timeSeriesCheck <- function(x, years, limits=NA, hours=FALSE) {
-    require(lubridate)
     
     if (is.na(limits)) {
         alldays <- 1:365

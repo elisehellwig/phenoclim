@@ -1,5 +1,3 @@
-source('functions/generalfunctions.R')
-
 mround <- function(x, base) {
     base*round(x/base)
 }
@@ -52,8 +50,6 @@ collateTT <- function(tempvec, pardat, methods, parnums) {
 
 
 tempfreq <- function(wdat, tdat, maxlength, binsize=5) {
-    require(plyr)
-    
     tm <- round(accumulatedTemps(tdat, wdat, maxlength))
     dt <- as.data.frame(table(tm))
     names(dt)[1] <- 'temp'
