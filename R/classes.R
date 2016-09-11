@@ -75,13 +75,48 @@ setGeneric('phenology<-',
 #' Setting the temperature list
 #'
 #'  Used to change the temperature list without recreating the object.
-#' @param object a Plant object
-#' @param value a data.frame with the relevant temperature data. If the form
-#'     of the model is 'gdd' or 'gddsimple' the data.frame should have the
-#'     variables year, tmin and tmax. Otherwise it should have the variables
-#'     year and tmax
+#' @param object A Plant object
+#' @param value A list with the relevant temperature data. If the form
+#'     of the model is 'gdd' or 'gddsimple' the list should have the
+#'     variables tmin and tmax. Otherwise it should have vectors of hourly
+#'     temperatures.
 #' @export
 setGeneric('temperature<-',
            function(object, value) standardGeneric('temperature<-'))
+
+
+
+#' Setting the model type
+#'
+#'  Used to change the model type without recreating the object.
+#' @param object A Plant object
+#' @param value A character that specifies the type of model. Current options
+#'     options are partial, full, combined, and time.
+#' @export
+setGeneric('modeltype<-',
+           function(object, value) standardGeneric('modeltype<-'))
+
+
+#' Setting the form
+#'
+#'  Used to change the thermal time functional form without recreating the
+#'      object.
+#' @param object A Plant object
+#' @param value A function that represents the functional form
+#'     of the thermal time model.
+#' @export
+setGeneric('form<-',
+           function(object, value) standardGeneric('form<-'))
+
+
+#' Setting the number of stages
+#'
+#'  Used to change the number of stages in the phenological model without
+#'      recreating the object.
+#' @param object A Plant object
+#' @param value The number of phenological stages in the model.
+#' @export
+setGeneric('stages<-',
+           function(object, value) standardGeneric('stages<-'))
 
 
