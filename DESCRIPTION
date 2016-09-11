@@ -14,3 +14,9 @@ Description: Cleans temperature data, uses it to calculate thermal time with a
 License: GPL-3
 LazyData: TRUE
 RoxygenNote: 5.0.1
+Collate:
+    'classes.R'
+    'general.R'
+    'phenoclim.R'
+    'plantmethodsbasic.R'
+    'preprocess.R'
