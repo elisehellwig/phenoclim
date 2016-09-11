@@ -21,32 +21,45 @@ setClass('Plant',
 #############################################################
 
 
+#' Returns the phenology data.frame
+#'
+#' @param object An object of class Plant
+#' @return A data.frame with the phenology data
+#' @export
+setGeneric('phenology', function(object) standardGeneric('phenology'))
 
+#' Returns the temperature data.frame
+#'
+#' @param object An object of class Plant
+#' @return A data.frame with the temperature data
+#' @export
+setGeneric('temperature', function(object) standardGeneric('temperature'))
 
+#' Displays the model type
+#'
+#' @param object An object of class Plant
+#' @return Returns the model type (character)
+#' @export
+setGeneric('modeltype', function(object) standardGeneric('modeltype'))
 
+#' Returns the functional form of the model
+#'
+#' @param object An object of class Plant
+#' @return Returns the functional form of the thermal time accumulation model.
+#' @export
+setGeneric('form', function(object) standardGeneric('form'))
 
-
-
+#' Displays the number of stages in the phenological model
+#'
+#' @param object An object of class Plant
+#' @return The number of stages in the phenological model (numeric)
+#' @export
+setGeneric('stages', function(object) standardGeneric('stages'))
 
 
 
 #############################################################
 
 
-
-setValidity("Plant", function(object) {
-    msg <- NULL
-    valid <- TRUE
-
-    if (!(modeltype %in% c('partial','full','combined','time'))) {
-        valid <- FALSE
-        msg <- c(msg,
-                 "modeltype must be either partial, full combined or time")
-    }
-
-    if (length(names()))
-
-
-})
 
 
