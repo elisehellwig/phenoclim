@@ -100,9 +100,31 @@ setValidity("Plant", function(object) {
     if (length(missingyears) > 0) {
         valid <- FALSE
         msg <- c(msg,
-                 "The following years have observations in the phenology data.frame but not the temperature data.frame:", missingyears)
+                 paste("The following years have observations in the phenology data.frame but not the temperature data.frame:", missingyears))
 
     }
+
+    formname <- deparse(substitute(object@form))
+
+    if (formname %in% c('gdd', 'gddsimple')) {
+        tnames <- c('year','tmin','tmax')
+
+        if (length(setdiff(tnames, names(temperature(object))))>0)
+            valid <- FALSE
+            msg <- c(msg,
+                     paste("The following variables are missing from your temperature data.frame:", setdiff(tnames, names(temperature(object)))))
+
+    } else {
+        tnames <- c('year','temp')
+
+        if (length(setdiff(tnames, names(temperature(object))))>0)
+            valid <- FALSE
+            msg <- c(msg,
+                 paste("The following variables are missing from your temperature data.frame:", setdiff(tnames, names(temperature(object)))))
+
+
+    }
+
 
     if (valid) TRUE else msg
 
