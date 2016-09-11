@@ -19,7 +19,7 @@ setClass('Plant',
 
 
 #############################################################
-
+###Accessor generics
 
 #' Returns the phenology data.frame
 #'
@@ -57,9 +57,8 @@ setGeneric('form', function(object) standardGeneric('form'))
 setGeneric('stages', function(object) standardGeneric('stages'))
 
 
-
 #############################################################
-
+#validity generic
 
 
 
