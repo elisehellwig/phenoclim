@@ -68,6 +68,7 @@ setMethod("stages", "Plant",
 
 
 ##############################
+#validity method
 
 setValidity("Plant", function(object) {
     msg <- NULL
@@ -81,51 +82,29 @@ setValidity("Plant", function(object) {
                  "modeltype must be either partial, full combined, or time")
     }
 
-    if (length(names(phenology(object))) < 2*n + 2) {
-        valid <- FALSE
-        msg <- c(msg,
-                 "There are not enough event day variables for the number of phenological stages in the Plant object.")
-
-    } else if (length(names(phenology(object))) > 2*n + 2) {
-        valid <- FALSE
-        msg <- c(msg,
-                 "There are too many variables for the number of phenological stages in the Plant object.")
-
-    }
-
-
-
     pnames <- c('year', paste0('event', 1:n), paste0('length', 1:(n-1)))
+    missingcols <- setdiff(pnames, names(phenology(object)))
 
-
-    if (!setequal(pnames, names(phenology(object)))) {
+    if (length(missingcols) > 0) {
         valid <- FALSE
+        msg <- c(msg,
+                 paste("You are missing the following variables in your phenology data.frame:", diff))
 
-        if (length(pnames) > length(names(phenology(object)))) {
-
-            diff <- setdiff(pnames, names(phenology(object)))
-            msg <- c(msg,
-                     paste("You are missing the following variables in your phenology data frame:", diff))
-
-        } else if (length(pnames) < length(names(phenology(object)))) {
-
-            diff <- setdiff(names(phenology(object)), pnames)
-            msg <- c(msg,
-                 paste("You are missing the following variables in your phenology data frame:", diff))
-        }
     }
 
 
     pyears <- sort(phenology(object)$year)
     tyears <- sort(unique(temperature(object)$year))
+    missingyears <- setdiff(pyears, tyears)
 
-    if (!identical(pyears, tyears)) {
+    if (length(missingyears) > 0) {
         valid <- FALSE
         msg <- c(msg,
-                 "The years of the temperature data are not the same as the years of the phenology data.")
+                 "The following years have observations in the phenology data.frame but not the temperature data.frame:", missingyears)
 
     }
 
+    if (valid) TRUE else msg
 
 })
 
