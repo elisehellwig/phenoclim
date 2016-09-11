@@ -113,4 +113,60 @@ setValidity("Plant", function(object) {
 ###replacement methods
 
 
+#' @rdname phenology-set
+setMethod('phenology<-', 'Plant',
+          function(object, value) {
+              object@phenology <- value
+
+              if (validObject(object)) {
+                  return(object)
+              }
+          })
+
+
+#' @rdname temperature-set
+setMethod('temperature<-', 'Plant',
+          function(object, value) {
+              object@temperatue <- value
+
+              if (validObject(object)) {
+                  return(object)
+              }
+          })
+
+
+#' @rdname modeltype-set
+setMethod('modeltype<-', 'Plant',
+          function(object, value) {
+              object@modeltype <- value
+
+              if (validObject(object)) {
+                  return(object)
+              }
+          })
+
+
+#' @rdname form-set
+setMethod('form<-', 'Plant',
+          function(object, value) {
+              object@form <- value
+
+              if (validObject(object)) {
+                  return(object)
+              }
+          })
+
+
+#' @rdname stages-set
+setMethod('stages<-', 'Plant',
+          function(object, value) {
+              object@stages <- value
+
+              if (validObject(object)) {
+                  return(object)
+              }
+          })
+
+
+
 
