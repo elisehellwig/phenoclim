@@ -94,7 +94,7 @@ setValidity("Plant", function(object) {
 
 
     pyears <- sort(phenology(object)$year)
-    tyears <- sort(unique(temperature(object)$year))
+    tyears <- sort(names(temperature(object)))
     missingyears <- setdiff(pyears, tyears)
 
     if (length(missingyears) > 0) {
@@ -104,34 +104,13 @@ setValidity("Plant", function(object) {
 
     }
 
-    formname <- deparse(substitute(object@form))
-
-    if (formname %in% c('gdd', 'gddsimple')) {
-        tnames <- c('year','tmin','tmax')
-
-        if (length(setdiff(tnames, names(temperature(object))))>0)
-            valid <- FALSE
-            msg <- c(msg,
-                     paste("The following variables are missing from your temperature data.frame:", setdiff(tnames, names(temperature(object)))))
-
-    } else {
-        tnames <- c('year','temp')
-
-        if (length(setdiff(tnames, names(temperature(object))))>0)
-            valid <- FALSE
-            msg <- c(msg,
-                 paste("The following variables are missing from your temperature data.frame:", setdiff(tnames, names(temperature(object)))))
-
-
-    }
-
-
     if (valid) TRUE else msg
 
 })
 
 
-
+##############################
+###replacement methods
 
 
 
