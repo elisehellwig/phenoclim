@@ -27,7 +27,7 @@ avgdate <- function(dates) {
 }
 
 
-
+#' Checks for missing days in a time series
 missingDays <- function(x, days, limits) {
 
     year <- unique(x$year)
