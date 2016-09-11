@@ -57,7 +57,7 @@ extracttemp <- function(tdat, years, starts, ends, tempname=NA,
     #print(years)
 
     #checking to see if the function needs to dectect the temperature column
-    if (is.na(tempname)) {
+    if (is.na(tempname[1])) {
 
         #detecting the temperature column
         if ('temp' %in% names(tdat)) {
@@ -146,3 +146,4 @@ rmsd <- function(x, y, na.rm=FALSE) {
 
 	return(rmsd)
 }
+
