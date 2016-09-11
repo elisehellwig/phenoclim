@@ -4,7 +4,8 @@ Title: Phenological Analysis in R
 Version: 0.1.0
 Imports:
     plyr,
-    reshape2
+    reshape2,
+    methods,
 Authors@R: person("Elise", "Hellwig",
                   email = "echellwig@ucdavis.edu", role = c("aut", "cre"))
 URL: https://bitbucket.org/echellwig/phenoclim
