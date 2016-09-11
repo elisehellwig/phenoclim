@@ -3,7 +3,7 @@
 #' An S4 class to represent the development of a plant
 #'
 #' @slot phenology A data.frame that contains the phenological data.
-#' @slot temperature A data.frame that contains temperature data for all of
+#' @slot temperature A list that contains temperature data for all of
 #'     the years for which there is phenological data.
 #' @slot modeltype The type of structure the model will have. Options are
 #'     'partial', 'full', 'combined', or 'time'.
@@ -12,7 +12,7 @@
 #' @slot
 setClass('Plant',
          slots=list(phenology = "data.frame",
-                    temperature = "data.frame",
+                    temperature = "list",
                     modeltype = "character",
                     form = "function",
                     stages = "numeric"))
@@ -28,10 +28,10 @@ setClass('Plant',
 #' @export
 setGeneric('phenology', function(object) standardGeneric('phenology'))
 
-#' Returns the temperature data.frame
+#' Returns the temperature list
 #'
 #' @param object An object of class Plant
-#' @return A data.frame with the temperature data
+#' @return A list with the temperature data
 #' @export
 setGeneric('temperature', function(object) standardGeneric('temperature'))
 
@@ -58,7 +58,30 @@ setGeneric('stages', function(object) standardGeneric('stages'))
 
 
 #############################################################
-#validity generic
+#replacement generics
 
+#' Setting the phenology data.frame
+#'
+#'  Used to change the phenology data.frame without recreating the object.
+#' @param object a Plant object
+#' @param value a data.frame with the relevant phenology data. Given N stages,
+#'     the data.frame should have columns year, event1 through eventN+1, and
+#'     length1 through lengthN.
+#' @export
+setGeneric('phenology<-',
+           function(object, value) standardGeneric('phenology<-'))
+
+
+#' Setting the temperature list
+#'
+#'  Used to change the temperature list without recreating the object.
+#' @param object a Plant object
+#' @param value a data.frame with the relevant temperature data. If the form
+#'     of the model is 'gdd' or 'gddsimple' the data.frame should have the
+#'     variables year, tmin and tmax. Otherwise it should have the variables
+#'     year and tmax
+#' @export
+setGeneric('temperature<-',
+           function(object, value) standardGeneric('temperature<-'))
 
 
