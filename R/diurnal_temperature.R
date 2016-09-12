@@ -2,20 +2,35 @@
 # License GPL3
 # Version 0.1  January 2009
 
+
+#' Calculates hourly temperatures
+#'
+#' This function calculates hourly temperatures for a given place based on its
+#'     latitude, the day of the year and the minimum and maximum daily
+#'     temperatures.
+#'
+#' @param lat The latitude of the location of the temperature measurements.
+#' @param date The date the temperature measurements were taken.
+#' @param tmin The minimum daily temperature
+#' @param tmax The maximum daily temperature
+#' @return A vector of 24 hourly temperatures.
+#' @examples
+#' diTemp(35, "2013-02-18", 8, 17)
+#' @export
 diTemp <- function(lat, date, tmin, tmax) {
-	
+
 	doyFromDate <- function(date) {
 		date <- as.character(date)
 		as.numeric(format(as.Date(date), "%j"))
 	}
 
 	daylength <- function(lat, doy) {
-		if (class(doy) == 'Date' | class(doy) == 'character') { 
-			doy <- doyFromDate(doy) 
+		if (class(doy) == 'Date' | class(doy) == 'character') {
+			doy <- doyFromDate(doy)
 		}
-		lat[lat > 90 | lat < -90] <- NA 
+		lat[lat > 90 | lat < -90] <- NA
 		doy <- doy %% 365
-		
+
 		# "A Model Comparison for Daylength as a Function of Latitude and Day of the Year."
 		#Ecological Modeling 80 (1995): 87-95.
 		P <- asin(0.39795 * cos(0.2163108 + 2 * atan(0.9671396 * tan(0.00860*(doy-186)))))
@@ -24,14 +39,14 @@ diTemp <- function(lat, date, tmin, tmax) {
 		DL <- 24 - (24/pi) * acos(a)
 		return(DL)
 	}
-			
+
 	TC <- 4.0
     P <- 1.5
 	dayl <- daylength(lat, doyFromDate(date))
 	nigthl <- 24-dayl
     sunris <- 12 - 0.5 * dayl
     sunset <- 12 + 0.5 * dayl
-	
+
 	hr <- 1:24
 	# a: between midnight and sunrise;
 	a <- hr < sunris
@@ -43,7 +58,7 @@ diTemp <- function(lat, date, tmin, tmax) {
 	d <- which(hr >= sunset)
 	a <- which(a)
 	b <- which(b)
-	
+
 	hrtemp <- vector(length=24)
 	tsunst <- tmin+(tmax-tmin)*sin(pi*(dayl/(dayl+2*P)))
 	hrtemp[a] <- (tmin-tsunst*exp(-nigthl/TC)+(tsunst-tmin)*exp(-(hr[a]+24-sunset)/TC))/(1-exp(-nigthl/TC))

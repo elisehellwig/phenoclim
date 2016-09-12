@@ -17,6 +17,7 @@ LazyData: TRUE
 RoxygenNote: 5.0.1
 Collate:
     'classes.R'
+    'diurnal_temperature.R'
     'general.R'
     'phenoclim.R'
     'plantmethodsbasic.R'
