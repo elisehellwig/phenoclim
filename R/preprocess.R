@@ -1,9 +1,8 @@
 #' @include general.R
 
-#' Average a vector of dates
-#'
-#' This function finds the average of a vector of objects of the class "Date"
-#'     representing calendar dates.
+
+
+#' Average dates
 #'
 #' @param dates an object of the class "Date"
 #' @return This function returns an object of the class "Date" that is the
