@@ -148,23 +148,6 @@ rmsd <- function(x, y, na.rm=FALSE) {
 }
 
 
-#' Returns rows in x that are missing from y
-#'
-#' @param x A data.frame with all the data
-#' @param y A data.frame that may have some rows missing
-#' @return the rows of x that are missing in y
-rowDifference <- function(x, y) {
-
-    xchar <- apply(x, 1, paste, collapse = '')
-    ychar <- apply(y, 1, paste, collapse = '')
-
-    diff <- x[(!(xchar %in% ychar)),]
-
-    return(diff)
-
-}
-
-
 
 
 

@@ -1,18 +1,36 @@
-#' @include general.R
 
 
-
-#' Average dates
+#' Returns rows in x that are missing from y
 #'
-#' @param dates an object of the class "Date"
-#' @return This function returns an object of the class "Date" that is the
-#'     average of the dates in the vector.
+#' @param x A data.frame with all the data
+#' @param y A data.frame that may have some rows missing
+#' @return the rows of x that are missing in y
+rowDifference <- function(x, y) {
+
+    xchar <- apply(x, 1, paste, collapse = '')
+    ychar <- apply(y, 1, paste, collapse = '')
+
+    diff <- x[(!(xchar %in% ychar)),]
+
+    return(diff)
+
+}
+
+
+
+
+
+#' Averages a vector of dates
+#'
+#' @param dates a vector of dates
+#' @param origin The start date. For R it is "1970-01-01".
+#' @return The average of all the dates
 #' @examples
-#' n <- runif(10, 1, 15000)
-#' d <- as.Date(n, origin='1970-01-01')
+#' v <- runif(10, min=9014, max=20300)
+#' d <- as.Date(v, origin="1970-01-01")
 #' avgdate(d)
 #' @export
-avgdate <- function(dates) {
+avgdate <- function(dates, origin="1970-01-01") {
     #averages dates together
 
     d <- as.integer(dates) #converts the dates to integers
@@ -21,7 +39,7 @@ avgdate <- function(dates) {
     ad <- ceiling(sum(d, na.rm=TRUE)/sum(!is.na(dates)))
 
     #converts that number back to the date
-    aD <- as.Date(ad, origin="1970-01-01")
+    aD <- as.Date(ad, origin=origin)
 
     return(aD)
 }
