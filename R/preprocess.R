@@ -1,3 +1,4 @@
+#' @include general.R
 
 #' Average a vector of dates
 #'
@@ -9,7 +10,7 @@
 #'     average of the dates in the vector.
 #' @examples
 #' n <- runif(10, 1, 15000)
-#' d <- as.Date(d, origin='1970-01-01')
+#' d <- as.Date(n, origin='1970-01-01')
 #' avgdate(d)
 #' @export
 avgdate <- function(dates) {
@@ -28,7 +29,13 @@ avgdate <- function(dates) {
 
 
 #' Checks for missing days in a time series
-missingDays <- function(x, days, limits) {
+#'
+#' @param x A data.frame containing the time series
+#' @param days The days you want to check to see if they are missing
+#' @param limits The min and max days to check.
+#' @param hourly Logical, is the data hourly?
+#' @return A vector with the days that are missing from the time series.
+missingDays <- function(x, days, limits, hourly=FALSE) {
 
     year <- unique(x$year)
 
@@ -36,25 +43,83 @@ missingDays <- function(x, days, limits) {
         stop('Only one year can be checked at a time.')
     }
 
-    if (is.na(limits)) {
+    if (hourly) {
+        cols <- c('day','hour')
 
-        if (is.leapyear(year)) {
-            days <- c(days, 366)
+        if (is.leapyear(year) & length(days)==365) {
+            days <- expand.grid(c(days,366), 1:24)
         }
 
-        observations <- x[,'day']
+    } else {
+        cols <- 'day'
+
+        if (is.leapyear(year) & length(days)==365) {
+            days <- c(days, 366)
+        }
+    }
+
+    if (is.na(limits)) {
+
+        observations <- x[,cols]
+
 
     } else {
-        observations <- x[x$day %in% limits[1]:limits[2], 'day' ]
+
+        observations <- x[x$day %in% limits[1]:limits[2], cols]
 
     }
 
-    return(setdiff(days, observations))
+
+    if (hourly) {
+
+        rd <- rowDifference(days, observations)
+        names(rd) <- cols
+
+        if (dim(rd)[1]==0) {
+            return(NA)
+        } else {
+            return(rd)
+        }
+
+    } else {
+        sdiff <- setdiff(days, observations)
+
+        if(length(sdiff)==0) {
+            return(NA)
+        } else {
+            return(sdiff)
+        }
+
+    }
+
 
 }
 
 
-timeSeriesCheck <- function(x, years, limits=NA, hours=FALSE) {
+#' Checks time series for missing entries
+#'
+#' This function checks a time series, in the form of a data.frame, for days
+#'     that are missing from the series.
+#'
+#' @param x A data.frame that contains the time series. It must have at least
+#'     two columns, one named 'year' with the year, and one named 'day' with
+#'     the julian day. If hours is TRUE, it needs a column
+#' @param years A numeric vector of years to check. If NA the function will
+#'     check all the years in the data.frame.
+#' @param limits A numeric vector of length two giving the minimum and
+#'     maximum julian day to check. If left NA, the function will check all
+#'     the days of the year.
+#' @param hours, Logical, determines whether the function will check whether
+#'     all the hourly observations are there
+#' @return This function returns TRUE if there are no missing observations
+#'     and returns a list of the days (and hours) of the missing observations
+#'     if there are any.
+#' @export
+timeSeriesCheck <- function(x, years=NA, limits=NA, hours=FALSE) {
+
+    if (is.na(years)) {
+        years <- unique(x$year)
+    }
 
     if (is.na(limits)) {
         alldays <- 1:365
@@ -64,12 +129,12 @@ timeSeriesCheck <- function(x, years, limits=NA, hours=FALSE) {
     }
 
     missing <- lapply(years, function(y) {
-        missingDays(x[x$year==y,], alldays, limits)
+        missingDays(x[x$year==y,], alldays, limits, hours)
     })
 
     names(missing) <- years
 
-    noneMissing <- sapply(missing, function(v) (length(v)==0))
+    noneMissing <- sapply(missing, function(v) is.na(v))
 
     if (all(noneMissing)) {
         return(TRUE)
@@ -80,7 +145,16 @@ timeSeriesCheck <- function(x, years, limits=NA, hours=FALSE) {
 
 }
 
-
+#' Calculates the length of a day
+#'
+#' This function calculates the length of a day given the day of the year and
+#'     the latitude of the location.
+#'
+#' @param jul The julian day/day of the year (1-366)
+#' @param lat The latitude of the location
+#' @param ret I am unsure what this argument is for
+#' @return The length of the day in hours, along with the time of sunrise and
+#'     sunset.
 daylength <- function(jul, lat=38.5, ret='') {
     #from extractTemp.py: Cesaraccio et al (2001) "An improved model for determining degree-day values..."
     #jul is the julian date
