@@ -2,7 +2,6 @@
 % Please edit documentation in R/preprocess.R
 \name{avgdate}
 \alias{avgdate}
-\title{Average a vector of dates}
 \usage{
 avgdate(dates)
 }
@@ -13,13 +12,9 @@ avgdate(dates)
 This function returns an object of the class "Date" that is the
     average of the dates in the vector.
 }
-\description{
-This function finds the average of a vector of objects of the class "Date"
-    representing calendar dates.
-}
 \examples{
 n <- runif(10, 1, 15000)
-d <- as.Date(d, origin='1970-01-01')
+d <- as.Date(n, origin='1970-01-01')
 avgdate(d)
 }
 

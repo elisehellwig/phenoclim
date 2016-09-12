@@ -4,7 +4,19 @@
 \alias{missingDays}
 \title{Checks for missing days in a time series}
 \usage{
-missingDays(x, days, limits)
+missingDays(x, days, limits, hourly = FALSE)
+}
+\arguments{
+\item{x}{A data.frame containing the time series}
+
+\item{days}{The days you want to check to see if they are missing}
+
+\item{limits}{The min and max days to check.}
+
+\item{hourly}{Logical, is the data hourly?}
+}
+\value{
+A vector with the days that are missing from the time series.
 }
 \description{
 Checks for missing days in a time series
