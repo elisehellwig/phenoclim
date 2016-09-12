@@ -22,9 +22,10 @@
 #'     where \eqn{T} is the hourly temperature, \eqn{T_b} is the base
 #'     temperature and \eqn{T_o} is the optimal temperature.
 #' @examples
-#' x <- runif(30, -5, 40)
-#' flat(x, 4, 25, sum=TRUE)
-#' flat(x, 4, 25, sum=FALSE)
+#' temp <- seq(-5, 50)
+#' gdh <- flat(temp, 4, 25, sum=FALSE)
+#' plot(gdh ~ temp)
+#' @export
 flat <- function(Tvec, Tb, To, sum=TRUE) {
 	#see notebook
 	#Tb - base temperature (no GDH below this)
@@ -81,9 +82,10 @@ flat <- function(Tvec, Tb, To, sum=TRUE) {
 #'          71–78. http://www.actahort.org/books/184/184_7.htm.
 
 #' @examples
-#' x <- runif(30, -5, 40)
-#' anderson(x, 4, 25, 36, sum=TRUE)
-#' anderson(x, 4, 25, 36, sum=FALSE)
+#' temp <- seq(-5, 50)
+#' gdh <- anderson(temp, 4, 25, 36, sum=FALSE)
+#' plot(gdh ~ temp)
+#' @export
 anderson <- function(Tvec, Tb, To, Tc, sum=TRUE) {
 	#from Anderson et al. 1986
 	#Th is a vector of hourly temperatures
@@ -145,17 +147,50 @@ anderson <- function(Tvec, Tb, To, Tc, sum=TRUE) {
 
 
 
+#' Calculates thermal time based on the trapezoid model
+#'
+#' This function calculates thermal time in growing degree hours from a
+#'     vector of temperatures (in degrees C) based on the triangle
+#'     \emph{et al.} (1986) model of thermal time described below.
+#' @param Tvec A vector of hourly temperatures, in degrees C.
+#' @param Tb The base cardinal temperature of the model.
+#' @param To The optimal cardinal temperature of the model.
+#' @param Ts The subcritical cardinal temperature of the model.
+#' @param Tc The critical cardinal temperature of the model.
+#' @param sum Logical, should the vector of thermal times be returned as a
+#'     sum?
+#' @return either the number or vector of numbers representing the thermal
+#'     time calculated
+#' @details The functional form of the Anderson thermal time model is as
+#'     follows:
+#'     \deqn{ GDH = \begin{cases}
+#'         0 & T\leq T_b \\
+#'         T - T_b & T_b \leq T \leq T_o \\
+#'         T_o - T_b & T_o\leq T \leq T_s \\
+#'         T*(Tb-To)/(Tc-Ts) + Tc*(To-Tb)/(To) & T_s\leq T \leq T_c \\
+#'         0 & T_c \leq T
+#'         \end{cases}}
+#'     where \eqn{T} is the hourly temperature, \eqn{T_b} is the base
+#'     temperature, \eqn{T_o} is the optimal temperature, and \eqn{T_c} is
+#'     the critical temperature.
+#'
+#' @examples
+#' temp <- seq(-5, 50)
+#' gdh <- trapezoid(temp, 4, 25, 36, 40 sum=FALSE)
+#' plot(gdh ~ temp)
+#' @export
 trapezoid <- function(Th, Tb, To, Ts, Tc, sum=TRUE) {
 	#Th is a vector of hourly temperatures
 	#looks like a trapezoid
 
-	temp <- Th - Tb
+	temp <- Th
 
-	temp[temp<0] <- 0
-	temp[temp>(To-Tb) & temp<=(Ts-Tb)] <- To - Tb
+	temp[temp<=Tb] <- 0
+	temp[temp>Tb & temp<=To] <- temp[temp>Tb & temp<=To] - Tb
+	temp[temp>To & temp<=Ts] <- To - Tb
 
-	temp[temp>(Ts-Tb) & temp<=(Tc-Tb)] <-  (Tc - Tb) - temp[temp>(Ts-Tb) & temp<=(Tc-Tb)]
-	temp[temp>=(Tc-Tb)] <- 0
+	temp[temp>(Ts) & temp<=(Tc)] <- temp[temp>(Ts) & temp<=(Tc)]*(Tb-To)/(Tc-Ts) + Tc*(To - Tb)/(Tc-Ts)
+	temp[temp>=(Tc)] <- 0
 
     if (sum) {
         tsum <- sum(temp)
@@ -183,16 +218,16 @@ trapezoid <- function(Th, Tb, To, Ts, Tc, sum=TRUE) {
 #'     time calculated
 #' @details The functional form of the flat thermal time model is as follows:
 #'     \deqn{GDH = \begin{cases}
-#'              0 & T\leq T_b \\
-#'              T - T_b & T_b\leq T\leq T_o \\
-#'              T_o & T_o\leq T
-#'              \end{cases}}
+#'     0 & T\leq T_b \\
+#'     T - T_b & T_b \leq T
+#'     \end{cases}}
 #'     where \eqn{T} is the hourly temperature, \eqn{T_b} is the base
 #'     temperature and \eqn{T_o} is the optimal temperature.
 #' @examples
-#' x <- runif(30, -5, 40)
-#' flat(x, 4, 25, sum=TRUE)
-#' flat(x, 4, 25, sum=FALSE)
+#' temp <- seq(-5, 50)
+#' gdh <- linear(temp, 4 sum=FALSE)
+#' plot(gdh ~ temp)
+#' @export
 linear <- function(Th, Tb, sum=TRUE) {
 
     Tb <- unname(unlist(Tb))
@@ -210,7 +245,36 @@ linear <- function(Th, Tb, sum=TRUE) {
 }
 
 
-
+#' Calculates thermal time based on the triangle model
+#'
+#' This function calculates thermal time in growing degree hours from a
+#'     vector of temperatures (in degrees C) based on the triangle
+#'     \emph{et al.} (1986) model of thermal time described below.
+#' @param Tvec A vector of hourly temperatures, in degrees C.
+#' @param Tb The base cardinal temperature of the model.
+#' @param To The optimal cardinal temperature of the model.
+#' @param Tc The critical cardinal temperature of the model.
+#' @param sum Logical, should the vector of thermal times be returned as a
+#'     sum?
+#' @return either the number or vector of numbers representing the thermal
+#'     time calculated
+#' @details The functional form of the Anderson thermal time model is as
+#'     follows:
+#'     \deqn{ GDH = \begin{cases}
+#'         0 & T\leq T_b \\
+#'         T - T_b & T_b \leq T \leq T_o \\
+#'         \frac{(T_c - T) (T_o - T_b)}{T_c - T_o} & T_o\leq T \leq T_c \\
+#'         0 & T_c \leq T
+#'         \end{cases}}
+#'     where \eqn{T} is the hourly temperature, \eqn{T_b} is the base
+#'     temperature, \eqn{T_o} is the optimal temperature, and \eqn{T_c} is
+#'     the critical temperature.
+#'
+#' @examples
+#' temp <- seq(-5, 50)
+#' gdh <- triangle(temp, 4, 25, 36, sum=FALSE)
+#' plot(gdh ~ temp)
+#' @export
 triangle <- function(Th, Tb, To, Tc, sum=TRUE) {
 
     Tb <- unname(unlist(Tb))
@@ -232,7 +296,31 @@ triangle <- function(Th, Tb, To, Tc, sum=TRUE) {
 }
 
 
-
+#' Calculates thermal time based on the growing degree day (GDD) model
+#'
+#' This function calculates thermal time in growing degree days from a
+#'     vector of temperatures (in degrees C) based on the model
+#'     described below.
+#' @param Tdat A matrix of minimum and maximum daily temperatures, in degrees
+#'     C.
+#' @param Tb The base cardinal temperature of the model.
+#' @param sum Logical, should the vector of thermal times be returned as a
+#'     sum?
+#' @return either the number or vector of numbers representing the thermal
+#'     time calculated
+#' @details The functional form of the flat thermal time model is as follows:
+#'     \deqn{GDD = \begin{cases}
+#'         0 & T_{max}\leq T_b \\
+#'         \frac{(T_{max}-T_b)^2}{2(T_{max} - T_{min})} & T_{min} \leq T_b \leq T_{max}\\
+#'         T - T_{avg} & T_{min} \geq T_b\\
+#'         \end{cases}}
+#'     where \eqn{T_min} is the daily minimum temperature, \eqn{T_max} is the
+#'     daily maximum temperature, and \eqn{T_b} is the base temperature.
+#' @examples
+#' temp <- data.frame(tmin=runif(10, 0, 10), tmax=runif(10, 13, 25))
+#' gdd(temp, 4, sum=TRUE)
+#' gdd(temp, 4, sum=FALSE)
+#' @export
 gdd <- function(Tdat, Tb, sum=TRUE) {
     #Tmat is a matrix where the columns are Tmin and Tmax for each of the days
     #From Zalom et al. 1983/Snyder 1999
@@ -261,7 +349,31 @@ gdd <- function(Tdat, Tb, sum=TRUE) {
     return(sdd)
 }
 
-
+#' Calculates thermal time based on the simplified growing degree day (GDD)
+#'      model
+#'
+#' This function calculates thermal time in growing degree days from a
+#'     vector of temperatures (in degrees C) based on the model
+#'     described below.
+#' @param Tdat A matrix of minimum and maximum daily temperatures, in degrees
+#'     C.
+#' @param Tb The base cardinal temperature of the model.
+#' @param sum Logical, should the vector of thermal times be returned as a
+#'     sum?
+#' @return either the number or vector of numbers representing the thermal
+#'     time calculated
+#' @details The functional form of the flat thermal time model is as follows:
+#'     \deqn{GDD = \begin{cases}
+#'         0 & T_{avg}\leq T_b \\
+#'         T - T_{avg} & T_b \leq T_{avg}\\
+#'         \end{cases}}
+#'     where \eqn{T_{avg}} is the average daily temperature, and \eqn{T_b} is
+#'     the base temperature.
+#' @examples
+#' temp <- data.frame(tmin=runif(10, 0, 10), tmax=runif(10, 13, 25))
+#' gddsimple(temp, 4, sum=TRUE)
+#' gddsimple(temp, 4, sum=FALSE)
+#' @export
 gddsimple <- function(tdat, Tb, sum=TRUE) {
     Tavg <- (tdat[,'tmin'] + tdat[,'tmax'])/2
     dd <- Tavg - Tb
