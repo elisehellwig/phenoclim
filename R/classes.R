@@ -14,7 +14,9 @@ setClass('Plant',
                     temperature = "list",
                     modeltype = "character",
                     form = "function",
-                    stages = "numeric"))
+                    stages = "numeric",
+                    length = "numeric",
+                    cardinaltemps = "list"))
 
 
 #############################################################
