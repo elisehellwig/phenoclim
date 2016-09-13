@@ -19,6 +19,7 @@ Collate:
     'classes.R'
     'diurnal_temperature.R'
     'general.R'
+    'parameterlistmethods.R'
     'phenoclim.R'
     'plantmethodsbasic.R'
     'preprocess.R'
