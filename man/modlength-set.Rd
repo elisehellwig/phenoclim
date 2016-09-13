@@ -6,7 +6,7 @@
 \alias{modlength<-,ParameterList-method}
 \title{Setting the modlength}
 \usage{
-modlength(object, ...) <- value
+modlength(object) <- value
 
 \S4method{modlength}{ParameterList}(object) <- value
 }

@@ -6,7 +6,7 @@
 \alias{cardinaltemps<-,ParameterList-method}
 \title{Setting the cardinal temps}
 \usage{
-cardinaltemps(object, ...) <- value
+cardinaltemps(object) <- value
 
 \S4method{cardinaltemps}{ParameterList}(object) <- value
 }
