@@ -115,21 +115,12 @@ setGeneric('form', function(object) standardGeneric('form'))
 #' @export
 setGeneric('stages', function(object) standardGeneric('stages'))
 
-#' Displays the inital thermal time/day accumulation length
+#' Displays the model's initial parameter values
 #'
 #' @param object An object of class Plant
-#' @return The number of days or GDD/H the model will accumulate thermal time
-#'     (numeric).
+#' @return .
 #' @export
-setGeneric('length', function(object) standardGeneric('length'))
-
-#' Displays the inital cardinal temperatures for the model
-#'
-#' @param object An object of class ParameterList
-#' @param value A list of cardinal temperatures.
-#' @return The initial cardinal temperatures for the model.
-#' @export
-setGeneric('cardinaltemps', function(object) standardGeneric('cardinaltemps'))
+setGeneric('parameters', function(object) standardGeneric('parameters'))
 
 #############################################################
 #replacement generics
@@ -193,6 +184,8 @@ setGeneric('form<-',
 setGeneric('stages<-',
            function(object, value) standardGeneric('stages<-'))
 
+
+
 #' Setting the initial thermal time/day accumulation length
 #'
 #'  Used to change the number of days or GDD/GDH the model accumulates thermal
@@ -200,20 +193,7 @@ setGeneric('stages<-',
 #' @param object A Plant object
 #' @param value The length of thermal time accumulation in the model.
 #' @export
-setGeneric('length<-',
-           function(object, value) standardGeneric('length<-'))
-
-
-
-#' Setting the intial cardinal temperatures
-#'
-#'  Used to change the inital cardinal temperature parameters in the
-#'      phenological model without recreating the object.
-#' @param object A Plant object
-#' @param value The initial cardinal temperature parameters.
-#' @export
-setGeneric('cardinals<-',
-           function(object, value) standardGeneric('cardinals<-'))
-
+setGeneric('parameters<-',
+           function(object, value) standardGeneric('parameters<-'))
 
 
