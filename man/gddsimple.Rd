@@ -8,13 +8,13 @@
 gddsimple(tdat, Tb, sum = TRUE)
 }
 \arguments{
+\item{tdat}{A matrix of minimum and maximum daily temperatures, in degrees
+C.}
+
 \item{Tb}{The base cardinal temperature of the model.}
 
 \item{sum}{Logical, should the vector of thermal times be returned as a
 sum?}
-
-\item{Tdat}{A matrix of minimum and maximum daily temperatures, in degrees
-C.}
 }
 \value{
 either the number or vector of numbers representing the thermal

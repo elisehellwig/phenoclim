@@ -41,10 +41,10 @@ The functional form of the Anderson thermal time model is as
     the critical temperature.
 
      Anderson, J. L., E. A. Richardson, and C. D. Kesner. 1985.
-         “Validation of Chill Unit and Flower Bud Phenology Models
-         for ’Montmorency’ sour Cherry.” In I International Symposium on
+         "Validation of Chill Unit and Flower Bud Phenology Models
+         for 'Montmorency' sour Cherry." In I International Symposium on
          Computer Modelling in Fruit Research and Orchard Management 184,
-         71–78. http://www.actahort.org/books/184/184_7.htm.
+         71-78. http://www.actahort.org/books/184/184_7.htm.
 }
 \examples{
 temp <- seq(-5, 50)

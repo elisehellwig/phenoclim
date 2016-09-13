@@ -4,15 +4,15 @@
 \alias{linear}
 \title{Calculates thermal time based on the linear model}
 \usage{
-linear(Th, Tb, sum = TRUE)
+linear(Tvec, Tb, sum = TRUE)
 }
 \arguments{
+\item{Tvec}{A vector of hourly temperatures, in degrees C.}
+
 \item{Tb}{The base cardinal temperature of the model.}
 
 \item{sum}{Logical, should the vector of thermal times be returned as a
 sum?}
-
-\item{Tvec}{A vector of hourly temperatures, in degrees C.}
 }
 \value{
 either the number or vector of numbers representing the thermal
@@ -34,7 +34,7 @@ The functional form of the flat thermal time model is as follows:
 }
 \examples{
 temp <- seq(-5, 50)
-gdh <- linear(temp, 4 sum=FALSE)
+gdh <- linear(temp, 4, sum=FALSE)
 plot(gdh ~ temp)
 }
 

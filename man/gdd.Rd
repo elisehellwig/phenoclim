@@ -4,10 +4,10 @@
 \alias{gdd}
 \title{Calculates thermal time based on the growing degree day (GDD) model}
 \usage{
-gdd(Tdat, Tb, sum = TRUE)
+gdd(tdat, Tb, sum = TRUE)
 }
 \arguments{
-\item{Tdat}{A matrix of minimum and maximum daily temperatures, in degrees
+\item{tdat}{A matrix of minimum and maximum daily temperatures, in degrees
 C.}
 
 \item{Tb}{The base cardinal temperature of the model.}

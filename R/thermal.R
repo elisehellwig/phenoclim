@@ -76,10 +76,10 @@ flat <- function(Tvec, Tb, To, sum=TRUE) {
 #'     the critical temperature.
 #'
 #'      Anderson, J. L., E. A. Richardson, and C. D. Kesner. 1985.
-#'          “Validation of Chill Unit and Flower Bud Phenology Models
-#'          for ’Montmorency’ sour Cherry.” In I International Symposium on
+#'          "Validation of Chill Unit and Flower Bud Phenology Models
+#'          for 'Montmorency' sour Cherry." In I International Symposium on
 #'          Computer Modelling in Fruit Research and Orchard Management 184,
-#'          71–78. http://www.actahort.org/books/184/184_7.htm.
+#'          71-78. http://www.actahort.org/books/184/184_7.htm.
 
 #' @examples
 #' temp <- seq(-5, 50)
@@ -95,7 +95,7 @@ anderson <- function(Tvec, Tb, To, Tc, sum=TRUE) {
     Tc <- unname(unlist(Tc))
 
     	#print(Th)
-	temp <- Th - Tb
+	temp <- Tvec - Tb
 
 	#print(temp)
 
@@ -150,8 +150,8 @@ anderson <- function(Tvec, Tb, To, Tc, sum=TRUE) {
 #' Calculates thermal time based on the trapezoid model
 #'
 #' This function calculates thermal time in growing degree hours from a
-#'     vector of temperatures (in degrees C) based on the triangle
-#'     \emph{et al.} (1986) model of thermal time described below.
+#'     vector of temperatures (in degrees C) based on the trapezoid
+#'     model of thermal time described below.
 #' @param Tvec A vector of hourly temperatures, in degrees C.
 #' @param Tb The base cardinal temperature of the model.
 #' @param To The optimal cardinal temperature of the model.
@@ -161,7 +161,7 @@ anderson <- function(Tvec, Tb, To, Tc, sum=TRUE) {
 #'     sum?
 #' @return either the number or vector of numbers representing the thermal
 #'     time calculated
-#' @details The functional form of the Anderson thermal time model is as
+#' @details The functional form of the trapezoid thermal time model is as
 #'     follows:
 #'     \deqn{ GDH = \begin{cases}
 #'         0 & T\leq T_b \\
@@ -176,14 +176,14 @@ anderson <- function(Tvec, Tb, To, Tc, sum=TRUE) {
 #'
 #' @examples
 #' temp <- seq(-5, 50)
-#' gdh <- trapezoid(temp, 4, 25, 36, 40 sum=FALSE)
+#' gdh <- trapezoid(temp, 4, 25, 36, 40, sum=FALSE)
 #' plot(gdh ~ temp)
 #' @export
-trapezoid <- function(Th, Tb, To, Ts, Tc, sum=TRUE) {
+trapezoid <- function(Tvec, Tb, To, Ts, Tc, sum=TRUE) {
 	#Th is a vector of hourly temperatures
 	#looks like a trapezoid
 
-	temp <- Th
+	temp <- Tvec
 
 	temp[temp<=Tb] <- 0
 	temp[temp>Tb & temp<=To] <- temp[temp>Tb & temp<=To] - Tb
@@ -225,14 +225,14 @@ trapezoid <- function(Th, Tb, To, Ts, Tc, sum=TRUE) {
 #'     temperature and \eqn{T_o} is the optimal temperature.
 #' @examples
 #' temp <- seq(-5, 50)
-#' gdh <- linear(temp, 4 sum=FALSE)
+#' gdh <- linear(temp, 4, sum=FALSE)
 #' plot(gdh ~ temp)
 #' @export
-linear <- function(Th, Tb, sum=TRUE) {
+linear <- function(Tvec, Tb, sum=TRUE) {
 
     Tb <- unname(unlist(Tb))
 
-	temp <- Th - Tb
+	temp <- Tvec - Tb
 	temp[temp<0] <- 0
 
 	if (sum) {
@@ -249,7 +249,7 @@ linear <- function(Th, Tb, sum=TRUE) {
 #'
 #' This function calculates thermal time in growing degree hours from a
 #'     vector of temperatures (in degrees C) based on the triangle
-#'     \emph{et al.} (1986) model of thermal time described below.
+#'     model of thermal time described below.
 #' @param Tvec A vector of hourly temperatures, in degrees C.
 #' @param Tb The base cardinal temperature of the model.
 #' @param To The optimal cardinal temperature of the model.
@@ -258,7 +258,7 @@ linear <- function(Th, Tb, sum=TRUE) {
 #'     sum?
 #' @return either the number or vector of numbers representing the thermal
 #'     time calculated
-#' @details The functional form of the Anderson thermal time model is as
+#' @details The functional form of the trianble thermal time model is as
 #'     follows:
 #'     \deqn{ GDH = \begin{cases}
 #'         0 & T\leq T_b \\
@@ -275,22 +275,22 @@ linear <- function(Th, Tb, sum=TRUE) {
 #' gdh <- triangle(temp, 4, 25, 36, sum=FALSE)
 #' plot(gdh ~ temp)
 #' @export
-triangle <- function(Th, Tb, To, Tc, sum=TRUE) {
+triangle <- function(Tvec, Tb, To, Tc, sum=TRUE) {
 
     Tb <- unname(unlist(Tb))
     To <- unname(unlist(To))
     Tc <- unname(unlist(Tc))
 
-    Th[Th<=Tb] <- 0
-    Th[Th>Tb & Th<=To] <- Th[Th>Tb & Th<=To] - Tb
-    Th[Th>To & Th<Tc] <- Th[Th>To & Th<Tc]*((Tb - To)/(Tc - To)) - Tc*((Tb-To)/(Tc-To))
-    Th[Th>=Tc] <- 0
+    Tvec[Tvec<=Tb] <- 0
+    Tvec[Tvec>Tb & Tvec<=To] <- Tvec[Tvec>Tb & Tvec<=To] - Tb
+    Tvec[Tvec>To & Tvec<Tc] <- Tvec[Tvec>To & Tvec<Tc]*((Tb - To)/(Tc - To)) - Tc*((Tb-To)/(Tc-To))
+    Tvec[Tvec>=Tc] <- 0
 
 
     if (sum) {
-        tsum <- sum(Th)
+        tsum <- sum(Tvec)
     } else {
-        tsum <- Th
+        tsum <- Tvec
     }
     return(tsum)
 }
@@ -301,7 +301,7 @@ triangle <- function(Th, Tb, To, Tc, sum=TRUE) {
 #' This function calculates thermal time in growing degree days from a
 #'     vector of temperatures (in degrees C) based on the model
 #'     described below.
-#' @param Tdat A matrix of minimum and maximum daily temperatures, in degrees
+#' @param tdat A matrix of minimum and maximum daily temperatures, in degrees
 #'     C.
 #' @param Tb The base cardinal temperature of the model.
 #' @param sum Logical, should the vector of thermal times be returned as a
@@ -321,11 +321,11 @@ triangle <- function(Th, Tb, To, Tc, sum=TRUE) {
 #' gdd(temp, 4, sum=TRUE)
 #' gdd(temp, 4, sum=FALSE)
 #' @export
-gdd <- function(Tdat, Tb, sum=TRUE) {
+gdd <- function(tdat, Tb, sum=TRUE) {
     #Tmat is a matrix where the columns are Tmin and Tmax for each of the days
     #From Zalom et al. 1983/Snyder 1999
-    Tmin <- Tdat[,'tmin']
-    Tmax <- Tdat[,'tmax']
+    Tmin <- tdat[,'tmin']
+    Tmax <- tdat[,'tmax']
 
     #print(length(Tmin))
 
@@ -355,7 +355,7 @@ gdd <- function(Tdat, Tb, sum=TRUE) {
 #' This function calculates thermal time in growing degree days from a
 #'     vector of temperatures (in degrees C) based on the model
 #'     described below.
-#' @param Tdat A matrix of minimum and maximum daily temperatures, in degrees
+#' @param tdat A matrix of minimum and maximum daily temperatures, in degrees
 #'     C.
 #' @param Tb The base cardinal temperature of the model.
 #' @param sum Logical, should the vector of thermal times be returned as a

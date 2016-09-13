@@ -4,9 +4,11 @@
 \alias{trapezoid}
 \title{Calculates thermal time based on the trapezoid model}
 \usage{
-trapezoid(Th, Tb, To, Ts, Tc, sum = TRUE)
+trapezoid(Tvec, Tb, To, Ts, Tc, sum = TRUE)
 }
 \arguments{
+\item{Tvec}{A vector of hourly temperatures, in degrees C.}
+
 \item{Tb}{The base cardinal temperature of the model.}
 
 \item{To}{The optimal cardinal temperature of the model.}
@@ -17,8 +19,6 @@ trapezoid(Th, Tb, To, Ts, Tc, sum = TRUE)
 
 \item{sum}{Logical, should the vector of thermal times be returned as a
 sum?}
-
-\item{Tvec}{A vector of hourly temperatures, in degrees C.}
 }
 \value{
 either the number or vector of numbers representing the thermal
@@ -26,11 +26,11 @@ either the number or vector of numbers representing the thermal
 }
 \description{
 This function calculates thermal time in growing degree hours from a
-    vector of temperatures (in degrees C) based on the triangle
-    \emph{et al.} (1986) model of thermal time described below.
+    vector of temperatures (in degrees C) based on the trapezoid
+    model of thermal time described below.
 }
 \details{
-The functional form of the Anderson thermal time model is as
+The functional form of the trapezoid thermal time model is as
     follows:
     \deqn{ GDH = \begin{cases}
         0 & T\leq T_b \\
@@ -45,7 +45,7 @@ The functional form of the Anderson thermal time model is as
 }
 \examples{
 temp <- seq(-5, 50)
-gdh <- trapezoid(temp, 4, 25, 36, 40 sum=FALSE)
+gdh <- trapezoid(temp, 4, 25, 36, 40, sum=FALSE)
 plot(gdh ~ temp)
 }
 

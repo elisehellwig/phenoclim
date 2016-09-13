@@ -4,9 +4,11 @@
 \alias{triangle}
 \title{Calculates thermal time based on the triangle model}
 \usage{
-triangle(Th, Tb, To, Tc, sum = TRUE)
+triangle(Tvec, Tb, To, Tc, sum = TRUE)
 }
 \arguments{
+\item{Tvec}{A vector of hourly temperatures, in degrees C.}
+
 \item{Tb}{The base cardinal temperature of the model.}
 
 \item{To}{The optimal cardinal temperature of the model.}
@@ -15,8 +17,6 @@ triangle(Th, Tb, To, Tc, sum = TRUE)
 
 \item{sum}{Logical, should the vector of thermal times be returned as a
 sum?}
-
-\item{Tvec}{A vector of hourly temperatures, in degrees C.}
 }
 \value{
 either the number or vector of numbers representing the thermal
@@ -25,10 +25,10 @@ either the number or vector of numbers representing the thermal
 \description{
 This function calculates thermal time in growing degree hours from a
     vector of temperatures (in degrees C) based on the triangle
-    \emph{et al.} (1986) model of thermal time described below.
+    model of thermal time described below.
 }
 \details{
-The functional form of the Anderson thermal time model is as
+The functional form of the trianble thermal time model is as
     follows:
     \deqn{ GDH = \begin{cases}
         0 & T\leq T_b \\
