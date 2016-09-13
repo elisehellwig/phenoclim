@@ -16,7 +16,7 @@ setClass('Plant',
                     form = "function",
                     stages = "numeric",
                     length = "numeric",
-                    cardinaltemps = "list"))
+                    cardinals = "list"))
 
 
 #############################################################
@@ -57,6 +57,20 @@ setGeneric('form', function(object) standardGeneric('form'))
 #' @export
 setGeneric('stages', function(object) standardGeneric('stages'))
 
+#' Displays the inital thermal time/day accumulation length
+#'
+#' @param object An object of class Plant
+#' @return The number of days or GDD/H the model will accumulate thermal time
+#'     (numeric).
+#' @export
+setGeneric('length', function(object) standardGeneric('length'))
+
+#' Displays the inital cardinal temperatures for the model
+#'
+#' @param object An object of class Plant
+#' @return The initial cardinal temperatures for the model.
+#' @export
+setGeneric('cardinaltemps', function(object) standardGeneric('cardinaltemps'))
 
 #############################################################
 #replacement generics
@@ -119,5 +133,28 @@ setGeneric('form<-',
 #' @export
 setGeneric('stages<-',
            function(object, value) standardGeneric('stages<-'))
+
+#' Setting the initial thermal time/day accumulation length
+#'
+#'  Used to change the number of days or GDD/GDH the model accumulates thermal
+#'      time in the phenological model without recreating the object.
+#' @param object A Plant object
+#' @param value The length of thermal time accumulation in the model.
+#' @export
+setGeneric('length<-',
+           function(object, value) standardGeneric('length<-'))
+
+
+
+#' Setting the intial cardinal temperatures
+#'
+#'  Used to change the inital cardinal temperature parameters in the
+#'      phenological model without recreating the object.
+#' @param object A Plant object
+#' @param value The initial cardinal temperature parameters.
+#' @export
+setGeneric('cardinals<-',
+           function(object, value) standardGeneric('cardinals<-'))
+
 
 
