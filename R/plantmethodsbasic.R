@@ -111,6 +111,13 @@ setValidity("Plant", function(object) {
 
     }
 
+    if (length(modlength(object@parameters)) != n) {
+        valid <- FALSE
+        msg <- c(msg,
+                 'The number of stages is not the same as the number of parameter value sets.')
+    }
+
+
     if (valid) TRUE else msg
 
 })
