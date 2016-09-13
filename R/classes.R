@@ -41,7 +41,7 @@ setGeneric('cardinaltemps', function(object) standardGeneric('cardinaltemps'))
 #' Used to change the model length without recreating the object.
 #'
 #' @param object An object of class ParameterList
-#' @return A vector of model lengths
+#' @param value A vector of acccumulation lengths.
 #' @export
 setGeneric('modlength<-', function(object, ...) standardGeneric('modlength<-'))
 
@@ -52,7 +52,7 @@ setGeneric('modlength<-', function(object, ...) standardGeneric('modlength<-'))
 #'       object.
 #'
 #' @param object An object of class ParameterList
-#' @return A list of cardinal temperatures
+#' @param value A list of cardinal temperatures
 #' @export
 setGeneric('cardinaltemps<-', function(object, ...) standardGeneric('cardinaltemps<-'))
 

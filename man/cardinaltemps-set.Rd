@@ -12,9 +12,8 @@ cardinaltemps(object, ...) <- value
 }
 \arguments{
 \item{object}{An object of class ParameterList}
-}
-\value{
-A list of cardinal temperatures
+
+\item{value}{A list of cardinal temperatures}
 }
 \description{
 Used to change the cardinal temperature parameters without recreating the

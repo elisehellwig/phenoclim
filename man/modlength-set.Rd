@@ -12,9 +12,8 @@ modlength(object, ...) <- value
 }
 \arguments{
 \item{object}{An object of class ParameterList}
-}
-\value{
-A vector of model lengths
+
+\item{value}{A vector of acccumulation lengths.}
 }
 \description{
 Used to change the model length without recreating the object.
