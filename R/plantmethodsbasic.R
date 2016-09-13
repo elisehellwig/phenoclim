@@ -19,6 +19,7 @@ setMethod("show",
               cat('Average event dates: ', avgdates)
               cat('The data spans ', span, 'years, and has ', obs,
                   'observations.')
+              cat()
           })
 
 
@@ -158,6 +159,16 @@ setMethod('form<-', 'Plant',
 
 
 #' @rdname stages-set
+setMethod('stages<-', 'Plant',
+          function(object, value) {
+              object@stages <- value
+
+              if (validObject(object)) {
+                  return(object)
+              }
+          })
+
+#' @rdname length-set
 setMethod('stages<-', 'Plant',
           function(object, value) {
               object@stages <- value

@@ -58,6 +58,7 @@ setGeneric('<-cardinaltemps', function(object) standardGeneric('cardinaltemps'))
 
 
 #############################################################
+#Plant class
 #############################################################
 #' An S4 class to represent the development of a plant
 #'
