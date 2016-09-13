@@ -1,4 +1,4 @@
-#' @include classes.R
+#' @include classes.R parameterlistmethods.R
 
 #This document has the basic methods for accessing and manipulating objects
 #   of the class Plant
@@ -13,13 +13,14 @@ setMethod("show",
               rng <- range(object@phenology[,'year'])
               span <- rng[2] - rng[1]
               obs <- length(object@phenology)
+              formname <- as.character(substitute(object@form))
 
               cat('This plant has ', object@stages, "phenological stages")
               cat('Average length of stage: ', avglengths)
               cat('Average event dates: ', avgdates)
               cat('The data spans ', span, 'years, and has ', obs,
                   'observations.')
-              cat()
+              cat('This is a ', object@modeltype, 'model with the ', formname, 'functional form.')
           })
 
 
@@ -66,7 +67,12 @@ setMethod("stages", "Plant",
               return(object@stages)
           })
 
-
+#' Accesses the number of stages of a Plant object
+#' @rdname parameters
+setMethod("parameters", "Plant",
+          function(object) {
+              return(object@parameters)
+          })
 
 ##############################
 #validity method
@@ -168,10 +174,10 @@ setMethod('stages<-', 'Plant',
               }
           })
 
-#' @rdname length-set
-setMethod('stages<-', 'Plant',
+#' @rdname parameters-set
+setMethod('parameters<-', 'Plant',
           function(object, value) {
-              object@stages <- value
+              object@parameters <- value
 
               if (validObject(object)) {
                   return(object)
