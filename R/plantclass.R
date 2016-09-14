@@ -1,3 +1,5 @@
+#' @include parameterlistclass.R parameterlistmethods.R
+
 #This document defines the Plant class around which this package is developed
 
 
