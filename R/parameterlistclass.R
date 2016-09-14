@@ -55,20 +55,6 @@ setGeneric('modlength<-', function(object, value) standardGeneric('modlength<-')
 setGeneric('cardinaltemps<-', function(object, value) standardGeneric('cardinaltemps<-'))
 
 
-#' Creates a ParameterList object
-#'
-#' @param ct A list, data.frame, or matrix of cardinal temperatures. In the case
-#'     of a data.frame or matrix, each row should contain the cardinal
-#'     temperatures for a given stage of the model. If ct is a list, each
-#'     element of the list should be a vector of cardinal temperatures for a
-#'     given stage of the model.
-#' @param length A vector of model lengths
-#' @return An object of the class ParameterList.
-#' @export
-setGeneric('parameterlist',
-           function(ct, length) standardGeneric('parameterlist'))
-
-
 
 
 

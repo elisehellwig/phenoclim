@@ -107,7 +107,3 @@ setMethod('cardinaltemps<-', 'ParameterList',
                   return(object)
               }
           })
-
-
-
-
