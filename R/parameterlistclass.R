@@ -59,7 +59,9 @@ setGeneric('cardinaltemps<-', function(object, value) standardGeneric('cardinalt
 #'
 #' @param ct A list, data.frame, or matrix of cardinal temperatures. In the case
 #'     of a data.frame or matrix, each row should contain the cardinal
-#'     temperatures for a given stage of the model.
+#'     temperatures for a given stage of the model. If ct is a list, each
+#'     element of the list should be a vector of cardinal temperatures for a
+#'     given stage of the model.
 #' @param length A vector of model lengths
 #' @return An object of the class ParameterList.
 #' @export
