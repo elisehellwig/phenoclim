@@ -2,17 +2,17 @@
 #'
 #' ParameterList stores parameters for running the phenological models
 #'
-#' @slot modlength Stores the length of time or thermal time that is accumulated
-#'     in the model. There should be either one value (if there is only one
-#'     or if all the stages have the same parameters) or as many values as there
-#'     are stages.
 #' @slot cardinaltemps The cardinal temperatures for the model. This is a list
 #'     that should either be of length one or the length of the number of
 #'     stages. Each element of the list should contain the same number of
 #'     cardinal parameters.
+#' @slot modlength Stores the length of time or thermal time that is accumulated
+#'     in the model. There should be either one value (if there is only one
+#'     or if all the stages have the same parameters) or as many values as there
+#'     are stages.
 setClass('ParameterList',
-         slots=list(modlength = "numeric",
-                    cardinaltemps = "list"))
+         slots=list(cardinaltemps = "list",
+                    modlength = "numeric"))
 
 
 #############################################################
