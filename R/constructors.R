@@ -33,13 +33,8 @@ parameterlist <- function(ct, length) {
 
 
 
-
-
-
-#' Creates ParameterList object
+#' Creates Plant object
 #'
-#' @param ct A list of cardinal temperatures
-#' @param length A numeric vector with the lengths of thermal time/day
-#'     accumulation. There should either be one entry for each stage or one
-#'     entry for all the stages.
+#' @param pheno A data.frame that contains the phenology data.
+#' @param clim A list or data.frame that contains the temperature data.
 #'
