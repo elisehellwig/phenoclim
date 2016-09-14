@@ -1,4 +1,4 @@
-#' @include classes.R
+#' @include parameterlistclass.R
 
 #This document has the basic methods for accessing and manipulating objects
 #   of the class ParameterList
@@ -43,7 +43,7 @@ setMethod("cardinaltemps", "ParameterList",
 ##################################
 ##validity method
 
-setValidity("Plant", function(object) {
+setValidity("ParameterList", function(object) {
     msg <- NULL
     valid <- TRUE
 
@@ -52,7 +52,7 @@ setValidity("Plant", function(object) {
     if (length(object@modlength) != length(ct)) {
         valid <- FALSE
         msg <- c(msg,
-                 'The number of accumulation lengths and the number of parameter sets is not the same.')
+                 'The number of accumulation lengths and the number of parameter sets are not the same.')
     }
 
     ctnum <- length(ct[[1]])
@@ -107,3 +107,9 @@ setMethod('cardinaltemps<-', 'ParameterList',
                   return(object)
               }
           })
+
+
+
+
+
+
