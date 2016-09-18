@@ -54,12 +54,35 @@ plant <- function(pheno, clim, model, form, stages, parameters) {
 
 
 
-    if (class(clim)=='data.frame') {
+    if (is.data.frame(clim)) {
         climlist <- lapply(1:stages, function(i) {
 
 
             extracttemp(clim, years, pheno[,cols[i]], pheno[,cols[i+1]])
         })
+
+    } else if (is.list(clim)) {
+
+        if ((length(clim)==stages & stages > 1) | stage==1) {
+
+            climlist <- clim
+
+        } else {
+            stop('There must be a temperature list for every stage.')
+        }
+
+    } else {
+        stop('clim must be a data.frame or a list.')
     }
+
+    obj <- new('Plant',
+               phenology = pheno,
+               temperature = climlist,
+               model = model,
+               form = form,
+               stages = stages,
+               parameters = parameters)
+
+    return(obj)
 
 }
