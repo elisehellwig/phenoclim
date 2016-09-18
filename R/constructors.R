@@ -6,6 +6,9 @@
 
 #' Creates a ParameterList object
 #'
+#' This function creates an object of the class ParameterList. Plant objects
+#'     require objects of the class ParameterList for their parameters slot.
+#'
 #' @param ct A list, data.frame, or matrix of cardinal temperatures. In the
 #'     case of a data.frame or matrix, each row should contain the cardinal
 #'     temperatures for a given stage of the model. If ct is a list, each
