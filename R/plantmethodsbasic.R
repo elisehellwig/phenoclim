@@ -133,7 +133,7 @@ setValidity("Plant", function(object) {
 
     if (valid) TRUE else msg
 
-})
+}
 
 
 ##############################
