@@ -16,11 +16,15 @@ License: GPL-3
 LazyData: TRUE
 RoxygenNote: 5.0.1
 Collate:
-    'classes.R'
-    'diurnal_temperature.R'
     'general.R'
-    'parameterlistmethods.R'
-    'phenoclim.R'
-    'plantmethodsbasic.R'
-    'preprocess.R'
     'thermal.R'
+    'parameterlistclass.R'
+    'parameterlistmethods.R'
+    'plantclass.R'
+    'plantmethodsbasic.R'
+    'constructors.R'
+    'diurnal_temperature.R'
+    'fit.R'
+    'phenoclim.R'
+    'preprocess.R'
+    'yearsums.R'
