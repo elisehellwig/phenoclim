@@ -147,8 +147,60 @@ rmsd <- function(x, y, na.rm=FALSE) {
 	return(rmsd)
 }
 
+##############################################
+
+#' Checks if length of vector is zero
+#'
+#' @param x vector or list
+#' @return logical, TRUE if the vector is of length 0, FALSE if it has a length
+#'     greater than zero
+length0 <- function(x) {
+    if (length(x)==0) TRUE else FALSE
+}
+
+##############################################
+#' Checks year presence in Plant object
+#'
+#' This function checks to make sure that for every year where there is
+#'     phenology data there is also temperature data.
+#'
+#' @param object An object of the class Plant
+#' @return Logical. Returns TRUE if all years of phenology data also have
+#'     corresponding temperature data. Otherwise it returns the years that are
+#'     missing temperature data.
+checktempyears <- function(object) {
+
+    pyears <- phenology(object)$year
+    temp <- temperature(object)
+
+    if (is.list(temp[[1]])) {
+
+        tyears <- lapply(temp, function(l) names(l))
+        missingyears <- lapply(tyears, function(v) setdiff(pyears, v))
+        mylogical <- sapply(missingyears, function(l) length0(l))
+
+        if (all(mylogical)) {
+            return(TRUE)
+
+        } else {
+            return(list(FALSE, missingyears[!mylogical]))
+        }
 
 
+    } else {
+        tyears <- names(temp)
+        missingyears <- setdiff(pyears, tyears)
+
+        if (length0(missingyears)) {
+            return(TRUE)
+        } else {
+            return(list(FALSE,missingyears))
+        }
+
+
+        }
+    }
+}
 
 
 
