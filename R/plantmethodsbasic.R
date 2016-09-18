@@ -1,4 +1,4 @@
-#' @include classes.R parameterlistmethods.R
+#' @include classes.R parameterlistmethods.R general.R
 
 #This document has the basic methods for accessing and manipulating objects
 #   of the class Plant
@@ -82,17 +82,18 @@ setValidity("Plant", function(object) {
     valid <- TRUE
 
     n <- stages(object)
+    temp <- temperature(object)
 
     if (!(modeltype %in% c('partial','full','combined','time'))) {
         valid <- FALSE
         msg <- c(msg,
-                 "modeltype must be either partial, full combined, or time")
+                 "modeltype must be either partial, full, combined, or time")
     }
 
     pnames <- c('year', paste0('event', 1:n), paste0('length', 1:(n-1)))
     missingcols <- setdiff(pnames, names(phenology(object)))
 
-    if (length(missingcols) > 0) {
+    if (length0(missingcols)) {
         valid <- FALSE
         msg <- c(msg,
                  paste("You are missing the following variables in your phenology data.frame:", diff))
@@ -100,14 +101,11 @@ setValidity("Plant", function(object) {
     }
 
 
-    pyears <- sort(phenology(object)$year)
-    tyears <- sort(names(temperature(object)))
-    missingyears <- setdiff(pyears, tyears)
-
-    if (length(missingyears) > 0) {
+    if (!(checktempyears(object)[[1]])) {
         valid <- FALSE
         msg <- c(msg,
-                 paste("The following years have observations in the phenology data.frame but not the temperature data.frame:", missingyears))
+                 paste('You are missing temp data for the following years',
+                       checktempyears(object[[2]])))
 
     }
 
@@ -117,6 +115,21 @@ setValidity("Plant", function(object) {
                  'The number of stages is not the same as the number of parameter value sets.')
     }
 
+    if (as.character(substitute(object@form)) %in% c('gdd','gddsimple')) {
+
+        if (is.list(temp[[1]])) {
+            if (!is.data.frame(temp[[1]][[1]]) | dim(temp[[1]][[1]])[2] != 2) {
+                valid <- FALSE
+                msg <- c(msg,
+                         'Min and max temperatures are required for gdd and gddsimple models.')
+            }
+        } else {
+            if (!is.data.frame(temp[[1]]) | dim(temp[[1]])[2] != 2) {
+                valid <- FALSE
+                msg <- c(msg,
+                         'Min and max temperatures are required for gdd and gddsimple models.')
+            }
+        }
 
     if (valid) TRUE else msg
 
