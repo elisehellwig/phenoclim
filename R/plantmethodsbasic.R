@@ -1,4 +1,4 @@
-#' @include classes.R parameterlistmethods.R general.R
+#' @include plantclass.R parameterlistmethods.R general.R
 
 #This document has the basic methods for accessing and manipulating objects
 #   of the class Plant
@@ -130,10 +130,11 @@ setValidity("Plant", function(object) {
                          'Min and max temperatures are required for gdd and gddsimple models.')
             }
         }
+    }
 
     if (valid) TRUE else msg
 
-}
+})
 
 
 ##############################
