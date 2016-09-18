@@ -1,4 +1,4 @@
-#' @include plantmethodsbasic.R parameterlistmethods.R
+#' @include plantmethodsbasic.R parameterlistmethods.R thermal.R general.R
 
 #This script defines functions to create objects of the Plant and ParameterList
 # classes
@@ -35,6 +35,31 @@ parameterlist <- function(ct, length) {
 
 #' Creates Plant object
 #'
-#' @param pheno A data.frame that contains the phenology data.
-#' @param clim A list or data.frame that contains the temperature data.
-#'
+#' @param pheno data.frame that contains the phenology data. Variables must
+#'      include year, day (julian), and temp (or tmin and tmax depending on the
+#'      model).
+#' @param clim list or data.frame that contains the temperature data. If
+#' @param model character, the name of the type of model to be used. Options are
+#'     partial, full. and combined. See Details for more information.
+#' @param form function, the functional form of the thermal time calculations.
+#'     See details for more information
+#' @param stages numeric, the number of phenological stages to be modeled.
+#' @param parameters object of the class ParameterList. More information at
+#'     \code{\link{parameterlist}}.
+#' @export
+plant <- function(pheno, clim, model, form, stages, parameters) {
+
+    years <- unique(pheno[,'year'])
+    cols <- paste0('event', 1:(stages+1))
+
+
+
+    if (class(clim)=='data.frame') {
+        climlist <- lapply(1:stages, function(i) {
+
+
+            extracttemp(clim, years, pheno[,cols[i]], pheno[,cols[i+1]])
+        })
+    }
+
+}
