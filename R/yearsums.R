@@ -1,3 +1,7 @@
+#' @include plantclass.R plantmethodsbasic.R
+
+#This file contains the yearsums family of functions used to calculate thermal
+#    time.
 
 #' Creates a list to pass to do.call in the yearsums family of functions
 #'
