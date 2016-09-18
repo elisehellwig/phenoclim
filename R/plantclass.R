@@ -15,6 +15,7 @@
 #'     'partial', 'full', 'combined', or 'time'.
 #' @slot form The functional form of the thermal time accumulation.
 #' @slot stages An integer with the number of stages in the phenological model
+#' @export
 setClass('Plant',
          slots=list(phenology = "data.frame",
                     temperature = "list",
