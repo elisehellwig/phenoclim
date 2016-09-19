@@ -2,6 +2,12 @@
 
 #This script has constructor functions for both ParameterList and Plant classes
 
+#' Dummy function
+#'
+#' @param x a number
+#' @return nothing
+dummy2 <- function(x) {return(8)}
+
 #' Creates ParameterList object
 #'
 #' This function creates an object of the class ParameterList. Plant objects
