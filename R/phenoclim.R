@@ -6,4 +6,6 @@
 #' @importFrom methods setClass setGeneric setMethod new validObject
 #' @importFrom plyr ldply
 #' @importFrom reshape2 melt
+#' @importFrom DEoptim DEoptim
+#' @importFrom parallel mclapply
 NULL
