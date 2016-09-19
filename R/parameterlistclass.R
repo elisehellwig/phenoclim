@@ -11,7 +11,8 @@
 #'     or if all the stages have the same parameters) or as many values as there
 #'     are stages.
 setClass('ParameterList',
-         slots=list(cardinaltemps = "list",
+         slots=list(form = 'character'
+         	        cardinaltemps = "list",
                     modlength = "numeric"))
 
 
