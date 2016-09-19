@@ -4,8 +4,8 @@
 \name{phenoclim}
 \alias{phenoclim}
 \alias{phenoclim-package}
-\title{phenoclim: a package for simulating large metapopulations}
+\title{phenoclim: a package for phenological analysis and prediction}
 \description{
-phenoclim: a package for simulating large metapopulations
+phenoclim: a package for phenological analysis and prediction
 }
 

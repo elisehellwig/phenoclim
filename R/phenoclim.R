@@ -1,4 +1,4 @@
-#' phenoclim: a package for simulating large metapopulations
+#' phenoclim: a package for phenological analysis and prediction
 #'
 #' @docType package
 #' @name phenoclim
