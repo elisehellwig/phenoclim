@@ -7,6 +7,8 @@
 #'
 #' @param temps The vector of temperatures used to calculate thermal time.
 #' @param pars A vector of parameters
+#' @param sum logical, should the thermal times be summed
+#' @param full logical, is the model type full?
 #' @return A list of parameters that can be passed to do.call
 parlist <- function(temps, pars, sum=FALSE, full=FALSE) {
 
