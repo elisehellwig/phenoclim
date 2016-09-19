@@ -6,6 +6,8 @@ Imports:
     plyr,
     reshape2,
     methods,
+    DEoptim,
+    parallel
 Authors@R: person("Elise", "Hellwig",
                   email = "echellwig@ucdavis.edu", role = c("aut", "cre"))
 URL: https://bitbucket.org/echellwig/phenoclim
