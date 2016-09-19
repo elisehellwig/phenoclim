@@ -1,3 +1,47 @@
+#' Calculates the Root Mean Squared Deviation/Error
+#'
+#' This function calculates the root mean squared error/deviation (RMSD/E)
+#'     between two vectors of numbers.
+#'
+#' @param x numeric, the first vector
+#' @param y numeric, the second vector
+#' @param na.rm logical, should NAs be removed from the vectors?
+#' @return This function returns the RMSD of the two vectors.
+#' @examples
+#' a <- rnorm(10)
+#' b <- rnorm(10)
+#' rmsd(a,b)
+#' @export
+rmsd <- function(x, y, na.rm=FALSE) {
+
+    if (length(x)!=length(y)) { #make sure vectors are the same length
+        stop('Vectors x and y must be of equal length.')
+    }
+
+
+    if (na.rm) {
+
+        xrows <- which(is.na(x)) #identifying the NAs in both vectors
+        yrows <- which(is.na(y))
+
+        rows <- union(xrows, yrows) #getting all the rows with NAs
+
+        x1 <- x[-rows] #removing all the rows with NAs from both x and y
+        y1 <- y[-rows]
+
+    } else {
+        x1 <- x
+        y1 <- y
+    }
+
+    rmsd <- sqrt(sum((x1-y1)^2)/length(x1)) #calculating the RMSD
+
+    return(rmsd)
+}
+
+##############################################
+
+
 #' Extracts temperatures from a data frame
 #'
 #' This function extracts temperature data from a data frame for specific days
@@ -106,48 +150,6 @@ is.leapyear <- function(year){
 
 ##############################################
 
-#' Calculates the Root Mean Squared Deviation/Error
-#'
-#' This function calculates the root mean squared error/deviation (RMSD/E)
-#'     between two vectors of numbers.
-#'
-#' @param x numeric, the first vector
-#' @param y numeric, the second vector
-#' @param na.rm logical, should NAs be removed from the vectors?
-#' @return This function returns the RMSD of the two vectors.
-#' @examples
-#' a <- rnorm(10)
-#' b <- rnorm(10)
-#' rmsd(a,b)
-#' @export
-rmsd <- function(x, y, na.rm=FALSE) {
-
-    if (length(x)!=length(y)) { #make sure vectors are the same length
-        stop('Vectors x and y must be of equal length.')
-    }
-
-
-	if (na.rm) {
-
-		xrows <- which(is.na(x)) #identifying the NAs in both vectors
-		yrows <- which(is.na(y))
-
-		rows <- union(xrows, yrows) #getting all the rows with NAs
-
-		x1 <- x[-rows] #removing all the rows with NAs from both x and y
-		y1 <- y[-rows]
-
-	} else {
-	    x1 <- x
-		y1 <- y
-	}
-
-	rmsd <- sqrt(sum((x1-y1)^2)/length(x1)) #calculating the RMSD
-
-	return(rmsd)
-}
-
-##############################################
 
 #' Checks if length of vector is zero
 #'
