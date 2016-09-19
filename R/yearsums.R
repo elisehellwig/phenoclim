@@ -1,7 +1,11 @@
 #' @include plantmethodsbasic.R
 
-#This file contains the yearsums family of functions used to calculate thermal
-#    time.
+#' Dummy function
+#'
+#' @param x a number
+#' @return nothing
+dummy <- function(x) {return(8)}
+
 
 #' Creates a list to pass to do.call in the yearsums family of functions
 #'

@@ -2,6 +2,7 @@
 % Please edit documentation in R/yearsums.R
 \name{parlist}
 \alias{parlist}
+\title{Creates a list to pass to do.call in the yearsums family of functions}
 \usage{
 parlist(temps, pars, sum = FALSE, full = FALSE)
 }
@@ -9,8 +10,15 @@ parlist(temps, pars, sum = FALSE, full = FALSE)
 \item{temps}{The vector of temperatures used to calculate thermal time.}
 
 \item{pars}{A vector of parameters}
+
+\item{sum}{logical, should the thermal times be summed}
+
+\item{full}{logical, is the model type full?}
 }
 \value{
 A list of parameters that can be passed to do.call
+}
+\description{
+Creates a list to pass to do.call in the yearsums family of functions
 }
 
