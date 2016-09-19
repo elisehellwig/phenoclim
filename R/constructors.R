@@ -2,12 +2,6 @@
 
 #This script has constructor functions for both ParameterList and Plant classes
 
-#' Dummy function
-#'
-#' @param x a number
-#' @return nothing
-dummy2 <- function(x) {return(8)}
-
 #' Creates ParameterList object
 #'
 #' This function creates an object of the class ParameterList. Plant objects
@@ -71,7 +65,7 @@ plant <- function(pheno, clim, model, form, stages, parameters) {
 
     } else if (is.list(clim)) {
 
-        if ((length(clim)==stages & stages > 1) | stage==1) {
+        if ((length(clim)==stages & stages > 1) | stages==1) {
 
             climlist <- clim
 
