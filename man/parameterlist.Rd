@@ -2,7 +2,6 @@
 % Please edit documentation in R/constructors.R
 \name{parameterlist}
 \alias{parameterlist}
-\title{Creates ParameterList object}
 \usage{
 parameterlist(ct, length)
 }
@@ -17,9 +16,5 @@ given stage of the model.}
 }
 \value{
 An object of the class ParameterList.
-}
-\description{
-This function creates an object of the class ParameterList. Plant objects
-    require objects of the class ParameterList for their parameters slot.
 }
 
