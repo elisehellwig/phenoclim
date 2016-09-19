@@ -1,10 +1,8 @@
-#' @include plantmethodsbasic.R parameterlistmethods.R thermal.R general.R
+#' @include plantmethodsbasic.R thermal.R general.R
 
-#This script defines functions to create objects of the Plant and ParameterList
-# classes
-#more comments?
+#This script has constructor functions for both ParameterList and Plant classes
 
-#' Creates a ParameterList object
+#' Creates ParameterList object
 #'
 #' This function creates an object of the class ParameterList. Plant objects
 #'     require objects of the class ParameterList for their parameters slot.

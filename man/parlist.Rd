@@ -10,4 +10,7 @@ parlist(temps, pars, sum = FALSE, full = FALSE)
 
 \item{pars}{A vector of parameters}
 }
+\value{
+A list of parameters that can be passed to do.call
+}
 

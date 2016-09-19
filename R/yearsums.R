@@ -1,4 +1,4 @@
-#' @include plantclass.R plantmethodsbasic.R
+#' @include plantmethodsbasic.R
 
 #This file contains the yearsums family of functions used to calculate thermal
 #    time.
@@ -7,6 +7,7 @@
 #'
 #' @param temps The vector of temperatures used to calculate thermal time.
 #' @param pars A vector of parameters
+#' @return A list of parameters that can be passed to do.call
 parlist <- function(temps, pars, sum=FALSE, full=FALSE) {
 
     if (length(pars)==1) {
@@ -29,6 +30,18 @@ parlist <- function(temps, pars, sum=FALSE, full=FALSE) {
 }
 
 
+#' Calculates thermal time sums by year
+#'
+#' @param pars lkasjsdf
+#' @param fdat lkasjsdf
+#' @param tdat lkasjsdf
+#' @param type lkasjsdf
+#' @param tempname lkasjsdf
+#' @param sumlen lkasjsdf
+#' @param fn lkasjsdf
+#' @param hn lkasjsdf
+#' @return thermal sums
+#' @export
 yearsums <- function(pars, fdat, tdat, type, tempname='temp', sumlen=NA,
                      fn='flower', hn='harvest') {
 
