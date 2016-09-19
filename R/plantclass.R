@@ -20,7 +20,7 @@ setClass('Plant',
          slots=list(phenology = "data.frame",
                     temperature = "list",
                     modeltype = "character",
-                    form = "function",
+                    form = "character",
                     stages = "numeric",
                     parameters = 'ParameterList'))
 
