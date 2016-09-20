@@ -22,7 +22,8 @@ setClass('Plant',
                     modeltype = "character",
                     form = "character",
                     stages = "numeric",
-                    parameters = 'ParameterList'))
+                    parameters = 'ParameterList'),
+         contains = 'ParameterList')
 
 
 #############################################################
