@@ -51,15 +51,6 @@ setMethod("modeltype", "Plant",
               return(object@modeltype)
           })
 
-
-#' Accesses the thermal time functional form of a Plant object
-#' @rdname form
-setMethod("form", "Plant",
-          function(object) {
-              return(object@form)
-          })
-
-
 #' Accesses the number of stages of a Plant object
 #' @rdname stages
 setMethod("stages", "Plant",
@@ -67,11 +58,33 @@ setMethod("stages", "Plant",
               return(object@stages)
           })
 
-#' Accesses the number of stages of a Plant object
+#' Accesses the parameters of a Plant object
 #' @rdname parameters
 setMethod("parameters", "Plant",
           function(object) {
               return(object@parameters)
+          })
+
+
+#' Accesses the functional form of a Plant object
+#' @rdname form
+setMethod("form", "Plant",
+          function(object) {
+              return(parameters(object)@form)
+          })
+
+#' Accesses the cardinal temperatures
+#' @rdname cardinaltemps
+setMethod("cardinaltemps", "Plant",
+          function(object) {
+              return(parameters(object)@cardinaltemps)
+          })
+
+#' Accesses the model lengths of a plant object
+#' @rdname modlength
+setMethod("modlength", "Plant",
+          function(object) {
+              return(parameters(object)@modlength)
           })
 
 ##############################
@@ -83,6 +96,7 @@ setValidity("Plant", function(object) {
 
     n <- stages(object)
     temp <- temperature(object)
+    frm <- form(object)
 
     if (!(modeltype %in% c('partial','full','combined','time'))) {
         valid <- FALSE
@@ -115,7 +129,7 @@ setValidity("Plant", function(object) {
                  'The number of stages is not the same as the number of parameter value sets.')
     }
 
-    if (as.character(substitute(object@form)) %in% c('gdd','gddsimple')) {
+    if (frm %in% c('gdd','gddsimple')) {
 
         if (is.list(temp[[1]])) {
             if (!is.data.frame(temp[[1]][[1]]) | dim(temp[[1]][[1]])[2] != 2) {
@@ -205,6 +219,16 @@ setMethod('parameters<-', 'Plant',
               }
           })
 
+
+#' @rdname form-set
+setMethod('form<-', 'Plant',
+          function(object, value) {
+              parameters(object)@form <- value
+
+              if (validObject(object)) {
+                  return(object)
+              }
+          })
 
 
 
