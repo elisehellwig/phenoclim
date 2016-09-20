@@ -40,6 +40,14 @@ setMethod("cardinaltemps", "ParameterList",
               return(object@cardinaltemps)
           })
 
+
+#' Accesses the form of a ParameterList object
+#' @rdname form
+setMethod("form", "ParameterList",
+          function(object) {
+              return(object@form)
+          })
+
 ##################################
 ##validity method
 
@@ -48,6 +56,7 @@ setValidity("ParameterList", function(object) {
     valid <- TRUE
 
     ct <- cardinaltemps(object)
+    frm <- form(object)
 
     if (length(object@modlength) != length(ct)) {
         valid <- FALSE
@@ -73,12 +82,24 @@ setValidity("ParameterList", function(object) {
                  'Not all of your parameter values are numbers.')
     }
 
-    if (valid) {
-        return(TRUE)
 
-    } else {
-        return(msg)
+    if (frm %in% c('gdd', 'gddsimple','linear') & ctnum!=1) {
+        valid <- FALSE
+        msg <- c(msg, 'gdd, gddsimple, linear models require exactly one
+                 cardinal temperature.')
+
+    } else if (frm=='flat' & ctnum!=2) {
+        valid <- FALSE
+        msg <- c(msg, 'flat models require exactly two cardinal temperatures.')
+
+    } else if (frm %in% c('anderson', 'triangle')) {
+        valid <- FALSE
+        msg <- c(msg, 'Anderson and triangle require exactly three cardinal temperatures.')
+
     }
+
+
+    if (valid) return(TRUE) else return(msg)
 
 })
 
@@ -107,5 +128,18 @@ setMethod('cardinaltemps<-', 'ParameterList',
                   return(object)
               }
           })
+
+
+#' @rdname form-set
+setMethod('form<-', 'ParameterList',
+          function(object, value) {
+              object@form <- value
+
+              if (validObject(object)) {
+                  return(object)
+              }
+          })
+
+
 
 
