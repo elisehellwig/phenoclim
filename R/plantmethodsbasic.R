@@ -13,7 +13,7 @@ setMethod("show",
               rng <- range(object@phenology[,'year'])
               span <- rng[2] - rng[1]
               obs <- length(object@phenology)
-              formname <- as.character(substitute(object@form))
+              formname <- parameters(object)@form
 
               cat('This plant has ', object@stages, "phenological stages")
               cat('Average length of stage: ', avglengths)
