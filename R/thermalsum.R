@@ -1,11 +1,5 @@
 #' @include plantmethodsbasic.R
 
-#' Dummy function
-#'
-#' @param x a number
-#' @return nothing
-dummy <- function(x) {return(8)}
-
 
 #' Creates a list to pass to do.call in the yearsums family of functions
 #'
@@ -48,7 +42,7 @@ parlist <- function(temps, pars, sum=FALSE, full=FALSE) {
 #' @param hn lkasjsdf
 #' @return thermal sums
 #' @export
-yearsums <- function(pars, fdat, tdat, type, tempname='temp', sumlen=NA,
+thermalgdsum <- function(pars, fdat, tdat, type, tempname='temp', sumlen=NA,
                      fn='flower', hn='harvest') {
 
 	# for walnut
@@ -91,7 +85,7 @@ yearsums <- function(pars, fdat, tdat, type, tempname='temp', sumlen=NA,
 
 
 
-yeargd <- function(pars, fdat, tdat, type, fn='flower',
+thermaltimesum <- function(pars, fdat, tdat, type, fn='flower',
                    hn='harvest', end=336, replaceinf=NA) {
 
     pars <- unlist(pars)
@@ -170,6 +164,6 @@ yeargd <- function(pars, fdat, tdat, type, fn='flower',
 
 }
 
-
+thermalsum <- function()
 
 
