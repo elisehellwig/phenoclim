@@ -2,21 +2,6 @@
 #     objects.
 
 
-minrmse <- function(pars, fdat, tdat, modtype, form, length) {
-
-    if (type=='partial') {
-        minrmsepartial(pars, fdat, tdat, form, length)
-
-    } else if (type == 'full') {
-        minrmsefull()
-
-    } else if (type == 'combined') {
-        minrmsecombined()
-    } else {
-        stop('Only options for model types are partial, full, and combined.')
-    }
-
-}
 
 
 
@@ -39,7 +24,7 @@ minrmsepartial <- function(pars, fdat, tdat, type='nocrit', sumlength=NA) {
         stop('There are no models with more than four parameters')
 
     } else {
-        ysums <- yearsums(pars, fdat, tdat, typ=type, sumlen=sumlength,
+        ysums <- thermalsum(pars, fdat, tdat, typ=type, sumlen=sumlength,
                           fn=flowername, hn=harvestname)
 
 
@@ -170,4 +155,19 @@ fit <- function(plant){
 
 
 
+minrmse <- function(pars, fdat, tdat, modtype, form, length) {
+
+    if (type=='partial') {
+        minrmsepartial(pars, fdat, tdat, form, length)
+
+    } else if (type == 'full') {
+        minrmsefull()
+
+    } else if (type == 'combined') {
+        minrmsecombined()
+    } else {
+        stop('Only options for model types are partial, full, and combined.')
+    }
+
+}
 
