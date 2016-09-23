@@ -9,9 +9,7 @@ fit <- function(p, lbounds, ubounds, cores=1L) {
     n <- stages(p)
 
     functionlist <- lapply(1:n, function(i) {
-        objective <- function(x) {
-            return(minrmse(p))
-        }
+        objective(p, i)
     })
 
     if (n > 1 & cores > 1) {
