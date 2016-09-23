@@ -1,24 +1,39 @@
-#' @include plantclass.R
-
 # This document contains functions that fit phenological models for Plant
 #     objects.
 
-minrmse <- function(pars, fdat, tdat, type='nocrit', sumlength=NA,
-                    def.rmse=Inf, flowername='flower',
-                    harvestname='harvest', negative=FALSE) {
+
+minrmse <- function(pars, fdat, tdat, modtype, form, length) {
+
+    if (type=='partial') {
+        minrmsepartial(pars, fdat, tdat, form, length)
+
+    } else if (type == 'full') {
+        minrmsefull()
+
+    } else if (type == 'combined') {
+        minrmsecombined()
+    } else {
+        stop('Only options for model types are partial, full, and combined.')
+    }
+
+}
+
+
+
+minrmsepartial <- function(pars, fdat, tdat, type='nocrit', sumlength=NA) {
 
     if (length(pars)==2 & pars[1]>pars[2]) {
         #print(2)
-        rmse <- def.rmse
+        rmse <- Inf
 
     } else if (length(pars)==3 & (pars[1]>pars[2]| pars[2]>pars[3]|pars[1]>pars[3])) {
         #print(3)
-        rmse <- def.rmse
+        rmse <- Inf
 
 
     } else if (length(pars)==4 & ( pars[1]>pars[2]| pars[2]>pars[3]|pars[1]>pars[3]|pars[1]>pars[4]| pars[2]>pars[4]|pars[3]>pars[4])) {
         #print(4)
-        rmse <- def.rmse
+        rmse <- Inf
 
     } else if (length(pars)>4) {
         stop('There are no models with more than four parameters')
