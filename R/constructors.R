@@ -38,9 +38,10 @@ parameterlist <- function(ct, length) {
 #' Creates Plant object
 #'
 #' @param pheno data.frame that contains the phenology data. Variables must
-#'      include year, day (julian), and temp (or tmin and tmax depending on the
+#'      include year,
+#' @param clim list or data.frame that contains the temperature data. Variables
+#'     must be year, day (julian), and temp (or tmin and tmax depending on the
 #'      model).
-#' @param clim list or data.frame that contains the temperature data. If
 #' @param model character, the name of the type of model to be used. Options are
 #'     partial, full. and combined. See Details for more information.
 #' @param form function, the functional form of the thermal time calculations.
