@@ -42,8 +42,7 @@ parlist <- function(temps, pars, sum=FALSE, full=FALSE) {
 #' @param hn lkasjsdf
 #' @return thermal sums
 #' @export
-thermalgdsum <- function(pars, fdat, tdat, type, tempname='temp', sumlen=NA,
-                     fn='flower', hn='harvest') {
+thermalgdsum <- function(pars, fdat, tdat, type, sumlen=NA) {
 
 	# for walnut
 	#fdat is data for the 'fruit'
@@ -85,8 +84,7 @@ thermalgdsum <- function(pars, fdat, tdat, type, tempname='temp', sumlen=NA,
 
 
 
-thermaltimesum <- function(pars, fdat, tdat, type, fn='flower',
-                   hn='harvest', end=336, replaceinf=NA) {
+thermaltimesum <- function(pars, fdat, tdat, type, end=336) {
 
     pars <- unlist(pars)
     #print(str(pars))
@@ -164,6 +162,20 @@ thermaltimesum <- function(pars, fdat, tdat, type, fn='flower',
 
 }
 
-thermalsum <- function()
+thermalsum <- function(pars, fdat, tdat, modtype, form, length) {
+
+    if (modtype=='partial') {
+        ths < thermalgdsum()
+
+
+    } else if (modtype %in% c('full', 'combined')) {
+        ths <- thermaltimesum()
+
+    } else {
+        stop('Only options for mod type are partial, full and combined.')
+    }
+
+    return(ths)
+}
 
 
