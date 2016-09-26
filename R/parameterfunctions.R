@@ -57,8 +57,19 @@ parnum <- function(form) {
 
 ##############################################
 
-
-parlength <- function(pars, form, CT, L) {
+#' Length of the bounds variables
+#'
+#' This function returns the length that the lbounds and ubounds variables
+#'     should be based on the functinoal form of the thermal time
+#'     accumulation as well as whether or not the cardinal temperatures and
+#'     the length of accumulation need to be estimated.
+#'
+#' @param form character, the thermal time functional form.
+#' @param CT logical, do the cardinal temperatures need to be estimated?
+#' @param L logical, does the thermal time accumulation length need to be
+#'     estimated?
+#' @return The length the bounds vectors need to be.
+boundlength <- function(form, CT, L) {
 
     if ((!CT) & (!L)) {
         stop('You must estimate the cardinal temperatures, the model length, or both.')
