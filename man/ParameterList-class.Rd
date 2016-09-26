@@ -10,6 +10,9 @@ ParameterList stores parameters for running the phenological models
 \section{Slots}{
 
 \describe{
+\item{\code{form}}{The functional form of the thermal time accumulation model.
+Current options are gdd, gddsimple, linear, flat, triangle, and anderson}
+
 \item{\code{cardinaltemps}}{The cardinal temperatures for the model. This is a list
 that should either be of length one or the length of the number of
 stages. Each element of the list should contain the same number of

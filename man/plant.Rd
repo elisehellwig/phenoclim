@@ -8,10 +8,11 @@ plant(pheno, clim, model, form, stages, parameters)
 }
 \arguments{
 \item{pheno}{data.frame that contains the phenology data. Variables must
-include year, day (julian), and temp (or tmin and tmax depending on the
-model).}
+include year,}
 
-\item{clim}{list or data.frame that contains the temperature data. If}
+\item{clim}{list or data.frame that contains the temperature data. Variables
+must be year, day (julian), and temp (or tmin and tmax depending on the
+ model).}
 
 \item{model}{character, the name of the type of model to be used. Options are
 partial, full. and combined. See Details for more information.}

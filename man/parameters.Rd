@@ -19,6 +19,6 @@ parameters(object)
 \description{
 Displays the model's initial parameter values
 
-Accesses the number of stages of a Plant object
+Accesses the parameters of a Plant object
 }
 
