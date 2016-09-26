@@ -202,6 +202,28 @@ checktempyears <- function(object) {
 }
 
 
+predictevent <- function(pars, temps, form, length) {
 
+    gd <- lapply(temps, function(v) {
+        plist <- parlist(v, pars)
+        tt <- do.call(form, plist)
+        cumsum(tt)
+    })
+
+    if (length(length)==length(gd)) {
+
+        eventday <- sapply(1:length(gd), {
+            suppressWarnings(min(which(gd[[i]]>length[i])))
+        })
+    } else if (length(length)==1) {
+
+        eventday <- sapply(gd, function(v) {
+            suppressWarnings(min(which(v>length)))
+        })
+    }
+
+
+    return(eventday)
+}
 
 
