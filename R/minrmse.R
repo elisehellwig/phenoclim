@@ -24,12 +24,10 @@ minrmsepartial <- function(pars, fdat, tdat, form, length, stage) {
 
     if (checkpars(pars)) {
         tsums <- thermalsum(pars, fdat, tdat, 'partial', form, length, stage)
-        events <- paste0('event', stage:(stage+1))
 
-        stagelength <- fdat[,events[2]] - fdat[,events[1]]
-        mod <- lm(stagelength ~ tsums)
+        mod <- lm(fdat$stagelength ~ tsums)
         fit <- fitted(mod)
-        rmse <- rmsd(fit, stagelength)
+        rmse <- rmsd(fit, fdat$stagelength)
 
     } else {
         rmse <- Inf
@@ -63,8 +61,8 @@ minrmsefull <- function(pars, fdat, tdat, form, length, stage) {
 
         predictedlength <- thermalsum(pars, fdat, tdat, 'full', form, length,
                                       stage)
-        observedlength <- eventi(fdat, stage+1) - eventi(fdat, stage)
-        rmse <- rmsd(predictedlength, observedlength)
+
+        rmse <- rmsd(predictedlength, fdat$stagelength)
 
     } else {
         rmse <- Inf
@@ -111,13 +109,12 @@ minrmsecomb <- function(pars, fdat, tdat, form, length, stage) {
 
         } else {
 
-            stagelength <- eventi(fdat, stage+1) - eventi(fdat, stage)
             positive <- ifelse(daymet > eventi(fdat, stage+1), FALSE, TRUE)
 
             if (all(positive)) {
-                mod <- lm(stagelength ~ daymet)
+                mod <- lm(fdat$stagelength ~ daymet)
                 fit <- fitted(mod)
-                rmse <- rmsd(fit, stagelength)
+                rmse <- rmsd(fit, fdat$stagelength)
 
             } else {
                 rmse <- Inf
