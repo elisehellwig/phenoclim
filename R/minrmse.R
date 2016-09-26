@@ -1,4 +1,4 @@
-#' @include thermalsum.R
+#' @include thermalsum.R parameterfunctions.R
 
 # This document contains functions that are minimized using the DEoptim
 #    function to find the optimum cardinal temperature and length of thermal
