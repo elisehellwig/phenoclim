@@ -153,20 +153,20 @@ minrmsecomb <- function(pars, fdat, tdat, form, length, stage) {
 #' @export
 minrmse <- function(pars, fdat, tdat, modtype, form, stage, CT, L) {
 
-    if (isTRUE(L)) {
+    if (isTRUE(L) & isTRUE(CT)) {
         length <- pars[1]
+        ct <- pars[-1]
 
-        if (isTRUE(CT)) {
-            ct <- pars[-1]
-        }
+    } else if (!is.TRUE(L) & isTRUE(CT)) {
+        length <- L
+        ct <- pars
 
     } else {
-        length <- L
+        length <- pars[1]
+        ct <- CT
 
-        if (isTRUE(CT)) {
-            ct <- pars
-        }
     }
+
 
 
     if (modtype=='partial') {
