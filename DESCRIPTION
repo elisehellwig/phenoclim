@@ -30,7 +30,6 @@ Collate:
     'thermalsum.R'
     'minrmse.R'
     'fit.R'
-    'headlist.R'
     'objectivefunction.R'
     'phenoclim.R'
     'preprocess.R'
