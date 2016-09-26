@@ -1,4 +1,4 @@
-#' @include plantmethodsbasic.R
+#' @include plantmethodsbasic.R general.R
 
 
 #' Creates a list to pass to do.call in the yearsums family of functions
@@ -30,51 +30,55 @@ parlist <- function(temps, pars, sum=FALSE, full=FALSE) {
 }
 
 
-#' Calculates thermal time sums by year
+#' Calculates thermal time sums for partial model
 #'
-#' @param pars lkasjsdf
-#' @param fdat lkasjsdf
-#' @param tdat lkasjsdf
-#' @param type lkasjsdf
-#' @param tempname lkasjsdf
-#' @param sumlen lkasjsdf
-#' @param fn lkasjsdf
-#' @param hn lkasjsdf
-#' @return thermal sums
-#' @export
-thermalgdsum <- function(pars, fdat, tdat, type, sumlen=NA) {
+#' Calculates thermal time sums for a given length of days after flowering for
+#' a series of years.
+#'
+#' @param pars Cardinal temperatures
+#' @param fdat the data.frame containing the phenological information
+#' @param tdat list containing the temperature information
+#' @param form the functional form of the thermal time accumulation
+#' @param length the length of thermal time accumulation (in days). It can be
+#'     either a set length of time (one number) or the total length of the
+#'     stage (one length for each entry in fdat).
+#' @param stage the number of the stage of the phenological model
+#' @return The thermal sums for a given series of years.
+thermalgdsum <- function(pars, fdat, tdat, form, length, stage) {
 
 	# for walnut
 	#fdat is data for the 'fruit'
-	pars <- unname(pars)
+    years <- fdat[,'year']
+	start <- fdat[, paste0('event',stage)]
+	end <- start+length
 
-    cd <- fdat
+	templist <- lapply(1:length(years), function(i) {
 
-	start <- cd[, fn]
+	    if (is.data.frame(tdat[[1]])) {
+            tdat[[as.character(years(i))]][start[i]:end[i],]
 
-	if (is.na(sumlen)) {
-	    end <- cd[,hn]
+	    } else {
+	        tdat[[as.character(years(i))]][start[i]:end[i]]
+	    }
+	})
 
-	} else {
-	    end <- start+sumlen
-	}
-
-	if (type %in% c('gdd','gddsimple', 'linear','nocrit','triangle',
+	if (form %in% c('gdd','gddsimple', 'linear','nocrit','triangle',
 	                'trapezoid')) {
 	    #print(pars)
-	    tsums <- sapply(cd[,'year'], function(y) {
-	        plist <- parlist(tdat[[as.character(y)]], pars, sum=TRUE)
-	        do.call(type, plist)
+	    tsums <- sapply(1:length(start), function(y) {
+
+	        plist <- parlist(templist[[i]], pars, sum=TRUE)
+	        do.call(form, plist)
 	    })
 
-	} else if (type=='anderson') {
-	    tsums <- sapply(cd[,'year'], function(y) {
-	        plist <- parlist(tdat[[as.character(y)]], c(4,25,36), sum=TRUE)
-	        do.call(type, plist)
+	} else if (form=='anderson') {
+	    tsums <- sapply(1:length(start), function(i) {
+	        plist <- parlist(templist[[i]], c(4,25,36), sum=TRUE)
+	        do.call(form, plist)
 	    })
 
 	} else {
-        stop('type must be linear, nocrit triangle, anderson, gdd, gddsimple
+        stop('form must be linear, nocrit triangle, anderson, gdd, gddsimple
              or trapezoid')
 	}
 
@@ -83,73 +87,39 @@ thermalgdsum <- function(pars, fdat, tdat, type, sumlen=NA) {
 
 
 
+#' Calculates thermal time sums for full or combined model
+#'
+#' Calculates thermal time sums for a given amount of GD* after flowering for
+#' a series of years.
+#'
+#' @param pars Cardinal temperatures
+#' @param fdat the data.frame containing the phenological information
+#' @param tdat list containing the temperature information
+#' @param form the functional form of the thermal time accumulation
+#' @param length the length of thermal time accumulation (in days). It can be
+#'     either a set length of time (one number) or the total length of the
+#'     stage (one length for each entry in fdat).
+#' @param stage the number of the stage of the phenological model
+#' @return The thermal sums for a given series of years.
+thermaltimesum <- function(pars, fdat, tdat, form, length, stage) {
 
-thermaltimesum <- function(pars, fdat, tdat, type, end=336) {
-
-    pars <- unlist(pars)
     #print(str(pars))
 
-    start <- fdat[,fn]
-    #print(1)
+    years <- fdat[,'year']
+    start <- fdat[,paste0('event',stage)]
 
-    if (type %in% c('gdd', 'gddsimple')) {
+    #getting the temperatures
+    if (form %in% c('gdd', 'gddsimple')) {
 
-        gd <- lapply(fdat[,'year'], function(y) {
-            plist <- parlist(tdat[[as.character(y)]],
-                             pars[[2:length(pars)]])
-            #print(plist)
-            tt <- do.call(type, plist)
-            cumsum(tt)
-        })
-
-        predslen <- sapply(1:length(fdat[,'year']), function(i) {
-            #print(pars[1])
-            if (is.infinite(suppressWarnings(min(which(gd[[i]]>pars[1]))))) {
-                # print(5)
-                replaceinf
-            } else {
-                #print(4)
-                min(which(gd[[i]]>pars[1]))
-            }
+        templist <- lapply(1:length(years), function(i) {
+            tdat[[as.character(years[i])]][start[i]:365,]
         })
 
        # print(2)
-    } else if (type %in% c('linear', 'nocrit', 'triangle')) {
+    } else if (form %in% c('linear', 'nocrit', 'triangle', 'anderson')) {
 
-        gd <- lapply(fdat[,'year'], function(y) {
-            plist <- parlist(tdat[[as.character(y)]], pars[-1])
-            tt <- do.call(type, plist)
-            cumsum(tt)
-        })
-
-        predslen <- sapply(1:length(fdat[,1]), function(i) {
-            #print(pars[1])
-            if (is.infinite(suppressWarnings(min(which(gd[[i]]>pars[1]))))) {
-                # print(5)
-                replaceinf
-            } else {
-                #print(4)
-                round(min(which(gd[[i]]>pars[1]))/24)
-            }
-        })
-
-    } else if (type=='anderson') {
-
-        gd <- lapply(fdat[,'year'], function(y) {
-            plist <- parlist(tdat[[as.character(y)]], c(4,25,36))
-            tt <- do.call(type, plist)
-            cumsum(tt)
-        })
-
-        predslen <- sapply(1:length(fdat[,1]), function(i) {
-            #print(pars[1])
-            if (is.infinite(suppressWarnings(min(which(gd[[i]]>pars[1]))))) {
-                # print(5)
-                replaceinf
-            } else {
-                #print(4)
-                round(min(which(gd[[i]]>pars[1]))/24)
-            }
+        templist <- lapply(1:length(years), function(i) {
+            tdat[[as.character(years[i])]][start[i]:365]
         })
 
     } else {
@@ -158,18 +128,44 @@ thermaltimesum <- function(pars, fdat, tdat, type, end=336) {
     }
 
 
-    return(predslen)
+    #calculating the event day
+
+    if (form=='anderson') {
+
+        day <- predictevent(c(4,25,36), templist, form, length)
+
+    } else {
+
+        day <- predictevent(pars, templist, form, length)
+
+    }
+
+    return(day)
 
 }
 
-thermalsum <- function(pars, fdat, tdat, modtype, form, length) {
+
+#' Calculates thermal time sums
+#'
+#' Calculates thermal time sums for either the partial, full, or combined model
+#'
+#' @param pars Cardinal temperatures
+#' @param fdat the data.frame containing the phenological information
+#' @param tdat list containing the temperature information
+#' @param form the functional form of the thermal time accumulation
+#' @param length the length of thermal time accumulation (in days). It can be
+#'     either a set length of time (one number) or the total length of the
+#'     stage (one length for each entry in fdat).
+#' @param stage the number of the stage of the phenological model
+#' @return The thermal sums for a given series of years.
+thermalsum <- function(pars, fdat, tdat, modtype, form, length, stage) {
 
     if (modtype=='partial') {
-        ths < thermalgdsum()
+        ths < thermalgdsum(pars, fdat, tdat, form, length, stage)
 
 
     } else if (modtype %in% c('full', 'combined')) {
-        ths <- thermaltimesum()
+        ths <- thermaltimesum(pars, fdat, tdat, form, length, stage)
 
     } else {
         stop('Only options for mod type are partial, full and combined.')
