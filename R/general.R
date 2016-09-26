@@ -240,4 +240,36 @@ predictevent <- function(pars, temps, form, length) {
     return(eventday)
 }
 
+##############################################
+
+#' Checks to see if parameters are in the correct order
+#'
+#' @param pars a vector of cardinal temperatures, should be organized least to greatest
+#' @return logical, TRUE if the cardinal temperatures are organized least to greatest, FALSE otherwise
+checkpars <- function(pars) {
+
+
+    if (length(pars)>4) {
+        stop('There are no models with more than four parameters')
+
+    } else {
+
+        parsort <-sort(pars)
+
+        if (identical(pars, parsort)) {
+            return(TRUE)
+
+        } else {
+            return(FALSE)
+        }
+
+    }
+
+}
+
+
+
+
+
+
 
