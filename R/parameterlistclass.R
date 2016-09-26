@@ -64,7 +64,9 @@ setGeneric('modlength<-', function(object, value) standardGeneric('modlength<-')
 #' @param object An object of class ParameterList
 #' @param value A list of cardinal temperatures
 #' @export
-setGeneric('cardinaltemps<-', function(object, value) standardGeneric('cardinaltemps<-'))
+setGeneric('cardinaltemps<-', function(object, value) {
+    standardGeneric('cardinaltemps<-')
+    })
 
 
 
