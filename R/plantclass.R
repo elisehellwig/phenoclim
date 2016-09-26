@@ -6,7 +6,7 @@
 #############################################################
 #Plant class
 #############################################################
-#' An S4 class to represent the development of a plant
+#' An S4 class to represent a plant
 #'
 #' @slot phenology A data.frame that contains the phenological data.
 #' @slot temperature A list that contains temperature data for all of
