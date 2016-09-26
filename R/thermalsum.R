@@ -63,17 +63,11 @@ thermalgdsum <- function(pars, fdat, tdat, form, length, stage) {
 	})
 
 	if (form %in% c('gdd','gddsimple', 'linear','nocrit','triangle',
-	                'trapezoid')) {
+	                'trapezoid','anderson')) {
 	    #print(pars)
 	    tsums <- sapply(1:length(start), function(y) {
 
 	        plist <- parlist(templist[[i]], pars, sum=TRUE)
-	        do.call(form, plist)
-	    })
-
-	} else if (form=='anderson') {
-	    tsums <- sapply(1:length(start), function(i) {
-	        plist <- parlist(templist[[i]], c(4,25,36), sum=TRUE)
 	        do.call(form, plist)
 	    })
 
@@ -129,16 +123,7 @@ thermaltimesum <- function(pars, fdat, tdat, form, length, stage) {
 
 
     #calculating the event day
-
-    if (form=='anderson') {
-
-        day <- predictevent(c(4,25,36), templist, form, length)
-
-    } else {
-
-        day <- predictevent(pars, templist, form, length)
-
-    }
+    day <- predictevent(pars, templist, form, length)
 
     return(day)
 
