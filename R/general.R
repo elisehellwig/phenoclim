@@ -160,6 +160,19 @@ length0 <- function(x) {
     if (length(x)==0) TRUE else FALSE
 }
 
+
+##############################################
+#' returns a column of the phenology data.frame
+#'
+#' @param dat the phenology data frame
+#' @param i the number of the phenology event to be extracted
+#' @return A vector with the julian days of the ith phenological event
+eventi <- function(dat, i) {
+    d <- dat[,paste0('event',i)]
+}
+
+
+
 ##############################################
 #' Checks year presence in Plant object
 #'
@@ -201,6 +214,7 @@ checktempyears <- function(object) {
     }
 }
 
+##############################################
 
 predictevent <- function(pars, temps, form, length) {
 
