@@ -70,7 +70,7 @@ setMethod("parameters", "Plant",
 #' @rdname form
 setMethod("form", "Plant",
           function(object) {
-              return(parameters(object)@form)
+              return(form(parameters(object)))
           })
 
 #' Accesses the cardinal temperatures
@@ -191,7 +191,7 @@ setMethod('modeltype<-', 'Plant',
 #' @rdname form-set
 setMethod('form<-', 'Plant',
           function(object, value) {
-              object@form <- value
+              form(parameters(object)) <- value
 
               if (validObject(object)) {
                   return(object)
