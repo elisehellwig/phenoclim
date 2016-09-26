@@ -17,11 +17,11 @@ fit <- function(p, lbounds, ubounds, cores=1L, estimateCT=TRUE,
 
     ttform <- form(p)
 
-    if (parlength(ttform, estimateCT, estimatelength)!=lbounds) {
-        stop(paste0('Your bounds have the wrong number of parameter values. ',
+    if (boundlength(ttform, estimateCT, estimatelength)!=lbounds) {
+        stop(paste0('The bounds have the wrong number of parameter values. ',
                    'Your bounds are of length', length(lbounds),
                    ', and they should be of length',
-                   parlength(ttform, estimateCT, estimatelength), '.'))
+                   boundlength(ttform, estimateCT, estimatelength), '.'))
     }
 
     n <- stages(p)
