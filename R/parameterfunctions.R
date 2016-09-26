@@ -29,7 +29,15 @@ checkpars <- function(pars) {
 
 
 
-
+#' Functional form parameter number
+#'
+#' This function returns the number of parameters a supplied thermal time functional form (form) requires.
+#'
+#' @param form character, the name of the functional form in question.
+#'     Options are 'gdd', 'gddsimple', 'linear', 'flat', 'anderson' and
+#'     'triangle'.
+#' @return The number of parameters required for the thermal time functional
+#'     form supplied.
 parnum <- function(form) {
 
     if (form %in% c('gdd', 'gddsimple','linear')) {
@@ -48,7 +56,9 @@ parnum <- function(form) {
 }
 
 ##############################################
-checkparlength <- function(pars, form, CT, L) {
+
+
+parlength <- function(pars, form, CT, L) {
 
     if ((!CT) & (!L)) {
         stop('You must estimate the cardinal temperatures, the model length, or both.')
