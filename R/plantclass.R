@@ -50,13 +50,6 @@ setGeneric('temperature', function(object) standardGeneric('temperature'))
 #' @export
 setGeneric('modeltype', function(object) standardGeneric('modeltype'))
 
-#' Returns the functional form of the model
-#'
-#' @param object An object of class Plant
-#' @return Returns the functional form of the thermal time accumulation model.
-#' @export
-setGeneric('form', function(object) standardGeneric('form'))
-
 #' Displays the number of stages in the phenological model
 #'
 #' @param object An object of class Plant
@@ -110,17 +103,6 @@ setGeneric('temperature<-',
 setGeneric('modeltype<-',
            function(object, value) standardGeneric('modeltype<-'))
 
-
-#' Setting the form
-#'
-#'  Used to change the thermal time functional form without recreating the
-#'      object.
-#' @param object A Plant object
-#' @param value A function that represents the functional form
-#'     of the thermal time model.
-#' @export
-setGeneric('form<-',
-           function(object, value) standardGeneric('form<-'))
 
 
 #' Setting the number of stages

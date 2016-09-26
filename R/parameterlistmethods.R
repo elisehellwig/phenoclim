@@ -4,24 +4,6 @@
 #   of the class ParameterList
 
 
-setMethod("show",
-          signature = 'ParameterList',
-          definition = function(object) {
-             n <- length(object@cardinaltemps[[1]])
-
-             pars <- as.data.frame(do.call(rbind, object@cardinaltemps))
-             names(pars) <- paste0('p', 1:n)
-
-             stagelength <- data.frame(stage=1:length(object@modlength),
-                               length=object@modlength)
-
-             lengthpars <- cbind(stagelength, pars)
-
-             print(lengthpars)
-
-          })
-
-
 ##############################
 ###accessor methods
 
@@ -47,6 +29,30 @@ setMethod("form", "ParameterList",
           function(object) {
               return(object@form)
           })
+
+
+##############################
+#show method
+
+setMethod("show",
+          signature = 'ParameterList',
+          definition = function(object) {
+             n <- length(object@cardinaltemps[[1]])
+
+             pars <- as.data.frame(do.call(rbind, object@cardinaltemps))
+             names(pars) <- paste0('p', 1:n)
+
+             stagelength <- data.frame(stage=1:length(object@modlength),
+                               length=object@modlength)
+
+             lengthpars <- cbind(stagelength, pars)
+
+             print(lengthpars)
+
+          })
+
+
+
 
 ##################################
 ##validity method
