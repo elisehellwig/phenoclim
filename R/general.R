@@ -267,7 +267,40 @@ checkpars <- function(pars) {
 
 }
 
+#######################################
+parnum <- function(form) {
 
+    if (form %in% c('gdd', 'gddsimple','linear')) {
+        n <- 1
+    } else if (form=='flat') {
+        n <- 2
+    } else if (form %in% c('anderson', 'triangle')) {
+        n <- 3
+    } else if (form=='trapezoid') {
+        n <- 4
+    } else {
+        stop('form must be either gdd, gddsimple, linear, flat, anderson, triangle, or trapezoid.')
+    }
+
+    return(n)
+}
+
+##############################################
+checkparlength <- function(pars, form, CT, L) {
+
+    if ((!CT) & (!L)) {
+        stop('You must estimate the cardinal temperatures, the model length, or both.')
+
+    } else if (L & (!CT)) {
+        parslength <- 1
+
+    } else if (L & CT) {
+        parslength <- parnum(form) + 1
+
+    } else {
+        parslength <- parnum(form)
+    }
+}
 
 
 
