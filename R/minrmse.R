@@ -147,19 +147,39 @@ minrmsecomb <- function(pars, fdat, tdat, form, length, stage) {
 #'     either a set length of time (one number) or the total length of the
 #'     stage (one length for each entry in fdat).
 #' @param stage the number of the stage of the phenological model
+#' @param CT logical, should the cardinal temperatures be optimized. If not CT
+#'     is the vector of cardinal temperatures
+#' @param L logical, should the model length be optimized. If not L is the
+#'     model length.
 #' @return The RMSE value for a given set of cardinal temperatures and thermal
 #'     time accumulation length.
 #' @export
-minrmse <- function(pars, fdat, tdat, modtype, form, length, stage) {
+minrmse <- function(pars, fdat, tdat, modtype, form, stage, CT, L) {
+
+    if (isTRUE(L)) {
+        length <- pars[1]
+
+        if (isTRUE(CT)) {
+            ct <- pars[-1]
+        }
+
+    } else {
+        length <- L
+
+        if (isTRUE(CT)) {
+            ct <- pars
+        }
+    }
+
 
     if (modtype=='partial') {
-        rmse <- minrmsepartial(pars, fdat, tdat, form, length, stage)
+        rmse <- minrmsepartial(ct, fdat, tdat, form, length, stage)
 
     } else if (modtype == 'full') {
-        rmse <- minrmsefull(pars, fdat, tdat, form, length, stage)
+        rmse <- minrmsefull(ct, fdat, tdat, form, length, stage)
 
     } else if (modtype == 'combined') {
-        minrmsecombined(pars, fdat, tdat, form, length, stage)
+        minrmsecombined(ct, fdat, tdat, form, length, stage)
     } else {
         stop('Only options for model types are partial, full, and combined.')
     }
