@@ -1,4 +1,4 @@
-#' @include plantmethodsbasic.R general.R
+#' @include plantmethodsbasic.R general.R parameterfunctions.R
 
 
 
