@@ -300,6 +300,8 @@ checkparlength <- function(pars, form, CT, L) {
     } else {
         parslength <- parnum(form)
     }
+
+    return(parlength)
 }
 
 
