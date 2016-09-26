@@ -65,3 +65,35 @@ checkparlength <- function(pars, form, CT, L) {
 
     return(parlength)
 }
+
+
+#####################################
+
+#' Creates a list to pass to do.call in the yearsums family of functions
+#'
+#' @param temps The vector of temperatures used to calculate thermal time.
+#' @param pars A vector of parameters
+#' @param sum logical, should the thermal times be summed
+#' @param full logical, is the model type full?
+#' @return A list of parameters that can be passed to do.call
+parlist <- function(temps, pars, sum=FALSE, full=FALSE) {
+
+    if (length(pars)==1) {
+        pl <- list(temps, pars, sum)
+
+    } else if (length(pars)==2) {
+        pl <- list(temps, pars[1], pars[2], sum)
+
+    } else if (length(pars)==3) {
+        pl <- list(temps, pars[1], pars[2], pars[3], sum)
+
+    } else if (length(pars)==4) {
+        pl <- list(temps, pars[1], pars[2], pars[3], pars[4], sum)
+
+    } else {
+        stop('There are no models with more than 4 parameters')
+    }
+
+    return(pl)
+}
+
