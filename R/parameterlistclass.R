@@ -10,12 +10,16 @@
 #'     cardinal parameters.
 #' @slot modlength Stores the length of time or thermal time that is accumulated
 #'     in the model. There should be either one value (if there is only one
-#'     or if all the stages have the same parameters) or as many values as there
-#'     are stages.
+#'     or if all the stages have the same parameters) or as many values as
+#'     there are stages.
+#' @slot estimate Determines what parameters are estimated in the model.
+#'     `estimate` is a character vector that can contain "cardinaltemps",
+#'     "modlength" or both, but it must contain at least one of the two.
 setClass('ParameterList',
          slots=list(form = 'character',
          	        cardinaltemps = "list",
-                    modlength = "numeric"))
+                    modlength = "numeric",
+                    estimation = 'character'))
 
 
 #############################################################
@@ -44,6 +48,13 @@ setGeneric('cardinaltemps', function(object) standardGeneric('cardinaltemps'))
 #' @export
 setGeneric('form', function(object) standardGeneric('form'))
 
+#' Returns the parameters to estimate
+#'
+#' @param object An object of class ParameterList
+#' @return character, the names of the parameters to be estimated
+#'     (cardinaltemps, modlength or both).
+#' @export
+setGeneric('estimate', function(object) standardGeneric('estimate'))
 
 
 #' Setting the modlength
@@ -80,5 +91,14 @@ setGeneric('cardinaltemps<-', function(object, value) {
 setGeneric('form<-', function(object, value) standardGeneric('form<-'))
 
 
+#' Setting the parameters to estimate
+#'
+#'  Used to change the functional form without recreating the object.
+#'
+#' @param object An object of class ParameterList
+#' @param value A character vector containing either 'cardinaltemps',
+#'     'modlength' or both.
+#' @export
+setGeneric('estimate<-', function(object, value) standardGeneric('estimate<-'))
 
 
