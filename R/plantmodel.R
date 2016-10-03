@@ -4,8 +4,21 @@
 #     objects.
 
 
-fit <- function(p, lbounds, ubounds, cores=1L, estimateCT=TRUE,
-                estimatelength=TRUE) {
+#' Fits phenological models
+#'
+#' `plantmodel` fits phenological models of two general types: thermal time accumulation and day accumulation (for more information see ____).
+#'
+#' @param phenology data.frame, contains the phenological data.
+#'     Required columns are `year`, and `event1` through `eventN` where `N`
+#'     is the number of phenological events in the model.
+#' @param temperature list, contains the temperature data. Each element of
+#'     the list should be either a vector of hourly temperatures or a
+#'     data.frame of minimum and maximum daily temperatures. Each element
+#'     of the list should be named with the corresponding year.
+#' @param model character, specifies the type of model. Options are
+plantmodel <- function(phenology, temperature, model, parameters, lbounds,
+                       ubounds, cores=1L, estimateCT=TRUE,
+                       estimatelength=TRUE, ) {
 
     if (!estimateCT & !estimatelength) {
         stop('You at least estimate either the cardinal temperatures or the model length, though you can estimate both.')
