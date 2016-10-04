@@ -67,7 +67,7 @@ thermalgdsum <- function(pars, fdat, tdat, form, length, stage) {
 #'     stage (one length for each entry in fdat).
 #' @param stage the number of the stage of the phenological model
 #' @return The thermal sums for a given series of years.
-thermaltimesum <- function(pars, fdat, tdat, form, length, stage) {
+thermaldaysum <- function(pars, fdat, tdat, form, length, stage) {
 
     #print(str(pars))
 
@@ -122,7 +122,7 @@ thermalsum <- function(pars, fdat, tdat, modtype, form, length, stage) {
 
 
     } else if (modtype %in% c('full', 'combined')) {
-        ths <- thermaltimesum(pars, fdat, tdat, form, length, stage)
+        ths <- thermaldaysum(pars, fdat, tdat, form, length, stage)
 
     } else {
         stop('Only options for mod type are partial, full and combined.')
