@@ -15,10 +15,13 @@
 #'     the list should be either a vector of hourly temperatures or a
 #'     data.frame of minimum and maximum daily temperatures. Each element
 #'     of the list should be named with the corresponding year.
-#' @param model character, specifies the type of model. Options are
+#' @param model character, specifies the type of model. Options are 'tta'
+#'     (thermal time accumulation) or 'da' (day accumulation).
+#' @param parameters ParameterList, contains the parameter values and
+#'     functional form of the thermal time calculations.
 plantmodel <- function(phenology, temperature, model, parameters, lbounds,
                        ubounds, cores=1L, estimateCT=TRUE,
-                       estimatelength=TRUE, ) {
+                       estimatelength=TRUE, full=FALSE) {
 
     if (!estimateCT & !estimatelength) {
         stop('You at least estimate either the cardinal temperatures or the model length, though you can estimate both.')
@@ -54,4 +57,6 @@ plantmodel <- function(phenology, temperature, model, parameters, lbounds,
             DEoptim(functionlist[[i]], lower=lbounds, upper=ubounds)$optim
         })
     }
+
+    return(optimlist)
 }
