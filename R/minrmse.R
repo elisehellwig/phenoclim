@@ -186,11 +186,7 @@ minrmse <- function(pars, fdat, tdat, modtype, form, stage, CT, L, full) {
     }
 
 
-
-    if (modtype=='thermal' & full) {
-        rmse <- minrmsethermalsimplified(fdat, stage)
-
-    } else if (modtype=='thermal') {
+    if (modtype=='thermal' & !full) {
         rmse <- minrmsethermal(ct, fdat, tdat, form, length, stage)
 
     } else if (modtype == 'day' & full) {
