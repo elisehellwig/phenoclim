@@ -117,15 +117,15 @@ thermaldaysum <- function(pars, fdat, tdat, form, length, stage) {
 #' @return The thermal sums for a given series of years.
 thermalsum <- function(pars, fdat, tdat, modtype, form, length, stage) {
 
-    if (modtype=='partial') {
+    if (modtype=='thermal') {
         ths < thermalgdsum(pars, fdat, tdat, form, length, stage)
 
 
-    } else if (modtype %in% c('full', 'combined')) {
+    } else if (modtype=='day') {
         ths <- thermaldaysum(pars, fdat, tdat, form, length, stage)
 
     } else {
-        stop('Only options for mod type are partial, full and combined.')
+        stop('Only options for model types are thermal and day.')
     }
 
     return(ths)
