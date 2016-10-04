@@ -45,12 +45,14 @@ minrmsethermal <- function(pars, fdat, tdat, form, length, stage) {
 #' @param fdat the data.frame containing the phenological information
 #' @param stage the number of the stage of the phenological model
 #' @return The RMSE value for the mean model.
-minrmsethermalsimplified <- function(fdat, stage) {
+minrmsethermalsimplified <- function(fdat, stage, returnMu=FALSE) {
 
     stagelength <- eventi(fdat, stage+1) - eventi(fdat, stage)
     meanSL <- mean(stagelength)
 
     rmse <- rmsd(rep(meanSL, length(stagelength)), stagelength)
+
+    if (returnMu) rmse <- c(rmse, meanSL)
 
     return(rmse)
 }
