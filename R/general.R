@@ -169,6 +169,7 @@ length0 <- function(x) {
 #' @return A vector with the julian days of the ith phenological event
 eventi <- function(dat, i) {
     d <- dat[,paste0('event',i)]
+    return(d)
 }
 
 
