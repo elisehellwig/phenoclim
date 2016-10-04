@@ -1,4 +1,4 @@
-#' @include parameterlistclass.R
+#' @include parameterlistclass.R parameterfunctions.R
 
 #This document has the basic methods for accessing and manipulating objects
 #   of the class ParameterList
@@ -30,6 +30,13 @@ setMethod("form", "ParameterList",
               return(object@form)
           })
 
+
+#' Accesses which parameters to estimate for the ParameterList object
+#' @rdname form
+setMethod("estimate", "ParameterList",
+          function(object) {
+              return(object@estimate)
+          })
 
 ##############################
 #show method
@@ -89,19 +96,16 @@ setValidity("ParameterList", function(object) {
     }
 
 
-    if (frm %in% c('gdd', 'gddsimple','linear') & ctnum!=1) {
+    if (parnum(frm)!=ctnum) {
         valid <- FALSE
-        msg <- c(msg, 'gdd, gddsimple, linear models require exactly one
-                 cardinal temperature.')
+        msg <- c(msg, 'The number of parameters does not fit the model form.')
+    }
 
-    } else if (frm=='flat' & ctnum!=2) {
+
+
+    if (all(!estimate(object))) {
         valid <- FALSE
-        msg <- c(msg, 'flat models require exactly two cardinal temperatures.')
-
-    } else if (frm %in% c('anderson', 'triangle')) {
-        valid <- FALSE
-        msg <- c(msg, 'Anderson and triangle require exactly three cardinal temperatures.')
-
+        msg <- c(msg, "At least one elemnent of estimate must be TRUE.")
     }
 
 
