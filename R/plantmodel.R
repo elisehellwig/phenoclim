@@ -20,8 +20,24 @@
 #' @param parameters ParameterList, contains the parameter values and
 #'     functional form of the thermal time calculations.
 plantmodel <- function(phenology, temperature, model, parameters, lbounds,
-                       ubounds, cores=1L, estimateCT=TRUE,
+                       ubounds, stages=1, cores=1L, estimateCT=TRUE,
                        estimatelength=TRUE, full=FALSE) {
+
+    n <- stages+1
+    events <- paste0('event', 1:n)
+    lengthcols <- paste0('length',1:stages)
+
+    pdat <- phenology[, c('year', events)]
+
+    ldat <- ldply(1:stages, function(i) eventi(pdat,i+1) - eventi(pdat, i))
+    names(ldat) <- lengthcols
+
+    d <- data.frame(pdat, ldat)
+
+
+    if (model=='thermal' & FULL) {
+
+    }
 
     if (!estimateCT & !estimatelength) {
         stop('You at least estimate either the cardinal temperatures or the model length, though you can estimate both.')
@@ -59,4 +75,15 @@ plantmodel <- function(phenology, temperature, model, parameters, lbounds,
     }
 
     return(optimlist)
+
+
+
+    pm <- new('PlantModel',
+              parameters=,
+              error=,
+              form=,
+              modeltype=,
+              )
+
+
 }
