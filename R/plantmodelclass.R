@@ -15,12 +15,9 @@
 setClass('PlantModel',
          slots=list(parameters='ParameterList',
                     error='numeric',
-                    form='character',
-                    modeltype='character',
-                    simplified='logical',
-                    stages='integer',
                     phenology='data.frame',
-                    temperature='list'))
+                    temperature='list',
+                    olm='lm'))
 
 #############################################################
 #Generics
