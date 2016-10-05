@@ -2,13 +2,18 @@
 #'
 #' ParameterList stores parameters for running the phenological models
 #'
-#' @slot form The functional form of the thermal time accumulation model.
+#' @slot stages integer. The number of stages in the phenological model.
+#' @slot modeltype character. The type of phenological model to be used. Options
+#'     are 'thermal' and 'day'. See ____ for more information.
+#' @slot simplified logical. Should the simplified version of the model type be
+#'      used.
+#' @slot form character. The functional form of the thermal time accumulation model.
 #'     Current options are gdd, gddsimple, linear, flat, triangle, and anderson
-#' @slot cardinaltemps The cardinal temperatures for the model. This is a list
+#' @slot cardinaltemps list. The cardinal temperatures for the model. This is a list
 #'     that should either be of length one or the length of the number of
 #'     stages. Each element of the list should contain the same number of
 #'     cardinal parameters.
-#' @slot modlength Stores the length of time or thermal time that is accumulated
+#' @slot modlength numeric. Stores the length of time or thermal time that is accumulated
 #'     in the model. There should be either one value (if there is only one
 #'     or if all the stages have the same parameters) or as many values as
 #'     there are stages.
@@ -16,14 +21,41 @@
 #'     `estimate` is a character vector that can contain "cardinaltemps",
 #'     "modlength" or both, but it must contain at least one of the two.
 setClass('ParameterList',
-         slots=list(form = 'character',
+         slots=list(stages='numeric',
+                    modeltype='character',
+                    simplified='logical',
+                    form = 'character',
          	        cardinaltemps = "list",
                     modlength = "numeric",
-                    estimation = 'character'))
+                    estimate = 'character'))
 
 
 #############################################################
 #generics
+
+#' Returns the number of stages in the model
+#'
+#' @param object An object of class ParameterList
+#' @return The number of stages in the model
+#' @export
+setGeneric('stages', function(object) standardGeneric('stages'))
+
+#' Returns the model type
+#'
+#' @param object An object of class ParameterList
+#' @return character, specifies what type of model the parameters are for.
+#'     Options are 'thermal' and 'day'
+#' @export
+setGeneric('modeltype', function(object) standardGeneric('modeltype'))
+
+#'
+#'
+#' @param object An object of class ParameterList
+#' @return character, specifies what type of model the parameters are for.
+#'     Options are 'thermal' and 'day'
+#' @export
+setGeneric('stages', function(object) standardGeneric('stages'))
+
 
 #' Returns the returns a vector of accumulation lengths
 #'
