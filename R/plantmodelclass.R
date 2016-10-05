@@ -19,7 +19,8 @@ setClass('PlantModel',
                     modeltype='character',
                     simplified='logical',
                     stages='integer',
-                    data='list'))
+                    phenology='data.frame',
+                    temperature='list'))
 
 #############################################################
 #Generics
