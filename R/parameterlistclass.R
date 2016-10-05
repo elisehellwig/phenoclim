@@ -48,13 +48,13 @@ setGeneric('stages', function(object) standardGeneric('stages'))
 #' @export
 setGeneric('modeltype', function(object) standardGeneric('modeltype'))
 
-#'
+#' Is the model simplified?
 #'
 #' @param object An object of class ParameterList
-#' @return character, specifies what type of model the parameters are for.
-#'     Options are 'thermal' and 'day'
+#' @return logical, is the simplified version of the model being fit? See ____
+#'      for more information.
 #' @export
-setGeneric('stages', function(object) standardGeneric('stages'))
+setGeneric('simplified', function(object) standardGeneric('simplified'))
 
 
 #' Returns the returns a vector of accumulation lengths
@@ -132,5 +132,42 @@ setGeneric('form<-', function(object, value) standardGeneric('form<-'))
 #'     'modlength' or both.
 #' @export
 setGeneric('estimate<-', function(object, value) standardGeneric('estimate<-'))
+
+
+
+#' Setting the number of stages
+#'
+#'  Used to change the number of stages without recreating the object.
+#'
+#' @param object An object of class ParameterList
+#' @param value integer, the number of stages in teh new model
+#' @export
+setGeneric('stages<-', function(object, value) standardGeneric('stages<-'))
+
+
+#' Setting the model type
+#'
+#'  Used to change the model type without recreating the object.
+#'
+#' @param object An object of class ParameterList
+#' @param value character, the model type, either 'thermal' or 'day'. See _____
+#'     for more information.
+#' @export
+setGeneric('modeltype<-', function(object, value) standardGeneric('modeltype<-'))
+
+
+#' Setting whether the model is simplified
+#'
+#'  Used to change whether or not the model is simplified without recreating the
+#'       object.
+#'
+#' @param object An object of class ParameterList
+#' @param value logical, is the model simplified?
+#' @export
+setGeneric('modeltype<-', function(object, value) standardGeneric('modeltype<-'))
+
+
+
+
 
 
