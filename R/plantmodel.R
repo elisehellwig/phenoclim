@@ -21,7 +21,7 @@
 #'     functional form of the thermal time calculations.
 plantmodel <- function(phenology, temperature, model, parameters, lbounds,
                        ubounds, stages=1, cores=1L, estimateCT=TRUE,
-                       estimatelength=TRUE, full=FALSE) {
+                       estimatelength=TRUE, simplified=FALSE) {
 
     n <- stages+1
     events <- paste0('event', 1:n)
@@ -35,7 +35,19 @@ plantmodel <- function(phenology, temperature, model, parameters, lbounds,
     d <- data.frame(pdat, ldat)
 
 
-    if (model=='thermal' & FULL) {
+    if (model=='thermal' & simplified) {
+
+        lmlist <- lapply(1:stages, function(i) {
+            fmla <- paste0(lengthcols[i]," ~ 1")
+            lm(fmla, data=d)
+        })
+
+        errorvec <- sapply(1:stages, function(i) {
+            rmsd(fitted(lmlist[[i]]), d[,lengthcols[i]])
+        })
+
+    } else if (model=='thermal') {
+
 
     }
 
