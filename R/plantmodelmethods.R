@@ -155,7 +155,7 @@ setValidity("PlantModel", function(object) {
                  'The number of stages is not the same as the number of parameter value sets.')
     }
 
-    if (!temptypecheck(temp)[1]) {
+    if (!tempclasscheck(temp)[1]) {
         valid <- FALSE
         msg <- c(msg, temptypecheck(temp)[-1])
     }
