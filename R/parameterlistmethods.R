@@ -7,6 +7,31 @@
 ##############################
 ###accessor methods
 
+
+#' Accesses the number stages of a ParameterList object
+#' @rdname stages
+setMethod("stages", "ParameterList",
+          function(object) {
+              return(object@stages)
+          })
+
+
+#' Accesses the model type of a ParameterList object
+#' @rdname modeltype
+setMethod("modeltype", "ParameterList",
+          function(object) {
+              return(object@modeltype)
+          })
+
+
+#' Accesses whether the model in the ParameterList object is simplified
+#' @rdname simplified
+setMethod("simplified", "ParameterList",
+          function(object) {
+              return(object@simplified)
+          })
+
+
 #' Accesses the modlength vector of a ParameterList object
 #' @rdname modlength
 setMethod("modlength", "ParameterList",
@@ -44,7 +69,7 @@ setMethod("estimate", "ParameterList",
 setMethod("show",
           signature = 'ParameterList',
           definition = function(object) {
-             n <- length(object@cardinaltemps[[1]])
+             n <- object@stages
 
              pars <- as.data.frame(do.call(rbind, object@cardinaltemps))
              names(pars) <- paste0('p', 1:n)
