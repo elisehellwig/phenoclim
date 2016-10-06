@@ -1,4 +1,4 @@
-#' @include plantmethodsbasic.R thermal.R general.R
+#' @include parameterlistmethods.R thermal.R general.R
 
 #This script has constructor functions for both ParameterList and Plant classes
 
