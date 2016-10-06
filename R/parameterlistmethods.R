@@ -188,6 +188,47 @@ setMethod('form<-', 'ParameterList',
               }
           })
 
+#' @rdname stages-set
+setMethod('stages<-', 'ParameterList',
+          function(object, value) {
+              object@stages <- value
+
+              if (validObject(object)) {
+                  return(object)
+              }
+          })
 
 
+#' @rdname modeltype-set
+setMethod('modeltype<-', 'ParameterList',
+          function(object, value) {
+              object@modeltype <- value
+
+              if (validObject(object)) {
+                  return(object)
+              }
+          })
+
+
+
+#' @rdname simplified-set
+setMethod('simplified<-', 'ParameterList',
+          function(object, value) {
+              object@simplified <- value
+
+              if (validObject(object)) {
+                  return(object)
+              }
+          })
+
+
+#' @rdname estimate-set
+setMethod('estimate<-', 'ParameterList',
+          function(object, value) {
+              object@estimate <- value
+
+              if (validObject(object)) {
+                  return(object)
+              }
+          })
 
