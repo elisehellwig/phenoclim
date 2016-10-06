@@ -86,3 +86,22 @@ tempclasscheck <- function(frm, temp) {
     return(msg)
 }
 
+
+
+plantmodelcheck <- function(phenology, temperature, form) {
+
+    #checking phenology data frame
+    pc <- phenologycheck(phenology)
+    if (!pc[1]) stop(pc[2])
+
+    #checking temperature list class
+    tcc <- tempclasscheck(form, temperature)
+    if (!tcc[1]) stop(tcc[2])
+
+    #checking
+
+}
+
+
+
+
