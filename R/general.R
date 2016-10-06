@@ -175,19 +175,20 @@ eventi <- function(dat, i) {
 
 
 ##############################################
-#' Checks year presence in Plant object
+#' Checks year presence in temperature list
 #'
 #' This function checks to make sure that for every year where there is
 #'     phenology data there is also temperature data.
 #'
-#' @param object An object of the class Plant
+#' @param phenology data.frame, the data.frame containing the phenology data.
+#' @param temperature, list, the list containing all the temperature data.
 #' @return Logical. Returns TRUE if all years of phenology data also have
 #'     corresponding temperature data. Otherwise it returns the years that are
 #'     missing temperature data.
-checktempyears <- function(object) {
+checktempyears <- function(phenology, temperature) {
 
-    pyears <- phenology(object)$year
-    temp <- temperature(object)
+    pyears <- phenology[,'year']
+    temp <- temperature
 
     if (is.list(temp[[1]])) {
 
