@@ -141,7 +141,7 @@ setValidity("PlantModel", function(object) {
        msg <- c(msg, phenologycheck[-1])
    }
 
-    if (!(checktempyears(object)[[1]])) {
+    if (!(checktempyears(pheno, temp)[[1]])) {
         valid <- FALSE
         msg <- c(msg,
                  paste('You are missing temp data for the following years',
