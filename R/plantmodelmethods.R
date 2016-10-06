@@ -19,7 +19,7 @@ setMethod("show",
               obs <- nrow(pheno)
               formname <- parameters(object)@form
 
-              cat('This plant has ', object@stages, "phenological stages")
+              cat('This plant has ', n, "phenological stages")
               cat('Average length of stage: ', avglengths)
               cat('Average event dates: ', avgdates)
               cat('The data spans ', span, 'years, and has ', obs,
@@ -29,6 +29,22 @@ setMethod("show",
 
 ################################################################
 #Accessor methods
+##top level
+
+#' Accesses the parameters of a PlantModel object
+#' @rdname parameters
+setMethod("parameters", "PlantModel",
+          function(object) {
+              return(object@parameters)
+          })
+
+
+#' Accesses the RMSE of a PlantModel object
+#' @rdname error
+setMethod("error", "PlantModel",
+          function(object) {
+              return(object@error)
+          })
 
 
 #' Accesses the phenology data.frame of a PlantModel object
@@ -47,50 +63,58 @@ setMethod("temperature", "PlantModel",
           })
 
 
-#' Accesses the model type of a PlantModel object
-#' @rdname modeltype
-setMethod("modeltype", "PlantModel",
+#' Accesses the linear model of a PlantModel object
+#' @rdname olm
+setMethod("olm", "PlantModel",
           function(object) {
-              return(object@modeltype)
+              return(object@olm)
           })
+
+
+######Paremeterlist accessors
 
 #' Accesses the number of stages of a PlantModel object
 #' @rdname stages
 setMethod("stages", "PlantModel",
           function(object) {
-              return(object@stages)
+              return(stages(object@parameters))
           })
 
-#' Accesses the parameters of a PlantModel object
-#' @rdname parameters
-setMethod("parameters", "PlantModel",
+#' Accesses the model type of a PlantModel object
+#' @rdname modeltype
+setMethod("modeltype", "PlantModel",
           function(object) {
-              return(object@parameters)
+              return(modeltype(object@parameters))
           })
 
 
-#' Accesses the functional form of a PlantModel object
-#' @rdname form
-setMethod("form", "PlantModel",
+#' Accesses whether the plant model is simplified
+#' @rdname simplifed
+setMethod("simplified", "PlantModel",
           function(object) {
-              return(form(parameters(object)))
+              return(simplified(object@parameters))
           })
 
 #' Accesses the cardinal temperatures
 #' @rdname cardinaltemps
 setMethod("cardinaltemps", "PlantModel",
           function(object) {
-              return(parameters(object)@cardinaltemps)
+              return(cardinaltemps(object@parameters))
           })
 
 #' Accesses the model lengths of a plant object
 #' @rdname modlength
 setMethod("modlength", "PlantModel",
           function(object) {
-              return(parameters(object)@modlength)
+              return(modlength(object@parameters))
           })
 
-
+#' Accesses what parameters are to be estimated
+#' @rdname estimate
+setMethod("estimate", "PlantModel",
+          function(object) {
+              return(estimate(object@parameters))
+          })
 ################################################################
 #validity method
 
