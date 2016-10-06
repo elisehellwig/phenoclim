@@ -17,25 +17,18 @@ setClass('PlantModel',
                     error='numeric',
                     phenology='data.frame',
                     temperature='list',
-                    olm='lm'))
+                    olm='lm'), contains = c('ParameterList', 'lm'))
 
 #############################################################
 #Generics
 
-#' Returns the RMSE for a phenological model
+#' Returns the parameters for a phenological model
 #'
 #' @param object An object of class PlantModel
-#' @return The root mean squared error (RMSE) of the model
+#' @return The ParameterList of the phenological model
 #' @export
-setGeneric('error', function(object) standardGeneric('error'))
+setGeneric('parameters', function(object) standardGeneric('parameters'))
 
-
-#' Is the PlantModel fit with the simplified model?
-#'
-#' @param object An object of class PlantModel
-#' @return logical, is the PlantModel the simplified version of the model?
-#' @export
-setGeneric('simplified', function(object) standardGeneric('simplified'))
 
 #' Returns the RMSE for a phenological model
 #'
@@ -58,19 +51,13 @@ setGeneric('phenology', function(object) standardGeneric('phenology'))
 #' @export
 setGeneric('temperature', function(object) standardGeneric('temperature'))
 
-#' Displays the model type
+
+#' Returns the lm object phenological model
 #'
 #' @param object An object of class PlantModel
-#' @return Returns the model type (character)
+#' @return An lm object containing the ordinary linear model used for stage
+#'     length prediction.
 #' @export
-setGeneric('modeltype', function(object) standardGeneric('modeltype'))
-
-#' Displays the number of stages in the phenological model
-#'
-#' @param object An object of class PlantModel
-#' @return The number of stages in the phenological model (numeric)
-#' @export
-setGeneric('stages', function(object) standardGeneric('stages'))
-
+setGeneric('olm', function(object) standardGeneric('olm'))
 
 
