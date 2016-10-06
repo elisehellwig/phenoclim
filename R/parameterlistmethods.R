@@ -93,8 +93,22 @@ setValidity("ParameterList", function(object) {
     msg <- NULL
     valid <- TRUE
 
+
     ct <- cardinaltemps(object)
     frm <- form(object)
+    forms <- c('gdd', 'gddsimple','linear','flat','anderson','triangle',
+               'trapezoid')
+
+    if (!(frm %in% forms)) {
+        valid <- FALSE
+        msg <- c(msg, 'The model form is not one of the accepted forms.')
+    }
+
+
+    if (!(modeltype(object) %in% c('thermal','day'))) {
+        valid <- FALSE
+        msg <- c(msg, 'The model type is not one of the accepted types.')
+    }
 
     if (length(object@modlength) != length(ct)) {
         valid <- FALSE
@@ -127,10 +141,9 @@ setValidity("ParameterList", function(object) {
     }
 
 
-
-    if (all(!estimate(object))) {
+    if (!all(estimate %in% c('cardinaltemps','modlength'))) {
         valid <- FALSE
-        msg <- c(msg, "At least one elemnent of estimate must be TRUE.")
+        msg <- c(msg, "estimate must include at least one of 'cardinaltemps' or 'modelength'. ")
     }
 
 
