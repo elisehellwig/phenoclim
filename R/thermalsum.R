@@ -3,7 +3,7 @@ NULL
 
 
 
-#' Calculates thermal time sums for partial model
+#' Calculates thermal time sums for tta model
 #'
 #' Calculates thermal time sums for a given length of days after flowering for
 #' a series of years.
@@ -54,7 +54,7 @@ thermalgdsum <- function(pars, fdat, tdat, form, length, stage) {
 
 
 
-#' Calculates thermal time sums for full or combined model
+#' Calculates thermal time sums for da model
 #'
 #' Calculates thermal time sums for a given amount of GD* after flowering for
 #' a series of years.
@@ -110,23 +110,26 @@ thermaldaysum <- function(pars, fdat, tdat, form, length, stage) {
 #' @param pars Cardinal temperatures
 #' @param fdat the data.frame containing the phenological information
 #' @param tdat list containing the temperature information
+#' @param modtype character, specifies what type of model is being run. Can be
+#'     either 'tta' (thermal time accumulation) or 'da' (day accumulation).
 #' @param form the functional form of the thermal time accumulation
 #' @param length the length of thermal time accumulation (in days). It can be
 #'     either a set length of time (one number) or the total length of the
 #'     stage (one length for each entry in fdat).
 #' @param stage the number of the stage of the phenological model
 #' @return The thermal sums for a given series of years.
+#' @export
 thermalsum <- function(pars, fdat, tdat, modtype, form, length, stage) {
 
-    if (modtype=='thermal') {
+    if (modtype=='tta') {
         ths < thermalgdsum(pars, fdat, tdat, form, length, stage)
 
 
-    } else if (modtype=='day') {
+    } else if (modtype=='da') {
         ths <- thermaldaysum(pars, fdat, tdat, form, length, stage)
 
     } else {
-        stop('Only options for model types are thermal and day.')
+        stop('Only options for model types are tta and da.')
     }
 
     return(ths)
