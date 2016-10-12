@@ -38,8 +38,7 @@ thermalgdsum <- function(pars, fdat, tdat, form, length, stage) {
 	if (form %in% c('gdd','gddsimple', 'linear','nocrit','triangle',
 	                'trapezoid','anderson')) {
 	    #print(pars)
-	    tsums <- sapply(1:length(start), function(y) {
-
+	    tsums <- sapply(1:length(start), function(i) {
 	        plist <- parlist(templist[[i]], pars, sum=TRUE)
 	        do.call(form, plist)
 	    })
@@ -111,7 +110,7 @@ thermaldaysum <- function(pars, fdat, tdat, form, length, stage) {
 #' @param fdat the data.frame containing the phenological information
 #' @param tdat list containing the temperature information
 #' @param modtype character, specifies what type of model is being run. Can be
-#'     either 'tta' (thermal time accumulation) or 'da' (day accumulation).
+#'     either thermal (thermal time accumulation) or day (day accumulation).
 #' @param form the functional form of the thermal time accumulation
 #' @param length the length of thermal time accumulation (in days). It can be
 #'     either a set length of time (one number) or the total length of the
@@ -121,15 +120,15 @@ thermaldaysum <- function(pars, fdat, tdat, form, length, stage) {
 #' @export
 thermalsum <- function(pars, fdat, tdat, modtype, form, length, stage) {
 
-    if (modtype=='tta') {
+    if (modtype=='thermal') {
         ths < thermalgdsum(pars, fdat, tdat, form, length, stage)
 
 
-    } else if (modtype=='da') {
+    } else if (modtype=='day') {
         ths <- thermaldaysum(pars, fdat, tdat, form, length, stage)
 
     } else {
-        stop('Only options for model types are tta and da.')
+        stop('Only options for model types are thermal and day.')
     }
 
     return(ths)

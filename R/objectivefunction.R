@@ -27,9 +27,9 @@ objective <- function(parameters, phenology, temperature, stage, CT, L) {
     fdat <- phenology[, c('year', events, paste0('length', stage))]
 
     if (stages(parameters)==1) {
-        tdat <- temperature(p)
+        tdat <- temperature
     } else {
-        tdat <- temperature(p)[[stage]]
+        tdat <- temperature[[stage]]
     }
 
     if (CT) ct <- TRUE else ct <- pars
@@ -37,7 +37,7 @@ objective <- function(parameters, phenology, temperature, stage, CT, L) {
 
 
     fun <- function(x) {
-        return(minrmse(x, fdat, tdat, modtype(parameters), form(parameters),
+        return(minrmse(x, fdat, tdat, modeltype(parameters), form(parameters),
                        stage, ct, l))
     }
 

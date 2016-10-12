@@ -8,4 +8,5 @@
 #' @importFrom reshape2 melt
 #' @importFrom DEoptim DEoptim
 #' @importFrom parallel mclapply
+#' @importFrom stats fitted formula lm
 NULL

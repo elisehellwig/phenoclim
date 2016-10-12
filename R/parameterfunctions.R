@@ -84,7 +84,7 @@ boundlength <- function(form, CT, L) {
         parslength <- parnum(form)
     }
 
-    return(parlength)
+    return(parslength)
 }
 
 

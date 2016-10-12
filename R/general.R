@@ -228,7 +228,7 @@ predictevent <- function(pars, temps, form, length) {
 
     if (length(length)==length(gd)) {
 
-        eventday <- sapply(1:length(gd), {
+        eventday <- sapply(1:length(gd), function(i) {
             suppressWarnings(min(which(gd[[i]]>length[i])))
         })
     } else if (length(length)==1) {

@@ -24,6 +24,8 @@ NULL
 #'     model
 #' @param ubounds numeric, a vector of the upper bounds for the parameters in
 #'     the model.
+#' @param cores integer, if using parallel processing, how many cores should R
+#'     use to fit the model.
 #' @param estimateCT logical, should the cardinal temperatures be estimated?
 #' @param estimatelength logical, should the accumulation length or threshold be
 #'     estimated?
@@ -70,7 +72,7 @@ plantmodel <- function(phenology, temperature, model, parameters, lbounds,
 
 
         functionlist <- lapply(1:stages, function(i) {
-            objective(p, i, estimateCT, estimatelength)
+            objective(parameters, i, estimateCT, estimatelength)
         })
 
 
@@ -113,7 +115,7 @@ plantmodel <- function(phenology, temperature, model, parameters, lbounds,
 
     }
 
-    if (!simplfied) {
+    if (!simplified) {
 
         lmlist <- lapply(1:stages, function(i) {
             f <- formula(paste(paste0('length',i), ' ~ ', predictornames[i] ))

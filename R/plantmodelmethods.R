@@ -77,43 +77,36 @@ setMethod("olm", "PlantModel",
 #' @rdname stages
 setMethod("stages", "PlantModel",
           function(object) {
-              return(stages(object@parameters))
+              return(object@parameters@stages)
           })
 
 #' Accesses the model type of a PlantModel object
 #' @rdname modeltype
 setMethod("modeltype", "PlantModel",
           function(object) {
-              return(modeltype(object@parameters))
+              return(object@parameters@modeltype)
           })
 
-
-#' Accesses whether the plant model is simplified
-#' @rdname simplifed
-setMethod("simplified", "PlantModel",
-          function(object) {
-              return(simplified(object@parameters))
-          })
 
 #' Accesses the cardinal temperatures
 #' @rdname cardinaltemps
 setMethod("cardinaltemps", "PlantModel",
           function(object) {
-              return(cardinaltemps(object@parameters))
+              return(object@parameters@cardinaltemps)
           })
 
 #' Accesses the model lengths of a plant object
 #' @rdname modlength
 setMethod("modlength", "PlantModel",
           function(object) {
-              return(modlength(object@parameters))
+              return(object@parameters@modlength)
           })
 
 #' Accesses what parameters are to be estimated
 #' @rdname estimate
 setMethod("estimate", "PlantModel",
           function(object) {
-              return(estimate(object@parameters))
+              return(object@parameters@estimate)
           })
 
 

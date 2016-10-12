@@ -6,14 +6,13 @@ NULL
 #############################################################
 #' An S4 class a fitted model of plant development
 #'
+#' @slot parameters A ParameterList object that contains the fit parameters.
+#' @slot error A vector of RMSE values for each of the models (not cross-validated).
 #' @slot phenology A data.frame that contains the phenological data.
 #' @slot temperature A list that contains temperature data for all of
 #'     the years for which there is phenological data.
-#' @slot modeltype The type of structure the model will have. Options are
-#'     'partial', 'full', 'combined', or 'time'.
-#' @slot form The functional form of the thermal time accumulation.
-#' @slot stages An integer with the number of stages in the phenological model
-#' @slot parameters A ParameterList object that contains the fit parameters.
+#' @slot olm A list of linear models relating the thermal time or day
+#'     accumulation to the stage length
 #' @export
 setClass('PlantModel',
          slots=list(parameters='ParameterList',
