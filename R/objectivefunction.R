@@ -1,28 +1,26 @@
 #' @include minrmse.R
 
-objective <- function(p, stage, CT, L) {
+objective <- function(parameters, phenology, temperature, stage, CT, L) {
 
-    pars <- cardinaltemps(p)[[i]]
-    ml <- modlength(p)[i]
-    events <- paste0('event', i:(i+1))
+    pars <- cardinaltemps(parameters)[[stage]]
+    ml <- modlength(parameters)[stage]
+    events <- paste0('event', stage:(stage+1))
 
-    fdat <- phenology(p)[, c('year', events)]
-    fdat$stagelength <- eventi(fdat, i+1) - eventi(fdat, i)
+    fdat <- phenology[, c('year', events, paste0('length', stage))]
 
-
-    if (stages(p)==1) {
+    if (stages(parameters)==1) {
         tdat <- temperature(p)
     } else {
-        tdat <- temperature(p)[[i]]
+        tdat <- temperature(p)[[stage]]
     }
 
     if (CT) ct <- TRUE else ct <- pars
     if (L) l <- TRUE else l <- pars
 
 
-
     fun <- function(x) {
-        return(minrmse(x, fdat, tdat, modtype(p), form(p), i, ct, l))
+        return(minrmse(x, fdat, tdat, modtype(parameters), form(parameters),
+                       stage, ct, l))
     }
 
     return(fun)
