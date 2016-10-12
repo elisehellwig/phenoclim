@@ -87,8 +87,15 @@ tempclasscheck <- function(frm, temp) {
 }
 
 
-
-plantmodelcheck <- function(phenology, temperature, form) {
+#' Checks a number of problems with the PlantModel
+#'
+#' @param phenology data.frame, the data.frame containing the phenology data.
+#' @param temperature list, the list of temperatures used to calculate thermal time
+#'     accumulation.
+#' @param form character, the functional form of the thermal time model.
+#' @param modtype character, the type of model to be fit using plantmodel()
+#' @param stages integer, number of phenological stages in the model.
+plantmodelcheck <- function(phenology, temperature, form, modtype, stages) {
 
     #checking phenology data frame
     pc <- phenologycheck(phenology)
@@ -98,7 +105,13 @@ plantmodelcheck <- function(phenology, temperature, form) {
     tcc <- tempclasscheck(form, temperature)
     if (!tcc[1]) stop(tcc[2])
 
-    #checking
+    #checking to make sure all the years are there
+    tyc <-checktempyears(phenology, temperature)
+    if (!tyc[[1]]) stop(paste('Missing temperature data from years:', tyc[[2]]))
+
+    #checking the model type
+    mtc <- modeltypecheck(modtype)
+    if (!mtc[1]) stop(mtc[2])
 
 }
 
