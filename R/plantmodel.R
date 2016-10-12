@@ -54,66 +54,64 @@ plantmodel <- function(phenology, temperature, model, parameters, lbounds,
             lm(fmla, data=d)
         })
 
-        errorvec <- sapply(1:stages, function(i) {
-            rmsd(fitted(lmlist[[i]]), d[,lengthcols[i]])
-
-
-
-            break
+        fits <- ldply(lmlist, function(mod) {
+            fitted(mod)
         })
-
-    }
-
-    ttform <- form(parameters)
-
-    if (boundlength(ttform, estimateCT, estimatelength)!=lbounds) {
-        stop(paste0('The bounds have the wrong number of parameter values. ',
-                   'Your bounds are of length', length(lbounds),
-                   ', and they should be of length',
-                   boundlength(ttform, estimateCT, estimatelength), '.'))
-    }
-
-
-    functionlist <- lapply(1:stages, function(i) {
-        objective(p, i, estimateCT, estimatelength)
-    })
-
-    #optimizing the parameters
-    if (stages > 1 & cores > 1) {
-
-        optimlist <- mclapply(1:length(functionlist), function(i) {
-            DEoptim(functionlist[[i]], lower=lbounds,upper=ubounds)$optim
-        }, mc.cores=cores)
 
     } else {
-        optimlist <- lapply(1:length(functionlist), function(i) {
-            DEoptim(functionlist[[i]], lower=lbounds, upper=ubounds)$optim
-        })
-    }
+        ttform <- form(parameters)
 
-    #extracting those parameters
-    if (estimateCT & estimatelength) {
-        newlength <- sapply(optimlist, function(ol) unname(ol[['bestmem']])[1])
-        newct <- lapply(optimlist, function(ol) unname(ol[['bestmem']])[-1] )
+        if (boundlength(ttform, estimateCT, estimatelength)!=lbounds) {
+            stop(paste0('The bounds have the wrong number of parameter values. ',
+                        'Your bounds are of length', length(lbounds),
+                        ', and they should be of length',
+                        boundlength(ttform, estimateCT, estimatelength), '.'))
+        }
 
-    } else if (estimateCT & !estimatelength) {
-        newlength <- modlength(parameters)
-        newct <- lapply(optimlist, function(ol) unname(ol[['bestmem']]))
 
-    } else {
-        newlength <- sapply(optimlist, function(ol) unname(ol[['bestmem']])[1])
-        newct <- cardinaltemps(parameters)
-    }
-
-    #creating predictors for stage length based on the parameters
-    predictornames <- paste0(modeltype, 1:stages)
-    predictors <- ldply(1:stages, function(i) {
-        thermalsum(newct, phenology, temperature, modeltype, ttform,
-                   newlength, i)
+        functionlist <- lapply(1:stages, function(i) {
+            objective(p, i, estimateCT, estimatelength)
         })
 
-    names(predictors) <- predictornames
-    d2 <- cbind(d, predictors)
+
+        #optimizing the parameters
+        if (stages > 1 & cores > 1) {
+
+            optimlist <- mclapply(1:length(functionlist), function(i) {
+                DEoptim(functionlist[[i]], lower=lbounds,upper=ubounds)$optim
+            }, mc.cores=cores)
+
+        } else {
+            optimlist <- lapply(1:length(functionlist), function(i) {
+                DEoptim(functionlist[[i]], lower=lbounds, upper=ubounds)$optim
+            })
+        }
+
+        #extracting those parameters
+        if (estimateCT & estimatelength) {
+            newlength <- sapply(optimlist, function(ol) unname(ol[['bestmem']])[1])
+            newct <- lapply(optimlist, function(ol) unname(ol[['bestmem']])[-1] )
+
+        } else if (estimateCT & !estimatelength) {
+            newlength <- modlength(parameters)
+            newct <- lapply(optimlist, function(ol) unname(ol[['bestmem']]))
+
+        } else {
+            newlength <- sapply(optimlist, function(ol) unname(ol[['bestmem']])[1])
+            newct <- cardinaltemps(parameters)
+        }
+
+        #creating predictors for stage length based on the parameters
+        predictornames <- paste0(modeltype, 1:stages)
+        predictors <- ldply(1:stages, function(i) {
+            thermalsum(newct, phenology, temperature, modeltype, ttform,
+                       newlength, i)
+        })
+
+        names(predictors) <- predictornames
+        d2 <- cbind(d, predictors)
+
+    }
 
     if (!simplfied) {
 
@@ -125,25 +123,32 @@ plantmodel <- function(phenology, temperature, model, parameters, lbounds,
         fits <- ldply(lmlist, function(mod) {
             fitted(mod)
         })
+
     } else if (simplified & modeltype='da') {
-        fits <-
+        lmlist <- list(NA)
+        fits <- predictors
     }
 
+    names(fits) <- paste0('fitstage', 1:stages)
+    d3 <- cbind(d2, fits)
 
-
+    rmse <- sapply(1:stages, function(i) {
+       fit <- paste0('fitstage', i)
+        observed <- paste0('length',i)
+        rmsd(d3[,fit], d3[,observed])
+    })
 
     DEparameters <- parameters
     modlength(DEparameters) <- newlength
     cardinaltemps(DEparameters) <- newct
 
-    DEerrors <- sapply(optimlist, function(ol) unname(ol[['bestval']])[1])
-
     pm <- new('PlantModel',
               parameters=DEparameters,
-              error=DEerrors,
-              phenology=d2,
+              error=rmse,
+              phenology=d3,
               temperature=temperature,
               olm=lmlist)
 
+    return(pm)
 
 }
