@@ -1,4 +1,4 @@
-#' @include constructors.R minrmse.R
+#' @include constructors.R minrmse.R plantmodelcheck.R
 
 # This document contains the function that fits phenological models for Plant
 #     objects.
@@ -19,13 +19,24 @@
 #'     (thermal time accumulation) or 'da' (day accumulation).
 #' @param parameters ParameterList, contains the parameter values and
 #'     functional form of the thermal time calculations.
+#' @param lbounds numeric, a vector of lower bounds for the parameters in the
+#'     model
+#' @param ubounds numeric, a vector of the upper bounds for the parameters in
+#'     the model.
+#' @param estimateCT logical, should the cardinal temperatures be estimated?
+#' @param estimatelength logical, should the accumulation length or threshold be
+#'     estimated?
+#' @param simplified logical, should the simplified version of the model be run.
 plantmodel <- function(phenology, temperature, model, parameters, lbounds,
-                       ubounds, stages=1, cores=1L, estimateCT=TRUE,
+                       ubounds, cores=1L, estimateCT=TRUE,
                        estimatelength=TRUE, simplified=FALSE) {
 
+    stages <- stages(parameters)
     n <- stages+1
     events <- paste0('event', 1:n)
     lengthcols <- paste0('length',1:stages)
+
+
 
     pdat <- phenology[, c('year', events)]
 
@@ -44,22 +55,15 @@ plantmodel <- function(phenology, temperature, model, parameters, lbounds,
 
         errorvec <- sapply(1:stages, function(i) {
             rmsd(fitted(lmlist[[i]]), d[,lengthcols[i]])
+
+
+
+            break
         })
 
-    } else if (model=='thermal') {
-
-
     }
 
-    if (!estimateCT & !estimatelength) {
-        stop('You at least estimate either the cardinal temperatures or the model length, though you can estimate both.')
-    }
-
-    if (lbounds != ubounds) {
-        stop('The lower and upper bound vectors must have the same number of parameters')
-    }
-
-    ttform <- form(p)
+    ttform <- form(parameters)
 
     if (boundlength(ttform, estimateCT, estimatelength)!=lbounds) {
         stop(paste0('The bounds have the wrong number of parameter values. ',
@@ -68,13 +72,12 @@ plantmodel <- function(phenology, temperature, model, parameters, lbounds,
                    boundlength(ttform, estimateCT, estimatelength), '.'))
     }
 
-    n <- stages(p)
 
-    functionlist <- lapply(1:n, function(i) {
+    functionlist <- lapply(1:stages, function(i) {
         objective(p, i, estimateCT, estimatelength)
     })
 
-    if (n > 1 & cores > 1) {
+    if (stages > 1 & cores > 1) {
 
         optimlist <- mclapply(1:length(functionlist), function(i) {
             DEoptim(functionlist[[i]], lower=lbounds,upper=ubounds)$optim
@@ -88,6 +91,11 @@ plantmodel <- function(phenology, temperature, model, parameters, lbounds,
 
     return(optimlist)
 
+    if (estimateCT & estimatelength) {
+        newlength <-
+    }
+
+    plist <- parameterlist()
 
 
     pm <- new('PlantModel',
