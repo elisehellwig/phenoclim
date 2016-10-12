@@ -2,10 +2,21 @@
 % Please edit documentation in R/constructors.R
 \name{parameterlist}
 \alias{parameterlist}
+\title{Creates ParameterList object}
 \usage{
-parameterlist(ct, length)
+parameterlist(n, mt, simple, ff, ct, length, est)
 }
 \arguments{
+\item{n}{integer, the number of stages in the model.}
+
+\item{mt}{character, the model type. Can be either 'thermal' or 'day'.}
+
+\item{simple}{logical, is the model the simplified version?}
+
+\item{ff}{character, the functional form of the thermal time calculations.
+Options are 'gdd', 'gddsimple', 'linear', 'flat', 'triangle', and
+'anderson'. For more information see ______.}
+
 \item{ct}{A list, data.frame, or matrix of cardinal temperatures. In the
 case of a data.frame or matrix, each row should contain the cardinal
 temperatures for a given stage of the model. If ct is a list, each
@@ -13,8 +24,16 @@ element of the list should be a vector of cardinal temperatures for a
 given stage of the model.}
 
 \item{length}{A vector of model lengths}
+
+\item{est}{character, Determines what parameters are estimated in the model.
+Can contain "cardinaltemps", "modlength" or both, but it must contain at
+least one of the two.}
 }
 \value{
 An object of the class ParameterList.
+}
+\description{
+This function creates an object of the class ParameterList. Plant objects
+    require objects of the class ParameterList for their parameters slot.
 }
 

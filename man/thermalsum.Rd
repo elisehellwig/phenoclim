@@ -13,6 +13,9 @@ thermalsum(pars, fdat, tdat, modtype, form, length, stage)
 
 \item{tdat}{list containing the temperature information}
 
+\item{modtype}{character, specifies what type of model is being run. Can be
+either thermal (thermal time accumulation) or day (day accumulation).}
+
 \item{form}{the functional form of the thermal time accumulation}
 
 \item{length}{the length of thermal time accumulation (in days). It can be

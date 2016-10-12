@@ -2,6 +2,7 @@
 % Please edit documentation in R/thermalsum.R
 \name{thermalgdsum}
 \alias{thermalgdsum}
+\title{Calculates thermal time sums for tta model}
 \usage{
 thermalgdsum(pars, fdat, tdat, form, length, stage)
 }
@@ -22,5 +23,9 @@ stage (one length for each entry in fdat).}
 }
 \value{
 The thermal sums for a given series of years.
+}
+\description{
+Calculates thermal time sums for a given length of days after flowering for
+a series of years.
 }
 

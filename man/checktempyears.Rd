@@ -2,12 +2,14 @@
 % Please edit documentation in R/general.R
 \name{checktempyears}
 \alias{checktempyears}
-\title{Checks year presence in Plant object}
+\title{Checks year presence in temperature list}
 \usage{
-checktempyears(object)
+checktempyears(phenology, temperature)
 }
 \arguments{
-\item{object}{An object of the class Plant}
+\item{phenology}{data.frame, the data.frame containing the phenology data.}
+
+\item{temperature, }{list, the list containing all the temperature data.}
 }
 \value{
 Logical. Returns TRUE if all years of phenology data also have

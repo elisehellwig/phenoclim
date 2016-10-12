@@ -4,7 +4,7 @@
 \alias{minrmse}
 \title{Calculates model RMSE}
 \usage{
-minrmse(pars, fdat, tdat, modtype, form, stage, CT, L)
+minrmse(pars, fdat, tdat, modtype, form, stage, CT, L, simplified)
 }
 \arguments{
 \item{pars}{Cardinal temperatures}
@@ -23,12 +23,10 @@ minrmse(pars, fdat, tdat, modtype, form, stage, CT, L)
 \item{CT}{logical, should the cardinal temperatures be optimized. If not CT
 is the vector of cardinal temperatures}
 
-\item{L}{logical, should the model length be optimized. If not L is the
-model length.}
+\item{L}{logical, should the model accumulation length be optimized. If not L
+is the (numeric) model accumulation length.}
 
-\item{length}{the length of thermal time accumulation (in days). It can be
-either a set length of time (one number) or the total length of the
-stage (one length for each entry in fdat).}
+\item{simplified}{logical, should the simplified version of the model be run?}
 }
 \value{
 The RMSE value for a given set of cardinal temperatures and thermal

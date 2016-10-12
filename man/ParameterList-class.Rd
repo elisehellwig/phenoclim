@@ -10,17 +10,30 @@ ParameterList stores parameters for running the phenological models
 \section{Slots}{
 
 \describe{
-\item{\code{form}}{The functional form of the thermal time accumulation model.
-Current options are gdd, gddsimple, linear, flat, triangle, and anderson}
+\item{\code{stages}}{integer. The number of stages in the phenological model.}
 
-\item{\code{cardinaltemps}}{The cardinal temperatures for the model. This is a list
-that should either be of length one or the length of the number of
+\item{\code{modeltype}}{character. The type of phenological model to be used. Options
+are 'thermal' and 'day'. See ____ for more information.}
+
+\item{\code{simplified}}{logical. Should the simplified version of the model type be
+used.}
+
+\item{\code{form}}{character. The functional form of the thermal time accumulation
+model. Current options are gdd, gddsimple, linear, flat, triangle, and
+anderson.}
+
+\item{\code{cardinaltemps}}{list. The cardinal temperatures for the model. This is a
+list that should either be of length one or the length of the number of
 stages. Each element of the list should contain the same number of
 cardinal parameters.}
 
-\item{\code{modlength}}{Stores the length of time or thermal time that is accumulated
-in the model. There should be either one value (if there is only one
-or if all the stages have the same parameters) or as many values as there
-are stages.}
+\item{\code{modlength}}{numeric. Stores the length of time or thermal time that is
+accumulated in the model. There should be either one value (if there is
+only one or if all the stages have the same parameters) or as many values
+as there are stages.}
+
+\item{\code{estimate}}{Determines what parameters are estimated in the model.
+`estimate` is a character vector that can contain "cardinaltemps",
+"modlength" or both, but it must contain at least one of the two.}
 }}
 
