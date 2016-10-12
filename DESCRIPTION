@@ -10,6 +10,8 @@ Imports:
     parallel
 Authors@R: person("Elise", "Hellwig",
                   email = "echellwig@ucdavis.edu", role = c("aut", "cre"))
+Author: Elise Hellwig
+Maintainer: Elise Hellwig
 URL: https://bitbucket.org/echellwig/phenoclim
 Description: Cleans temperature data, uses it to calculate thermal time with a
     set number of thermal time models, optimizes thermal time cardinal temperatures
