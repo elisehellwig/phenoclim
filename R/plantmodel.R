@@ -124,7 +124,7 @@ plantmodel <- function(phenology, temperature, model, parameters, lbounds,
             fitted(mod)
         })
 
-    } else if (simplified & modeltype='da') {
+    } else if (simplified & modeltype=='da') {
         lmlist <- list(NA)
         fits <- predictors
     }
