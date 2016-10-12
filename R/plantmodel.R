@@ -1,4 +1,5 @@
 #' @include constructors.R minrmse.R plantmodelcheck.R
+NULL
 
 # This document contains the function that fits phenological models for Plant
 #     objects.
@@ -77,6 +78,7 @@ plantmodel <- function(phenology, temperature, model, parameters, lbounds,
         objective(p, i, estimateCT, estimatelength)
     })
 
+    #optimizing the parameters
     if (stages > 1 & cores > 1) {
 
         optimlist <- mclapply(1:length(functionlist), function(i) {
@@ -89,21 +91,59 @@ plantmodel <- function(phenology, temperature, model, parameters, lbounds,
         })
     }
 
-    return(optimlist)
-
+    #extracting those parameters
     if (estimateCT & estimatelength) {
-        newlength <-
+        newlength <- sapply(optimlist, function(ol) unname(ol[['bestmem']])[1])
+        newct <- lapply(optimlist, function(ol) unname(ol[['bestmem']])[-1] )
+
+    } else if (estimateCT & !estimatelength) {
+        newlength <- modlength(parameters)
+        newct <- lapply(optimlist, function(ol) unname(ol[['bestmem']]))
+
+    } else {
+        newlength <- sapply(optimlist, function(ol) unname(ol[['bestmem']])[1])
+        newct <- cardinaltemps(parameters)
     }
 
-    plist <- parameterlist()
+    #creating predictors for stage length based on the parameters
+    predictornames <- paste0(modeltype, 1:stages)
+    predictors <- ldply(1:stages, function(i) {
+        thermalsum(newct, phenology, temperature, modeltype, ttform,
+                   newlength, i)
+        })
 
+    names(predictors) <- predictornames
+    d2 <- cbind(d, predictors)
+
+    if (!simplfied) {
+
+        lmlist <- lapply(1:stages, function(i) {
+            f <- formula(paste(paste0('length',i), ' ~ ', predictornames[i] ))
+            lm(f, data=d2)
+        })
+
+        fits <- ldply(lmlist, function(mod) {
+            fitted(mod)
+        })
+    } else if (simplified & modeltype='da') {
+        fits <-
+    }
+
+
+
+
+    DEparameters <- parameters
+    modlength(DEparameters) <- newlength
+    cardinaltemps(DEparameters) <- newct
+
+    DEerrors <- sapply(optimlist, function(ol) unname(ol[['bestval']])[1])
 
     pm <- new('PlantModel',
-              parameters=,
-              error=,
-              form=,
-              modeltype=,
-              )
+              parameters=DEparameters,
+              error=DEerrors,
+              phenology=d2,
+              temperature=temperature,
+              olm=lmlist)
 
 
 }
