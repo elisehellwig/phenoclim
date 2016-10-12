@@ -1,4 +1,6 @@
 #' @include minrmse.R
+NULL
+
 
 objective <- function(parameters, phenology, temperature, stage, CT, L) {
 

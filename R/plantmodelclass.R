@@ -1,5 +1,8 @@
+#' @include parameterlistmethods.R
+NULL
+
 #############################################################
-#GrowthModel class
+#PlantModel class
 #############################################################
 #' An S4 class a fitted model of plant development
 #'

@@ -1,4 +1,5 @@
 #' @include parameterlistmethods.R thermal.R general.R
+NULL
 
 #This script has constructor functions for both ParameterList and Plant classes
 

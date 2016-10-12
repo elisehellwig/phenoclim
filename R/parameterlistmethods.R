@@ -1,4 +1,5 @@
 #' @include parameterlistclass.R parameterfunctions.R
+NULL
 
 #This document has the basic methods for accessing and manipulating objects
 #   of the class ParameterList
