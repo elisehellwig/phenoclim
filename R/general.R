@@ -91,14 +91,12 @@ extracttemp <- function(tdat, years, starts, ends, tempname=NA,
 
     #checks if the end day is the same for each year
     } else if (length(ends)==1) {
-        endvec <- rep(ends, length(starts))
+        endvec <- rep(ends, length(startvec))
 
     } else { #if not there is a problem
         stop('Starts must either have an end day for each year or the end day must be the same for all years')
 
     }
-
-    #print(years)
 
     #checking to see if the function needs to dectect the temperature column
     if (is.na(tempname[1])) {
