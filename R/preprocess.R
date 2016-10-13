@@ -65,6 +65,8 @@ missingDays <- function(x, days, limits, hourly=FALSE) {
 
         if (is.leapyear(year) & length(days)==365) {
             days <- expand.grid(c(days,366), 1:24)
+        } else {
+            days <- expand.grid(days, 1:24)
         }
 
     } else {
@@ -75,7 +77,7 @@ missingDays <- function(x, days, limits, hourly=FALSE) {
         }
     }
 
-    if (is.na(limits)) {
+    if (is.na(limits[1])) {
 
         observations <- x[,cols]
 
@@ -138,7 +140,7 @@ timeSeriesCheck <- function(x, years=NA, limits=NA, hours=FALSE) {
         years <- unique(x$year)
     }
 
-    if (is.na(limits)) {
+    if (is.na(limits[[1]])) {
         alldays <- 1:365
 
     } else {
@@ -150,7 +152,6 @@ timeSeriesCheck <- function(x, years=NA, limits=NA, hours=FALSE) {
     })
 
     names(missing) <- years
-
     noneMissing <- sapply(missing, function(v) is.na(v))
 
     if (all(noneMissing)) {
