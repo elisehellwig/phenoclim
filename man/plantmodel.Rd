@@ -4,25 +4,13 @@
 \alias{plantmodel}
 \title{Fits phenological models}
 \usage{
-plantmodel(phenology, temperature, model, parameters, lbounds, ubounds,
-  cores = 1L, estimateCT = TRUE, estimatelength = TRUE,
-  simplified = FALSE)
+plantmodel(phenology, temp, parlist, lbounds, ubounds, cores = 1L,
+  estimateCT = TRUE, estimatelength = TRUE, simple = FALSE)
 }
 \arguments{
 \item{phenology}{data.frame, contains the phenological data.
 Required columns are `year`, and `event1` through `eventN` where `N`
 is the number of phenological events in the model.}
-
-\item{temperature}{list, contains the temperature data. Each element of
-the list should be either a vector of hourly temperatures or a
-data.frame of minimum and maximum daily temperatures. Each element
-of the list should be named with the corresponding year.}
-
-\item{model}{character, specifies the type of model. Options are 'tta'
-(thermal time accumulation) or 'da' (day accumulation).}
-
-\item{parameters}{ParameterList, contains the parameter values and
-functional form of the thermal time calculations.}
 
 \item{lbounds}{numeric, a vector of lower bounds for the parameters in the
 model}
@@ -38,7 +26,18 @@ use to fit the model.}
 \item{estimatelength}{logical, should the accumulation length or threshold be
 estimated?}
 
+\item{temps}{data.frame, contains the temperature data. There should be a
+column for year, day of the year, hourly temperature (named temp) or min
+max daily temperatures (named tmin and tmax), and hour if the
+temperatures are hourly.}
+
+\item{parameters}{ParameterList, contains the parameter values and
+functional form of the thermal time calculations.}
+
 \item{simplified}{logical, should the simplified version of the model be run.}
+}
+\value{
+A PlantModel object.
 }
 \description{
 `plantmodel` fits phenological models of two general types: thermal time accumulation and day accumulation (for more information see ____).

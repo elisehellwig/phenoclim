@@ -4,7 +4,7 @@
 \alias{minrmse}
 \title{Calculates model RMSE}
 \usage{
-minrmse(pars, fdat, tdat, modtype, form, stage, CT, L, simplified)
+minrmse(pars, fdat, tdat, modtype, form, stage, CT, L, simple)
 }
 \arguments{
 \item{pars}{Cardinal temperatures}

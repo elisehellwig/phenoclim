@@ -10,7 +10,7 @@ ParameterList stores parameters for running the phenological models
 \section{Slots}{
 
 \describe{
-\item{\code{stages}}{integer. The number of stages in the phenological model.}
+\item{\code{stages}}{numeric, The number of stages in the phenological model.}
 
 \item{\code{modeltype}}{character. The type of phenological model to be used. Options
 are 'thermal' and 'day'. See ____ for more information.}
@@ -32,8 +32,8 @@ accumulated in the model. There should be either one value (if there is
 only one or if all the stages have the same parameters) or as many values
 as there are stages.}
 
-\item{\code{estimate}}{Determines what parameters are estimated in the model.
-`estimate` is a character vector that can contain "cardinaltemps",
+\item{\code{parsOptimized}}{Determines what parameters are optimized in the model.
+`parsOptimized` is a character vector that can contain "cardinaltemps",
 "modlength" or both, but it must contain at least one of the two.}
 }}
 

@@ -4,7 +4,7 @@
 \alias{objective}
 \title{Generates the Objective function}
 \usage{
-objective(parameters, phenology, temperature, stage, CT, L)
+objective(parameters, phenology, temperature, stage, CT, L, simple)
 }
 \arguments{
 \item{parameters}{ParameterList, contains all of the parameters needed to

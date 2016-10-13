@@ -13,7 +13,7 @@ stages(object) <- value
 \arguments{
 \item{object}{An object of class ParameterList}
 
-\item{value}{integer, the number of stages in teh new model}
+\item{value}{numeric, the number of stages in teh new model}
 }
 \description{
 Used to change the number of stages without recreating the object.
