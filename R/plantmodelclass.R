@@ -19,7 +19,7 @@ setClass('PlantModel',
                     error='numeric',
                     phenology='data.frame',
                     temperature='list',
-                    olm='list'), contains = c('ParameterList', 'lm'))
+                    olm='list'))
 
 #############################################################
 #Generics
