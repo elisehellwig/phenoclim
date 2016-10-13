@@ -185,32 +185,16 @@ eventi <- function(dat, i) {
 #'     missing temperature data.
 checktempyears <- function(phenology, temperature) {
 
-    pyears <- phenology[,'year']
-    temp <- temperature
+    pyears <- unique(phenology[,'year'])
+    tyears <- unique(temperature[,'year'])
 
-    if (is.list(temp[[1]])) {
-
-        tyears <- lapply(temp, function(l) names(l))
-        missingyears <- lapply(tyears, function(v) setdiff(pyears, v))
-        mylogical <- sapply(missingyears, function(l) length0(l))
-
-        if (all(mylogical)) {
-            return(TRUE)
-
-        } else {
-            return(list(FALSE, missingyears[!mylogical]))
-        }
+    missingyears <- setdiff(pyears,tyears)
 
 
+    if (length0(missingyears)) {
+        return(TRUE)
     } else {
-        tyears <- names(temp)
-        missingyears <- setdiff(pyears, tyears)
-
-        if (length0(missingyears)) {
-            return(TRUE)
-        } else {
-            return(list(FALSE,missingyears))
-        }
+        return(list(FALSE,missingyears))
     }
 }
 
