@@ -22,12 +22,17 @@ NULL
 #'     time accumulation length.
 minrmsethermal <- function(pars, fdat, tdat, form, length, stage) {
 
+    responsename <- paste0('length',stage)
+
     if (checkpars(pars)) {
         tsums <- thermalsum(pars, fdat, tdat, 'thermal', form, length, stage)
+        #print(tsums)
 
-        mod <- lm(fdat$stagelength ~ tsums)
+        mod <- lm(fdat[,responsename] ~ tsums)
         fit <- fitted(mod)
-        rmse <- rmsd(fit, fdat$stagelength)
+        #print(fit)
+        #print(fdat[,responsename])
+        rmse <- rmsd(fit, fdat[,responsename])
 
     } else {
         rmse <- Inf
@@ -165,7 +170,7 @@ minrmse <- function(pars, fdat, tdat, modtype, form, stage, CT, L, simple) {
 
     }
 
-    print(simple)
+    #print(simple)
 
 
     if (modtype=='thermal' & !simple) {
