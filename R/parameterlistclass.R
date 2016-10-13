@@ -22,7 +22,7 @@
 #'     `estimate` is a character vector that can contain "cardinaltemps",
 #'     "modlength" or both, but it must contain at least one of the two.
 setClass('ParameterList',
-         slots=list(stages='numeric',
+         slots=list(stages='integer',
                     modeltype='character',
                     simplified='logical',
                     form = 'character',
