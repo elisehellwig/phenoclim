@@ -28,10 +28,10 @@ thermalgdsum <- function(pars, fdat, tdat, form, length, stage) {
 	templist <- lapply(1:length(years), function(i) {
 
 	    if (is.data.frame(tdat[[1]])) {
-            tdat[[as.character(years(i))]][start[i]:end[i],]
+            tdat[[as.character(years[i])]][start[i]:end[i],]
 
 	    } else {
-	        tdat[[as.character(years(i))]][start[i]:end[i]]
+	        tdat[[as.character(years[i])]][start[i]:end[i]]
 	    }
 	})
 
