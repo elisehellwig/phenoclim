@@ -107,7 +107,8 @@ plantmodelcheck <- function(phenology, temperature, form, modtype, stages) {
 
     #checking to make sure all the years are there
     tyc <-checktempyears(phenology, temperature)
-    if (!tyc[[1]]) stop(paste('Missing temperature data from years:', tyc[[2]]))
+    if (!tyc[[1]]) stop(paste('Missing temperature data from years:',
+                              paste(tyc[[2]], sep=', ')))
 
     #checking the model type
     mtc <- modeltypecheck(modtype)
