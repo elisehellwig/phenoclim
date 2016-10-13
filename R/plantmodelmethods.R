@@ -7,24 +7,34 @@ setMethod("show",
           signature = 'PlantModel',
           definition = function(object) {
 
-              n <- object@stages
+              n <- object@parameters@stages
               pheno <- object@phenology
-              eventcols <- paste0('event', 1:n)
-              lengthcols <- paste0('length', 1:(n-1))
+              eventcols <- paste0('event', 1:(n+1))
+              lengthcols <- paste0('length', 1:(n))
 
-              avgdates <- apply(pheno[,eventcols], 2, mean)
-              avglengths <- apply(pheno[,lengthcols], 2, mean)
+
+              avgdates <- round(apply(pheno[,eventcols], 2, mean))
+
+              if (is.numeric(pheno[,lengthcols])) {
+                  avglengths <- round(mean(pheno[,lengthcols]))
+              } else {
+                  avglengths <- round(apply(pheno[,lengthcols], 2, mean))
+              }
+
               rng <- range(pheno[,'year'])
               span <- rng[2] - rng[1]
               obs <- nrow(pheno)
               formname <- parameters(object)@form
 
-              cat('This plant has ', n, "phenological stages")
-              cat('Average length of stage: ', avglengths)
-              cat('Average event dates: ', avgdates)
-              cat('The data spans ', span, 'years, and has ', obs,
-                  'observations.')
-              cat('This is a ', object@modeltype, 'model with the ', formname, 'functional form.')
+              cat('This plant has ', n, " phenological stage(s)", '\n', sep='')
+              cat('Average length of stage: ', paste(avglengths, collapse=', '),
+                  '\n', sep='')
+              cat('Average event dates: ', paste(avgdates, collapse=', '), '\n',
+                                                 sep='')
+              cat('The data spans ', span, ' years, and has ', obs,
+                  ' observations.', '\n', sep='')
+              cat('This is a ', object@parameters@modeltype, ' model with the ',
+                  formname, ' functional form.', '\n', sep='')
           })
 
 ################################################################
@@ -80,6 +90,13 @@ setMethod("stages", "PlantModel",
               return(object@parameters@stages)
           })
 
+#' Accesses form of a PlantModel object
+#' @rdname form
+setMethod("form", "PlantModel",
+          function(object) {
+              return(object@parameters@form)
+          })
+
 #' Accesses the model type of a PlantModel object
 #' @rdname modeltype
 setMethod("modeltype", "PlantModel",
@@ -118,6 +135,7 @@ setValidity("PlantModel", function(object) {
     msg <- NULL
     valid <- TRUE
 
+    #print(5)
     n <- stages(object)
     temp <- temperature(object)
     frm <- form(object)
@@ -129,7 +147,7 @@ setValidity("PlantModel", function(object) {
         msg <- c(msg, modeltypecheck(mt)[1])
     }
 
-   if (!phenologycheck(pheno)[1]) {
+   if (!phenologycheck(n, pheno)[1]) {
        valid <- FALSE
        msg <- c(msg, phenologycheck[-1])
    }
@@ -138,9 +156,10 @@ setValidity("PlantModel", function(object) {
         valid <- FALSE
         msg <- c(msg,
                  paste('You are missing temp data for the following years',
-                       checktempyears(object[[2]])))
+                       paste(checktempyears(pheno, temp)[[2]], sep=", ")))
 
     }
+
 
     if (length(modlength(object@parameters)) != n) {
         valid <- FALSE
@@ -148,9 +167,9 @@ setValidity("PlantModel", function(object) {
                  'The number of stages is not the same as the number of parameter value sets.')
     }
 
-    if (!tempclasscheck(temp)[1]) {
+    if (!tempclasscheck(frm, temp)[1]) {
         valid <- FALSE
-        msg <- c(msg, temptypecheck(temp)[-1])
+        msg <- c(msg, temptypecheck(frm, temp)[-1])
     }
 
     if (valid) TRUE else msg
