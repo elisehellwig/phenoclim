@@ -27,7 +27,7 @@ objective <- function(parameters, phenology, temperature, stage, CT, L,
 
     fdat <- phenology[, c('year', events, paste0('length', stage))]
 
-    tlist <- extracttemp(temperature, fdat$year, 1, 365)
+    tlist <- extracttemp(temperature, fdat$year, 1, 331)
 
     if (CT) ct <- TRUE else ct <- pars
     if (L) l <- TRUE else l <- pars
