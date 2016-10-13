@@ -23,6 +23,8 @@ if not CT should be a vector of the cardinal temperatures.}
 
 \item{L}{Should accumulation length be optimized? If yes L is TRUE,
 if not L should be the accumulation length to be used.}
+
+\item{simple}{logical, is the simplified version of the model being run?}
 }
 \description{
 This function creates a function to be passed to the DEoptim function that

@@ -26,7 +26,7 @@ is the vector of cardinal temperatures}
 \item{L}{logical, should the model accumulation length be optimized. If not L
 is the (numeric) model accumulation length.}
 
-\item{simplified}{logical, should the simplified version of the model be run?}
+\item{simple}{logical, should the simplified version of the model be run?}
 }
 \value{
 The RMSE value for a given set of cardinal temperatures and thermal

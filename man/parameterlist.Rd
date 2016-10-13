@@ -25,9 +25,9 @@ given stage of the model.}
 
 \item{length}{A vector of model lengths}
 
-\item{est}{character, Determines what parameters are estimated in the model.
-Can contain "cardinaltemps", "modlength" or both, but it must contain at
-least one of the two.}
+\item{optimized}{character, Determines what parameters are optimized in the
+model.Can contain "cardinaltemps", "modlength" or both, but it must
+contain at least one of the two.}
 }
 \value{
 An object of the class ParameterList.
