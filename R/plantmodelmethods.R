@@ -102,11 +102,11 @@ setMethod("modlength", "PlantModel",
               return(object@parameters@modlength)
           })
 
-#' Accesses what parameters are to be estimated
-#' @rdname estimate
-setMethod("estimate", "PlantModel",
+#' Accesses what parameters are to be optimized
+#' @rdname parsOptimized
+setMethod("parsOptimized", "PlantModel",
           function(object) {
-              return(object@parameters@estimate)
+              return(object@parameters@parsOptimized)
           })
 
 

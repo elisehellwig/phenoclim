@@ -58,10 +58,10 @@ setMethod("form", "ParameterList",
 
 
 #' Accesses which parameters to estimate for the ParameterList object
-#' @rdname form
-setMethod("estimate", "ParameterList",
+#' @rdname parsOptimized
+setMethod("parsOptimized", "ParameterList",
           function(object) {
-              return(object@estimate)
+              return(object@parsOptimized)
           })
 
 ##############################
@@ -94,6 +94,7 @@ setValidity("ParameterList", function(object) {
     msg <- NULL
     valid <- TRUE
 
+    print(1)
 
     ct <- cardinaltemps(object)
     frm <- form(object)
@@ -104,18 +105,22 @@ setValidity("ParameterList", function(object) {
         valid <- FALSE
         msg <- c(msg, 'The model form is not one of the accepted forms.')
     }
-
+    print(2)
 
     if (!(modeltype(object) %in% c('thermal','day'))) {
         valid <- FALSE
         msg <- c(msg, 'The model type is not one of the accepted types.')
     }
 
+    print(3)
+
     if (length(object@modlength) != length(ct)) {
         valid <- FALSE
         msg <- c(msg,
                  'The number of accumulation lengths and the number of parameter sets are not the same.')
     }
+
+    print(4)
 
     ctnum <- length(ct[[1]])
     ctsame <- sapply(ct, function(v) length(v)==ctnum)
@@ -127,6 +132,7 @@ setValidity("ParameterList", function(object) {
     }
 
 
+    print(5)
     isnum <- sapply(ct, function(v) (is.numeric(v) | is.integer(v)) )
 
     if (!all(isnum)) {
@@ -135,19 +141,19 @@ setValidity("ParameterList", function(object) {
                  'Not all of your parameter values are numbers.')
     }
 
+    print(6)
 
     if (parnum(frm)!=ctnum) {
         valid <- FALSE
         msg <- c(msg, 'The number of parameters does not fit the model form.')
     }
 
-
-    if (!all(estimate %in% c('cardinaltemps','modlength'))) {
+    if (!all(parsOptimized %in% c('cardinaltemps','modlength'))) {
         valid <- FALSE
         msg <- c(msg, "estimate must include at least one of 'cardinaltemps' or 'modelength'. ")
     }
 
-
+    print(8)
     if (valid) return(TRUE) else return(msg)
 
 })
@@ -193,8 +199,10 @@ setMethod('form<-', 'ParameterList',
 setMethod('stages<-', 'ParameterList',
           function(object, value) {
               object@stages <- value
+              print(1)
 
               if (validObject(object)) {
+                    print(2)
                   return(object)
               }
           })
@@ -223,10 +231,10 @@ setMethod('simplified<-', 'ParameterList',
           })
 
 
-#' @rdname estimate-set
-setMethod('estimate<-', 'ParameterList',
+#' @rdname parsOptimized-set
+setMethod('parsOptimized<-', 'ParameterList',
           function(object, value) {
-              object@estimate <- value
+              object@parsOptimized <- value
 
               if (validObject(object)) {
                   return(object)

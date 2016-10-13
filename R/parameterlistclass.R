@@ -2,7 +2,7 @@
 #'
 #' ParameterList stores parameters for running the phenological models
 #'
-#' @slot stages integer. The number of stages in the phenological model.
+#' @slot stages numeric, The number of stages in the phenological model.
 #' @slot modeltype character. The type of phenological model to be used. Options
 #'     are 'thermal' and 'day'. See ____ for more information.
 #' @slot simplified logical. Should the simplified version of the model type be
@@ -18,17 +18,17 @@
 #'     accumulated in the model. There should be either one value (if there is
 #'     only one or if all the stages have the same parameters) or as many values
 #'     as there are stages.
-#' @slot estimate Determines what parameters are estimated in the model.
-#'     `estimate` is a character vector that can contain "cardinaltemps",
+#' @slot parsOptimized Determines what parameters are optimized in the model.
+#'     `parsOptimized` is a character vector that can contain "cardinaltemps",
 #'     "modlength" or both, but it must contain at least one of the two.
 setClass('ParameterList',
-         slots=list(stages='integer',
+         slots=list(stages='numeric',
                     modeltype='character',
                     simplified='logical',
                     form = 'character',
          	        cardinaltemps = "list",
                     modlength = "numeric",
-                    estimate = 'character'))
+                    parsOptimized = 'character'))
 
 
 #############################################################
@@ -87,7 +87,7 @@ setGeneric('form', function(object) standardGeneric('form'))
 #' @return character, the names of the parameters to be estimated
 #'     (cardinaltemps, modlength or both).
 #' @export
-setGeneric('estimate', function(object) standardGeneric('estimate'))
+setGeneric('parsOptimized', function(object) standardGeneric('parsOptimized'))
 
 
 #' Setting the modlength
@@ -97,7 +97,8 @@ setGeneric('estimate', function(object) standardGeneric('estimate'))
 #' @param object An object of class ParameterList
 #' @param value A vector of acccumulation lengths.
 #' @export
-setGeneric('modlength<-', function(object, value) standardGeneric('modlength<-'))
+setGeneric('modlength<-', function(object, value) {
+    standardGeneric('modlength<-')})
 
 
 #' Setting the cardinal temps
@@ -124,7 +125,7 @@ setGeneric('cardinaltemps<-', function(object, value) {
 setGeneric('form<-', function(object, value) standardGeneric('form<-'))
 
 
-#' Setting the parameters to estimate
+#' Setting the parameters to optimize
 #'
 #'  Used to change the functional form without recreating the object.
 #'
@@ -132,7 +133,8 @@ setGeneric('form<-', function(object, value) standardGeneric('form<-'))
 #' @param value A character vector containing either 'cardinaltemps',
 #'     'modlength' or both.
 #' @export
-setGeneric('estimate<-', function(object, value) standardGeneric('estimate<-'))
+setGeneric('parsOptimized<-', function(object, value) {
+    standardGeneric('parsOptimized<-') })
 
 
 
@@ -141,7 +143,7 @@ setGeneric('estimate<-', function(object, value) standardGeneric('estimate<-'))
 #'  Used to change the number of stages without recreating the object.
 #'
 #' @param object An object of class ParameterList
-#' @param value integer, the number of stages in teh new model
+#' @param value numeric, the number of stages in teh new model
 #' @export
 setGeneric('stages<-', function(object, value) standardGeneric('stages<-'))
 
