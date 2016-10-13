@@ -149,7 +149,7 @@ minrmseday <- function(pars, fdat, tdat, form, length, stage) {
 #' @return The RMSE value for a given set of cardinal temperatures and thermal
 #'     time accumulation length.
 #' @export
-minrmse <- function(pars, fdat, tdat, modtype, form, stage, CT, L, simplified) {
+minrmse <- function(pars, fdat, tdat, modtype, form, stage, CT, L, simple) {
 
     if (isTRUE(L) & isTRUE(CT)) {
         length <- pars[1]
@@ -165,11 +165,13 @@ minrmse <- function(pars, fdat, tdat, modtype, form, stage, CT, L, simplified) {
 
     }
 
+    print(simple)
 
-    if (modtype=='thermal' & !simplified) {
+
+    if (modtype=='thermal' & !simple) {
         rmse <- minrmsethermal(ct, fdat, tdat, form, length, stage)
 
-    } else if (modtype == 'day' & simplified) {
+    } else if (modtype == 'day' & simple) {
         rmse <- minrmsedaysimplified(ct, fdat, tdat, form, length, stage)
 
     } else if (modtype == 'day') {
