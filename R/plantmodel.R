@@ -12,12 +12,10 @@ NULL
 #' @param phenology data.frame, contains the phenological data.
 #'     Required columns are `year`, and `event1` through `eventN` where `N`
 #'     is the number of phenological events in the model.
-#' @param temperature list, contains the temperature data. Each element of
-#'     the list should be either a vector of hourly temperatures or a
-#'     data.frame of minimum and maximum daily temperatures. Each element
-#'     of the list should be named with the corresponding year.
-#' @param model character, specifies the type of model. Options are 'tta'
-#'     (thermal time accumulation) or 'da' (day accumulation).
+#' @param temps data.frame, contains the temperature data. There should be a
+#'     column for year, day of the year, hourly temperature (named temp) or min
+#'     max daily temperatures (named tmin and tmax), and hour if the
+#'     temperatures are hourly.
 #' @param parameters ParameterList, contains the parameter values and
 #'     functional form of the thermal time calculations.
 #' @param lbounds numeric, a vector of lower bounds for the parameters in the
@@ -30,9 +28,11 @@ NULL
 #' @param estimatelength logical, should the accumulation length or threshold be
 #'     estimated?
 #' @param simplified logical, should the simplified version of the model be run.
-plantmodel <- function(phenology, temperature, model, parameters, lbounds,
+#' @return A PlantModel object.
+#' @export
+plantmodel <- function(phenology, temp, parameters, lbounds,
                        ubounds, cores=1L, estimateCT=TRUE,
-                       estimatelength=TRUE, simplified=FALSE) {
+                       estimatelength=TRUE, simple=FALSE) {
 
     stages <- stages(parameters)
     n <- stages+1
@@ -43,41 +43,45 @@ plantmodel <- function(phenology, temperature, model, parameters, lbounds,
 
     pdat <- phenology[, c('year', events)]
 
-    ldat <- ldply(1:stages, function(i) eventi(pdat,i+1) - eventi(pdat, i))
+    ldat <- as.data.frame(sapply(1:stages, function(i) {
+        eventi(pdat,i+1) - eventi(pdat, i)
+        }))
+
     names(ldat) <- lengthcols
 
     d <- data.frame(pdat, ldat)
 
 
-    if (model=='thermal' & simplified) {
+    if (model=='thermal' & simple) {
 
         lmlist <- lapply(1:stages, function(i) {
             fmla <- paste0(lengthcols[i]," ~ 1")
             lm(fmla, data=d)
         })
 
-        fits <- ldply(lmlist, function(mod) {
+        fits <- as.data.frame(sapply(lmlist, function(mod) {
             fitted(mod)
-        })
+        }))
 
     } else {
         ttform <- form(parameters)
 
-        if (boundlength(ttform, estimateCT, estimatelength)!=lbounds) {
+        if (boundlength(ttform, estimateCT, estimatelength)!=length(lbounds)) {
             stop(paste0('The bounds have the wrong number of parameter values. ',
-                        'Your bounds are of length', length(lbounds),
-                        ', and they should be of length',
+                        'Your bounds are of length ', length(lbounds),
+                        ', and they should be of length ',
                         boundlength(ttform, estimateCT, estimatelength), '.'))
         }
 
 
         functionlist <- lapply(1:stages, function(i) {
-            objective(parameters, i, estimateCT, estimatelength)
+            objective(parameters, d, temps, i, estimateCT,
+                      estimatelength, simple)
         })
 
 
         #optimizing the parameters
-        if (stages > 1 & cores > 1) {
+        if (cores > 1) {
 
             optimlist <- mclapply(1:length(functionlist), function(i) {
                 DEoptim(functionlist[[i]], lower=lbounds,upper=ubounds)$optim
@@ -115,7 +119,7 @@ plantmodel <- function(phenology, temperature, model, parameters, lbounds,
 
     }
 
-    if (!simplified) {
+    if (!simple) {
 
         lmlist <- lapply(1:stages, function(i) {
             f <- formula(paste(paste0('length',i), ' ~ ', predictornames[i] ))
@@ -126,7 +130,7 @@ plantmodel <- function(phenology, temperature, model, parameters, lbounds,
             fitted(mod)
         })
 
-    } else if (simplified & modeltype=='da') {
+    } else if (simple & modeltype=='da') {
         lmlist <- list(NA)
         fits <- predictors
     }
