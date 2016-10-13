@@ -31,6 +31,9 @@ thermalgdsum <- function(pars, fdat, tdat, form, length, stage) {
         end <- start+length*24
     }
 
+    #print(start)
+    #print(end)
+    #print(length(tdat[[1]]))
 
 	#print(head(tdat))
 	templist <- lapply(1:length(years), function(i) {
@@ -51,7 +54,7 @@ thermalgdsum <- function(pars, fdat, tdat, form, length, stage) {
 	        do.call(form, plist)
 	    })
 
-	    print(tsums)
+	    #print(tsums)
 
 	} else {
         stop('form must be linear, nocrit triangle, anderson, gdd, gddsimple
