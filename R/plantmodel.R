@@ -30,11 +30,11 @@ NULL
 #' @param simplified logical, should the simplified version of the model be run.
 #' @return A PlantModel object.
 #' @export
-plantmodel <- function(phenology, temp, parameters, lbounds,
+plantmodel <- function(phenology, temp, parlist, lbounds,
                        ubounds, cores=1L, estimateCT=TRUE,
                        estimatelength=TRUE, simple=FALSE) {
 
-    stages <- stages(parameters)
+    stages <- stages(parlist)
     n <- stages+1
     events <- paste0('event', 1:n)
     lengthcols <- paste0('length',1:stages)
@@ -64,7 +64,7 @@ plantmodel <- function(phenology, temp, parameters, lbounds,
         }))
 
     } else {
-        ttform <- form(parameters)
+        ttform <- form(parlist)
 
         if (boundlength(ttform, estimateCT, estimatelength)!=length(lbounds)) {
             stop(paste0('The bounds have the wrong number of parameter values. ',
@@ -99,20 +99,21 @@ plantmodel <- function(phenology, temp, parameters, lbounds,
             newct <- lapply(optimlist, function(ol) unname(ol[['bestmem']])[-1] )
 
         } else if (estimateCT & !estimatelength) {
-            newlength <- modlength(parameters)
+            newlength <- modlength(parlist)
             newct <- lapply(optimlist, function(ol) unname(ol[['bestmem']]))
 
         } else {
             newlength <- sapply(optimlist, function(ol) unname(ol[['bestmem']])[1])
-            newct <- cardinaltemps(parameters)
+            newct <- cardinaltemps(parlist)
         }
 
         #creating predictors for stage length based on the parameters
-        predictornames <- paste0(modeltype, 1:stages)
-        predictors <- ldply(1:stages, function(i) {
-            thermalsum(newct, phenology, temperature, modeltype, ttform,
-                       newlength, i)
-        })
+        predictornames <- paste0(modeltype(parlist), 1:stages)
+        tempslist <- extracttemp(temps, d$year, 1, 331)
+        predictors <- as.data.frame(sapply(1:stages, function(i) {
+            thermalsum(newct, d, tempslist, modeltype(parlist),
+                       ttform, newlength, i)
+        }))
 
         names(predictors) <- predictornames
         d2 <- cbind(d, predictors)
@@ -126,9 +127,9 @@ plantmodel <- function(phenology, temp, parameters, lbounds,
             lm(f, data=d2)
         })
 
-        fits <- ldply(lmlist, function(mod) {
+        fits <- as.data.frame(sapply(lmlist, function(mod) {
             fitted(mod)
-        })
+        }))
 
     } else if (simple & modeltype=='da') {
         lmlist <- list(NA)
@@ -144,7 +145,7 @@ plantmodel <- function(phenology, temp, parameters, lbounds,
         rmsd(d3[,fit], d3[,observed])
     })
 
-    DEparameters <- parameters
+    DEparameters <- parlist
     modlength(DEparameters) <- newlength
     cardinaltemps(DEparameters) <- newct
 
@@ -152,7 +153,7 @@ plantmodel <- function(phenology, temp, parameters, lbounds,
               parameters=DEparameters,
               error=rmse,
               phenology=d3,
-              temperature=temperature,
+              temperature=temps,
               olm=lmlist)
 
     return(pm)
