@@ -52,7 +52,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds,
     d <- data.frame(pdat, ldat)
 
 
-    if (model=='thermal' & simple) {
+    if (modeltype(parlist)=='thermal' & simple) {
 
         lmlist <- lapply(1:stages, function(i) {
             fmla <- paste0(lengthcols[i]," ~ 1")
