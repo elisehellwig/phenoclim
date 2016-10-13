@@ -22,9 +22,17 @@ thermalgdsum <- function(pars, fdat, tdat, form, length, stage) {
 	# for walnut
 	#fdat is data for the 'fruit'
     years <- fdat[,'year']
-	start <- fdat[, paste0('event',stage)]
-	end <- start+length
 
+    if (form %in% c('gdd','gddsimple')) {
+        start <- fdat[, paste0('event',stage)]
+        end <- start+length
+    } else {
+        start <- (fdat[, paste0('event',stage)]*24)-23
+        end <- start+length*24
+    }
+
+
+	#print(head(tdat))
 	templist <- lapply(1:length(years), function(i) {
 
 	    if (is.data.frame(tdat[[1]])) {
@@ -42,6 +50,8 @@ thermalgdsum <- function(pars, fdat, tdat, form, length, stage) {
 	        plist <- parlist(templist[[i]], pars, sum=TRUE)
 	        do.call(form, plist)
 	    })
+
+	    print(tsums)
 
 	} else {
         stop('form must be linear, nocrit triangle, anderson, gdd, gddsimple
