@@ -25,19 +25,19 @@ NULL
 #'      least one of the two.
 #' @return An object of the class ParameterList.
 #' @export
-parameterlist <- function(n, mt, simple, ff, ct, length, est) {
+parameterlist <- function(n, mt, simple, ff, ct, length, optimized) {
 
     if (class(ct)=='list') {
         newobject <- new('ParameterList', stages=n, modeltype=mt,
                          simplified=simple, form=ff, cardinaltemps=ct,
-                         modlength=length, estimate=est)
+                         modlength=length, parsOptimized=optimized)
 
     } else if (class(ct) %in% c('data.frame', 'matrix') ) {
         ctlist <- lapply(1:dim(ct)[1], function(i) ct[i,])
 
         newobject <- new('ParameterList', stages=n, modeltype=mt,
                          simplified=simple, form=ff, cardinaltemps=ctlist,
-                         modlength=length, estimate=est)
+                         modlength=length, parsOptimized=optimized)
     } else {
         stop('ct must be of the type list, data.frame, or matrix.')
     }
