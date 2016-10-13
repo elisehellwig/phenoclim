@@ -18,7 +18,8 @@ NULL
 #'     if not CT should be a vector of the cardinal temperatures.
 #' @param L Should accumulation length be optimized? If yes L is TRUE,
 #'     if not L should be the accumulation length to be used.
-objective <- function(parameters, phenology, temperature, stage, CT, L) {
+objective <- function(parameters, phenology, temperature, stage, CT, L,
+                      simple) {
 
     pars <- cardinaltemps(parameters)[[stage]]
     ml <- modlength(parameters)[stage]
@@ -34,7 +35,7 @@ objective <- function(parameters, phenology, temperature, stage, CT, L) {
 
     fun <- function(x) {
         return(minrmse(x, fdat, tlist, modeltype(parameters), form(parameters),
-                       stage, ct, l))
+                       stage, ct, l, simple))
     }
 
     return(fun)
