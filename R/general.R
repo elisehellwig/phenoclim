@@ -73,11 +73,11 @@ extracttemp <- function(tdat, years, starts, ends, tempname=NA,
 
     #checks if there is a start day for each year
     if (length(starts)==length(years)) {
-        start <- starts
+        startvec <- starts
 
     #checks if the start day is the same for each year
     } else if (length(starts)==1) {
-        start <- rep(starts, length(years))
+        startvec <- rep(starts, length(years))
 
     } else { #if not there is a problem
         stop('Starts must either have a start day for each year or the start date must be the same for all years')
@@ -87,11 +87,11 @@ extracttemp <- function(tdat, years, starts, ends, tempname=NA,
 
     #checks if there is a end day for each year
     if (length(ends)==length(years)) {
-        end <- ends
+        endvec <- ends
 
     #checks if the end day is the same for each year
     } else if (length(ends)==1) {
-        ends <- rep(ends, length(starts))
+        endvec <- rep(ends, length(starts))
 
     } else { #if not there is a problem
         stop('Starts must either have an end day for each year or the end day must be the same for all years')
@@ -123,7 +123,7 @@ extracttemp <- function(tdat, years, starts, ends, tempname=NA,
     #extracting the temperature data from the data frame and putting it
     #in a list
     tlist <- lapply(1:length(years), function(i) {
-        rows <- which(tdat[,yearname]==years[i] & tdat[,dayname]>=start[i] & tdat[,dayname]<=end[i])
+        rows <- which(tdat[,yearname]==years[i] & tdat[,dayname]>=startvec[i] & tdat[,dayname]<=endvec[i])
 
         tdat[rows,tnames]
     })
