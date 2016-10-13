@@ -121,7 +121,7 @@ thermaldaysum <- function(pars, fdat, tdat, form, length, stage) {
 thermalsum <- function(pars, fdat, tdat, modtype, form, length, stage) {
 
     if (modtype=='thermal') {
-        ths < thermalgdsum(pars, fdat, tdat, form, length, stage)
+        ths <- thermalgdsum(pars, fdat, tdat, form, length, stage)
 
 
     } else if (modtype=='day') {
