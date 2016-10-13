@@ -20,9 +20,9 @@ NULL
 #'     element of the list should be a vector of cardinal temperatures for a
 #'     given stage of the model.
 #' @param length A vector of model lengths
-#' @param est character, Determines what parameters are estimated in the model.
-#'      Can contain "cardinaltemps", "modlength" or both, but it must contain at
-#'      least one of the two.
+#' @param optimized character, Determines what parameters are optimized in the
+#'     model.Can contain "cardinaltemps", "modlength" or both, but it must
+#'     contain at least one of the two.
 #' @return An object of the class ParameterList.
 #' @export
 parameterlist <- function(n, mt, simple, ff, ct, length, optimized) {

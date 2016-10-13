@@ -18,6 +18,7 @@ NULL
 #'     if not CT should be a vector of the cardinal temperatures.
 #' @param L Should accumulation length be optimized? If yes L is TRUE,
 #'     if not L should be the accumulation length to be used.
+#' @param simple logical, is the simplified version of the model being run?
 objective <- function(parameters, phenology, temperature, stage, CT, L,
                       simple) {
 

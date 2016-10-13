@@ -16,7 +16,7 @@ NULL
 #'     column for year, day of the year, hourly temperature (named temp) or min
 #'     max daily temperatures (named tmin and tmax), and hour if the
 #'     temperatures are hourly.
-#' @param parameters ParameterList, contains the parameter values and
+#' @param parlist ParameterList, contains the parameter values and
 #'     functional form of the thermal time calculations.
 #' @param lbounds numeric, a vector of lower bounds for the parameters in the
 #'     model
@@ -24,13 +24,13 @@ NULL
 #'     the model.
 #' @param cores integer, if using parallel processing, how many cores should R
 #'     use to fit the model.
-#' @param estimateCT logical, should the cardinal temperatures be estimated?
+#' @param estimateCT logical, should the cardinal temperatures be optimized?
 #' @param estimatelength logical, should the accumulation length or threshold be
-#'     estimated?
-#' @param simplified logical, should the simplified version of the model be run.
+#'     optimized?
+#' @param simple logical, should the simplified version of the model be run.
 #' @return A PlantModel object.
 #' @export
-plantmodel <- function(phenology, temp, parlist, lbounds,
+plantmodel <- function(phenology, temps, parlist, lbounds,
                        ubounds, cores=1L, estimateCT=TRUE,
                        estimatelength=TRUE, simple=FALSE) {
 

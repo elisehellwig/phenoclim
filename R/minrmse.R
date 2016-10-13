@@ -150,7 +150,7 @@ minrmseday <- function(pars, fdat, tdat, form, length, stage) {
 #'     is the vector of cardinal temperatures
 #' @param L logical, should the model accumulation length be optimized. If not L
 #'     is the (numeric) model accumulation length.
-#' @param simplified logical, should the simplified version of the model be run?
+#' @param simple logical, should the simplified version of the model be run?
 #' @return The RMSE value for a given set of cardinal temperatures and thermal
 #'     time accumulation length.
 #' @export
