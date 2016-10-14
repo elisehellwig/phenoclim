@@ -189,7 +189,7 @@ setValidity("PlantModel", function(object) {
 #setting stuff
 
 #' @rdname crossvalidated-set
-setMethod('crossvalidated<-', 'ParameterList',
+setMethod('crossvalidated<-', 'PlantModel',
           function(object, value) {
               object@crossvalidated <- value
 
@@ -200,7 +200,7 @@ setMethod('crossvalidated<-', 'ParameterList',
 
 
 #' @rdname error-set
-setMethod('error<-', 'ParameterList',
+setMethod('error<-', 'PlantModel',
           function(object, value) {
               object@error <- value
 
