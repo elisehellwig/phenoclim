@@ -24,24 +24,30 @@ NULL
 #'     the model.
 #' @param cores integer, if using parallel processing, how many cores should R
 #'     use to fit the model.
-#' @param estimateCT logical, should the cardinal temperatures be optimized?
-#' @param estimatelength logical, should the accumulation length or threshold be
-#'     optimized?
 #' @param simple logical, should the simplified version of the model be run.
 #' @param iterations numeric, the number of iterations used in the differential
 #'     evolution optimization of the phenological parameters.
 #' @return A PlantModel object.
 #' @export
-plantmodel <- function(phenology, temps, parlist, lbounds,
-                       ubounds, cores=1L, estimateCT=TRUE,
-                       estimatelength=TRUE, simple=FALSE, interations=100) {
+plantmodel <- function(phenology, temps, parlist, lbounds, ubounds, cores=1L,
+                       simple=FALSE, interations=200) {
 
     stages <- stages(parlist)
     n <- stages+1
     events <- paste0('event', 1:n)
     lengthcols <- paste0('length',1:stages)
 
+    if ('cardinaltemps' %in% parsOptimized(parlist)) {
+        estimateCT <- TRUE
+    } else {
+        estimateCT <- FALSE
+    }
 
+    if ('modlength' %in% parsOptimized(parlist)) {
+        estimatelength <- TRUE
+    } else {
+        estimatelength <- FALSE
+    }
 
     pdat <- phenology[, c('year', events)]
 

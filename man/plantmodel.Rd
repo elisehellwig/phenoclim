@@ -5,7 +5,7 @@
 \title{Fits phenological models}
 \usage{
 plantmodel(phenology, temps, parlist, lbounds, ubounds, cores = 1L,
-  estimateCT = TRUE, estimatelength = TRUE, simple = FALSE)
+  simple = FALSE, interations = 200)
 }
 \arguments{
 \item{phenology}{data.frame, contains the phenological data.
@@ -29,12 +29,10 @@ the model.}
 \item{cores}{integer, if using parallel processing, how many cores should R
 use to fit the model.}
 
-\item{estimateCT}{logical, should the cardinal temperatures be optimized?}
-
-\item{estimatelength}{logical, should the accumulation length or threshold be
-optimized?}
-
 \item{simple}{logical, should the simplified version of the model be run.}
+
+\item{iterations}{numeric, the number of iterations used in the differential
+evolution optimization of the phenological parameters.}
 }
 \value{
 A PlantModel object.
