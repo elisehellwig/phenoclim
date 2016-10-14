@@ -4,12 +4,17 @@
 \alias{crossval}
 \title{Crossvalidates the PlantModel Error}
 \usage{
-crossval(plant)
+crossval(plant, k, seed, fun = "rmsd")
 }
 \arguments{
 \item{plant}{PlantModel, the object to be crossvalidated}
 
 \item{k}{numeric, number of folds for crossvalidation.}
+
+\item{seed}{numeric, the number to be used as the seed. Set to NA for no seed
+set.}
+
+\item{fun}{character, the name of the function used to evaluate the model.}
 }
 \value{
 A PlantModel object with the error slot having the new crossvalidated
