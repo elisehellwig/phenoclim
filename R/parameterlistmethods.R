@@ -73,10 +73,11 @@ setMethod("show",
              n <- object@stages
 
              pars <- as.data.frame(do.call(rbind, object@cardinaltemps))
+             pars <- round(pars)
              names(pars) <- paste0('p', 1:n)
 
              stagelength <- data.frame(stage=1:length(object@modlength),
-                               length=object@modlength)
+                               length=round(object@modlength))
 
              lengthpars <- cbind(stagelength, pars)
 
