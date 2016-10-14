@@ -25,7 +25,8 @@ NULL
 #'     contain at least one of the two.
 #' @return An object of the class ParameterList.
 #' @export
-parameterlist <- function(n, mt, simple, ff, ct, length, optimized) {
+parameterlist <- function(n, mt, simple, ff, ct, length, 
+    optimized=c('cardinaltemps','modlength')) {
 
     if (class(ct)=='list') {
         newobject <- new('ParameterList', stages=n, modeltype=mt,
