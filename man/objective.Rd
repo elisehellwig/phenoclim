@@ -4,10 +4,10 @@
 \alias{objective}
 \title{Generates the Objective function}
 \usage{
-objective(parameters, phenology, temperature, stage, CT, L, simple)
+objective(parlist, phenology, temperature, stage, CT, L, simple)
 }
 \arguments{
-\item{parameters}{ParameterList, contains all of the parameters needed to
+\item{parlist}{ParameterList, contains all of the parlist needed to
 create the phenology model/PlantModel object.}
 
 \item{phenology}{data.frame, contains all of the phenology data necessary for
