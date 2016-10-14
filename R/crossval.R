@@ -4,11 +4,12 @@ NULL
 #' Crossvalidating one stage
 #'
 #' @param pdat data.frame, the phenology data.frame.
+#' @param modtype character, the type of model, either 'thermal' or 'day'.
 #' @param k numeric, the number of folds in the crossvalidation.
 #' @param stage numeric, the stage of the phenology model.
 #' @param fun character, the name of the function used to evaluate the model.
 #' @return The mean rmse
-stagecrossval <- function(pdat, k, stage, fun) {
+stagecrossval <- function(pdat, modtype, k, stage, fun) {
 
     measure <- rep(NA, k)
 
@@ -16,7 +17,7 @@ stagecrossval <- function(pdat, k, stage, fun) {
         train <- pdat[pdat$fold!=i, ]
         test <- pdat[pdat$fold==i, ]
 
-        predictor <- paste0(modeltype(plant), stage)
+        predictor <- paste0(modtype, stage)
         response <- paste0('length', stage)
         f <- formula(paste(response, ~ predictor))
 
@@ -58,7 +59,9 @@ crossval <- function(plant, k, seed, fun='rmsd') {
 
     p$fold <- kfold(p, k=k)
 
-    CVerrors <- sapply(1:stages(plant), function(i) stagecrossval(p, k, i, fun))
+    CVerrors <- sapply(1:stages(plant), function(i) {
+        stagecrossval(p, modeltype(plant), k, i, fun)
+        })
 
 
     error(plant) <- CVerrors
