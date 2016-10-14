@@ -13,13 +13,15 @@ NULL
 #'     the years for which there is phenological data.
 #' @slot olm A list of linear models relating the thermal time or day
 #'     accumulation to the stage length
+#' @slot crossvalidated logical, is the error crossvalidated?
 #' @export
 setClass('PlantModel',
          slots=list(parameters='ParameterList',
                     error='numeric',
                     phenology='data.frame',
                     temperature='data.frame',
-                    olm='list'))
+                    olm='list',
+                    crossvalidated='logical'))
 
 #############################################################
 #Generics
@@ -54,7 +56,7 @@ setGeneric('phenology', function(object) standardGeneric('phenology'))
 setGeneric('temperature', function(object) standardGeneric('temperature'))
 
 
-#' Returns the lm object phenological model
+#' Returns the lm object phenological models
 #'
 #' @param object An object of class PlantModel
 #' @return An lm object containing the ordinary linear model used for stage
@@ -62,4 +64,12 @@ setGeneric('temperature', function(object) standardGeneric('temperature'))
 #' @export
 setGeneric('olm', function(object) standardGeneric('olm'))
 
+
+#' Returns the crossvalidated logical vecter
+#'
+#' @param object An object of class PlantModel
+#' @return A logical vector answering the question 'Is the model error
+#'     crossvalidated?'
+#' @export
+setGeneric('crossvalidated', function(object) standardGeneric('crossvalidated'))
 

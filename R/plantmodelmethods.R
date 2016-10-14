@@ -73,11 +73,18 @@ setMethod("temperature", "PlantModel",
           })
 
 
-#' Accesses the linear model of a PlantModel object
+#' Accesses the linear models of a PlantModel object
 #' @rdname olm
 setMethod("olm", "PlantModel",
           function(object) {
               return(object@olm)
+          })
+
+#' Is the model error crossvalidated?
+#' @rdname crossvalidated
+setMethod("crossvalidated", "PlantModel",
+          function(object) {
+              return(object@crossvalidated)
           })
 
 

@@ -154,7 +154,8 @@ plantmodel <- function(phenology, temps, parlist, lbounds,
               error=rmse,
               phenology=d3,
               temperature=temps,
-              olm=lmlist)
+              olm=lmlist,
+              crossvalidated=FALSE)
 
     return(pm)
 
