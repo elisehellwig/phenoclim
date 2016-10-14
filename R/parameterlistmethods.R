@@ -94,12 +94,8 @@ setValidity("ParameterList", function(object) {
     msg <- NULL
     valid <- TRUE
 
-    print(3)
-
-    print(object)
     ct <- cardinaltemps(object)
     frm <- object@form
-    print(frm)
     forms <- c('gdd', 'gddsimple','linear','flat','anderson','triangle',
                'trapezoid')
 
