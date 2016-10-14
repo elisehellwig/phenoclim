@@ -19,7 +19,7 @@ stagecrossval <- function(pdat, modtype, k, stage, fun) {
 
         predictor <- paste0(modtype, stage)
         response <- paste0('length', stage)
-        f <- formula(paste(response, ~ predictor))
+        f <- formula(paste(response, '~', predictor))
 
         trainmod <- lm(f, train)
         testdata <- data.frame(test[,predictor])
