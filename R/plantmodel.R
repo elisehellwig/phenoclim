@@ -30,7 +30,7 @@ NULL
 #' @return A PlantModel object.
 #' @export
 plantmodel <- function(phenology, temps, parlist, lbounds, ubounds, cores=1L,
-                       simple=FALSE, interations=200) {
+                       simple=FALSE, iterations=200) {
 
     stages <- stages(parlist)
     n <- stages+1
