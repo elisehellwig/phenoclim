@@ -9,4 +9,5 @@
 #' @importFrom DEoptim DEoptim
 #' @importFrom parallel mclapply
 #' @importFrom stats fitted formula lm
+#' @importFrom dismo kfold
 NULL
