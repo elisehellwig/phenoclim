@@ -4,7 +4,8 @@
 \alias{parameterlist}
 \title{Creates ParameterList object}
 \usage{
-parameterlist(n, mt, simple, ff, ct, length, optimized)
+parameterlist(n, mt, simple, ff, ct, length, optimized = c("cardinaltemps",
+  "modlength"))
 }
 \arguments{
 \item{n}{integer, the number of stages in the model.}
