@@ -35,6 +35,8 @@ setMethod("show",
                   ' observations.', '\n', sep='')
               cat('This is a ', object@parameters@modeltype, ' model with the ',
                   formname, ' functional form.', '\n', sep='')
+              cat('The model has an error of ', round(object@error,2), ' days.', '\n',
+                  sep='')
           })
 
 ################################################################
