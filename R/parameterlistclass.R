@@ -167,7 +167,8 @@ setGeneric('modeltype<-', function(object, value) standardGeneric('modeltype<-')
 #' @param object An object of class ParameterList
 #' @param value logical, is the model simplified?
 #' @export
-setGeneric('simplified<-', function(object, value) standardGeneric('simplified<-'))
+setGeneric('simplified<-', function(object, value) {
+    standardGeneric('simplified<-')} )
 
 
 
