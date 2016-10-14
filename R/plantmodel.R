@@ -86,12 +86,16 @@ plantmodel <- function(phenology, temps, parlist, lbounds,
         if (cores > 1) {
 
             optimlist <- mclapply(1:length(functionlist), function(i) {
-                DEoptim(functionlist[[i]], lower=lbounds,upper=ubounds)$optim
+                DEoptim(functionlist[[i]], lower=lbounds,upper=ubounds,
+                        control=DEoptim.control(itermax=iterations,
+                                                trace=FALSE))$optim
             }, mc.cores=cores)
 
         } else {
             optimlist <- lapply(1:length(functionlist), function(i) {
-                DEoptim(functionlist[[i]], lower=lbounds, upper=ubounds)$optim
+                DEoptim(functionlist[[i]], lower=lbounds, upper=ubounds,
+                        control=DEoptim.control(itermax=iterations,
+                                                trace=FALSE))$optim
             })
         }
 
