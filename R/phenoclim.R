@@ -6,7 +6,7 @@
 #' @importFrom methods setClass setGeneric setMethod new validObject
 #' @importFrom plyr ldply
 #' @importFrom reshape2 melt
-#' @importFrom DEoptim DEoptim
+#' @importFrom DEoptim DEoptim DEoptim.control
 #' @importFrom parallel mclapply
 #' @importFrom stats fitted formula lm predict
 #' @importFrom dismo kfold
