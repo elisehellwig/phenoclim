@@ -28,11 +28,13 @@ NULL
 #' @param estimatelength logical, should the accumulation length or threshold be
 #'     optimized?
 #' @param simple logical, should the simplified version of the model be run.
+#' @param iterations numeric, the number of iterations used in the differential
+#'     evolution optimization of the phenological parameters.
 #' @return A PlantModel object.
 #' @export
 plantmodel <- function(phenology, temps, parlist, lbounds,
                        ubounds, cores=1L, estimateCT=TRUE,
-                       estimatelength=TRUE, simple=FALSE) {
+                       estimatelength=TRUE, simple=FALSE, interations=100) {
 
     stages <- stages(parlist)
     n <- stages+1
@@ -75,7 +77,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds,
 
 
         functionlist <- lapply(1:stages, function(i) {
-            objective(parameters, d, temps, i, estimateCT,
+            objective(parlist, d, temps, i, estimateCT,
                       estimatelength, simple)
         })
 
@@ -105,6 +107,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds,
         } else {
             newlength <- sapply(optimlist, function(ol) unname(ol[['bestmem']])[1])
             newct <- cardinaltemps(parlist)
+
         }
 
         #creating predictors for stage length based on the parameters
