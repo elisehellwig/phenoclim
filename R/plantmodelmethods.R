@@ -183,6 +183,29 @@ setValidity("PlantModel", function(object) {
 
 })
 
+#############################
+#setting stuff
+
+#' @rdname crossvalidated-set
+setMethod('crossvalidated<-', 'ParameterList',
+          function(object, value) {
+              object@crossvalidated <- value
+
+              if (validObject(object)) {
+                  return(object)
+              }
+          })
+
+
+#' @rdname error-set
+setMethod('error<-', 'ParameterList',
+          function(object, value) {
+              object@error <- value
+
+              if (validObject(object)) {
+                  return(object)
+              }
+          })
 
 
 

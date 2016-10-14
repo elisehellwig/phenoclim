@@ -73,3 +73,29 @@ setGeneric('olm', function(object) standardGeneric('olm'))
 #' @export
 setGeneric('crossvalidated', function(object) standardGeneric('crossvalidated'))
 
+###################################
+#sets stuff
+
+#' Setting whether the error is crossvalidated
+#'
+#'  Used to change whether or not the error is crossvalidated without recreating
+#'       the object.
+#'
+#' @param object An object of class PlantModel
+#' @param value logical, is the error crossvalidated?
+setGeneric('crossvalidated<-', function(object, value) {
+    standardGeneric('crossvalidated<-')} )
+
+
+#' Setting the error
+#'
+#'  Used to change the error without recreating the object.
+#'
+#' @param object An object of class PlantModel
+#' @param value numeric, the model error
+setGeneric('error<-', function(object, value) {
+    standardGeneric('error<-')} )
+
+
+
+
