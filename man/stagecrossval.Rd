@@ -4,10 +4,12 @@
 \alias{stagecrossval}
 \title{Crossvalidating one stage}
 \usage{
-stagecrossval(pdat, k, stage, fun)
+stagecrossval(pdat, modtype, k, stage, fun)
 }
 \arguments{
 \item{pdat}{data.frame, the phenology data.frame.}
+
+\item{modtype}{character, the type of model, either 'thermal' or 'day'.}
 
 \item{k}{numeric, the number of folds in the crossvalidation.}
 
