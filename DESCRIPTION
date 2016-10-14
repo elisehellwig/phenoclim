@@ -1,7 +1,7 @@
 Package: phenoclim
 Type: Package
 Title: Phenological Analysis in R
-Version: 0.1.0
+Version: 0.2.0
 Imports:
     plyr,
     reshape2,
