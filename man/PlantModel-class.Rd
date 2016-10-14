@@ -21,5 +21,7 @@ the years for which there is phenological data.}
 
 \item{\code{olm}}{A list of linear models relating the thermal time or day
 accumulation to the stage length}
+
+\item{\code{crossvalidated}}{logical, is the error crossvalidated?}
 }}
 

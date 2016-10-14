@@ -4,7 +4,7 @@
 \name{olm}
 \alias{olm}
 \alias{olm,PlantModel-method}
-\title{Returns the lm object phenological model}
+\title{Returns the lm object phenological models}
 \usage{
 olm(object)
 
@@ -18,8 +18,8 @@ An lm object containing the ordinary linear model used for stage
     length prediction.
 }
 \description{
-Returns the lm object phenological model
+Returns the lm object phenological models
 
-Accesses the linear model of a PlantModel object
+Accesses the linear models of a PlantModel object
 }
 
