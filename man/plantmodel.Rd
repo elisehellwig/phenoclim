@@ -5,7 +5,7 @@
 \title{Fits phenological models}
 \usage{
 plantmodel(phenology, temps, parlist, lbounds, ubounds, cores = 1L,
-  simple = FALSE, interations = 200)
+  simple = FALSE, iterations = 200)
 }
 \arguments{
 \item{phenology}{data.frame, contains the phenological data.
