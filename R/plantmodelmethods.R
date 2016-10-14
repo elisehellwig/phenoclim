@@ -26,6 +26,8 @@ setMethod("show",
               obs <- nrow(pheno)
               formname <- parameters(object)@form
 
+              if (crossvalidated) cv <-'is' else cv <- 'is not'
+
               cat('This plant has ', n, " phenological stage(s)", '\n', sep='')
               cat('Average length of stage: ', paste(avglengths, collapse=', '),
                   '\n', sep='')
@@ -35,8 +37,8 @@ setMethod("show",
                   ' observations.', '\n', sep='')
               cat('This is a ', object@parameters@modeltype, ' model with the ',
                   formname, ' functional form.', '\n', sep='')
-              cat('The model has an error of ', round(object@error,2), ' days.', '\n',
-                  sep='')
+              cat('The model has an error of ', round(object@error,2),
+                  ' days, which ', cv, ' crossvalidated.', '\n', sep='')
           })
 
 ################################################################
