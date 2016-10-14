@@ -7,7 +7,7 @@ NULL
 #' optimizes the cardinal temperatures and the length of thermal time or day
 #' accumulation for a PlantModel object.
 #'
-#' @param parameters ParameterList, contains all of the parameters needed to
+#' @param parlist ParameterList, contains all of the parlist needed to
 #'     create the phenology model/PlantModel object.
 #' @param phenology data.frame, contains all of the phenology data necessary for
 #'     running the phenology model.
@@ -19,11 +19,11 @@ NULL
 #' @param L Should accumulation length be optimized? If yes L is TRUE,
 #'     if not L should be the accumulation length to be used.
 #' @param simple logical, is the simplified version of the model being run?
-objective <- function(parameters, phenology, temperature, stage, CT, L,
+objective <- function(parlist, phenology, temperature, stage, CT, L,
                       simple) {
 
-    pars <- cardinaltemps(parameters)[[stage]]
-    ml <- modlength(parameters)[stage]
+    pars <- cardinaltemps(parlist)[[stage]]
+    ml <- modlength(parlist)[stage]
     events <- paste0('event', stage:(stage+1))
 
     fdat <- phenology[, c('year', events, paste0('length', stage))]
@@ -35,7 +35,7 @@ objective <- function(parameters, phenology, temperature, stage, CT, L,
 
 
     fun <- function(x) {
-        return(minrmse(x, fdat, tlist, modeltype(parameters), form(parameters),
+        return(minrmse(x, fdat, tlist, modeltype(parlist), form(parlist),
                        stage, ct, l, simple))
     }
 
