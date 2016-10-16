@@ -26,7 +26,7 @@ setMethod("show",
               obs <- nrow(pheno)
               formname <- parameters(object)@form
 
-              if (crossvalidated) cv <-'is' else cv <- 'is not'
+              if (crossvalidated@object) cv <-'is' else cv <- 'is not'
 
               cat('This plant has ', n, " phenological stage(s)", '\n', sep='')
               cat('Average length of stage: ', paste(avglengths, collapse=', '),
