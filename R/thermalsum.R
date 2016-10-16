@@ -46,7 +46,7 @@ thermalgdsum <- function(pars, fdat, tdat, form, length, stage) {
 	    }
 	})
 
-	if (form %in% c('gdd','gddsimple', 'linear','nocrit','triangle',
+	if (form %in% c('gdd','gddsimple', 'linear','flat','triangle',
 	                'trapezoid','anderson')) {
 	    #print(pars)
 	    tsums <- sapply(1:length(start), function(i) {
@@ -57,7 +57,7 @@ thermalgdsum <- function(pars, fdat, tdat, form, length, stage) {
 	    #print(tsums)
 
 	} else {
-        stop('form must be linear, nocrit triangle, anderson, gdd, gddsimple
+        stop('form must be linear, flat, triangle, anderson, gdd, gddsimple
              or trapezoid')
 	}
 
@@ -95,7 +95,7 @@ thermaldaysum <- function(pars, fdat, tdat, form, length, stage) {
         })
 
        # print(2)
-    } else if (form %in% c('linear', 'nocrit', 'triangle', 'anderson')) {
+    } else if (form %in% c('linear', 'flat', 'triangle', 'anderson')) {
 
         templist <- lapply(1:length(years), function(i) {
             tdat[[as.character(years[i])]][start[i]:365]
@@ -103,7 +103,7 @@ thermaldaysum <- function(pars, fdat, tdat, form, length, stage) {
 
     } else {
         stop('type must be one of the following: gdd, gddsimple, linear
-             nocrit, triangle, anderson')
+             flat, triangle, anderson')
     }
 
 

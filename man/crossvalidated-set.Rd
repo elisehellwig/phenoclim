@@ -3,12 +3,12 @@
 \docType{methods}
 \name{crossvalidated<-}
 \alias{crossvalidated<-}
-\alias{crossvalidated<-,ParameterList-method}
+\alias{crossvalidated<-,PlantModel-method}
 \title{Setting whether the error is crossvalidated}
 \usage{
 crossvalidated(object) <- value
 
-\S4method{crossvalidated}{ParameterList}(object) <- value
+\S4method{crossvalidated}{PlantModel}(object) <- value
 }
 \arguments{
 \item{object}{An object of class PlantModel}

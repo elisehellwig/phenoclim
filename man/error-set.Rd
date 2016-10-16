@@ -3,12 +3,12 @@
 \docType{methods}
 \name{error<-}
 \alias{error<-}
-\alias{error<-,ParameterList-method}
+\alias{error<-,PlantModel-method}
 \title{Setting the error}
 \usage{
 error(object) <- value
 
-\S4method{error}{ParameterList}(object) <- value
+\S4method{error}{PlantModel}(object) <- value
 }
 \arguments{
 \item{object}{An object of class PlantModel}
