@@ -107,25 +107,36 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds, cores=1L,
 
         #extracting those parameters
         if (estimateCT & estimatelength) {
-            newlength <- sapply(optimlist, function(ol) unname(ol[['bestmem']])[1])
-            newct <- lapply(optimlist, function(ol) unname(ol[['bestmem']])[-1] )
+            newlength <- sapply(optimlist, function(ol) {
+               unname(ol[['bestmem']])[1]
+                })
+
+            newct <- lapply(optimlist, function(ol) {
+                unname(ol[['bestmem']])[-1]
+                })
 
         } else if (estimateCT & !estimatelength) {
             newlength <- modlength(parlist)
-            newct <- lapply(optimlist, function(ol) unname(ol[['bestmem']]))
+            newct <- lapply(optimlist, function(ol) {
+                unname(ol[['bestmem']])
+                       })
 
         } else {
-            newlength <- sapply(optimlist, function(ol) unname(ol[['bestmem']])[1])
+            newlength <- sapply(optimlist, function(ol) {
+                unname(ol[['bestmem']])[1]
+                })
             newct <- cardinaltemps(parlist)
 
         }
 
+
         #creating predictors for stage length based on the parameters
         predictornames <- paste0(modeltype(parlist), 1:stages)
         tempslist <- extracttemp(temps, d$year, 1, 331)
+
         predictors <- as.data.frame(sapply(1:stages, function(i) {
-            thermalsum(newct, d, tempslist, modeltype(parlist),
-                       ttform, newlength, i)
+            thermalsum(newct[[i]], d, tempslist, modeltype(parlist),
+                       ttform, newlength[i], i)
         }))
 
         names(predictors) <- predictornames
