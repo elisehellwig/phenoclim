@@ -42,6 +42,42 @@ modeltypecheck <-  function(mt) {
 }
 
 
+#' Checks temperature class
+#'
+#' This function checks to make sure the temperature data is in the right format
+#'     given the functional form used to calculate thermal time with it.
+#'
+#' @param frm character, the functional form of the thermal time model.
+#' @param temp data.frame, the data.frame with temperatures used to calculate
+#'     thermal time accumulation.
+#' @return This function returns True if the class of the temperature is
+#'     correct. Otherwise it returns a vector with FALSE and an error message.
+tempclasscheck <- function(frm, temp) {
 
+    valid <- TRUE
+    msg <- NULL
+
+    if (!is.data.frame(temp)) {
+        valid <- FALSE
+        msg <- c(msg, 'Temperature data must be a data frame.')
+    }
+
+
+    if (frm %in% c('gdd','gddsimple')) {
+        if (!(c('tmin', 'tmax') %in% names(temp))) {
+            valid <- FALSE
+            msg <- c(msg,
+                     'Temperature data must contain variables tmin and tmax.')
+        }
+
+    } else if (!('temp' %in% names(temp))) {
+        valid <- FALSE
+        msg <- c(msg, 'Temperature data must contain variable temp')
+    }
+    msg <- c(valid, msg)
+
+    return(msg)
+
+}
 
 
