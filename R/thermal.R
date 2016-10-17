@@ -83,7 +83,7 @@ flat <- function(Tvec, Tb, To, sum=TRUE) {
 
 #' @examples
 #' temp <- seq(-5, 50)
-#' gdh <- anderson(temp, 4, 25, 36, sum=FALSE)
+#' gdh <- asymcur(temp, 4, 25, 36, sum=FALSE)
 #' plot(gdh ~ temp)
 #' @export
 asymcur <- function(Tvec, Tb, To, Tc, sum=TRUE) {
