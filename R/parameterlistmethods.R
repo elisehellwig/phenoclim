@@ -97,8 +97,8 @@ setValidity("ParameterList", function(object) {
 
     ct <- cardinaltemps(object)
     frm <- object@form
-    forms <- c('gdd', 'gddsimple','linear','flat','anderson','triangle',
-               'trapezoid')
+    forms <- c('gdd', 'gddsimple','linear','flat', 'asymcur','anderson',
+               'triangle', 'trapezoid')
 
     if (!(frm %in% forms)) {
         valid <- FALSE
