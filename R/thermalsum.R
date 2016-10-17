@@ -46,8 +46,7 @@ thermalgdsum <- function(pars, fdat, tdat, form, length, stage) {
 	    }
 	})
 
-	if (form %in% c('gdd','gddsimple', 'linear','flat','triangle',
-	                'trapezoid','anderson')) {
+	if (form %in% c('gdd','gddsimple', 'linear','flat','triangle','asymcur')) {
 	    #print(pars)
 	    tsums <- sapply(1:length(start), function(i) {
 	        plist <- parlist(templist[[i]], pars, sum=TRUE)
@@ -56,14 +55,18 @@ thermalgdsum <- function(pars, fdat, tdat, form, length, stage) {
 
 	    #print(tsums)
 
+	} else if (form=='anderson') {
+        tsums <- sapply(1:length(start), function(i) {
+            plist <- parlist(templist[[i]], c(4,25,36), sum=TRUE)
+            do.call('asymcur', plist)
+        })
+
 	} else {
-        stop('form must be linear, flat, triangle, anderson, gdd, gddsimple
-             or trapezoid')
+        stop('form must be linear, flat, triangle, asymcur, anderson, gdd, or gddsimple.')
 	}
 
 	return(tsums)
 }
-
 
 
 #' Calculates thermal time sums for da model
