@@ -81,10 +81,10 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds, cores=1L,
                         boundlength(ttform, estimateCT, estimatelength), '.'))
         }
 
-        tlist <- extracttemp(temps, d$year, 1, 331)
+        tempslist <- extracttemp(temps, d$year, 1, 331)
 
         functionlist <- lapply(1:stages, function(i) {
-            objective(parlist, d, tlist, i, estimateCT,
+            objective(parlist, d, tempslist, i, estimateCT,
                       estimatelength, simple)
         })
 
@@ -133,7 +133,6 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds, cores=1L,
 
         #creating predictors for stage length based on the parameters
         predictornames <- paste0(modeltype(parlist), 1:stages)
-        tempslist <- extracttemp(temps, d$year, 1, 331)
 
         predictors <- as.data.frame(sapply(1:stages, function(i) {
             thermalsum(newct[[i]], d, tempslist, modeltype(parlist),
