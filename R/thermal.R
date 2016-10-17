@@ -86,7 +86,7 @@ flat <- function(Tvec, Tb, To, sum=TRUE) {
 #' gdh <- anderson(temp, 4, 25, 36, sum=FALSE)
 #' plot(gdh ~ temp)
 #' @export
-anderson <- function(Tvec, Tb, To, Tc, sum=TRUE) {
+asymcur <- function(Tvec, Tb, To, Tc, sum=TRUE) {
 	#from Anderson et al. 1986
 	#Th is a vector of hourly temperatures
 
