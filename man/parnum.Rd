@@ -8,14 +8,15 @@ parnum(form)
 }
 \arguments{
 \item{form}{character, the name of the functional form in question.
-Options are 'gdd', 'gddsimple', 'linear', 'flat', 'anderson' and
-'triangle'.}
+Options are 'gdd', 'gddsimple', 'linear', 'flat', 'asymcur, 'anderson'
+and 'triangle'.}
 }
 \value{
 The number of parameters required for the thermal time functional
     form supplied.
 }
 \description{
-This function returns the number of parameters a supplied thermal time functional form (form) requires.
+This function returns the number of parameters a supplied thermal time
+    functional form (form) requires.
 }
 

@@ -31,11 +31,12 @@ checkpars <- function(pars) {
 
 #' Functional form parameter number
 #'
-#' This function returns the number of parameters a supplied thermal time functional form (form) requires.
+#' This function returns the number of parameters a supplied thermal time
+#'     functional form (form) requires.
 #'
 #' @param form character, the name of the functional form in question.
-#'     Options are 'gdd', 'gddsimple', 'linear', 'flat', 'anderson' and
-#'     'triangle'.
+#'     Options are 'gdd', 'gddsimple', 'linear', 'flat', 'asymcur, 'anderson'
+#'     and 'triangle'.
 #' @return The number of parameters required for the thermal time functional
 #'     form supplied.
 parnum <- function(form) {
@@ -44,7 +45,7 @@ parnum <- function(form) {
         n <- 1
     } else if (form=='flat') {
         n <- 2
-    } else if (form %in% c('anderson', 'triangle')) {
+    } else if (form %in% c('anderson', 'asymcur', 'triangle')) {
         n <- 3
     } else if (form=='trapezoid') {
         n <- 4
