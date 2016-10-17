@@ -64,7 +64,7 @@ tempclasscheck <- function(frm, temp) {
 
 
     if (frm %in% c('gdd','gddsimple')) {
-        if (!(c('tmin', 'tmax') %in% names(temp))) {
+        if (any(!(c('tmin', 'tmax') %in% names(temp)))) {
             valid <- FALSE
             msg <- c(msg,
                      'Temperature data must contain variables tmin and tmax.')
