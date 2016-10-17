@@ -81,9 +81,10 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds, cores=1L,
                         boundlength(ttform, estimateCT, estimatelength), '.'))
         }
 
+        tlist <- extracttemp(temps, d$year, 1, 331)
 
         functionlist <- lapply(1:stages, function(i) {
-            objective(parlist, d, temps, i, estimateCT,
+            objective(parlist, d, tlist, i, estimateCT,
                       estimatelength, simple)
         })
 
