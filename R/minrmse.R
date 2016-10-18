@@ -62,12 +62,14 @@ minrmsethermal <- function(pars, fdat, tdat, form, length, stage) {
 #'     time accumulation length.
 minrmsedaysimplified <- function(pars, fdat, tdat, form, length, stage) {
 
+    responsename <- paste0('length',stage)
+
     if (checkpars(pars)) {
 
         predictedlength <- thermalsum(pars, fdat, tdat, 'day', form, length,
                                       stage)
 
-        rmse <- rmsd(predictedlength, fdat$stagelength)
+        rmse <- rmsd(predictedlength, fdat[,responsename])
 
     } else {
         rmse <- Inf
@@ -97,9 +99,12 @@ minrmsedaysimplified <- function(pars, fdat, tdat, form, length, stage) {
 #'     time accumulation length.
 minrmseday <- function(pars, fdat, tdat, form, length, stage) {
 
+    responsename <- paste0('length',stage)
+
     if (checkpars(pars)) {
         #print(2)
        rmse <- Inf
+
 
     }  else {
 
@@ -117,9 +122,9 @@ minrmseday <- function(pars, fdat, tdat, form, length, stage) {
             positive <- ifelse(daymet > eventi(fdat, stage+1), FALSE, TRUE)
 
             if (all(positive)) {
-                mod <- lm(fdat$stagelength ~ daymet)
+                mod <- lm(fdat[,responsename] ~ daymet)
                 fit <- fitted(mod)
-                rmse <- rmsd(fit, fdat$stagelength)
+                rmse <- rmsd(fit, fdat[,responsename])
 
             } else {
                 rmse <- Inf
