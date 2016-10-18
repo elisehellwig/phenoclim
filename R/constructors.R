@@ -19,13 +19,14 @@ NULL
 #'     temperatures for a given stage of the model. If ct is a list, each
 #'     element of the list should be a vector of cardinal temperatures for a
 #'     given stage of the model.
-#' @param length A vector of model lengths
+#' @param length list of model lengths. Model lengths for the same stage should
+#'     be in the same list element.
 #' @param optimized character, Determines what parameters are optimized in the
 #'     model.Can contain "cardinaltemps", "modlength" or both, but it must
 #'     contain at least one of the two.
 #' @return An object of the class ParameterList.
 #' @export
-parameterlist <- function(n, mt, simple, ff, ct, length, 
+parameterlist <- function(n, mt, simple, ff, ct, length,
     optimized=c('cardinaltemps','modlength')) {
 
     if (class(ct)=='list') {
