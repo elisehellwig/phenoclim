@@ -39,6 +39,8 @@ setMethod("show",
                   formname, ' functional form.', '\n', sep='')
               cat('The model has an error of ', round(object@error,2),
                   ' days, which ', cv, ' crossvalidated.', '\n', sep='')
+              cat('Model Parameters:','\n', sep='')
+              print(parameters(object))
           })
 
 ################################################################
