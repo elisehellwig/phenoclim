@@ -156,7 +156,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds, cores=1L,
             fitted(mod)
         }))
 
-    } else if (simple & modeltype=='da') {
+    } else if (simple & modeltype(parlist)=='day') {
         lmlist <- list(NA)
         fits <- predictors
     }
