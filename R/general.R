@@ -208,6 +208,7 @@ predictevent <- function(pars, temps, form, length) {
         cumsum(tt)
     })
 
+
     if (length(length)==length(gd)) {
 
         eventday <- sapply(1:length(gd), function(i) {
