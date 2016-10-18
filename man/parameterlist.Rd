@@ -24,7 +24,8 @@ temperatures for a given stage of the model. If ct is a list, each
 element of the list should be a vector of cardinal temperatures for a
 given stage of the model.}
 
-\item{length}{A vector of model lengths}
+\item{length}{list of model lengths. Model lengths for the same stage should
+be in the same list element.}
 
 \item{optimized}{character, Determines what parameters are optimized in the
 model.Can contain "cardinaltemps", "modlength" or both, but it must
