@@ -65,6 +65,7 @@ minrmsedaysimplified <- function(pars, fdat, tdat, form, length, stage) {
     responsename <- paste0('length',stage)
 
     if (checkpars(pars)) {
+        #print('simple')
 
         predictedlength <- thermalsum(pars, fdat, tdat, 'day', form, length,
                                       stage)
