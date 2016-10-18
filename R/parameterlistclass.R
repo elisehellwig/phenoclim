@@ -27,7 +27,7 @@ setClass('ParameterList',
                     simplified='logical',
                     form = 'character',
          	        cardinaltemps = "list",
-                    modlength = "numeric",
+                    modlength = "list",
                     parsOptimized = 'character'))
 
 
