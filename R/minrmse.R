@@ -101,7 +101,7 @@ minrmseday <- function(pars, fdat, tdat, form, length, stage) {
 
     responsename <- paste0('length',stage)
 
-    if (checkpars(pars)) {
+    if (!checkpars(pars)) {
         #print(2)
        rmse <- Inf
 
