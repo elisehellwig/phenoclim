@@ -77,9 +77,7 @@ setMethod("show",
              names(pars) <- paste0('p', 1:parnum(object@form))
 
              stagelength <- data.frame(stage=1:n,
-                               length=sapply(1:n, function(i) {
-                                   round(mean(object@modlength[[i]]))
-                               }))
+                                       length=round(object@modlength))
 
              lengthpars <- cbind(stagelength, pars)
 

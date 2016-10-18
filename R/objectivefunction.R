@@ -23,7 +23,7 @@ objective <- function(parlist, phenology, templist, stage, CT, L,
                       simple) {
 
     pars <- cardinaltemps(parlist)[[stage]]
-    ml <- modlength(parlist)[[stage]]
+    ml <- modlength(parlist)[stage]
     events <- paste0('event', stage:(stage+1))
 
     fdat <- phenology[, c('year', events, paste0('length', stage))]
