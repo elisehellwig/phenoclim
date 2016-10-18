@@ -30,12 +30,13 @@ NULL
 #' @return A PlantModel object.
 #' @export
 plantmodel <- function(phenology, temps, parlist, lbounds, ubounds, cores=1L,
-                       simple=FALSE, iterations=200) {
+                       iterations=200) {
 
     stages <- stages(parlist)
     n <- stages+1
     events <- paste0('event', 1:n)
     lengthcols <- paste0('length',1:stages)
+    simple <- simplified(parlist)
 
     if ('cardinaltemps' %in% parsOptimized(parlist)) {
         estimateCT <- TRUE
