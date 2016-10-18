@@ -98,7 +98,8 @@ thermaldaysum <- function(pars, fdat, tdat, form, length, stage) {
         })
 
        # print(2)
-    } else if (form %in% c('linear', 'flat', 'triangle', 'anderson')) {
+    } else if (form %in% c('linear', 'flat', 'triangle', 'asymcur',
+                           'anderson')) {
 
         templist <- lapply(1:length(years), function(i) {
             tdat[[as.character(years[i])]][start[i]:365]
@@ -106,7 +107,7 @@ thermaldaysum <- function(pars, fdat, tdat, form, length, stage) {
 
     } else {
         stop('type must be one of the following: gdd, gddsimple, linear
-             flat, triangle, anderson')
+             flat, triangle, asymcur, anderson')
     }
 
 
@@ -138,7 +139,7 @@ thermalsum <- function(pars, fdat, tdat, modtype, form, length, stage) {
 
     if (modtype=='thermal') {
         ths <- thermalgdsum(pars, fdat, tdat, form, length, stage)
-
+        print(ths)
 
     } else if (modtype=='day') {
         ths <- thermaldaysum(pars, fdat, tdat, form, length, stage)
