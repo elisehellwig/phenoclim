@@ -136,7 +136,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds, cores=1L,
 
         predictors <- as.data.frame(sapply(1:stages, function(i) {
             thermalsum(newct[[i]], d, tempslist, modeltype(parlist),
-                       ttform, newlength[i], i)
+                       ttform, newlength[[i]], i)
         }))
 
         names(predictors) <- predictornames
