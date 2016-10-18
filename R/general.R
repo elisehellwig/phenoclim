@@ -208,6 +208,7 @@ predictevent <- function(pars, temps, form, length) {
         cumsum(tt)
     })
 
+    #print(sapply(gd, function(v) max(v)))
 
     if (length(length)==length(gd)) {
 

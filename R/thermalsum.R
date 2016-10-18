@@ -94,7 +94,7 @@ thermaldaysum <- function(pars, fdat, tdat, form, length, stage) {
     if (form %in% c('gdd', 'gddsimple')) {
 
         templist <- lapply(1:length(years), function(i) {
-            tdat[[as.character(years[i])]][start[i]:365,]
+            tdat[[as.character(years[i])]][start[i]:331,]
         })
 
        # print(2)
@@ -102,7 +102,7 @@ thermaldaysum <- function(pars, fdat, tdat, form, length, stage) {
                            'anderson')) {
 
         templist <- lapply(1:length(years), function(i) {
-            tdat[[as.character(years[i])]][start[i]:365]
+            tdat[[as.character(years[i])]][start[i]:331]
         })
 
     } else {
@@ -142,6 +142,7 @@ thermalsum <- function(pars, fdat, tdat, modtype, form, length, stage) {
 
     } else if (modtype=='day') {
         ths <- thermaldaysum(pars, fdat, tdat, form, length, stage)
+        #print(ths)
 
     } else {
         stop('Only options for model types are thermal and day.')
