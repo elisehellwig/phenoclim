@@ -69,7 +69,11 @@ minrmsedaysimplified <- function(pars, fdat, tdat, form, length, stage) {
         predictedlength <- thermalsum(pars, fdat, tdat, 'day', form, length,
                                       stage)
 
-        rmse <- rmsd(predictedlength, fdat[,responsename])
+        if (any(is.infinite(predictedlength))){
+            rmse <- Inf
+        } else {
+            rmse <- rmsd(predictedlength, fdat[,responsename])
+        }
 
     } else {
         rmse <- Inf
