@@ -114,7 +114,6 @@ thermaldaysum <- function(pars, fdat, tdat, form, length, stage) {
     #calculating the event day
     day <- predictevent(pars, templist, form, length)
 
-    print(day)
     return(day)
 
 }
@@ -140,7 +139,6 @@ thermalsum <- function(pars, fdat, tdat, modtype, form, length, stage) {
 
     if (modtype=='thermal') {
         ths <- thermalgdsum(pars, fdat, tdat, form, length, stage)
-        print(ths)
 
     } else if (modtype=='day') {
         ths <- thermaldaysum(pars, fdat, tdat, form, length, stage)
