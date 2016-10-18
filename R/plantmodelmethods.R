@@ -28,17 +28,15 @@ setMethod("show",
 
               if (object@crossvalidated) cv <-'is' else cv <- 'is not'
 
-              cat('This plant has ', n, " phenological stage(s)", '\n', sep='')
-              cat('Average length of stage: ', paste(avglengths, collapse=', '),
-                  '\n', sep='')
-              cat('Average event dates: ', paste(avgdates, collapse=', '), '\n',
-                                                 sep='')
-              cat('The data spans ', span, ' years, and has ', obs,
-                  ' observations.', '\n', sep='')
-              cat('This is a ', object@parameters@modeltype, ' model with the ',
-                  formname, ' functional form.', '\n', sep='')
-              cat('The model has an error of ', round(object@error,2),
-                  ' days, which ', cv, ' crossvalidated.', '\n', sep='')
+              cat('Stages; stage lengths; event days: ', n,'; ' ,
+                  paste(avglengths, collapse=', '), '; ',
+                  paste(avgdates, collapse=', '), '\n', sep='')
+              cat('Model type, form: ', object@parameters@modeltype, ', ',
+                  formname, '\n', sep='')
+              #cat('The data spans ', span, ' years, and has ', obs,
+               #   ' observations.', '\n', sep='')
+              cat('Error: ', round(object@error,2),
+                  ' days, ', cv, ' crossvalidated.', '\n', sep='')
               cat('Model Parameters:','\n', sep='')
               print(parameters(object))
           })
