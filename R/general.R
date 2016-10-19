@@ -210,15 +210,21 @@ predictevent <- function(pars, temps, form, length) {
 
     #print(sapply(gd, function(v) max(v)))
 
+    if (form %in% c('gdd', 'gddsimple')) {
+        unitfactor <- 1
+    } else {
+        unitfactor <- 24
+    }
+
     if (length(length)==length(gd)) {
 
         eventday <- sapply(1:length(gd), function(i) {
-            suppressWarnings(min(which(gd[[i]]>length[i])))
+            suppressWarnings(min(which(gd[[i]]>length[i]))/unitfactor)
         })
     } else if (length(length)==1) {
 
         eventday <- sapply(gd, function(v) {
-            suppressWarnings(min(which(v>length)))
+            suppressWarnings(min(which(v>length))/unitfactor)
         })
     }
 
