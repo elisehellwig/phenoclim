@@ -24,7 +24,6 @@ NULL
 #'     the model.
 #' @param cores integer, if using parallel processing, how many cores should R
 #'     use to fit the model.
-#' @param simple logical, should the simplified version of the model be run.
 #' @param iterations numeric, the number of iterations used in the differential
 #'     evolution optimization of the phenological parameters.
 #' @return A PlantModel object.

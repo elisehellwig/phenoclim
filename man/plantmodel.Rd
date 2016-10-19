@@ -5,7 +5,7 @@
 \title{Fits phenological models}
 \usage{
 plantmodel(phenology, temps, parlist, lbounds, ubounds, cores = 1L,
-  simple = FALSE, iterations = 200)
+  iterations = 200)
 }
 \arguments{
 \item{phenology}{data.frame, contains the phenological data.
@@ -28,8 +28,6 @@ the model.}
 
 \item{cores}{integer, if using parallel processing, how many cores should R
 use to fit the model.}
-
-\item{simple}{logical, should the simplified version of the model be run.}
 
 \item{iterations}{numeric, the number of iterations used in the differential
 evolution optimization of the phenological parameters.}
