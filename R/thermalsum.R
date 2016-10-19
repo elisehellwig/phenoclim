@@ -94,7 +94,7 @@ thermaldaysum <- function(pars, fdat, tdat, form, length, stage) {
     if (form %in% c('gdd', 'gddsimple')) {
 
         templist <- lapply(1:length(years), function(i) {
-            tdat[[as.character(years[i])]][start[i]:331,]
+            tdat[[as.character(years[i])]][start[i]:365,]
         })
 
        # print(2)
@@ -102,7 +102,7 @@ thermaldaysum <- function(pars, fdat, tdat, form, length, stage) {
                            'anderson')) {
 
         templist <- lapply(1:length(years), function(i) {
-            tdat[[as.character(years[i])]][start[i]:331]
+            tdat[[as.character(years[i])]][start[i]:365]
         })
 
     } else {
