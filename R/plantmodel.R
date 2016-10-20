@@ -186,8 +186,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds, cores=1L,
     cardinaltemps(DEparameters) <- newct
 
     if (small) {
-        d3 <- data.frame()
-        temps <- data.frame()
+        temps <- temps[1:5,]
     }
 
     pm <- new('PlantModel',
