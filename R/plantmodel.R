@@ -46,9 +46,11 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds, cores=1L,
 
         if (ttform=='anderson') {
             estimateCT <- FALSE
+        } else {
+            estimateCT <- TRUE
         }
 
-        estimateCT <- TRUE
+
     } else {
         estimateCT <- FALSE
     }
