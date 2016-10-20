@@ -36,8 +36,18 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds, cores=1L,
     events <- paste0('event', 1:n)
     lengthcols <- paste0('length',1:stages)
     simple <- simplified(parlist)
+    ttform <- form(parlist)
+
+    if (ttform=='anderson') {
+        cardinaltemps(parlist) <- list(c(4,25,36))
+    }
 
     if ('cardinaltemps' %in% parsOptimized(parlist)) {
+
+        if (ttform=='anderson') {
+            estimateCT <- FALSE
+        }
+
         estimateCT <- TRUE
     } else {
         estimateCT <- FALSE
@@ -72,7 +82,6 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds, cores=1L,
         }))
 
     } else {
-        ttform <- form(parlist)
 
         if (boundlength(ttform, estimateCT, estimatelength)!=length(lbounds)) {
             stop(paste0('The bounds have the wrong number of parameter values. ',
