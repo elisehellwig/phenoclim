@@ -26,10 +26,11 @@ NULL
 #'     use to fit the model.
 #' @param iterations numeric, the number of iterations used in the differential
 #'     evolution optimization of the phenological parameters.
+#' @param small logical, if small empty dataframes will be returned.
 #' @return A PlantModel object.
 #' @export
 plantmodel <- function(phenology, temps, parlist, lbounds, ubounds, cores=1L,
-                       iterations=200) {
+                       iterations=200, small=FALSE) {
 
     stages <- stages(parlist)
     n <- stages+1
@@ -183,6 +184,11 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds, cores=1L,
     DEparameters <- parlist
     modlength(DEparameters) <- newlength
     cardinaltemps(DEparameters) <- newct
+
+    if (small) {
+        d3 <- data.frame()
+        temps <- data.frame()
+    }
 
     pm <- new('PlantModel',
               parameters=DEparameters,
