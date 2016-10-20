@@ -202,6 +202,9 @@ checktempyears <- function(phenology, temperature) {
 
 predictevent <- function(pars, temps, form, length) {
 
+    if (form=='anderson') form <- 'asymcur'
+
+
     gd <- lapply(temps, function(v) {
         plist <- parlist(v, pars)
         tt <- do.call(form, plist)
