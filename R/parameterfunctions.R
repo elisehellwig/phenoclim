@@ -72,6 +72,8 @@ parnum <- function(form) {
 #' @return The length the bounds vectors need to be.
 boundlength <- function(form, CT, L) {
 
+    pn <- max(sapply(form, function(fm) parnum(fm)))
+
     if ((!CT) & (!L)) {
         stop('You must estimate the cardinal temperatures, the model length, or both.')
 
@@ -79,10 +81,10 @@ boundlength <- function(form, CT, L) {
         parslength <- 1
 
     } else if (L & CT) {
-        parslength <- parnum(form) + 1
+        parslength <- pn + 1
 
     } else {
-        parslength <- parnum(form)
+        parslength <- pn
     }
 
     return(parslength)
