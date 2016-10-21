@@ -6,8 +6,10 @@ NULL
 #############################################################
 #' An S4 class a fitted model of plant development
 #'
-#' @slot parameters A ParameterList object that contains the fit parameters.
-#' @slot error A vector of RMSE values for each of the models (not cross-validated).
+#' @slot parameters A list of ParameterList object that contains the fit
+#'     parameters.
+#' @slot error A vector of RMSE values for each of the models (not cross-
+#'     validated).
 #' @slot phenology A data.frame that contains the phenological data.
 #' @slot temperature A list that contains temperature data for all of
 #'     the years for which there is phenological data.
@@ -16,8 +18,8 @@ NULL
 #' @slot crossvalidated logical, is the error crossvalidated?
 #' @export
 setClass('PlantModel',
-         slots=list(parameters='ParameterList',
-                    error='numeric',
+         slots=list(parameters='list',
+                    error='list',
                     phenology='data.frame',
                     temperature='data.frame',
                     olm='list',

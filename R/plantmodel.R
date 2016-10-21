@@ -32,7 +32,7 @@ NULL
 plantmodel <- function(phenology, temps, parlist, lbounds, ubounds, cores=1L,
                        iterations=200, small=FALSE) {
 
-    stages <- stages(parlist)
+    stages <- sapply(parlist, function(pl) stages(pl))
     n <- stages+1
     events <- paste0('event', 1:n)
     lengthcols <- paste0('length',1:stages)
