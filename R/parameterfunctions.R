@@ -50,7 +50,7 @@ parnum <- function(form) {
     } else if (form=='trapezoid') {
         n <- 4
     } else {
-        stop('form must be either gdd, gddsimple, linear, flat, anderson, triangle, or trapezoid.')
+        stop('form must be either gdd, gddsimple, linear, flat, asymcur, anderson, triangle, or trapezoid.')
     }
 
     return(n)
@@ -73,6 +73,8 @@ parnum <- function(form) {
 boundlength <- function(form, CT, L) {
 
     pn <- max(sapply(form, function(fm) parnum(fm)))
+    CT <- any(CT)
+    L <- any(L)
 
     if ((!CT) & (!L)) {
         stop('You must estimate the cardinal temperatures, the model length, or both.')
