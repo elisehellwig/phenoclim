@@ -166,17 +166,19 @@ minrmseday <- function(pars, fdat, tdat, form, length, stage) {
 #' @export
 minrmse <- function(pars, fdat, tdat, modtype, form, stage, CT, L, simple) {
 
+    ctlen <- parnum(form)
+
     if (isTRUE(L) & isTRUE(CT)) {
         length <- pars[1]
-        ct <- pars[-1]
+        ct <- pars[2:(ctlen+1)]
 
     } else if (!isTRUE(L) & isTRUE(CT)) {
         length <- L
-        ct <- pars
+        ct <- pars[1:ctlen]
 
     } else {
         length <- pars[1]
-        ct <- CT
+        ct <- CT[1:ctlen]
 
     }
 
