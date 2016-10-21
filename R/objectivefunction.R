@@ -20,22 +20,22 @@ NULL
 #'     if not L should be the accumulation length to be used.
 #' @param simple logical, is the simplified version of the model being run?
 objective <- function(parlist, phenology, templist, stage, CT, L,
-                      simple) {
+                      simple, listindex) {
 
-    pars <- cardinaltemps(parlist)[[stage]]
-    ml <- modlength(parlist)[stage]
+    pars <- cardinaltemps(parlist[[listindex]])[[stage]]
+    ml <- modlength(parlist[[listindex]])[stage]
     events <- paste0('event', stage:(stage+1))
 
     fdat <- phenology[, c('year', events, paste0('length', stage))]
 
 
-    if (CT) ct <- TRUE else ct <- pars
-    if (L) l <- TRUE else l <- ml
+    if (CT[listindex]) ct <- TRUE else ct <- pars
+    if (L[listindex]) l <- TRUE else l <- ml
 
 
     fun <- function(x) {
-        return(minrmse(x, fdat, templist, modeltype(parlist), form(parlist),
-                       stage, ct, l, simple))
+        return(minrmse(x, fdat, templist, modeltype(parlist[[listindex]]),
+                       form(parlist[[listindex]])[stage], stage, ct, l, simple))
     }
 
     return(fun)
