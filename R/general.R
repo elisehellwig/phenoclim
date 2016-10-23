@@ -238,7 +238,12 @@ predictevent <- function(pars, temps, form, length) {
 
 ##############################
 
-
+#' Returns the right temperature list
+#'
+#' @param form character, what is the form of the model
+#' @param daily list the daily temperature data
+#' @param hourly list, the hourly temperature data
+#' @return A list of temperature data based on the functional form of the model.
 whichtemp <- function(form, daily, hourly) {
 
     if (form %in% c('gdd', 'gddsimple')) {
