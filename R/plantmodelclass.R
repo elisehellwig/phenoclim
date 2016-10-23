@@ -6,7 +6,7 @@ NULL
 #############################################################
 #' An S4 class a fitted model of plant development
 #'
-#' @slot parameters A list of ParameterList object that contains the fit
+#' @slot parameters A list of ParameterList objects that contains the fit
 #'     parameters.
 #' @slot error A vector of RMSE values for each of the models (not cross-
 #'     validated).
@@ -19,7 +19,7 @@ NULL
 #' @export
 setClass('PlantModel',
          slots=list(parameters='list',
-                    error='list',
+                    error='numeric',
                     phenology='data.frame',
                     temperature='data.frame',
                     olm='list',
