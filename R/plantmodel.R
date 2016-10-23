@@ -111,10 +111,15 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
         if ('gdd' %in% unlist(ttforms) | 'gddsimple' %in% unlist(ttforms)) {
             daytemps <- unique(temps[,c('year','day','tmin','tmax')])
             daytemplist <- extracttemp(daytemps, d$year, 1, 365)
+        } else {
+            daytemplist <- NA
         }
 
+
         if (ifelse(any(unlist(ttforms) %in% hforms), TRUE, FALSE)) {
-             hourtempslist <- extracttemp(temps, d$year, 1, 365)
+             hourtemplist <- extracttemp(temps, d$year, 1, 365)
+        } else {
+            hourtemplist <- NA
         }
 
 
