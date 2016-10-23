@@ -236,6 +236,21 @@ predictevent <- function(pars, temps, form, length) {
 }
 
 
+##############################
+
+
+whichtemp <- function(form, daily, hourly) {
+
+    if (form %in% c('gdd', 'gddsimple')) {
+        return(daily)
+    } else {
+        return(hourly)
+    }
+}
+
+
+
+
 
 
 
