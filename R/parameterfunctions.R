@@ -125,7 +125,3 @@ parlist <- function(temps, pars, sum=FALSE, full=FALSE) {
 
 
 
-
-
-
-
