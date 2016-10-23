@@ -25,6 +25,12 @@ if not CT should be a vector of the cardinal temperatures.}
 if not L should be the accumulation length to be used.}
 
 \item{simple}{logical, is the simplified version of the model being run?}
+
+\item{listindex}{numeric, the index of the ParameterList from parlist that
+you are at}
+}
+\value{
+the function that is passed to DEoptim to optimize.
 }
 \description{
 This function creates a function to be passed to the DEoptim function that
