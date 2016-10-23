@@ -18,7 +18,8 @@ NULL
 #'     temperatures are hourly.
 #' @param parlist list of ParameterLists, contains the parameter values and
 #'     functional form of the thermal time calculations. Note as of right now.
-#'     All ParameterLists must have the same number of stages.
+#'     All ParameterLists must have the same number of stages, and the same
+#'     model type.
 #' @param lbounds numeric, a vector of lower bounds for the parameters in the
 #'     model
 #' @param ubounds numeric, a vector of the upper bounds for the parameters in
@@ -119,14 +120,9 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
         functionlist <- lapply(1:m, function(j) {
                 lapply(1:stages, function(i) {
-                    if (ttforms[[j]][i] %in% c('gdd','gddsimple')){
-                        tl <- daytemplist
-                    } else {
-                        tl <- hourtemplist
-                    }
-
-                    objective(parlist, d, tl, i, estimateCT,
-                          estimatelength, simple, j)
+                    objective(parlist, d, whichtemp(ttforms[[j]][i],daytemplist,
+                                                    hourtemplist),
+                              i, estimateCT,estimatelength, simple, j)
             })
         })
 
@@ -187,84 +183,90 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
         newct <- lapply(1:m, function(i) {
             if (estimatelength[i] & estimateCT[i]) {
-
+                lapply(optimlist[[i]], function(ol) {
+                    unname(ol[['bestmem']])[-1]
+                })
+            } else if (estimateCT[i] & !estimatelength[i]) {
+                lapply(optimlist[[i]], function(ol) {
+                    unname(ol[['bestmem']])
+                })
+            } else {
+                newct <- cardinaltemps(parlist[[i]])
             }
         })
-        if (estimateCT & estimatelength) {
-            newct <- lapply(optimlist, function(ol) {
-                unname(ol[['bestmem']])[-1]
-                })
-
-        } else if (estimateCT & !estimatelength) {
-            newlength <- modlength(parlist)
-            newct <- lapply(optimlist, function(ol) {
-                unname(ol[['bestmem']])
-                       })
-
-        } else {
-            newlength <- sapply(optimlist, function(ol) {
-                unname(ol[['bestmem']])[1]
-                })
-            newct <- cardinaltemps(parlist)
-
-        }
-
 
         #creating predictors for stage length based on the parameters
-        predictornames <- lapply(1:length(parlist), function(i) {
+
+        predictornames <- lapply(1:m, function(i) {
             sapply(1:stages, function(j) {
                 paste0(modeltype(parlist[[i]]), ttform[[i]][j], j)
             })
         })
 
-        ij <- expand.grid(1:length(parlist), 1:stages)
+        ij <- expand.grid(1:stages, 1:m)
+        names(ij) <- c('stage','pl')
+        ij$form <- sapply(1:nrow(ij), function(i) {
+            ttforms[[ij[i,2]]][ij[i,1]]
+        })
+
 
         predictors <- as.data.frame(sapply(1:nrow(ij), function(i) {
-            s <- ij[i, 2]
-            fm <- ij[i, 1]
-            thermalsum(newct[[fm]][[s]])
-        }))
-        predictors <- as.data.frame(sapply(1:stages, function(i) {
-            thermalsum(newct[[i]], d, tempslist, modeltype(parlist),
-                       ttform, newlength[i], i)
+            s <- ij[i, 1]
+            fm <- ij[i, 2]
+            thermalsum(newct[[fm]][[s]], d,
+                       whichtemp(ij[i,'form'], daytemplist, hourtemplist),
+                       modeltype(parlist[[fm]]),
+                       ij[i,'form'],
+                       newlength[[fm]][s],
+                       s)
         }))
 
-        names(predictors) <- predictornames
+        names(predictors) <- unlist(predictornames)
         d2 <- cbind(d, predictors)
 
     }
 
     if (!simple) {
 
-        lmlist <- lapply(1:stages, function(i) {
-            f <- formula(paste(paste0('length',i), ' ~ ', predictornames[i] ))
-            lm(f, data=d2)
+        lmlist <- lapply(1:m, function(j) {
+            lapply(1:stages, function(i) {
+                f <- formula(paste(paste0('length',i), ' ~ ',
+                                   predictornames[[j]][i] ))
+                lm(f, data=d2)
+            })
         })
 
-        fits <- as.data.frame(sapply(lmlist, function(mod) {
+        fits <- as.data.frame(sapply(unlist(lmlist), function(mod) {
             fitted(mod)
         }))
 
-    } else if (simple & modeltype(parlist)=='day') {
+    } else if (simple & modeltype(parlist[[1]])=='day') {
         lmlist <- list(NA)
         fits <- predictors
     }
 
-    names(fits) <- paste0('fitstage', 1:stages)
+    names(fits) <- sapply(1:nrow(ij), function(i) {
+        paste0('fit', modeltype(parlist[[ij[i,'pl']]]), ij[i,'form'],
+               ij[i,'stage'])
+    })
     d3 <- cbind(d2, fits)
 
-    rmse <- sapply(1:stages, function(i) {
-       fit <- paste0('fitstage', i)
-        observed <- paste0('length',i)
-        rmsd(d3[,fit], d3[,observed])
+
+    rmse <- sapply(1:m, function(i) {
+        sapply(1:stages, function(j) {
+            fit <- paste0('fit', modeltype(parlist[[i]]), ttforms[[i]][j],j)
+            observed <- paste0('length',i)
+            rmsd(d3[,fit], d3[,observed])
+        })
     })
 
-    DEparameters <- parlist
-    modlength(DEparameters) <- newlength
-    cardinaltemps(DEparameters) <- newct
 
-    if (small) {
-        temps <- temps[1:5,]
+
+    DEparameters <- parlist
+
+    for (i in 1:m) {
+        modlength(DEparameters[[i]]) <- newlength[[i]]
+        cardinaltemps(DEparameters[[i]]) <- newct[[i]]
     }
 
     pm <- new('PlantModel',
