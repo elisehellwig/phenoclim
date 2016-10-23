@@ -19,7 +19,7 @@ NULL
 #' @export
 setClass('PlantModel',
          slots=list(parameters='list',
-                    error='numeric',
+                    error='ANY',
                     phenology='data.frame',
                     temperature='data.frame',
                     olm='list',
