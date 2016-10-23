@@ -41,8 +41,9 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
     lengthcols <- paste0('length',1:stages)
     simple <- sapply(parlist, function(pl) simplified(pl))
     ttforms <- lapply(parlist, function(pl) form(pl))
+    m <- length(parlist)
 
-    for (i in 1:length(parlist)) {
+    for (i in 1:m) {
         for (j in 1:stages) {
             if (ttforms[[i]][j]=='anderson') {
                 suppressWarnings(cardinaltemps(parlist[[i]])[[j]] <- c(4,25,36))
@@ -54,7 +55,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
 
 
-    estimateCT <- sapply(1:length(ttforms), function(i) {
+    estimateCT <- sapply(1:m, function(i) {
         if ('cardinaltemps' %in% parsOptimized(parlist[[i]])) {
 
             if ('anderson' %in% ttforms[[i]]) {
@@ -116,7 +117,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
         }
 
 
-        functionlist <- lapply(1:length(ttforms), function(j) {
+        functionlist <- lapply(1:m, function(j) {
                 lapply(1:stages, function(i) {
                     if (ttforms[[j]][i] %in% c('gdd','gddsimple')){
                         tl <- daytemplist
@@ -129,7 +130,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
             })
         })
 
-        lboundlist <- lapply(1:length(ttforms), function(i) {
+        lboundlist <- lapply(1:m, function(i) {
             lapply(1:length(ttforms[[i]]), function(j) {
                 bndlen <- boundlength(ttforms[[i]][j], estimateCT[i],
                                       estimatelength[i])
@@ -138,7 +139,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
             })
         })
 
-        uboundlist <- lapply(1:length(ttforms), function(i) {
+        uboundlist <- lapply(1:m, function(i) {
             lapply(1:length(ttforms[[i]]), function(j) {
                 bndlen <- boundlength(ttforms[[i]][j], estimateCT[i],
                                       estimatelength[i])
@@ -150,8 +151,8 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
         #optimizing the parameters
         if (cores > 1) {
 
-            optimlist <- mclapply(1:length(functionlist), function(i) {
-                lapply(1:length(functionlist[[i]]), function(j) {
+            optimlist <- mclapply(1:m, function(i) {
+                lapply(1:stages, function(j) {
                    DEoptim(functionlist[[i]][[j]], lower=lbounds[[i]][[j]],
                            upper=ubounds[[i]][[j]],
                            control=DEoptim.control(itermax=iterations,
@@ -161,8 +162,8 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
         } else {
 
-            optimlist <- lapply(1:length(functionlist), function(i) {
-                lapply(1:length(functionlist[[i]]), function(j) {
+            optimlist <- lapply(1:m, function(i) {
+                lapply(1:stages, function(j) {
                     DEoptim(functionlist[[i]][[j]], lower=lbounds[[i]][[j]],
                             upper=ubounds[[i]][[j]],
                             control=DEoptim.control(itermax=iterations,
@@ -172,7 +173,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
         }
 
         #extracting those parameters
-        newlengths <- lapply(1:length(parlist), function(i) {
+        newlength <- lapply(1:m, function(i) {
             if (estimatelength[i]) {
                 sapply(optimlist[[i]], function(ol) {
                     unname(ol[["bestmem"]][1])
@@ -184,11 +185,12 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
 
 
-        if (estimateCT & estimatelength) {
-            newlength <- sapply(optimlist, function(ol) {
-               unname(ol[['bestmem']])[1]
-                })
+        newct <- lapply(1:m, function(i) {
+            if (estimatelength[i] & estimateCT[i]) {
 
+            }
+        })
+        if (estimateCT & estimatelength) {
             newct <- lapply(optimlist, function(ol) {
                 unname(ol[['bestmem']])[-1]
                 })
@@ -217,6 +219,11 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
         ij <- expand.grid(1:length(parlist), 1:stages)
 
+        predictors <- as.data.frame(sapply(1:nrow(ij), function(i) {
+            s <- ij[i, 2]
+            fm <- ij[i, 1]
+            thermalsum(newct[[fm]][[s]])
+        }))
         predictors <- as.data.frame(sapply(1:stages, function(i) {
             thermalsum(newct[[i]], d, tempslist, modeltype(parlist),
                        ttform, newlength[i], i)
