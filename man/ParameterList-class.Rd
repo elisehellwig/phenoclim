@@ -34,6 +34,7 @@ as there are stages.}
 
 \item{\code{parsOptimized}}{Determines what parameters are optimized in the model.
 `parsOptimized` is a character vector that can contain "cardinaltemps",
-"modlength" or both, but it must contain at least one of the two.}
+"modlength" or both, but it must contain at least one of the two.
+Currently this cannot vary by stage.}
 }}
 

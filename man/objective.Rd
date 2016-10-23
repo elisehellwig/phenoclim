@@ -4,7 +4,7 @@
 \alias{objective}
 \title{Generates the Objective function}
 \usage{
-objective(parlist, phenology, templist, stage, CT, L, simple)
+objective(parlist, phenology, templist, stage, CT, L, simple, listindex)
 }
 \arguments{
 \item{parlist}{ParameterList, contains all of the parlist needed to

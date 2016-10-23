@@ -10,9 +10,11 @@ An S4 class a fitted model of plant development
 \section{Slots}{
 
 \describe{
-\item{\code{parameters}}{A ParameterList object that contains the fit parameters.}
+\item{\code{parameters}}{A list of ParameterList objects that contains the fit
+parameters.}
 
-\item{\code{error}}{A vector of RMSE values for each of the models (not cross-validated).}
+\item{\code{error}}{A vector of RMSE values for each of the models (not cross-
+validated).}
 
 \item{\code{phenology}}{A data.frame that contains the phenological data.}
 

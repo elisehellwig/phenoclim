@@ -17,8 +17,10 @@ column for year, day of the year, hourly temperature (named temp) or min
 max daily temperatures (named tmin and tmax), and hour if the
 temperatures are hourly.}
 
-\item{parlist}{ParameterList, contains the parameter values and
-functional form of the thermal time calculations.}
+\item{parlist}{list of ParameterLists, contains the parameter values and
+functional form of the thermal time calculations. Note as of right now.
+All ParameterLists must have the same number of stages, and the same
+model type.}
 
 \item{lbounds}{numeric, a vector of lower bounds for the parameters in the
 model}
