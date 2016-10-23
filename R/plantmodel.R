@@ -16,8 +16,9 @@ NULL
 #'     column for year, day of the year, hourly temperature (named temp) or min
 #'     max daily temperatures (named tmin and tmax), and hour if the
 #'     temperatures are hourly.
-#' @param parlist ParameterList, contains the parameter values and
-#'     functional form of the thermal time calculations.
+#' @param parlist list of ParameterLists, contains the parameter values and
+#'     functional form of the thermal time calculations. Note as of right now.
+#'     All ParameterLists must have the same number of stages.
 #' @param lbounds numeric, a vector of lower bounds for the parameters in the
 #'     model
 #' @param ubounds numeric, a vector of the upper bounds for the parameters in
@@ -29,38 +30,50 @@ NULL
 #' @param small logical, if small empty dataframes will be returned.
 #' @return A PlantModel object.
 #' @export
-plantmodel <- function(phenology, temps, parlist, lbounds, ubounds, cores=1L,
-                       iterations=200, small=FALSE) {
+plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
+                       cores=1L, iterations=200, small=FALSE) {
 
-    stages <- sapply(parlist, function(pl) stages(pl))
+    hforms <- c('linear','flat','anderson','triangle','asymcur')
+
+    stages <- stages(parlist[[1]])
     n <- stages+1
     events <- paste0('event', 1:n)
     lengthcols <- paste0('length',1:stages)
-    simple <- simplified(parlist)
-    ttform <- form(parlist)
+    simple <- sapply(parlist, function(pl) simplified(pl))
+    ttforms <- lapply(parlist, function(pl) form(pl))
 
-    if (ttform=='anderson') {
-        cardinaltemps(parlist) <- list(c(4,25,36))
-    }
-
-    if ('cardinaltemps' %in% parsOptimized(parlist)) {
-
-        if (ttform=='anderson') {
-            estimateCT <- FALSE
-        } else {
-            estimateCT <- TRUE
+    for (i in 1:length(parlist)) {
+        for (j in 1:stages) {
+            if (ttforms[[i]][j]=='anderson') {
+                suppressWarnings(cardinaltemps(parlist[[i]])[[j]] <- c(4,25,36))
         }
 
-
-    } else {
-        estimateCT <- FALSE
+        }
     }
 
-    if ('modlength' %in% parsOptimized(parlist)) {
-        estimatelength <- TRUE
-    } else {
-        estimatelength <- FALSE
-    }
+
+
+
+    estimateCT <- sapply(1:length(ttforms), function(i) {
+        if ('cardinaltemps' %in% parsOptimized(parlist[[i]])) {
+
+            if ('anderson' %in% ttforms[[i]]) {
+               FALSE
+            } else {
+               TRUE
+            }
+
+        } else {
+            FALSE
+        }
+    })
+
+
+
+    estimatelength <- sapply(parlist, function(pl) {
+        if ('modlength' %in% parsOptimized(pl)) TRUE else FALSE
+    })
+
 
     pdat <- phenology[, c('year', events)]
 
@@ -73,7 +86,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds, cores=1L,
     d <- data.frame(pdat, ldat)
 
 
-    if (modeltype(parlist)=='thermal' & simple) {
+    if (modeltype(parlist[[1]])=='thermal' & simple[[1]]) {
 
         lmlist <- lapply(1:stages, function(i) {
             fmla <- paste0(lengthcols[i]," ~ 1")
@@ -86,39 +99,91 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds, cores=1L,
 
     } else {
 
-        if (boundlength(ttform, estimateCT, estimatelength)!=length(lbounds)) {
+        if (boundlength(ttforms, estimateCT, estimatelength)!=length(lbounds)) {
             stop(paste0('The bounds have the wrong number of parameter values. ',
                         'Your bounds are of length ', length(lbounds),
                         ', and they should be of length ',
-                        boundlength(ttform, estimateCT, estimatelength), '.'))
+                        boundlength(ttforms, estimateCT, estimatelength), '.'))
         }
 
-        tempslist <- extracttemp(temps, d$year, 1, 365)
+        if ('gdd' %in% unlist(ttforms) | 'gddsimple' %in% unlist(ttforms)) {
+            daytemps <- unique(temps[,c('year','day','tmin','tmax')])
+            daytemplist <- extracttemp(daytemps, d$year, 1, 365)
+        }
 
-        functionlist <- lapply(1:stages, function(i) {
-            objective(parlist, d, tempslist, i, estimateCT,
-                      estimatelength, simple)
+        if (ifelse(any(unlist(ttforms) %in% hforms), TRUE, FALSE)) {
+             hourtempslist <- extracttemp(temps, d$year, 1, 365)
+        }
+
+
+        functionlist <- lapply(1:length(ttforms), function(j) {
+                lapply(1:stages, function(i) {
+                    if (ttforms[[j]][i] %in% c('gdd','gddsimple')){
+                        tl <- daytemplist
+                    } else {
+                        tl <- hourtemplist
+                    }
+
+                    objective(parlist, d, tl, i, estimateCT,
+                          estimatelength, simple, j)
+            })
         })
 
+        lboundlist <- lapply(1:length(ttforms), function(i) {
+            lapply(1:length(ttforms[[i]]), function(j) {
+                bndlen <- boundlength(ttforms[[i]][j], estimateCT[i],
+                                      estimatelength[i])
+
+                lbounds[1:bndlen]
+            })
+        })
+
+        uboundlist <- lapply(1:length(ttforms), function(i) {
+            lapply(1:length(ttforms[[i]]), function(j) {
+                bndlen <- boundlength(ttforms[[i]][j], estimateCT[i],
+                                      estimatelength[i])
+
+                ubounds[1:bndlen]
+            })
+        })
 
         #optimizing the parameters
         if (cores > 1) {
 
             optimlist <- mclapply(1:length(functionlist), function(i) {
-                DEoptim(functionlist[[i]], lower=lbounds,upper=ubounds,
-                        control=DEoptim.control(itermax=iterations,
-                                                trace=FALSE))$optim
+                lapply(1:length(functionlist[[i]]), function(j) {
+                   DEoptim(functionlist[[i]][[j]], lower=lbounds[[i]][[j]],
+                           upper=ubounds[[i]][[j]],
+                           control=DEoptim.control(itermax=iterations,
+                                                   trace=FALSE))$optim
+                })
             }, mc.cores=cores)
 
         } else {
+
             optimlist <- lapply(1:length(functionlist), function(i) {
-                DEoptim(functionlist[[i]], lower=lbounds, upper=ubounds,
-                        control=DEoptim.control(itermax=iterations,
-                                                trace=FALSE))$optim
+                lapply(1:length(functionlist[[i]]), function(j) {
+                    DEoptim(functionlist[[i]][[j]], lower=lbounds[[i]][[j]],
+                            upper=ubounds[[i]][[j]],
+                            control=DEoptim.control(itermax=iterations,
+                                                    trace=FALSE))$optim
+                })
             })
         }
 
         #extracting those parameters
+        newlengths <- lapply(1:length(parlist), function(i) {
+            if (estimatelength[i]) {
+                sapply(optimlist[[i]], function(ol) {
+                    unname(ol[["bestmem"]][1])
+                })
+            } else {
+                modlength(parlist[[i]])
+            }
+        })
+
+
+
         if (estimateCT & estimatelength) {
             newlength <- sapply(optimlist, function(ol) {
                unname(ol[['bestmem']])[1]
@@ -144,7 +209,13 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds, cores=1L,
 
 
         #creating predictors for stage length based on the parameters
-        predictornames <- paste0(modeltype(parlist), 1:stages)
+        predictornames <- lapply(1:length(parlist), function(i) {
+            sapply(1:stages, function(j) {
+                paste0(modeltype(parlist[[i]]), ttform[[i]][j], j)
+            })
+        })
+
+        ij <- expand.grid(1:length(parlist), 1:stages)
 
         predictors <- as.data.frame(sapply(1:stages, function(i) {
             thermalsum(newct[[i]], d, tempslist, modeltype(parlist),
