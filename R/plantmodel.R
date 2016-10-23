@@ -199,7 +199,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
         predictornames <- lapply(1:m, function(i) {
             sapply(1:stages, function(j) {
-                paste0(modeltype(parlist[[i]]), ttform[[i]][j], j)
+                paste0(modeltype(parlist[[i]]), ttforms[[i]][j], j)
             })
         })
 

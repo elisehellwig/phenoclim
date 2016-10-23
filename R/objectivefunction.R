@@ -19,6 +19,9 @@ NULL
 #' @param L Should accumulation length be optimized? If yes L is TRUE,
 #'     if not L should be the accumulation length to be used.
 #' @param simple logical, is the simplified version of the model being run?
+#' @param listindex numeric, the index of the ParameterList from parlist that
+#'     you are at
+#' @return the function that is passed to DEoptim to optimize.
 objective <- function(parlist, phenology, templist, stage, CT, L,
                       simple, listindex) {
 
