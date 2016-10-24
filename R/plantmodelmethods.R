@@ -7,11 +7,18 @@ setMethod("show",
           signature = 'PlantModel',
           definition = function(object) {
 
-              n <- object@parameters@stages
+              n <- object@parameters[[1]]@stages
               pheno <- object@phenology
               eventcols <- paste0('event', 1:(n+1))
               lengthcols <- paste0('length', 1:(n))
+              m <- length(object@parameters)
 
+              parshow <- ldply(object@parameters, function(pl) {
+                  showparlist(pl)
+              })
+
+              parshow$model <- rep(1:m, each=n)
+              parshow$error <- as.numeric(object@error)
 
               avgdates <- round(apply(pheno[,eventcols], 2, mean))
 
@@ -24,21 +31,18 @@ setMethod("show",
               rng <- range(pheno[,'year'])
               span <- rng[2] - rng[1]
               obs <- nrow(pheno)
-              formname <- parameters(object)@form
 
               if (object@crossvalidated) cv <-'is' else cv <- 'is not'
 
               cat('Stages; stage lengths; event days: ', n,'; ' ,
                   paste(avglengths, collapse=', '), '; ',
                   paste(avgdates, collapse=', '), '\n', sep='')
-              cat('Model type, form: ', object@parameters@modeltype, ', ',
-                  formname, '\n', sep='')
               #cat('The data spans ', span, ' years, and has ', obs,
                #   ' observations.', '\n', sep='')
-              cat('Error: ', round(object@error,2),
-                  ' days, ', cv, ' crossvalidated.', '\n', sep='')
+              cat('Model error is in days and ', cv, ' crossvalidated.', '\n', sep='')
               cat('Model Parameters:','\n', sep='')
-              print(parameters(object))
+              print(parshow)
+
           })
 
 ################################################################
@@ -98,21 +102,25 @@ setMethod("crossvalidated", "PlantModel",
 #' @rdname stages
 setMethod("stages", "PlantModel",
           function(object) {
-              return(object@parameters@stages)
+              return(object@parameters[[1]]@stages)
           })
 
 #' Accesses form of a PlantModel object
 #' @rdname form
 setMethod("form", "PlantModel",
           function(object) {
-              return(object@parameters@form)
+              frms <- lapply(object@parameters, function(parlist) {
+                  parlist@form
+              })
+              return(frms)
           })
 
 #' Accesses the model type of a PlantModel object
 #' @rdname modeltype
 setMethod("modeltype", "PlantModel",
           function(object) {
-              return(object@parameters@modeltype)
+
+              return(object@parameters[[1]]@modeltype)
           })
 
 
@@ -120,21 +128,32 @@ setMethod("modeltype", "PlantModel",
 #' @rdname cardinaltemps
 setMethod("cardinaltemps", "PlantModel",
           function(object) {
-              return(object@parameters@cardinaltemps)
+
+              ct <- lapply(object@parameters, function(parlist) {
+                  parlist@cardinaltemps
+              })
+
+              return(ct)
           })
 
 #' Accesses the model lengths of a plant object
 #' @rdname modlength
 setMethod("modlength", "PlantModel",
           function(object) {
-              return(object@parameters@modlength)
+              ml <- lapply(object@parameters, function(parlist) {
+                  parlist@modlength
+              })
+              return(ml)
           })
 
 #' Accesses what parameters are to be optimized
 #' @rdname parsOptimized
 setMethod("parsOptimized", "PlantModel",
           function(object) {
-              return(object@parameters@parsOptimized)
+              pO <- lapply(object@parameters, function(parlist) {
+                  parlist@parsOptimized
+              })
+              return(pO)
           })
 
 
@@ -172,7 +191,7 @@ setValidity("PlantModel", function(object) {
     }
 
 
-    if (length(modlength(object@parameters)) != n) {
+    if (length(modlength(object@parameters[[1]])) != n) {
         valid <- FALSE
         msg <- c(msg,
                  'The number of stages is not the same as the number of parameter value sets.')
