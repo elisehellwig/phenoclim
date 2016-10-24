@@ -28,11 +28,10 @@ NULL
 #'     use to fit the model.
 #' @param iterations numeric, the number of iterations used in the differential
 #'     evolution optimization of the phenological parameters.
-#' @param small logical, if small empty dataframes will be returned.
 #' @return A PlantModel object.
 #' @export
 plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
-                       cores=1L, iterations=200, small=FALSE) {
+                       cores=1L, iterations=200) {
 
     hforms <- c('linear','flat','anderson','triangle','asymcur')
 
