@@ -73,13 +73,6 @@ setMethod("phenology", "PlantModel",
           })
 
 
-#' Accesses the temperature data.frame of a PlantModel object
-#' @rdname temperature
-setMethod("temperature", "PlantModel",
-          function(object) {
-              return(object@temperature)
-          })
-
 
 #' Accesses the linear models of a PlantModel object
 #' @rdname olm
@@ -110,7 +103,8 @@ setMethod("stages", "PlantModel",
 setMethod("form", "PlantModel",
           function(object) {
               frms <- lapply(object@parameters, function(parlist) {
-                  parlist@form
+                  #print(class(parlist))
+                  form(parlist)
               })
               return(frms)
           })
@@ -167,7 +161,6 @@ setValidity("PlantModel", function(object) {
 
     #print(5)
     n <- stages(object)
-    temp <- temperature(object)
     frm <- form(object)
     pheno <- phenology(object)
     mt <- modeltype(object)
@@ -182,14 +175,6 @@ setValidity("PlantModel", function(object) {
        msg <- c(msg, phenologycheck[-1])
    }
 
-    if (!(checktempyears(pheno, temp)[[1]])) {
-        valid <- FALSE
-        msg <- c(msg,
-                 paste('You are missing temp data for the following years',
-                       paste(checktempyears(pheno, temp)[[2]], sep=", ")))
-
-    }
-
 
     if (length(modlength(object@parameters[[1]])) != n) {
         valid <- FALSE
@@ -197,10 +182,6 @@ setValidity("PlantModel", function(object) {
                  'The number of stages is not the same as the number of parameter value sets.')
     }
 
-    if (!tempclasscheck(frm, temp)[1]) {
-        valid <- FALSE
-        msg <- c(msg, temptypecheck(frm, temp)[-1])
-    }
 
     if (valid) TRUE else msg
 
