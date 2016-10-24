@@ -124,4 +124,38 @@ parlist <- function(temps, pars, sum=FALSE, full=FALSE) {
 }
 
 
+##############################################
+
+#' Legwork behind the ParameterList show method
+#'
+#' @param object Parameterlist object
+showparlist <- function(object) {
+    n <- object@stages
+
+    if (length(object@form)==n) {
+        forms <- object@form
+    } else {
+        forms <- rep(object@form, stages)
+    }
+
+    ctlist <- lapply(object@cardinaltemps, function(ct){
+        if (length(ct)==3) {
+            ct
+        } else {
+            c(ct, rep(NA, 3-length(ct)))
+        }
+    })
+    pars <- as.data.frame(do.call(rbind, ctlist))
+    pars <- round(pars)
+    names(pars) <- c('Base','Optimal','Critical')
+
+    stagelength <- data.frame(stage=1:n,
+                              type=rep(object@modeltype, n),
+                              form=forms,
+                              length=round(object@modlength))
+
+    lengthpars <- cbind(stagelength, pars)
+    return(lengthpars)
+}
+
 
