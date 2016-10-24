@@ -7,7 +7,7 @@
 modeltypecheck(mt)
 }
 \arguments{
-\item{mt}{character, the type of model to be fit using plantmodel()}
+\item{mt}{list, the types of model to be fit using plantmodel()}
 }
 \value{
 The function returns true if the model type is one of the allowed
