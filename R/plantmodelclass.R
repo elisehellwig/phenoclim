@@ -10,9 +10,8 @@ NULL
 #'     parameters.
 #' @slot error A vector of RMSE values for each of the models (not cross-
 #'     validated).
-#' @slot phenology A data.frame that contains the phenological data.
-#' @slot temperature A list that contains temperature data for all of
-#'     the years for which there is phenological data.
+#' @slot phenology A data.frame that contains the phenological data and thermal
+#'     time data.
 #' @slot olm A list of linear models relating the thermal time or day
 #'     accumulation to the stage length
 #' @slot crossvalidated logical, is the error crossvalidated?
@@ -21,7 +20,6 @@ setClass('PlantModel',
          slots=list(parameters='list',
                     error='ANY',
                     phenology='data.frame',
-                    temperature='data.frame',
                     olm='list',
                     crossvalidated='logical'))
 
@@ -49,14 +47,6 @@ setGeneric('error', function(object) standardGeneric('error'))
 #' @return A data.frame with the phenology data
 #' @export
 setGeneric('phenology', function(object) standardGeneric('phenology'))
-
-#' Returns the temperature list
-#'
-#' @param object An object of class PlantModel
-#' @return A list with the temperature data
-#' @export
-setGeneric('temperature', function(object) standardGeneric('temperature'))
-
 
 #' Returns the lm object phenological models
 #'
