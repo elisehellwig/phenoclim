@@ -88,7 +88,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
     d <- data.frame(pdat, ldat)
 
 
-    if (modeltype(parlist[[1]])=='thermal' & simple[[1]]) {
+    if (modeltype(parlist[[1]])=='thermal' & simple[1]) {
 
         lmlist <- lapply(1:stages, function(i) {
             fmla <- paste0(lengthcols[i]," ~ 1")
@@ -174,7 +174,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
             })
         }
 
-        print(2)
+       # print(2)
 
         #extracting those parameters
         newlength <- lapply(1:m, function(i) {
@@ -205,7 +205,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
         #creating predictors for stage length based on the parameters
 
-        print(3)
+        #print(3)
         predictornames <- lapply(1:m, function(i) {
             sapply(1:stages, function(j) {
                 paste0(modeltype(parlist[[i]]), ttforms[[i]][j], j)
@@ -235,11 +235,11 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
     }
 
-    print(4)
+   # print(4)
 
-    if (!simple) {
+    if (!simple[1]) {
 
-        print(4.1)
+       # print(4.1)
         lmlist <- lapply(1:m, function(j) {
             lapply(1:stages, function(i) {
                 f <- formula(paste(paste0('length',i), ' ~ ',
@@ -248,17 +248,17 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
             })
         })
 
-        print(4.2)
+       # print(4.2)
         fits <- as.data.frame(sapply(unlist(lmlist, recursive=FALSE),
                                      function(mod) fitted(mod)))
 
-        print(4.3)
-    } else if (simple & modeltype(parlist[[1]])=='day') {
+       # print(4.3)
+    } else if (simple[1] & modeltype(parlist[[1]])=='day') {
         lmlist <- list(NA)
         fits <- predictors
     }
 
-    print(5)
+    #print(5)
     names(fits) <- sapply(1:nrow(ij), function(i) {
         paste0('fit', modeltype(parlist[[ij[i,'pl']]]), ij[i,'form'],
                ij[i,'stage'])
@@ -266,7 +266,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
     d3 <- cbind(d2, fits)
 
 
-    print(6)
+   # print(6)
     rmse <- sapply(1:m, function(i) {
         sapply(1:stages, function(j) {
             fit <- paste0('fit', modeltype(parlist[[i]]), ttforms[[i]][j],j)
@@ -276,7 +276,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
     })
 
 
-    print(7)
+    #print(7)
     DEparameters <- parlist
 
     for (i in 1:m) {
@@ -284,7 +284,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
         cardinaltemps(DEparameters[[i]]) <- newct[[i]]
     }
 
-    print(8)
+    #print(8)
     pm <- new('PlantModel',
               parameters=DEparameters,
               error=rmse,
