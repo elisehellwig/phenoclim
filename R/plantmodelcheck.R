@@ -26,7 +26,7 @@ phenologycheck <- function(n, df) {
 
 #' Checks model type
 #'
-#' @param mt character, the type of model to be fit using plantmodel()
+#' @param mt list, the types of model to be fit using plantmodel()
 #' @return The function returns true if the model type is one of the allowed
 #'     types (thermal or day), and false with a message if it is not.
 modeltypecheck <-  function(mt) {
@@ -56,6 +56,8 @@ modeltypecheck <-  function(mt) {
 #'     correct. Otherwise it returns a vector with FALSE and an error message.
 tempclasscheck <- function(frm, temp) {
 
+    hrforms <- c('linear','flat','triangle','asymcur','anderson')
+    tempvars <- c('year','day')
     valid <- TRUE
     msg <- NULL
 
@@ -64,18 +66,24 @@ tempclasscheck <- function(frm, temp) {
         msg <- c(msg, 'Temperature data must be a data frame.')
     }
 
+    frmv <- unlist(frm)
 
-    if (frm %in% c('gdd','gddsimple')) {
-        if (any(!(c('tmin', 'tmax') %in% names(temp)))) {
-            valid <- FALSE
-            msg <- c(msg,
-                     'Temperature data must contain variables tmin and tmax.')
-        }
 
-    } else if (!('temp' %in% names(temp))) {
-        valid <- FALSE
-        msg <- c(msg, 'Temperature data must contain variable temp')
+    if (any(ifelse(frmv %in% c('gdd','gddsimple'), TRUE, FALSE))) {
+        tempvars <- c(tempvars, 'tmin','tmax')
+
     }
+
+    if (any(ifelse(frmv %in% hrforms, TRUE, FALSE))) {
+        tempvars <- c(tempvars, 'hour','temp')
+    }
+
+    if (any(ifelse(names(temp) %in% tempvars, FALSE, TRUE))) {
+        valid <- FALSE
+        msg <- c(msg, paste('Temperature data must contain the following variables:',
+                     paste0(tempvars, collapse=', ')))
+    }
+
     msg <- c(valid, msg)
 
     return(msg)
