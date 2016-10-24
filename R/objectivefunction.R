@@ -38,7 +38,7 @@ objective <- function(parlist, phenology, templist, stage, CT, L,
 
     fun <- function(x) {
         return(minrmse(x, fdat, templist, modeltype(parlist[[listindex]]),
-                       form(parlist[[listindex]])[stage], stage, ct, l, simple))
+                       form(parlist[[listindex]])[stage], stage, ct, l, simple[listindex]))
     }
 
     return(fun)

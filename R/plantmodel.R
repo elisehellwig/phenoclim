@@ -128,7 +128,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
         functionlist <- lapply(1:m, function(j) {
                 lapply(1:stages, function(i) {
-                    objective(parlist[[j]], d, whichtemp(ttforms[[j]][i],daytemplist,
+                    objective(parlist, d, whichtemp(ttforms[[j]][i],daytemplist,
                                                     hourtemplist),
                               i, estimateCT,estimatelength, simple, j)
             })
