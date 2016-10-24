@@ -1,3 +1,7 @@
+#' @include general.R
+NULL
+
+
 #This script contains functions to check various things to make sure the
 #plant model is correctly formed.
 
@@ -58,12 +62,10 @@ tempclasscheck <- function(frm, temp) {
 
     hrforms <- c('linear','flat','triangle','asymcur','anderson')
     tempvars <- c('year','day')
-    valid <- TRUE
-    msg <- NULL
+
 
     if (!is.data.frame(temp)) {
-        valid <- FALSE
-        msg <- c(msg, 'Temperature data must be a data frame.')
+        stop('Temperature data must be a data frame.')
     }
 
     frmv <- unlist(frm)
@@ -79,15 +81,31 @@ tempclasscheck <- function(frm, temp) {
     }
 
     if (any(ifelse(tempvars %in% names(temp), FALSE, TRUE))) {
-        valid <- FALSE
-        msg <- c(msg, paste('Temperature data must contain the following variables:',
+        stop( paste('Temperature data must contain the following variables:',
                      paste0(tempvars, collapse=', ')))
     }
 
-    msg <- c(valid, msg)
-
-    return(msg)
 
 }
+
+
+#' Checks temp data.frame is ship shape
+#'
+#' @param temp data.frame, contains all the temperature data
+#' @param pheno data.frame, contains all the phenological data
+#' @param forms list, contains all the functional forms to be used to calculate
+#'     the thermal time in the model.
+#' @return logical, TRUE if everything goes well, an error if not.
+checktemps <- function(temp, pheno, forms) {
+
+    if (!checktempyears(pheno, temp)[[1]]) {
+        stop(paste('You are missing temperature data for the following years',
+                   paste(checktempyears(pheno, temp)[[2]], sep=", ")))
+    }
+
+    tempclasscheck(forms, temp)
+}
+
+
 
 
