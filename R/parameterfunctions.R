@@ -129,6 +129,8 @@ parlist <- function(temps, pars, sum=FALSE, full=FALSE) {
 #' Legwork behind the ParameterList show method
 #'
 #' @param object Parameterlist object
+#' @return A data.frame with the columns type, form, length, stage, Base,
+#'     Optimal, and Critical
 showparlist <- function(object) {
     n <- object@stages
 
