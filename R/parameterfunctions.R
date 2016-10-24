@@ -149,7 +149,7 @@ showparlist <- function(object) {
     })
     pars <- as.data.frame(do.call(rbind, ctlist))
     pars <- round(pars)
-    names(pars) <- c('Base','Optimal','Critical')
+    names(pars) <- c('Base','Opt.','Crit.')
 
     stagelength <- data.frame(stage=1:n,
                               type=rep(object@modeltype, n),

@@ -18,7 +18,7 @@ setMethod("show",
               })
 
               parshow$model <- rep(1:m, each=n)
-              parshow$error <- as.numeric(object@error)
+              parshow$error <- round(as.numeric(object@error),2)
 
               avgdates <- round(apply(pheno[,eventcols], 2, mean))
 
