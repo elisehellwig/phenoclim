@@ -72,11 +72,26 @@ setMethod("show",
           definition = function(object) {
              n <- object@stages
 
-             pars <- as.data.frame(do.call(rbind, object@cardinaltemps))
+             if (length(object@form)==n) {
+                 forms <- object@form
+             } else {
+                 forms <- rep(object@form, stages)
+             }
+
+             ctlist <- lapply(object@cardinaltemps, function(ct){
+                 if (length(ct)==3) {
+                     ct
+                 } else {
+                     c(ct, rep(NA, 3-length(ct)))
+                 }
+             })
+             pars <- as.data.frame(do.call(rbind, ctlist))
              pars <- round(pars)
-             names(pars) <- paste0('p', 1:parnum(object@form))
+             names(pars) <- c('Base','Optimal','Critical')
 
              stagelength <- data.frame(stage=1:n,
+                                       type=rep(object@modeltype, n),
+                                       form=forms,
                                        length=round(object@modlength))
 
              lengthpars <- cbind(stagelength, pars)
@@ -100,9 +115,9 @@ setValidity("ParameterList", function(object) {
     forms <- c('gdd', 'gddsimple','linear','flat', 'asymcur','anderson',
                'triangle', 'trapezoid')
 
-    if (!(frm %in% forms)) {
+    if (any(ifelse(frm %in% forms, FALSE, TRUE))) {
         valid <- FALSE
-        msg <- c(msg, 'The model form is not one of the accepted forms.')
+        msg <- c(msg, 'At least one form is not one of the accepted forms.')
     }
 
     if (!(modeltype(object) %in% c('thermal','day'))) {
@@ -118,14 +133,14 @@ setValidity("ParameterList", function(object) {
     }
 
 
-    ctnum <- length(ct[[1]])
+    ctnum <- sapply(ct, function(v) length(v))
     ctsame <- sapply(ct, function(v) length(v)==ctnum)
 
-    if (!all(ctsame)) {
-        valid <- FALSE
-        msg <- c(msg,
-                 'Not all parameter sets have the same number of parameters.')
-    }
+    # if (!all(ctsame)) {
+    #     valid <- FALSE
+    #     msg <- c(msg,
+    #              'Not all parameter sets have the same number of parameters.')
+    # }
 
 
     isnum <- sapply(ct, function(v) (is.numeric(v) | is.integer(v)) )
@@ -136,15 +151,16 @@ setValidity("ParameterList", function(object) {
                  'Not all of your parameter values are numbers.')
     }
 
+    formparnum <- sapply(frm, function(ch) parnum(ch))
 
-    if (parnum(frm)!=ctnum) {
+    if (any(ifelse(formparnum!=ctnum, TRUE, FALSE))) {
         valid <- FALSE
         msg <- c(msg, 'The number of parameters does not fit the model form.')
     }
 
+    pO <- c('cardinaltemps','modlength')
 
-
-    if (!all(parsOptimized(object) %in% c('cardinaltemps','modlength'))) {
+    if (all(ifelse(parsOptimized(object) %in% pO, FALSE, TRUE))) {
         valid <- FALSE
         msg <- c(msg, "estimate must include at least one of 'cardinaltemps' or 'modelength'. ")
     }
