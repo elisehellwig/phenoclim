@@ -44,10 +44,12 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
     ttforms <- lapply(parlist, function(pl) form(pl))
     m <- length(parlist)
 
+    checktemps(temps, phenology, ttforms)
+
     for (i in 1:m) {
         for (j in 1:stages) {
             if (ttforms[[i]][j]=='anderson') {
-                suppressWarnings(cardinaltemps(parlist[[i]])[[j]] <- c(4,25,36))
+                cardinaltemps(parlist[[i]])[[j]] <- c(4,25,36)
         }
 
         }
@@ -289,7 +291,6 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
               parameters=DEparameters,
               error=rmse,
               phenology=d3,
-              temperature=temps,
               olm=lmlist,
               crossvalidated=FALSE)
 
