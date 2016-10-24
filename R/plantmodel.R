@@ -110,14 +110,15 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
         if ('gdd' %in% unlist(ttforms) | 'gddsimple' %in% unlist(ttforms)) {
             daytemps <- unique(temps[,c('year','day','tmin','tmax')])
-            daytemplist <- extracttemp(daytemps, d$year, 1, 365)
+            daytemplist <- extracttemp(daytemps, d$year, 1, 365,
+                                       tempname=c('tmin','tmax'))
         } else {
             daytemplist <- NA
         }
 
 
         if (ifelse(any(unlist(ttforms) %in% hforms), TRUE, FALSE)) {
-             hourtemplist <- extracttemp(temps, d$year, 1, 365)
+             hourtemplist <- extracttemp(temps, d$year, 1, 365, tempname='temp')
         } else {
             hourtemplist <- NA
         }
@@ -154,8 +155,8 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
             optimlist <- mclapply(1:m, function(i) {
                 lapply(1:stages, function(j) {
-                   DEoptim(functionlist[[i]][[j]], lower=lbounds[[i]][[j]],
-                           upper=ubounds[[i]][[j]],
+                   DEoptim(functionlist[[i]][[j]], lower=lboundlist[[i]][[j]],
+                           upper=uboundlist[[i]][[j]],
                            control=DEoptim.control(itermax=iterations,
                                                    trace=FALSE))$optim
                 })
@@ -165,13 +166,15 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
             optimlist <- lapply(1:m, function(i) {
                 lapply(1:stages, function(j) {
-                    DEoptim(functionlist[[i]][[j]], lower=lbounds[[i]][[j]],
-                            upper=ubounds[[i]][[j]],
+                    DEoptim(functionlist[[i]][[j]], lower=lboundlist[[i]][[j]],
+                            upper=uboundlist[[i]][[j]],
                             control=DEoptim.control(itermax=iterations,
                                                     trace=FALSE))$optim
                 })
             })
         }
+
+        print(2)
 
         #extracting those parameters
         newlength <- lapply(1:m, function(i) {
@@ -202,6 +205,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
         #creating predictors for stage length based on the parameters
 
+        print(3)
         predictornames <- lapply(1:m, function(i) {
             sapply(1:stages, function(j) {
                 paste0(modeltype(parlist[[i]]), ttforms[[i]][j], j)
@@ -231,8 +235,11 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
     }
 
+    print(4)
+
     if (!simple) {
 
+        print(4.1)
         lmlist <- lapply(1:m, function(j) {
             lapply(1:stages, function(i) {
                 f <- formula(paste(paste0('length',i), ' ~ ',
@@ -241,15 +248,17 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
             })
         })
 
-        fits <- as.data.frame(sapply(unlist(lmlist), function(mod) {
-            fitted(mod)
-        }))
+        print(4.2)
+        fits <- as.data.frame(sapply(unlist(lmlist, recursive=FALSE),
+                                     function(mod) fitted(mod)))
 
+        print(4.3)
     } else if (simple & modeltype(parlist[[1]])=='day') {
         lmlist <- list(NA)
         fits <- predictors
     }
 
+    print(5)
     names(fits) <- sapply(1:nrow(ij), function(i) {
         paste0('fit', modeltype(parlist[[ij[i,'pl']]]), ij[i,'form'],
                ij[i,'stage'])
@@ -257,16 +266,17 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
     d3 <- cbind(d2, fits)
 
 
+    print(6)
     rmse <- sapply(1:m, function(i) {
         sapply(1:stages, function(j) {
             fit <- paste0('fit', modeltype(parlist[[i]]), ttforms[[i]][j],j)
-            observed <- paste0('length',i)
+            observed <- paste0('length',j)
             rmsd(d3[,fit], d3[,observed])
         })
     })
 
 
-
+    print(7)
     DEparameters <- parlist
 
     for (i in 1:m) {
@@ -274,6 +284,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
         cardinaltemps(DEparameters[[i]]) <- newct[[i]]
     }
 
+    print(8)
     pm <- new('PlantModel',
               parameters=DEparameters,
               error=rmse,
