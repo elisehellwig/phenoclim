@@ -31,7 +31,9 @@ phenologycheck <- function(n, df) {
 #'     types (thermal or day), and false with a message if it is not.
 modeltypecheck <-  function(mt) {
 
-    if (mt %in% c('thermal', 'day')) {
+    mt <- unlist(mt)
+
+    if (all(ifelse(mt %in% c('thermal', 'day'), TRUE, FALSE))) {
         return(TRUE)
 
     } else {
