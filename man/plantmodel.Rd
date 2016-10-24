@@ -5,7 +5,7 @@
 \title{Fits phenological models}
 \usage{
 plantmodel(phenology, temps, parlist, lbounds, ubounds, cores = 1L,
-  iterations = 200, small = FALSE)
+  iterations = 200)
 }
 \arguments{
 \item{phenology}{data.frame, contains the phenological data.
@@ -33,8 +33,6 @@ use to fit the model.}
 
 \item{iterations}{numeric, the number of iterations used in the differential
 evolution optimization of the phenological parameters.}
-
-\item{small}{logical, if small empty dataframes will be returned.}
 }
 \value{
 A PlantModel object.

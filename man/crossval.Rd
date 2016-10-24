@@ -4,7 +4,7 @@
 \alias{crossval}
 \title{Crossvalidates the PlantModel Error}
 \usage{
-crossval(plant, k, seed, fun = "rmsd")
+crossval(plant, temps, k, seed, fun = "rmsd")
 }
 \arguments{
 \item{plant}{PlantModel, the object to be crossvalidated}

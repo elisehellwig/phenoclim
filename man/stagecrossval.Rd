@@ -4,16 +4,31 @@
 \alias{stagecrossval}
 \title{Crossvalidating one stage}
 \usage{
-stagecrossval(pdat, modtype, k, stage, fun)
+stagecrossval(k, fun, stage, pdat, temps, parlist, lbounds, ubounds,
+  cores = 1L, iterations = 100)
 }
 \arguments{
-\item{pdat}{data.frame, the phenology data.frame.}
-
-\item{modtype}{character, the type of model, either 'thermal' or 'day'.}
-
 \item{k}{numeric, the number of folds in the crossvalidation.}
 
+\item{fun}{character, the name of the function used to evaluate the goodness
+of fit.}
+
 \item{stage}{numeric, the stage of the phenology model.}
+
+\item{pdat}{data.frame, the phenology data.frame.}
+
+\item{temps}{data.frame, the temperature data.frame}
+
+\item{parlist}{list, list of parameterlists}
+
+\item{lbounds}{numeric, lower bounds of parameters}
+
+\item{ubounds}{numeric, upper bounds of parameters.}
+
+\item{cores}{integer, number of cores to be used when fitting the models}
+
+\item{iterations}{numeric, number of iterations to be used when optimizing
+paramters.}
 
 \item{fun}{character, the name of the function used to evaluate the model.}
 }
