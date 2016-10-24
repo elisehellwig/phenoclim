@@ -16,10 +16,8 @@ parameters.}
 \item{\code{error}}{A vector of RMSE values for each of the models (not cross-
 validated).}
 
-\item{\code{phenology}}{A data.frame that contains the phenological data.}
-
-\item{\code{temperature}}{A list that contains temperature data for all of
-the years for which there is phenological data.}
+\item{\code{phenology}}{A data.frame that contains the phenological data and thermal
+time data.}
 
 \item{\code{olm}}{A list of linear models relating the thermal time or day
 accumulation to the stage length}
