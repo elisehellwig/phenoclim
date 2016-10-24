@@ -78,7 +78,7 @@ tempclasscheck <- function(frm, temp) {
         tempvars <- c(tempvars, 'hour','temp')
     }
 
-    if (any(ifelse(names(temp) %in% tempvars, FALSE, TRUE))) {
+    if (any(ifelse(tempvars %in% names(temp), FALSE, TRUE))) {
         valid <- FALSE
         msg <- c(msg, paste('Temperature data must contain the following variables:',
                      paste0(tempvars, collapse=', ')))
