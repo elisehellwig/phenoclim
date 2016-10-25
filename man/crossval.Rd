@@ -4,7 +4,8 @@
 \alias{crossval}
 \title{Crossvalidates the PlantModel Error}
 \usage{
-crossval(plant, temps, k, seed, fun = "rmsd")
+crossval(plant, temps, k, seed, fun = "rmsd", lbounds, ubounds,
+  iterations = 100, cores = 1L)
 }
 \arguments{
 \item{plant}{PlantModel, the object to be crossvalidated}
@@ -17,6 +18,15 @@ crossval(plant, temps, k, seed, fun = "rmsd")
 set.}
 
 \item{fun}{character, the name of the function used to evaluate the model.}
+
+\item{lbounds}{numeric, lower bounds of parameters}
+
+\item{ubounds}{numeric, upper bounds of parameters.}
+
+\item{iterations}{numeric, number of iterations to be used when optimizing
+paramters.}
+
+\item{cores}{integer, number of cores to be used when fitting the models}
 }
 \value{
 A PlantModel object with the error slot having the new crossvalidated
