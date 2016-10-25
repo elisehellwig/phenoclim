@@ -254,8 +254,39 @@ whichtemp <- function(form, daily, hourly) {
 }
 
 
+##############################
+
+#'Extracts the right templist based on the forms provided
+#'
+#' @param temps data.frame, where all the temperature data is stored.
+#' @param years numeric, the years for which temperature data is needed.
+#' @param forms list or character, the functional forms that will be used to
+#'     calculate the thermal time.
+#' @return A list of two the first contains the daily extracted temps if they
+#'     are needed (if not it contains NA) and the second element contains the
+#'     hourly extracted temps if they are needed (if not it contains NA).
+extracttemplist <- function(temps, years, forms) {
+
+    hforms <- c('linear','flat','anderson','triangle','asymcur')
+    ttforms <- unlist(forms)
+
+    if ('gdd' %in% ttforms | 'gddsimple' %in% ttforms) {
+        daytemps <- unique(temps[,c('year','day','tmin','tmax')])
+        daytemplist <- extracttemp(daytemps, years, 1, 365,
+                                   tempname=c('tmin','tmax'))
+    } else {
+        daytemplist <- NA
+    }
 
 
+    if (ifelse(any(ttforms %in% hforms), TRUE, FALSE)) {
+        hourtemplist <- extracttemp(temps, d$year, 1, 365, tempname='temp')
+    } else {
+        hourtemplist <- NA
+    }
+
+    return(list(daytemplist, hourtemplist))
+}
 
 
 
