@@ -33,7 +33,6 @@ NULL
 plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
                        cores=1L, iterations=200) {
 
-    hforms <- c('linear','flat','anderson','triangle','asymcur')
 
     stages <- stages(parlist[[1]])
     n <- stages+1
@@ -109,20 +108,10 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
                         boundlength(ttforms, estimateCT, estimatelength), '.'))
         }
 
-        if ('gdd' %in% unlist(ttforms) | 'gddsimple' %in% unlist(ttforms)) {
-            daytemps <- unique(temps[,c('year','day','tmin','tmax')])
-            daytemplist <- extracttemp(daytemps, d$year, 1, 365,
-                                       tempname=c('tmin','tmax'))
-        } else {
-            daytemplist <- NA
-        }
 
-
-        if (ifelse(any(unlist(ttforms) %in% hforms), TRUE, FALSE)) {
-             hourtemplist <- extracttemp(temps, d$year, 1, 365, tempname='temp')
-        } else {
-            hourtemplist <- NA
-        }
+        extractedtemps <- extracttemplist(temps, ttforms)
+        daytemplist <- extractedtemps[[1]]
+        hourtemplist <- extractedtemps[[2]]
 
 
         functionlist <- lapply(1:m, function(j) {
