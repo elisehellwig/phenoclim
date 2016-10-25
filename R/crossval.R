@@ -84,10 +84,6 @@ crossval <- function(plant, temps, k, seed, fun='rmsd', lbounds, ubounds,
 
     avgmeasure <- apply(measure, 1, mean)
 
-
-
-
-
     error(plant) <- avgmeasure
     crossvalidated(plant) <- TRUE
 
