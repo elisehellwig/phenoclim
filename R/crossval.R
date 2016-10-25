@@ -40,14 +40,14 @@ crossval <- function(plant, temps, k, seed, fun='rmsd', lbounds, ubounds,
 
     ttforms <- sapply(parlist, function(pl) form(pl)[stage])
 
-    extractedtemps <- extracttemplist(temps, pdat$year, ttforms)
+    extractedtemps <- extracttemplist(temps, p$year, ttforms)
     daytemplist <- extractedtemps[[1]]
     hourtemplist <- extractedtemps[[2]]
 
 
     for (i in 1:k) {
-        train <- pdat[pdat$fold!=i, ]
-        test <- pdat[pdat$fold==i, ]
+        train <- p[p$fold!=i, ]
+        test <- p[p$fold==i, ]
 
         pm <- plantmodel(train, temps, parlist, lbounds, ubounds, cores,
                          iterations)
