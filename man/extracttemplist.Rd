@@ -4,10 +4,12 @@
 \alias{extracttemplist}
 \title{Extracts the right templist based on the forms provided}
 \usage{
-extracttemplist(temps, forms)
+extracttemplist(temps, years, forms)
 }
 \arguments{
 \item{temps}{data.frame, where all the temperature data is stored.}
+
+\item{years}{numeric, the years for which temperature data is needed.}
 
 \item{forms}{list or character, the functional forms that will be used to
 calculate the thermal time.}

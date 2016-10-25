@@ -29,8 +29,6 @@ of fit.}
 
 \item{iterations}{numeric, number of iterations to be used when optimizing
 paramters.}
-
-\item{fun}{character, the name of the function used to evaluate the model.}
 }
 \value{
 The mean rmse

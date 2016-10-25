@@ -9,6 +9,8 @@ crossval(plant, temps, k, seed, fun = "rmsd")
 \arguments{
 \item{plant}{PlantModel, the object to be crossvalidated}
 
+\item{temps}{data.frame, contains all the temperature data.}
+
 \item{k}{numeric, number of folds for crossvalidation.}
 
 \item{seed}{numeric, the number to be used as the seed. Set to NA for no seed
