@@ -280,7 +280,7 @@ extracttemplist <- function(temps, years, forms) {
 
 
     if (ifelse(any(ttforms %in% hforms), TRUE, FALSE)) {
-        hourtemplist <- extracttemp(temps, d$year, 1, 365, tempname='temp')
+        hourtemplist <- extracttemp(temps, years, 1, 365, tempname='temp')
     } else {
         hourtemplist <- NA
     }
