@@ -376,6 +376,8 @@ gdd <- function(tdat, Tb, sum=TRUE) {
 #' @export
 gddsimple <- function(tdat, Tb, sum=TRUE) {
     Tavg <- (tdat[,'tmin'] + tdat[,'tmax'])/2
+    Tb <- as.vector(unname(unlist(Tb)))
+
     dd <- Tavg - Tb
     dd[dd<0] <- 0
 
