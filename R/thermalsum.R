@@ -50,6 +50,7 @@ thermalgdsum <- function(pars, fdat, tdat, form, length, stage) {
 	    #print(pars)
 	    tsums <- sapply(1:length(start), function(i) {
 	        plist <- parlist(templist[[i]], pars, sum=TRUE)
+	        #print(str(plist))
 	        do.call(form, plist)
 	    })
 
@@ -121,7 +122,7 @@ thermaldaysum <- function(pars, fdat, tdat, form, length, stage) {
 
 #' Calculates thermal time sums
 #'
-#' Calculates thermal time sums for either the partial, full, or combined model
+#' Calculates thermal time sums for either the day or thermal time model
 #'
 #' @param pars Cardinal temperatures
 #' @param fdat the data.frame containing the phenological information
