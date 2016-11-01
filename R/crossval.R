@@ -39,21 +39,21 @@ crossval <- function(plant, temps, k, seed, fun='rmsd', lbounds, ubounds,
     measure <- matrix(rep(NA, m*k), nrow=m)
 
     ttforms <- sapply(parlist, function(pl) form(pl)[stage])
-
+    #print(1)
     extractedtemps <- extracttemplist(temps, p$year, ttforms)
     daytemplist <- extractedtemps[[1]]
     hourtemplist <- extractedtemps[[2]]
 
-
+   # print(2)
     for (i in 1:k) {
         train <- p[p$fold!=i, ]
         test <- p[p$fold==i, ]
 
+        #print(3)
         pm <- plantmodel(train, temps, parlist, lbounds, ubounds, cores,
                          iterations)
-
         trainmod <- olm(pm)
-
+        #print(4)
         predictors <- lapply(1:m, function(h) {
             paste0(modeltype(parlist[[h]])[stage], ttforms[h], stage)
         })
@@ -62,11 +62,14 @@ crossval <- function(plant, temps, k, seed, fun='rmsd', lbounds, ubounds,
 
         testdata <- lapply(1:length(parlist), function(j) {
             pl <- parlist[[j]]
+
+            #print(cardinaltemps(pl)[stage])
+            #print(form(pl))
             as.data.frame(thermalsum(cardinaltemps(pl)[stage], test,
                          whichtemp(ttforms[j], daytemplist, hourtemplist),
-                         modeltype(pl),ttforms[j], modlength(pl)[j],stage))
+                         modeltype(pl), ttforms[j], round(modlength(pl)),stage))
         })
-
+        #print(5)
 
         for (j in 1:m) {
             names(testdata[[j]]) <- predictors[[j]]
@@ -76,12 +79,14 @@ crossval <- function(plant, temps, k, seed, fun='rmsd', lbounds, ubounds,
             predict(trainmod[[j]][[stage]], newdata=testdata[[j]])
         })
 
-        measure[j,i] <- sapply(1:m, function(j) {
+        #str(fit)
+
+
+        measure[,i] <- sapply(1:m, function(j) {
             do.call(fun, list(fit[[j]], test[,response]))
         })
 
     }
-
     avgmeasure <- apply(measure, 1, mean)
 
     error(plant) <- avgmeasure
