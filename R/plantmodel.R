@@ -71,7 +71,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
     })
 
 
-
+   # print(1)
     estimatelength <- sapply(parlist, function(pl) {
         if ('modlength' %in% parsOptimized(pl)) TRUE else FALSE
     })
@@ -109,7 +109,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
         }
 
 
-        extractedtemps <- extracttemplist(temps, ttforms)
+        extractedtemps <- extracttemplist(temps, pdat$year, ttforms)
         daytemplist <- extractedtemps[[1]]
         hourtemplist <- extractedtemps[[2]]
 
@@ -164,7 +164,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
             })
         }
 
-       # print(2)
+        #print(2)
 
         #extracting those parameters
         newlength <- lapply(1:m, function(i) {
@@ -195,7 +195,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
         #creating predictors for stage length based on the parameters
 
-        #print(3)
+       # print(3)
         predictornames <- lapply(1:m, function(i) {
             sapply(1:stages, function(j) {
                 paste0(modeltype(parlist[[i]]), ttforms[[i]][j], j)
@@ -225,7 +225,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
     }
 
-   # print(4)
+    #print(4)
 
     if (!simple[1]) {
 
@@ -248,7 +248,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
         fits <- predictors
     }
 
-    #print(5)
+   # print(5)
     names(fits) <- sapply(1:nrow(ij), function(i) {
         paste0('fit', modeltype(parlist[[ij[i,'pl']]]), ij[i,'form'],
                ij[i,'stage'])
@@ -256,7 +256,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
     d3 <- cbind(d2, fits)
 
 
-   # print(6)
+    #print(6)
     rmse <- sapply(1:m, function(i) {
         sapply(1:stages, function(j) {
             fit <- paste0('fit', modeltype(parlist[[i]]), ttforms[[i]][j],j)
@@ -266,7 +266,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
     })
 
 
-    #print(7)
+  #  print(7)
     DEparameters <- parlist
 
     for (i in 1:m) {
