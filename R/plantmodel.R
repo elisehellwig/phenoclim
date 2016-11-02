@@ -244,7 +244,17 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
        # print(4.3)
     } else if (simple[1] & modeltype(parlist[[1]])=='day') {
-        lmlist <- list(NA)
+
+        lmlist <- lapply(1:m, function(j) {
+            lapply(1:stages, function(i) {
+                dat <- data.frame(y=1:10, x=1:10)
+                names(dat) <- c(paste0('length',i), predictornames[[j]][i])
+                f <- formula(paste(paste0('length',i), ' ~ ',
+                                   predictornames[[j]][i] ))
+                lm(f, data=dat)
+            })
+        })
+
         fits <- predictors
     }
 
