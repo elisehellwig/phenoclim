@@ -113,7 +113,7 @@ thermaldaysum <- function(pars, fdat, tdat, form, length, stage) {
 
 
     #calculating the event day
-    day <- predictevent(pars, templist, form, length)
+    day <- predictevent(unlist(pars), templist, form, length)
 
     return(day)
 
