@@ -75,13 +75,13 @@ crossval <- function(plant, temps, k, seed, fun='rmsd', lbounds, ubounds,
             names(testdata[[j]]) <- predictors[[j]]
         }
 
-        print(trainmod[[1]])
+        #print(trainmod[[1]])
 
         fit <- lapply(1:m, function(j) {
             predict(trainmod[[j]][[stage]], newdata=testdata[[j]])
         })
 
-        print(7)
+        #print(7)
         #str(fit)
 
 
