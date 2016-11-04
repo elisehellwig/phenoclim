@@ -1,4 +1,4 @@
-#' @include constructors.R minrmse.R plantmodelcheck.R
+#' @include constructors.R plantmodelcheck.R objectivefunction.R plantmodelmethods.R
 NULL
 
 # This document contains the function that fits phenological models for Plant
