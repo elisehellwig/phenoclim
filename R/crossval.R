@@ -35,7 +35,6 @@ crossval <- function(plant, temps, k, seed, fun='rmsd', lbounds, ubounds,
 
     p$fold <- kfold(p, k=k)
 
-    m <- length(parlist)
     measure <- matrix(rep(NA, m*k), nrow=m)
 
     ttforms <- sapply(parlist, function(pl) form(pl)[stage])
@@ -70,7 +69,7 @@ crossval <- function(plant, temps, k, seed, fun='rmsd', lbounds, ubounds,
                          modeltype(pl), ttforms[j], round(modlength(pl)),stage))
         })
         #print(5)
-
+        print(parameters(pm))
         for (j in 1:m) {
             names(testdata[[j]]) <- predictors[[j]]
         }
@@ -90,6 +89,8 @@ crossval <- function(plant, temps, k, seed, fun='rmsd', lbounds, ubounds,
         })
 
     }
+
+    print(measure)
     avgmeasure <- apply(measure, 1, mean)
 
     error(plant) <- avgmeasure
