@@ -265,6 +265,7 @@ whichtemp <- function(form, daily, hourly) {
 #' @return A list of two the first contains the daily extracted temps if they
 #'     are needed (if not it contains NA) and the second element contains the
 #'     hourly extracted temps if they are needed (if not it contains NA).
+#' @export
 extracttemplist <- function(temps, years, forms) {
 
     hforms <- c('linear','flat','anderson','triangle','asymcur')
