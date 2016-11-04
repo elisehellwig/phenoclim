@@ -28,6 +28,6 @@ stage (one length for each entry in fdat).}
 The thermal sums for a given series of years.
 }
 \description{
-Calculates thermal time sums for either the partial, full, or combined model
+Calculates thermal time sums for either the day or thermal time model
 }
 
