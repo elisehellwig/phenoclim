@@ -49,7 +49,7 @@ thermalgdsum <- function(pars, fdat, tdat, form, length, stage) {
 	if (form %in% c('gdd','gddsimple', 'linear','flat','triangle','asymcur')) {
 	    #print(pars)
 	    tsums <- sapply(1:length(start), function(i) {
-	        plist <- parlist(templist[[i]], unlist(pars), sum=TRUE)
+	        plist <- parslist(templist[[i]], unlist(pars), sum=TRUE)
 	        #print(str(plist))
 	        do.call(form, plist)
 	    })
@@ -58,7 +58,7 @@ thermalgdsum <- function(pars, fdat, tdat, form, length, stage) {
 
 	} else if (form=='anderson') {
         tsums <- sapply(1:length(start), function(i) {
-            plist <- parlist(templist[[i]], c(4,25,36), sum=TRUE)
+            plist <- parslist(templist[[i]], c(4,25,36), sum=TRUE)
             do.call('asymcur', plist)
         })
 

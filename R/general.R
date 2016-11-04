@@ -206,7 +206,7 @@ predictevent <- function(pars, temps, form, length) {
 
 
     gd <- lapply(temps, function(v) {
-        plist <- parlist(v, pars)
+        plist <- parslist(v, pars)
         tt <- do.call(form, plist)
         cumsum(tt)
     })

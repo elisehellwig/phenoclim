@@ -102,7 +102,7 @@ boundlength <- function(form, CT, L) {
 #' @param sum logical, should the thermal times be summed
 #' @param full logical, is the model type full?
 #' @return A list of parameters that can be passed to do.call
-parlist <- function(temps, pars, sum=FALSE, full=FALSE) {
+parslist <- function(temps, pars, sum=FALSE, full=FALSE) {
 
     if (length(pars)==1) {
         pl <- list(temps, pars, sum)
