@@ -94,8 +94,10 @@ crossval <- function(plant, temps, k, seed, fun='rmsd', lbounds, ubounds,
         measure[,i] <- sapply(1:m, function(j) {
             do.call(fun, list(fit[[j]], test[,response]))
         })
-
+        #print(parlist)
     }
+
+    #print(measure)
 
     #print(measure)
     avgmeasure <- apply(measure, 1, mean)
