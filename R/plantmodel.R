@@ -264,7 +264,13 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
         paste0('fit', modeltype(parlist[[ij[i,'pl']]]), ij[i,'form'],
                ij[i,'stage'])
     })
-    d3 <- cbind(d2, fits)
+
+    if (exists('d2')) {
+        d3 <- cbind(d2, fits)
+    } else {
+        d3 <- cbind(d, fits)
+    }
+
 
 
     #print(6)
