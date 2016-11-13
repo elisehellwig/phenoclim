@@ -105,6 +105,10 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
             fitted(mod)
         }))
 
+        newct <- lapply(1:m, function(i) list(rep(NA, stages)))
+        newlength <- sapply(1:m, function(i) 0)
+
+
     } else {
 
         if (boundlength(ttforms, estimateCT, estimatelength)!=length(lbounds)) {
