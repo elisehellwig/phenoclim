@@ -42,6 +42,12 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
     ttforms <- lapply(parlist, function(pl) form(pl))
     m <- length(parlist)
 
+    ij <- expand.grid(1:stages, 1:m)
+    names(ij) <- c('stage','pl')
+    ij$form <- sapply(1:nrow(ij), function(i) {
+        ttforms[[ij[i,2]]][ij[i,1]]
+    })
+
     checktemps(temps, phenology, ttforms)
 
     for (i in 1:m) {
@@ -202,11 +208,6 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
             })
         })
 
-        ij <- expand.grid(1:stages, 1:m)
-        names(ij) <- c('stage','pl')
-        ij$form <- sapply(1:nrow(ij), function(i) {
-            ttforms[[ij[i,2]]][ij[i,1]]
-        })
 
 
         predictors <- as.data.frame(sapply(1:nrow(ij), function(i) {
