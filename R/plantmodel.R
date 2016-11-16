@@ -105,9 +105,9 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
             fitted(mod)
         }))
 
-        newct <- lapply(1:m, function(i) list(rep(NA, stages)))
-        newlength <- sapply(1:m, function(i) 0)
-
+        newlength <- lapply(1:m, function(i) {
+            fits[1,1]
+        })
 
     } else {
 
@@ -290,10 +290,14 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
   #  print(7)
     DEparameters <- parlist
 
+
     for (i in 1:m) {
         modlength(DEparameters[[i]]) <- newlength[[i]]
-        cardinaltemps(DEparameters[[i]]) <- newct[[i]]
+        if ((!simple[1]) | (modeltype(parlist[[1]])=='day')) {
+            cardinaltemps(DEparameters[[i]]) <- newct[[i]]
+        }
     }
+
 
     #print(8)
     pm <- new('PlantModel',
