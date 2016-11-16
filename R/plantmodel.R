@@ -31,7 +31,7 @@ NULL
 #' @return A PlantModel object.
 #' @export
 plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
-                       cores=1L, iterations=200) {
+                       cores=1L, iterations=200, ensemble=FALSE) {
 
 
     stages <- stages(parlist[[1]])
@@ -247,6 +247,9 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
         fits <- as.data.frame(sapply(unlist(lmlist, recursive=FALSE),
                                      function(mod) fitted(mod)))
 
+        if (ensemble) {
+            fits$ensemble <- apply(fits, 1, mean)
+        }
        # print(4.3)
     } else if (simple[1] & modeltype(parlist[[1]])=='day') {
 
@@ -261,13 +264,29 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
         })
 
         fits <- predictors
+
+        if (ensemble) {
+            fits$ensemble <- apply(fits, 1, mean)
+        }
     }
 
    # print(5)
-    names(fits) <- sapply(1:nrow(ij), function(i) {
-        paste0('fit', modeltype(parlist[[ij[i,'pl']]]), ij[i,'form'],
-               ij[i,'stage'])
-    })
+
+    if (ensemble) {
+        l <- dim(fits)[2]
+        names(fits[,-l]) <- sapply(1:nrow(ij), function(i) {
+            paste0('fit', modeltype(parlist[[ij[i,'pl']]]), ij[i,'form'],
+                   ij[i,'stage'])
+        })
+
+    } else {
+        names(fits) <- sapply(1:nrow(ij), function(i) {
+            paste0('fit', modeltype(parlist[[ij[i,'pl']]]), ij[i,'form'],
+                   ij[i,'stage'])
+        })
+    }
+
+
 
     if (exists('d2')) {
         d3 <- cbind(d2, fits)
