@@ -289,6 +289,18 @@ extracttemplist <- function(temps, years, forms) {
     return(list(daytemplist, hourtemplist))
 }
 
+#' Return the First of an Object
+#' @rdname head
+#' @export
+head.list <- function(x, n=6L, ...) {
+    stopifnot(length(n) == 1L)
+    origN <- n
+    n <- if (n < 0L)
+        max(length(obj) + n, 0L)
+    else min(n, length(obj))
+    lapply(obj[seq_len(n)], head, origN, ...)
+}
+
 
 
 
