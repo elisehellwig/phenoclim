@@ -28,6 +28,7 @@ NULL
 #'     use to fit the model.
 #' @param iterations numeric, the number of iterations used in the differential
 #'     evolution optimization of the phenological parameters.
+#' @param ensemble logical, should an ensemble prediction be used?
 #' @return A PlantModel object.
 #' @export
 plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,

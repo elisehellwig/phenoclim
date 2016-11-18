@@ -21,7 +21,7 @@ NULL
 #'     error
 #' @export
 crossval <- function(plant, temps, k, seed, fun='rmsd', lbounds, ubounds,
-                     iterations=100, cores=1L) {
+                     iterations=100, cores=1L, ensemble=FALSE) {
 
     parlist <- parameters(plant)
     m <- length(parlist)
