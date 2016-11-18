@@ -5,7 +5,7 @@
 \title{Crossvalidates the PlantModel Error}
 \usage{
 crossval(plant, temps, k, seed, fun = "rmsd", lbounds, ubounds,
-  iterations = 100, cores = 1L)
+  iterations = 100, cores = 1L, ensemble = FALSE)
 }
 \arguments{
 \item{plant}{PlantModel, the object to be crossvalidated}

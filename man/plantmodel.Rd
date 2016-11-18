@@ -5,7 +5,7 @@
 \title{Fits phenological models}
 \usage{
 plantmodel(phenology, temps, parlist, lbounds, ubounds, cores = 1L,
-  iterations = 200)
+  iterations = 200, ensemble = FALSE)
 }
 \arguments{
 \item{phenology}{data.frame, contains the phenological data.
@@ -33,6 +33,8 @@ use to fit the model.}
 
 \item{iterations}{numeric, the number of iterations used in the differential
 evolution optimization of the phenological parameters.}
+
+\item{ensemble}{logical, should an ensemble prediction be used?}
 }
 \value{
 A PlantModel object.
