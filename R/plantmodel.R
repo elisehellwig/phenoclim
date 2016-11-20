@@ -328,9 +328,12 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
     }
 
     if (ensemble) {
-        DEparameters[[m+1]] <- parameterlist(stages, modeltype(parlist[[1]]),
-                                             simple[1], 'ensemble',
-                                             list(c(NA,NA,NA), 0))
+        DEparameters[[m+1]] <- parameterlist(n=stages,
+                                             mt=modeltype(parlist[[1]]),
+                                             simple=simple[1],
+                                             ff='ensemble',
+                                             ct=list(c(NA,NA,NA)),
+                                             length=0)
     }
 
     #print(8)
