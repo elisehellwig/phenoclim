@@ -35,9 +35,15 @@ crossval <- function(plant, temps, k, seed, fun='rmsd', lbounds, ubounds,
 
     p$fold <- kfold(p, k=k)
 
-    measure <- matrix(rep(NA, m*k), nrow=m)
 
     ttforms <- sapply(parlist, function(pl) form(pl)[stage])
+
+    if ('ensemble' %in% ttforms) {
+        ttforms <- ttforms[-m]
+        parlist <- parlist[[-m]]
+        m <- m-1
+    }
+
     #print(1)
     extractedtemps <- extracttemplist(temps, p$year, ttforms)
     daytemplist <- extractedtemps[[1]]
@@ -86,6 +92,7 @@ crossval <- function(plant, temps, k, seed, fun='rmsd', lbounds, ubounds,
         })
 
 
+
         #print(fit)
         #print(7)
         #str(fit)
@@ -97,10 +104,20 @@ crossval <- function(plant, temps, k, seed, fun='rmsd', lbounds, ubounds,
         #print(parlist)
     }
 
-    #print(measure)
 
     #print(measure)
     avgmeasure <- apply(measure, 1, mean)
+
+    if (ensemble) {
+        fitdf <- ldply(fit, function(v) v)
+        ensemblefit <- apply(fitdf, 2, mean)
+
+        ensembleerror <- do.call(fun, list(ensemblefit, test[,response]))
+
+        avgmeasure <- c(avgmeasure, ensembleerror)
+    }
+
+
 
     error(plant) <- avgmeasure
     crossvalidated(plant) <- TRUE
