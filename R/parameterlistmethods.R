@@ -108,9 +108,9 @@ setValidity("ParameterList", function(object) {
     }
 
     ensemblefrm <- which(frm=='ensemble')
+    ctnum <- sapply(ct, function(v) length(v))
 
     if (length(ensemblefrm)!=length(ct)) {
-        ctnum <- sapply(ct, function(v) length(v))
 
         isnum <- sapply(ct, function(v) (is.numeric(v) | is.integer(v)) )
 
