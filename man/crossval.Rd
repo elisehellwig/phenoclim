@@ -27,6 +27,8 @@ set.}
 paramters.}
 
 \item{cores}{integer, number of cores to be used when fitting the models}
+
+\item{ensemble}{logical, should the ensemble predictions be crossvalidated?}
 }
 \value{
 A PlantModel object with the error slot having the new crossvalidated

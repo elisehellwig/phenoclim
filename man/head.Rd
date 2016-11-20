@@ -6,6 +6,13 @@
 \usage{
 \method{head}{list}(x, n = 6L, ...)
 }
+\arguments{
+\item{x}{a list that you want to see the first n entries of}
+
+\item{n}{integer, number of entries of the list you want to see}
+
+\item{...}{anything else you can past to head}
+}
 \description{
 Return the First of an Object
 }
