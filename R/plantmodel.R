@@ -248,9 +248,6 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
         fits <- as.data.frame(sapply(unlist(lmlist, recursive=FALSE),
                                      function(mod) fitted(mod)))
 
-        if (ensemble) {
-            fits$ensemble <- apply(fits, 1, mean)
-        }
        # print(4.3)
     } else if (simple[1] & modeltype(parlist[[1]])=='day') {
 
@@ -266,25 +263,17 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
         fits <- predictors
 
-        if (ensemble) {
-            fits$ensemble <- apply(fits, 1, mean)
-        }
     }
 
    # print(5)
 
-    if (ensemble) {
-        l <- dim(fits)[2]
-        names(fits[,-l]) <- sapply(1:nrow(ij), function(i) {
-            paste0('fit', modeltype(parlist[[ij[i,'pl']]]), ij[i,'form'],
-                   ij[i,'stage'])
-        })
+    names(fits) <- sapply(1:nrow(ij), function(i) {
+        paste0('fit', modeltype(parlist[[ij[i,'pl']]]), ij[i,'form'],
+               ij[i,'stage'])
+    })
 
-    } else {
-        names(fits) <- sapply(1:nrow(ij), function(i) {
-            paste0('fit', modeltype(parlist[[ij[i,'pl']]]), ij[i,'form'],
-                   ij[i,'stage'])
-        })
+    if (ensemble) {
+        fits$fitensemble <- apply(fits, 1, mean)
     }
 
 
@@ -295,16 +284,36 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
         d3 <- cbind(d, fits)
     }
 
+    if (ensemble) {
+        fitnames <- c(sapply(1:m, function(i) paste0('fit',
+                                                     modeltype(parlist[[i]]),
+                                                     ttforms[[i]][1],1)),
+                      'fitensemble')
+
+        rmse <- sapply(1:m+1, function(i) {
+            sapply(1:stages, function(j) {
+                observed <- paste0('length',j)
+                rmsd(d3[,fitnames[i]], d3[,observed])
+            })
+        })
+
+
+    } else {
+        fitnames <- sapply(1:m, function(i) paste0('fit',
+                                                     modeltype(parlist[[i]]),
+                                                     ttforms[[i]][1],1))
+
+        rmse <- sapply(1:m, function(i) {
+            sapply(1:stages, function(j) {
+                observed <- paste0('length',j)
+                rmsd(d3[,fitnames[i]], d3[,observed])
+            })
+        })
+    }
 
 
     #print(6)
-    rmse <- sapply(1:m, function(i) {
-        sapply(1:stages, function(j) {
-            fit <- paste0('fit', modeltype(parlist[[i]]), ttforms[[i]][j],j)
-            observed <- paste0('length',j)
-            rmsd(d3[,fit], d3[,observed])
-        })
-    })
+
 
 
   #  print(7)
@@ -318,6 +327,11 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
         }
     }
 
+    if (ensemble) {
+        DEparameters[[m+1]] <- ParameterList(stages, modeltype(parlist[[1]]),
+                                             simple[1], 'ensemble',
+                                             list(c(NA,NA,NA), 0))
+    }
 
     #print(8)
     pm <- new('PlantModel',
