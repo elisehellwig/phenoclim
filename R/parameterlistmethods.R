@@ -88,7 +88,7 @@ setValidity("ParameterList", function(object) {
     ct <- cardinaltemps(object)
     frm <- object@form
     forms <- c('gdd', 'gddsimple','linear','flat', 'asymcur','anderson',
-               'triangle', 'trapezoid')
+               'triangle', 'trapezoid', 'ensemble')
 
     if (any(ifelse(frm %in% forms, FALSE, TRUE))) {
         valid <- FALSE
@@ -107,23 +107,18 @@ setValidity("ParameterList", function(object) {
                  'The number of accumulation lengths and the number of parameter sets are not the same.')
     }
 
+    ensemblefrm <- which(frm=='ensemble')
 
-    ctnum <- sapply(ct, function(v) length(v))
-    ctsame <- sapply(ct, function(v) length(v)==ctnum)
+    if (length(ensemblefrm)!=length(ct)) {
+        ctnum <- sapply(ct, function(v) length(v))
 
-    # if (!all(ctsame)) {
-    #     valid <- FALSE
-    #     msg <- c(msg,
-    #              'Not all parameter sets have the same number of parameters.')
-    # }
+        isnum <- sapply(ct, function(v) (is.numeric(v) | is.integer(v)) )
 
-
-    isnum <- sapply(ct, function(v) (is.numeric(v) | is.integer(v)) )
-
-    if (!all(isnum)) {
-        valid <-FALSE
-        msg <- c(msg,
-                 'Not all of your parameter values are numbers.')
+        if (!all(isnum)) {
+            valid <-FALSE
+            msg <- c(msg,
+                     'Not all of your parameter values are numbers.')
+        }
     }
 
     formparnum <- sapply(frm, function(ch) parnum(ch))
