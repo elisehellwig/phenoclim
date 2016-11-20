@@ -45,12 +45,12 @@ parnum <- function(form) {
         n <- 1
     } else if (form=='flat') {
         n <- 2
-    } else if (form %in% c('anderson', 'asymcur', 'triangle')) {
+    } else if (form %in% c('anderson', 'asymcur', 'triangle', 'ensemble')) {
         n <- 3
     } else if (form=='trapezoid') {
         n <- 4
     } else {
-        stop('form must be either gdd, gddsimple, linear, flat, asymcur, anderson, triangle, or trapezoid.')
+        stop('form must be either gdd, gddsimple, linear, flat, asymcur, anderson, triangle, or trapezoid, or ensemble.')
     }
 
     return(n)
