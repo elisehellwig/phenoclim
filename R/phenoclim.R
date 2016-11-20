@@ -10,4 +10,5 @@
 #' @importFrom parallel mclapply
 #' @importFrom stats fitted formula lm predict
 #' @importFrom dismo kfold
+#' @importFrom utils head
 NULL
