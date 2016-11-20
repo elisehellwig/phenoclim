@@ -17,6 +17,7 @@ NULL
 #' @param cores integer, number of cores to be used when fitting the models
 #' @param iterations numeric, number of iterations to be used when optimizing
 #'     paramters.
+#' @param ensemble logical, should the ensemble predictions be crossvalidated?
 #' @return A PlantModel object with the error slot having the new crossvalidated
 #'     error
 #' @export
@@ -28,7 +29,6 @@ crossval <- function(plant, temps, k, seed, fun='rmsd', lbounds, ubounds,
     p <- phenology(plant)
     stage <- 1
 
-
     if (is.numeric(seed)) {
         set.seed(seed)
     }
@@ -37,6 +37,10 @@ crossval <- function(plant, temps, k, seed, fun='rmsd', lbounds, ubounds,
 
 
     ttforms <- sapply(parlist, function(pl) form(pl)[stage])
+
+    if ((!('ensemble' %in% ttforms)) & (ensemble)) {
+        stop('There is no ensemble prediction in the PlantModel, so there cannot be any in the crossvalidation')
+    }
 
     if ('ensemble' %in% ttforms) {
         ttforms <- ttforms[-m]
