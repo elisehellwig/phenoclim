@@ -44,8 +44,15 @@ crossval <- function(plant, temps, k, seed, fun='rmsd', lbounds, ubounds,
 
     if ('ensemble' %in% ttforms) {
         ttforms <- ttforms[-m]
-        parlist <- parlist[[-m]]
+        parlist <- parlist[1:(m-1)]
         m <- m-1
+    }
+
+    measure <- matrix(rep(NA, m*k), nrow=m)
+
+    if (ensemble) {
+        ensemblefits <- lapply(1:k, function(i) data.frame())
+        ensembletest <- lapply(1:k, function(i) NA)
     }
 
     #print(1)
@@ -95,6 +102,9 @@ crossval <- function(plant, temps, k, seed, fun='rmsd', lbounds, ubounds,
             unname(predict(trainmod[[j]][[stage]], newdata=testdata[[j]]))
         })
 
+        ensemblefits[[i]] <- t(ldply(fit, function(v) v))
+        names(ensemblefits[[i]]) <- ttforms
+
 
 
         #print(fit)
@@ -105,6 +115,10 @@ crossval <- function(plant, temps, k, seed, fun='rmsd', lbounds, ubounds,
         measure[,i] <- sapply(1:m, function(j) {
             do.call(fun, list(fit[[j]], test[,response]))
         })
+
+        if (ensemble) {
+            ensembletest[[i]] <- test[, response]
+        }
         #print(parlist)
     }
 
@@ -113,12 +127,16 @@ crossval <- function(plant, temps, k, seed, fun='rmsd', lbounds, ubounds,
     avgmeasure <- apply(measure, 1, mean)
 
     if (ensemble) {
-        fitdf <- ldply(fit, function(v) v)
-        ensemblefit <- apply(fitdf, 2, mean)
+        ensemblefitvec <- lapply(ensemblefits, function(df) {
+            apply(df, 1, mean)
+        })
 
-        ensembleerror <- do.call(fun, list(ensemblefit, test[,response]))
+        ensembleerror <- sapply(1:k, function(i) {
+            do.call(fun, list(ensemblefitvec[[i]], ensembletest[[i]]))
+        })
 
-        avgmeasure <- c(avgmeasure, ensembleerror)
+        ensembleavgerror <- mean(ensembleerror)
+        avgmeasure <- c(avgmeasure, ensembleavgerror)
     }
 
 
