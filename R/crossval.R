@@ -125,7 +125,7 @@ crossval <- function(plant, temps, k, seed, fun='rmsd', lbounds, ubounds,
 
     #print(measure)
     avgmeasure <- apply(measure, 1, mean)
-
+    #print(8)
     if (ensemble) {
         ensemblefitvec <- lapply(ensemblefits, function(df) {
             apply(df, 1, mean)
