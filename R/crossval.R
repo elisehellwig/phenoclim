@@ -102,8 +102,11 @@ crossval <- function(plant, temps, k, seed, fun='rmsd', lbounds, ubounds,
             unname(predict(trainmod[[j]][[stage]], newdata=testdata[[j]]))
         })
 
-        ensemblefits[[i]] <- t(ldply(fit, function(v) v))
-        names(ensemblefits[[i]]) <- ttforms
+        if (ensemble) {
+            ensemblefits[[i]] <- t(ldply(fit, function(v) v))
+            names(ensemblefits[[i]]) <- ttforms
+        }
+
 
 
 
