@@ -9,7 +9,7 @@ NULL
 #'     require objects of the class ParameterList for their parameters slot.
 #'
 #' @param n integer, the number of stages in the model.
-#' @param mt character, the model type. Can be either 'thermal' or 'day'.
+#' @param mt character, the model type. Can be either 'DT' or 'TTT'.
 #' @param simple logical, is the model the simplified version?
 #' @param ff character, the functional form of the thermal time calculations.
 #'     Options are 'gdd', 'gddsimple', 'linear', 'flat', 'triangle', and
@@ -29,14 +29,18 @@ NULL
 parameterlist <- function(n, mt, simple, ff, ct, length,
     optimized=c('cardinaltemps','modlength')) {
 
-    if (class(ct)=='list') {
+    if (class(ct)=='list') {#if cardinal temps are in a list
+                            #don't need to do anything to them
+
+        #creat ParameterList class object
         newobject <- new('ParameterList', stages=n, modeltype=mt,
                          simplified=simple, form=ff, cardinaltemps=ct,
                          modlength=length, parsOptimized=optimized)
 
-    } else if (class(ct) %in% c('data.frame', 'matrix') ) {
-        ctlist <- lapply(1:dim(ct)[1], function(i) ct[i,])
+    } else if (class(ct) %in% c('data.frame', 'matrix') ) { #if ct not in list
+        ctlist <- lapply(1:dim(ct)[1], function(i) ct[i,]) #convert ct to list
 
+        #then create ParameterList class object
         newobject <- new('ParameterList', stages=n, modeltype=mt,
                          simplified=simple, form=ff, cardinaltemps=ctlist,
                          modlength=length, parsOptimized=optimized)
