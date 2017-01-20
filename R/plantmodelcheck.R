@@ -17,14 +17,15 @@ NULL
 #'     and an error message with a list of the missing variables.
 phenologycheck <- function(n, df) {
 
-    pnames <- c('year', paste0('event', 1:n))
-    missingcols <- setdiff(pnames, names(df))
+    pnames <- c('year', paste0('event', 1:n)) #column names
+    missingcols <- setdiff(pnames, names(df)) #check if there are missing
+                                              #columns in the data.frame
 
     if (length0(missingcols)) {
         return(TRUE)
     } else {
         msg <- c(FALSE, paste("You are missing the following variables in your phenology data.frame:", missingcols))
-        return(msg)
+        return(msg) #tells you which columns are missing
     }
 }
 
@@ -35,13 +36,13 @@ phenologycheck <- function(n, df) {
 #'     types (thermal or day), and false with a message if it is not.
 modeltypecheck <-  function(mt) {
 
-    mt <- unlist(mt)
+    mt <- unlist(mt) #unlist the model types
 
-    if (all(ifelse(mt %in% c('thermal', 'day'), TRUE, FALSE))) {
+    if (all(ifelse(mt %in% c('DT', 'TTT'), TRUE, FALSE))) {
         return(TRUE)
 
     } else {
-        msg <- c(FALSE, "modeltype must be either 'thermal' or 'day'.")
+        msg <- c(FALSE, "modeltype must be either 'DT' or 'TTT'.")
         return(msg)
 
     }
@@ -68,21 +69,24 @@ tempclasscheck <- function(frm, temp) {
         stop('Temperature data must be a data frame.')
     }
 
-    frmv <- unlist(frm)
+    frmv <- unlist(frm) #unlist forms from arguments
 
 
     if (any(ifelse(frmv %in% c('gdd','gddsimple'), TRUE, FALSE))) {
-        tempvars <- c(tempvars, 'tmin','tmax')
+        tempvars <- c(tempvars, 'tmin','tmax') #variables for GDD models
 
     }
 
     if (any(ifelse(frmv %in% hrforms, TRUE, FALSE))) {
-        tempvars <- c(tempvars, 'hour','temp')
+        tempvars <- c(tempvars, 'hour','temp') #variables for GDH models
     }
 
+    #check to see if any of the variables are missing from the temperature
+    #data.frame
     if (any(ifelse(tempvars %in% names(temp), FALSE, TRUE))) {
         stop( paste('Temperature data must contain the following variables:',
-                     paste0(tempvars, collapse=', ')))
+                     paste0(tempvars, collapse=', '))) #spits out an error with
+        #the names of the variables that are missing
     }
 
 
