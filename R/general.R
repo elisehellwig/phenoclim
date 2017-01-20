@@ -202,36 +202,46 @@ checktempyears <- function(phenology, temperature) {
 
 predictevent <- function(pars, temps, form, length) {
 
+    #changes form to asymcur since anderson form is just asymcur with cardinal
+        #temps 4, 25, and 36
     if (form=='anderson') form <- 'asymcur'
 
-
+    #calculates the thermal time sums
     gd <- lapply(temps, function(v) {
-        plist <- parslist(v, pars)
-        tt <- do.call(form, plist)
-        cumsum(tt)
+        plist <- parslist(v, pars) #puts the cardinal temps in the list format
+        tt <- do.call(form, plist) #applies form function do them
+        cumsum(tt) #creates cummulative sum
     })
 
     #print(sapply(gd, function(v) max(v)))
 
+    #if the model is a GDH model then you have to divide the length by 24 to
+     #give you the correct number of days, which is what we want.
     if (form %in% c('gdd', 'gddsimple')) {
         unitfactor <- 1
     } else {
         unitfactor <- 24
     }
 
-    if (length(length)==length(gd)) {
+    if (length(length)==length(gd)) { #the length depends on the year
 
+        #figures out which day was the first day to meet the thermal time
+            #threshold
         eventday <- sapply(1:length(gd), function(i) {
             suppressWarnings(min(which(gd[[i]]>length[i]))/unitfactor)
         })
-    } else if (length(length)==1) {
 
+    } else if (length(length)==1) { #the length does not depend on the year
+
+        #figures out which day was the first day to meet the thermal time
+            #threshold
         eventday <- sapply(gd, function(v) {
             suppressWarnings(min(which(v>length))/unitfactor)
         })
     }
 
-
+    #returns the day each year when the thermal time the plant experienced
+        #reached the thermal time threshold
     return(eventday)
 }
 
@@ -268,11 +278,13 @@ whichtemp <- function(form, daily, hourly) {
 #' @export
 extracttemplist <- function(temps, years, forms) {
 
-    hforms <- c('linear','flat','anderson','triangle','asymcur')
-    ttforms <- unlist(forms)
+    hforms <- c('linear','flat','anderson','triangle','asymcur') #GDH forms
+    ttforms <- unlist(forms) #vector of thermal time forms we care about
 
     if ('gdd' %in% ttforms | 'gddsimple' %in% ttforms) {
+        #do we care about GDD forms?
         daytemps <- unique(temps[,c('year','day','tmin','tmax')])
+        #if so extract daily data for those forms
         daytemplist <- extracttemp(daytemps, years, 1, 365,
                                    tempname=c('tmin','tmax'))
     } else {
@@ -281,6 +293,8 @@ extracttemplist <- function(temps, years, forms) {
 
 
     if (ifelse(any(ttforms %in% hforms), TRUE, FALSE)) {
+        #do we care about hourly forms, if so extract hourly data for those
+            #forms
         hourtemplist <- extracttemp(temps, years, 1, 365, tempname='temp')
     } else {
         hourtemplist <- NA
