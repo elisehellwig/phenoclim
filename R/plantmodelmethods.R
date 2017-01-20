@@ -7,39 +7,46 @@ setMethod("show",
           signature = 'PlantModel',
           definition = function(object) {
 
-              n <- object@parameters[[1]]@stages
-              pheno <- object@phenology
-              eventcols <- paste0('event', 1:(n+1))
-              lengthcols <- paste0('length', 1:(n))
-              m <- length(object@parameters)
+              n <- object@parameters[[1]]@stages #extract stages
+              pheno <- object@phenology #extract phenology data frame
+              eventcols <- paste0('event', 1:(n+1)) #create event column names
+              lengthcols <- paste0('length', 1:(n)) #create length column names
+              m <- length(object@parameters) #number of parameters
 
               parshow <- ldply(object@parameters, function(pl) {
                   showparlist(pl)
-              })
+              }) #create parameter lists to display
 
-              parshow$model <- rep(1:m, each=n)
-              parshow$error <- round(as.numeric(object@error),2)
-
+              parshow$model <- rep(1:m, each=n) #creating model numbers
+              parshow$error <- round(as.numeric(object@error),2) #rounding error
+                                                                 #values
+              #taking the average dates for each of the phenological
+                #events
               avgdates <- round(apply(pheno[,eventcols], 2, mean))
 
+              #calculating the average lengths for each of the stages
               if (is.numeric(pheno[,lengthcols])) {
                   avglengths <- round(mean(pheno[,lengthcols]))
               } else {
                   avglengths <- round(apply(pheno[,lengthcols], 2, mean))
               }
 
+              #more statistics on the data
               rng <- range(pheno[,'year'])
               span <- rng[2] - rng[1]
               obs <- nrow(pheno)
 
+              #checking to see if model is cross validated and saving the result
               if (object@crossvalidated) cv <-'is' else cv <- 'is not'
 
+              #creating what is displayed
               cat('Stages; stage lengths; event days: ', n,'; ' ,
                   paste(avglengths, collapse=', '), '; ',
                   paste(avgdates, collapse=', '), '\n', sep='')
               #cat('The data spans ', span, ' years, and has ', obs,
                #   ' observations.', '\n', sep='')
-              cat('Model error is in days and ', cv, ' crossvalidated.', '\n', sep='')
+              cat('Model error is in days and ', cv, ' crossvalidated.', '\n',
+                  sep='')
               cat('Model Parameters:','\n', sep='')
               print(parshow)
 
