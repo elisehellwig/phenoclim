@@ -4,7 +4,8 @@
 #'
 #' @slot stages numeric, The number of stages in the phenological model.
 #' @slot modeltype character. The type of phenological model to be used. Options
-#'     are 'thermal' and 'day'. See ____ for more information.
+#'     are 'DT' for Day threshold and 'TTT' for thermal time threshold. See ____
+#'     for more information.
 #' @slot simplified logical. Should the simplified version of the model type be
 #'      used.
 #' @slot form character. The functional form of the thermal time accumulation
