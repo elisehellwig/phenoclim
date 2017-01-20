@@ -25,20 +25,30 @@ NULL
 objective <- function(parlist, phenology, templist, stage, CT, L,
                       simple, listindex) {
 
+    #extract parameters from ParameterList object
     pars <- cardinaltemps(parlist[[listindex]])[[stage]]
+
+    #extract model length/threshold from parameterlist object
     ml <- modlength(parlist[[listindex]])[stage]
+
+    #create vector of names of events (columns)
     events <- paste0('event', stage:(stage+1))
 
+    #create data.frame with only the columns necessary
     fdat <- phenology[, c('year', events, paste0('length', stage))]
 
 
+    #which parameters are geting estimated
     if (CT[listindex]) ct <- TRUE else ct <- pars
     if (L[listindex]) l <- TRUE else l <- ml
 
 
+    #create a function that evaluates returns the rmse of the model that can be
+        #minimized using the function DEoptim()
     fun <- function(x) {
         return(minrmse(x, fdat, templist, modeltype(parlist[[listindex]]),
-                       form(parlist[[listindex]])[stage], stage, ct, l, simple[listindex]))
+                       form(parlist[[listindex]])[stage], stage, ct, l,
+                       simple[listindex]))
     }
 
     return(fun)
