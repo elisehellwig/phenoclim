@@ -6,16 +6,16 @@
 #' @return logical, TRUE if the cardinal temperatures are organized least to greatest, FALSE otherwise
 checkpars <- function(pars) {
 
-
+     #check to see if there are more parameters than any of the models use
     if (length(pars)>4) {
         stop('There are no models with more than four parameters')
 
     } else {
 
-        parsort <-sort(pars)
+        parsort <-sort(pars)#put parameters in ascending order
 
-        if (identical(pars, parsort)) {
-            return(TRUE)
+        if (identical(pars, parsort)) { #are parameters already in ascending
+            return(TRUE)                #order?
 
         } else {
             return(FALSE)
@@ -41,6 +41,7 @@ checkpars <- function(pars) {
 #'     form supplied.
 parnum <- function(form) {
 
+    #identify how many parameters a model should have based on its form
     if (form %in% c('gdd', 'gddsimple','linear')) {
         n <- 1
     } else if (form=='flat') {
@@ -72,22 +73,24 @@ parnum <- function(form) {
 #' @return The length the bounds vectors need to be.
 boundlength <- function(form, CT, L) {
 
+    #what is the maximum number of parameters any form requires?
     pn <- max(sapply(form, function(fm) parnum(fm)))
-    CT <- any(CT)
-    L <- any(L)
+
+    CT <- any(CT) #do any models need to estimate cardinal temperatures
+    L <- any(L) #do any models need to estimate threshold?
 
     if ((!CT) & (!L)) {
         stop('You must estimate the cardinal temperatures, the model length, or both.')
 
-    } else if (L & (!CT)) {
-        parslength <- 1
+    } else if (L & (!CT)) { #if you are only estimating length
+        parslength <- 1     #you only need to estimate one parameter
 
-    } else if (L & CT) {
-        parslength <- pn + 1
+    } else if (L & CT) {    # if you are estimating length and Cardinal temps
+        parslength <- pn + 1 #you need to estimate 1+pn parameters
 
     } else {
-        parslength <- pn
-    }
+        parslength <- pn #if you are only estimating cardinal times you need to
+    }                       #estimate pn parameters
 
     return(parslength)
 }
@@ -95,7 +98,7 @@ boundlength <- function(form, CT, L) {
 
 #####################################
 
-#' Creates a list to pass to do.call in the yearsums family of functions
+#' Creates a list to pass to do.call in the DT/TT family of functions
 #'
 #' @param temps The vector of temperatures used to calculate thermal time.
 #' @param pars A vector of parameters
@@ -132,31 +135,34 @@ parslist <- function(temps, pars, sum=FALSE, full=FALSE) {
 #' @return A data.frame with the columns type, form, length, stage, Base,
 #'     Optimal, and Critical
 showparlist <- function(object) {
-    n <- object@stages
+    n <- object@stages #number of stages in a model
 
-    if (length(object@form)==n) {
+
+    if (length(object@form)==n) { #extracting forms from PlantModel
         forms <- object@form
-    } else {
+    } else { #replicating name if there is only on form
         forms <- rep(object@form, stages)
     }
 
-    ctlist <- lapply(object@cardinaltemps, function(ct){
-        if (length(ct)==3) {
+    ctlist <- lapply(object@cardinaltemps, function(ct){ #reformating cardinal
+        if (length(ct)==3) {                             #temperatures
             ct
         } else {
             c(ct, rep(NA, 3-length(ct)))
         }
     })
-    pars <- as.data.frame(do.call(rbind, ctlist))
+    pars <- as.data.frame(do.call(rbind, ctlist)) #converting ctlist list to df
     pars <- round(pars)
-    names(pars) <- c('Base','Opt.','Crit.')
+    names(pars) <- c('Base','Opt.','Crit.') #giving the columns names
 
+    #adding information from different stages
     stagelength <- data.frame(stage=1:n,
                               type=rep(object@modeltype, n),
                               form=forms,
                               length=round(object@modlength))
 
-    lengthpars <- cbind(stagelength, pars)
+    lengthpars <- cbind(stagelength, pars) #putting stage length and parameter
+                                            #information together
     return(lengthpars)
 }
 
