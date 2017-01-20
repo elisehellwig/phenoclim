@@ -318,6 +318,3 @@ head.list <- function(x, n=6L, ...) {
     lapply(x[seq_len(n)], head, origN, ...)
 }
 
-
-
-
