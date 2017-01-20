@@ -22,20 +22,23 @@ NULL
 #'     time accumulation length.
 minrmseDT <- function(pars, fdat, tdat, form, length, stage) {
 
-    responsename <- paste0('length',stage)
+    responsename <- paste0('length',stage) #define name of response variable
 
-    if (checkpars(pars)) {
+    if (checkpars(pars)) { #if parameters are in ascending order
+
+        #calculate the thermal sum for each year using the cardinal temps and
+            #day threshold
         tsums <- thermalsum(pars, fdat, tdat, 'DT', form, length, stage)
-        #print(tsums)
 
+        #use that data as a predictor in a model to predict stage length
         mod <- lm(fdat[,responsename] ~ tsums)
-        fit <- fitted(mod)
-        #print(fit)
-        #print(fdat[,responsename])
-        rmse <- rmsd(fit, fdat[,responsename])
+        fit <- fitted(mod) #extract fitted values
+
+        rmse <- rmsd(fit, fdat[,responsename]) #calculate RMSE of fitted values
 
     } else {
-        rmse <- Inf
+        rmse <- Inf #if cardinal temperatures are not in ascending order the
+                        #rmse is infinite.
     }
 
     return(rmse)
@@ -62,22 +65,23 @@ minrmseDT <- function(pars, fdat, tdat, form, length, stage) {
 #'     time accumulation length.
 minrmsedaysimplified <- function(pars, fdat, tdat, form, length, stage) {
 
-    responsename <- paste0('length',stage)
+    responsename <- paste0('length',stage) #name of length response variable
 
-    if (checkpars(pars)) {
-        #print('simple')
+    if (checkpars(pars)) { #are parameters in ascending order
 
-        predictedlength <- thermalsum(pars, fdat, tdat, 'TTT', form, length,
+        #calculate day thermal time threshold is met
+        daymet <- thermalsum(pars, fdat, tdat, 'TTT', form, length,
                                       stage)
 
-        if (any(is.infinite(predictedlength))){
+        if (any(is.infinite(daymet))){ #were any of the thermal sums
+            #that did not resolve
             rmse <- Inf
         } else {
-            rmse <- rmsd(predictedlength, fdat[,responsename])
+            rmse <- rmsd(daymet, fdat[,responsename]) #calculate rmse
         }
 
     } else {
-        rmse <- Inf
+        rmse <- Inf #if cardinal temps not in ascending order rmse is infinite
     }
 
 
@@ -86,7 +90,7 @@ minrmsedaysimplified <- function(pars, fdat, tdat, form, length, stage) {
 }
 
 
-#' Calculates DA model RMSE
+#' Calculates TTT model RMSE
 #'
 #' Calculates RMSE for the combined model of thermal time accumulation given a
 #'     certain set of cardinal temperatures and thermal time accumulation
@@ -104,35 +108,35 @@ minrmsedaysimplified <- function(pars, fdat, tdat, form, length, stage) {
 #'     time accumulation length.
 minrmseTTT <- function(pars, fdat, tdat, form, length, stage) {
 
-    responsename <- paste0('length',stage)
+    responsename <- paste0('length',stage) #creating response column name
 
-    if (!checkpars(pars)) {
-        #print(2)
-       rmse <- Inf
+    if (!checkpars(pars)) { #are cardinal temperatures in ascending order
+       rmse <- Inf #if not, rmse is infinite
 
 
     }  else {
 
-        #print(pars)
-
+        #calculate day thermal time threshold is met
         daymet <- thermalsum(pars, fdat, tdat, 'TTT', form, length, stage)
         #print(daymet)
 
         if (any(is.infinite(daymet))) {
-            rmse <- Inf
+            rmse <- Inf #if any year, the threshold is not met, rmse is inf
 
 
         } else {
 
+            #is the day met before the end of the stage in questions?
             positive <- ifelse(daymet > eventi(fdat, stage+1), FALSE, TRUE)
 
-            if (all(positive)) {
+            if (all(positive)) {  #if so create model to use day met to predict
+                                    #stage length
                 mod <- lm(fdat[,responsename] ~ daymet)
-                fit <- fitted(mod)
-                rmse <- rmsd(fit, fdat[,responsename])
+                fit <- fitted(mod) #extract fitted data
+                rmse <- rmsd(fit, fdat[,responsename]) #calculate rmse
 
             } else {
-                rmse <- Inf
+                rmse <- Inf #if not, rmse is infinite
             }
 
         }
@@ -166,8 +170,10 @@ minrmseTTT <- function(pars, fdat, tdat, form, length, stage) {
 #' @export
 minrmse <- function(pars, fdat, tdat, modtype, form, stage, CT, L, simple) {
 
-    ctlen <- parnum(form)
+    ctlen <- parnum(form) #what is the number of parameter values for the form
 
+    #assigning parameter values to variables based on what parameters are
+        #in the model
     if (isTRUE(L) & isTRUE(CT)) {
         length <- pars[1]
         ct <- pars[2:(ctlen+1)]
