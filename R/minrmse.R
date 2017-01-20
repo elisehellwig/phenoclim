@@ -5,7 +5,7 @@ NULL
 #    function to find the optimum cardinal temperature and length of thermal
 #    accumulation
 
-#' Calculates TTA model RMSE
+#' Calculates DT model RMSE
 #'
 #' Calculates RMSE for the thermal model given a certain set of cardinal
 #'     temperatures and thermal time accumulation length.
@@ -20,12 +20,12 @@ NULL
 #' @param stage the number of the stage of the phenological model
 #' @return The RMSE value for a given set of cardinal temperatures and thermal
 #'     time accumulation length.
-minrmsethermal <- function(pars, fdat, tdat, form, length, stage) {
+minrmseDT <- function(pars, fdat, tdat, form, length, stage) {
 
     responsename <- paste0('length',stage)
 
     if (checkpars(pars)) {
-        tsums <- thermalsum(pars, fdat, tdat, 'thermal', form, length, stage)
+        tsums <- thermalsum(pars, fdat, tdat, 'DT', form, length, stage)
         #print(tsums)
 
         mod <- lm(fdat[,responsename] ~ tsums)
@@ -44,7 +44,7 @@ minrmsethermal <- function(pars, fdat, tdat, form, length, stage) {
 
 
 
-#' Calculates simplified DA model RMSE
+#' Calculates simplified TTT model RMSE
 #'
 #' Calculates RMSE for the simplified model of day accumulation given a
 #'     certain set of cardinal temperatures and day accumulation
@@ -67,7 +67,7 @@ minrmsedaysimplified <- function(pars, fdat, tdat, form, length, stage) {
     if (checkpars(pars)) {
         #print('simple')
 
-        predictedlength <- thermalsum(pars, fdat, tdat, 'day', form, length,
+        predictedlength <- thermalsum(pars, fdat, tdat, 'TTT', form, length,
                                       stage)
 
         if (any(is.infinite(predictedlength))){
@@ -102,7 +102,7 @@ minrmsedaysimplified <- function(pars, fdat, tdat, form, length, stage) {
 #' @param stage the number of the stage of the phenological model
 #' @return The RMSE value for a given set of cardinal temperatures and thermal
 #'     time accumulation length.
-minrmseday <- function(pars, fdat, tdat, form, length, stage) {
+minrmseTTT <- function(pars, fdat, tdat, form, length, stage) {
 
     responsename <- paste0('length',stage)
 
@@ -115,7 +115,7 @@ minrmseday <- function(pars, fdat, tdat, form, length, stage) {
 
         #print(pars)
 
-        daymet <- thermalsum(pars, fdat, tdat, 'day', form, length, stage)
+        daymet <- thermalsum(pars, fdat, tdat, 'TTT', form, length, stage)
         #print(daymet)
 
         if (any(is.infinite(daymet))) {
@@ -151,8 +151,8 @@ minrmseday <- function(pars, fdat, tdat, form, length, stage) {
 #'
 #' @param pars Cardinal temperatures
 #' @param fdat the data.frame containing the phenological information
-#' @param modtype character, the type of model. Can be 'partial', 'full' or
-#'     'combined'.
+#' @param modtype character, the type of model. The model can be 'DT' (day
+#'     threshold) or 'TTT' (thermal time threshold)
 #' @param tdat list containing the temperature information
 #' @param form the functional form of the thermal time accumulation
 #' @param stage the number of the stage of the phenological model
@@ -185,13 +185,13 @@ minrmse <- function(pars, fdat, tdat, modtype, form, stage, CT, L, simple) {
     #print(simple)
 
 
-    if (modtype=='thermal' & !simple) {
+    if (modtype=='DT' & !simple) {
         rmse <- minrmsethermal(ct, fdat, tdat, form, length, stage)
 
-    } else if (modtype == 'day' & simple) {
+    } else if (modtype == 'TTT' & simple) {
         rmse <- minrmsedaysimplified(ct, fdat, tdat, form, length, stage)
 
-    } else if (modtype == 'day') {
+    } else if (modtype == 'TTT') {
         rmse <- minrmseday(ct, fdat, tdat, form, length, stage)
     } else {
         stop('Only options for model types are thermal and day.')
