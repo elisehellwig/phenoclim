@@ -35,20 +35,25 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
                        cores=1L, iterations=200, ensemble=FALSE) {
 
 
-    stages <- stages(parlist[[1]])
-    n <- stages+1
-    events <- paste0('event', 1:n)
-    lengthcols <- paste0('length',1:stages)
-    simple <- sapply(parlist, function(pl) simplified(pl))
-    ttforms <- lapply(parlist, function(pl) form(pl))
-    m <- length(parlist)
+    stages <- stages(parlist[[1]]) #extract # of stages from the Parameterlist
+    n <- stages+1 #number of events
+    events <- paste0('event', 1:n) #event column names
+    lengthcols <- paste0('length',1:stages) #length column names
 
-    ij <- expand.grid(1:stages, 1:m)
-    names(ij) <- c('stage','pl')
+    #are the models simplified?
+    simple <- sapply(parlist, function(pl) simplified(pl))
+    ttforms <- lapply(parlist, function(pl) form(pl)) #list of functional forms
+    m <- length(parlist) #number of functional forms
+
+    ij <- expand.grid(1:stages, 1:m) #unique combos of form numbers and stages
+    names(ij) <- c('stage','pl') #giving columns names
+
+    #extracting the appropriate form names
     ij$form <- sapply(1:nrow(ij), function(i) {
         ttforms[[ij[i,2]]][ij[i,1]]
     })
 
+    #Checking to make sure all of the right variables and etc are present
     checktemps(temps, phenology, ttforms)
 
     for (i in 1:m) {
@@ -62,14 +67,16 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
 
 
-
+    #detects if you are estimating the cardinal temperatures
     estimateCT <- sapply(1:m, function(i) {
+
+        #are you estimating cardinal temperatures?
         if ('cardinaltemps' %in% parsOptimized(parlist[[i]])) {
 
-            if ('anderson' %in% ttforms[[i]]) {
-               FALSE
+            if ('anderson' %in% ttforms[[i]]) { #is the form anderson?
+               FALSE #if the form is anderson, you don't estimate cardinal temps
             } else {
-               TRUE
+               TRUE #otherwise estimateCT is true
             }
 
         } else {
@@ -78,36 +85,40 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
     })
 
 
-   # print(1)
+   #for which models are you estimating model length/threshold
     estimatelength <- sapply(parlist, function(pl) {
         if ('modlength' %in% parsOptimized(pl)) TRUE else FALSE
     })
 
 
+    #phenology data with only the year and event data.
     pdat <- phenology[, c('year', events)]
 
+    #data frame with the length of the stages
     ldat <- as.data.frame(sapply(1:stages, function(i) {
         eventi(pdat,i+1) - eventi(pdat, i)
         }))
 
+    #naming the stage length columns
     names(ldat) <- lengthcols
 
+    #joining the event and length data frames
     d <- data.frame(pdat, ldat)
 
 
-    if (modeltype(parlist[[1]])=='thermal' & simple[1]) {
+    if (modeltype(parlist[[1]])=='DT' & simple[1]) { #average stage length model
 
-        lmlist <- lapply(1:stages, function(i) {
+        lmlist <- lapply(1:stages, function(i) { #average stage length lm
             fmla <- paste0(lengthcols[i]," ~ 1")
             lm(fmla, data=d)
         })
 
-        fits <- as.data.frame(sapply(lmlist, function(mod) {
-            fitted(mod)
+        fits <- as.data.frame(sapply(lmlist, function(mod) { #extracting fitted
+            fitted(mod)                                         #data
         }))
 
-        newlength <- lapply(1:m, function(i) {
-            fits[1,1]
+        newlength <- lapply(1:m, function(i) { #getting the new average
+            fits[1,1]                           #season length of the fits
         })
 
     } else {
