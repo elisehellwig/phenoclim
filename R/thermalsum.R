@@ -141,6 +141,10 @@ TTTsum <- function(pars, fdat, tdat, form, length, stage) {
 #' @export
 thermalsum <- function(pars, fdat, tdat, modtype, form, length, stage) {
 
+    if (!(is.numeric(length) | is.integer(length))) {
+        stop('Length must be numeric or an integer')
+    }
+
     if (modtype=='DT') {
         ths <- DTsum(pars, fdat, tdat, form, length, stage)
 
