@@ -260,7 +260,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
                                      function(mod) fitted(mod)))
 
        # print(4.3)
-    } else if (simple[1] & modeltype(parlist[[1]])=='day') {
+    } else if (simple[1] & modeltype(parlist[[1]])=='TTT') {
 
         lmlist <- lapply(1:m, function(j) {
             lapply(1:stages, function(i) {
@@ -335,7 +335,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
     for (i in 1:m) {
         modlength(DEparameters[[i]]) <- newlength[[i]]
-        if ((!simple[1]) | (modeltype(parlist[[1]])=='day')) {
+        if ((!simple[1]) | (modeltype(parlist[[1]])=='TTT')) {
             cardinaltemps(DEparameters[[i]]) <- newct[[i]]
         }
     }
