@@ -63,7 +63,7 @@ minrmseDT <- function(pars, fdat, tdat, form, length, stage) {
 #' @param stage the number of the stage of the phenological model
 #' @return The RMSE value for a given set of cardinal temperatures and thermal
 #'     time accumulation length.
-minrmsedaysimplified <- function(pars, fdat, tdat, form, length, stage) {
+minrmseTTTsimplified <- function(pars, fdat, tdat, form, length, stage) {
 
     responsename <- paste0('length',stage) #name of length response variable
 
@@ -192,13 +192,13 @@ minrmse <- function(pars, fdat, tdat, modtype, form, stage, CT, L, simple) {
 
 
     if (modtype=='DT' & !simple) {
-        rmse <- minrmsethermal(ct, fdat, tdat, form, length, stage)
+        rmse <- minrmseDT(ct, fdat, tdat, form, length, stage)
 
     } else if (modtype == 'TTT' & simple) {
-        rmse <- minrmsedaysimplified(ct, fdat, tdat, form, length, stage)
+        rmse <- minrmseTTTsimplified(ct, fdat, tdat, form, length, stage)
 
     } else if (modtype == 'TTT') {
-        rmse <- minrmseday(ct, fdat, tdat, form, length, stage)
+        rmse <- minrmseTTT(ct, fdat, tdat, form, length, stage)
     } else {
         stop('Only options for model types are thermal and day.')
     }

@@ -149,7 +149,7 @@ thermalsum <- function(pars, fdat, tdat, modtype, form, length, stage) {
         ths <- DTsum(pars, fdat, tdat, form, length, stage)
 
     } else if (modtype=='TTT') {
-        ths <- TTsum(pars, fdat, tdat, form, length, stage)
+        ths <- TTTsum(pars, fdat, tdat, form, length, stage)
         #print(ths)
 
     } else {
