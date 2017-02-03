@@ -13,7 +13,8 @@ ParameterList stores parameters for running the phenological models
 \item{\code{stages}}{numeric, The number of stages in the phenological model.}
 
 \item{\code{modeltype}}{character. The type of phenological model to be used. Options
-are 'thermal' and 'day'. See ____ for more information.}
+are 'DT' for Day threshold and 'TTT' for thermal time threshold. See ____
+for more information.}
 
 \item{\code{simplified}}{logical. Should the simplified version of the model type be
 used.}

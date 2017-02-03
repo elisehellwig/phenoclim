@@ -10,7 +10,7 @@ parameterlist(n, mt, simple, ff, ct, length, optimized = c("cardinaltemps",
 \arguments{
 \item{n}{integer, the number of stages in the model.}
 
-\item{mt}{character, the model type. Can be either 'thermal' or 'day'.}
+\item{mt}{character, the model type. Can be either 'DT' or 'TTT'.}
 
 \item{simple}{logical, is the model the simplified version?}
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/minrmse.R
 \name{minrmsedaysimplified}
 \alias{minrmsedaysimplified}
-\title{Calculates simplified DA model RMSE}
+\title{Calculates simplified TTT model RMSE}
 \usage{
 minrmsedaysimplified(pars, fdat, tdat, form, length, stage)
 }

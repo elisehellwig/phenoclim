@@ -7,14 +7,14 @@
 minrmse(pars, fdat, tdat, modtype, form, stage, CT, L, simple)
 }
 \arguments{
-\item{pars}{Cardinal temperatures}
+\item{pars}{vector with threshold value and cardinal temperatures}
 
 \item{fdat}{the data.frame containing the phenological information}
 
 \item{tdat}{list containing the temperature information}
 
-\item{modtype}{character, the type of model. Can be 'partial', 'full' or
-'combined'.}
+\item{modtype}{character, the type of model. The model can be 'DT' (day
+threshold) or 'TTT' (thermal time threshold)}
 
 \item{form}{the functional form of the thermal time accumulation}
 
@@ -33,8 +33,8 @@ The RMSE value for a given set of cardinal temperatures and thermal
     time accumulation length.
 }
 \description{
-Calculates RMSE for a partial, full or combined model of thermal time
-    accumulation given a certain set of cardinal temperatures and thermal
-    time accumulation length.
+Calculates RMSE for a Day Threshold (DT) or Thermal Time Threshold (TTT)
+model of thermal time accumulation given a certain set of cardinal
+temperatures and a day/thermal time threshold.
 }
 

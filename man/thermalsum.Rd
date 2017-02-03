@@ -14,7 +14,7 @@ thermalsum(pars, fdat, tdat, modtype, form, length, stage)
 \item{tdat}{list containing the temperature information}
 
 \item{modtype}{character, specifies what type of model is being run. Can be
-either thermal (thermal time accumulation) or day (day accumulation).}
+either DT (Day Threshold) or TTT (Thermal Time Threshold).}
 
 \item{form}{the functional form of the thermal time accumulation}
 
@@ -28,6 +28,6 @@ stage (one length for each entry in fdat).}
 The thermal sums for a given series of years.
 }
 \description{
-Calculates thermal time sums for either the day or thermal time model
+Calculates thermal time sums for either the TTT or DT time model
 }
 

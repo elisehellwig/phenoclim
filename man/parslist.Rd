@@ -2,7 +2,7 @@
 % Please edit documentation in R/parameterfunctions.R
 \name{parslist}
 \alias{parslist}
-\title{Creates a list to pass to do.call in the yearsums family of functions}
+\title{Creates a list to pass to do.call in the DT/TT family of functions}
 \usage{
 parslist(temps, pars, sum = FALSE, full = FALSE)
 }
@@ -19,6 +19,6 @@ parslist(temps, pars, sum = FALSE, full = FALSE)
 A list of parameters that can be passed to do.call
 }
 \description{
-Creates a list to pass to do.call in the yearsums family of functions
+Creates a list to pass to do.call in the DT/TT family of functions
 }
 
