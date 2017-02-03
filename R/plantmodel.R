@@ -113,9 +113,12 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
             lm(fmla, data=d)
         })
 
-        fits <- as.data.frame(sapply(lmlist, function(mod) { #extracting fitted
-            fitted(mod)                                         #data
-        }))
+        #extracting fitted data
+        fits <- lapply(1:length(lmlist), function(i) {
+            as.data.frame(sapply(1:length(ttforms), function(j) {
+                fitted(lmlist[[i]])
+            }))
+        })[[1]]
 
         newlength <- lapply(1:m, function(i) { #getting the new average
             fits[1,1]                           #season length of the fits
