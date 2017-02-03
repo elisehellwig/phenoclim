@@ -149,11 +149,11 @@ minrmseTTT <- function(pars, fdat, tdat, form, length, stage) {
 
 #' Calculates model RMSE
 #'
-#' Calculates RMSE for a partial, full or combined model of thermal time
-#'     accumulation given a certain set of cardinal temperatures and thermal
-#'     time accumulation length.
+#' Calculates RMSE for a Day Threshold (DT) or Thermal Time Threshold (TTT)
+#' model of thermal time accumulation given a certain set of cardinal
+#' temperatures and a day/thermal time threshold.
 #'
-#' @param pars Cardinal temperatures
+#' @param pars vector with threshold value and cardinal temperatures
 #' @param fdat the data.frame containing the phenological information
 #' @param modtype character, the type of model. The model can be 'DT' (day
 #'     threshold) or 'TTT' (thermal time threshold)
