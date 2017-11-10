@@ -1,6 +1,18 @@
-
-
-
+#' Converts years for bloom modeling
+#'
+#' Models for bloom necessarily incorporte phenology data from multiple years.
+#'     this is not compatible with the current phenoclim model paradigm. So this
+#'     function groups the phenogical events by blooming event not by year.
+#'
+#' @param fdat dataframe, contains the phenology data
+#' @param firstyear numeric, the first year you would like to predict bloom.
+#' @param lastyear numeric, the last year you would like to predict bloom.
+#' @param bloomvar character, the name of the column that contains the bloom
+#'     data.
+#' @param matvar character, the name of the column that contains the harvest
+#'     data.
+#' @return A data.frame with all of the converted phenology data in it.
+#' @export
 yearconversion <- function(fdat, firstyear=NA, lastyear=NA,
                            bloomvar='event1', matvar='event2') {
 
@@ -16,7 +28,7 @@ yearconversion <- function(fdat, firstyear=NA, lastyear=NA,
     if (is.na(lastyear)) {
         lastyear <- max(fdat[,'year'])
     } else if (lastyear <= max(fdat[,'year'])) {
-        fdat <- fdat[fdat$year<=lastyearyear, ]
+        fdat <- fdat[fdat$year<=lastyear, ]
     } else {
         stop('The last year must be the same year or earlier as the last year you have phenology data.')
     }
@@ -33,6 +45,7 @@ yearconversion <- function(fdat, firstyear=NA, lastyear=NA,
                        event1=fdat[,bloomvar],
                        event0=(fdat[,matvar] - fullyears),
                        length0=l0)
+    return(conv)
 }
 
 
