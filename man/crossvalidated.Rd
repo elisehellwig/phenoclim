@@ -22,4 +22,3 @@ Returns the crossvalidated logical vecter
 
 Is the model error crossvalidated?
 }
-

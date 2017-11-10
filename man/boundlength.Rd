@@ -23,4 +23,3 @@ This function returns the length that the lbounds and ubounds variables
     accumulation as well as whether or not the cardinal temperatures and
     the length of accumulation need to be estimated.
 }
-

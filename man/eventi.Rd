@@ -17,4 +17,3 @@ A vector with the julian days of the ith phenological event
 \description{
 returns a column of the phenology data.frame
 }
-

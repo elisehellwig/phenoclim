@@ -37,4 +37,3 @@ Calculates RMSE for a Day Threshold (DT) or Thermal Time Threshold (TTT)
 model of thermal time accumulation given a certain set of cardinal
 temperatures and a day/thermal time threshold.
 }
-

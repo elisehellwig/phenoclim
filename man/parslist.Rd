@@ -21,4 +21,3 @@ A list of parameters that can be passed to do.call
 \description{
 Creates a list to pass to do.call in the DT/TT family of functions
 }
-

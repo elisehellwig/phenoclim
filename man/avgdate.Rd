@@ -22,4 +22,3 @@ v <- runif(10, min=9014, max=20300)
 d <- as.Date(v, origin="1970-01-01")
 avgdate(d)
 }
-

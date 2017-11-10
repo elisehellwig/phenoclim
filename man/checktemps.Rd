@@ -20,4 +20,3 @@ logical, TRUE if everything goes well, an error if not.
 \description{
 Checks temp data.frame is ship shape
 }
-

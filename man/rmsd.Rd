@@ -25,4 +25,3 @@ a <- rnorm(10)
 b <- rnorm(10)
 rmsd(a,b)
 }
-

@@ -37,4 +37,3 @@ A PlantModel object with the error slot having the new crossvalidated
 \description{
 Does k-fold crossvalidation on the error of a PlantModel object.
 }
-

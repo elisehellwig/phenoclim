@@ -19,4 +19,3 @@ simplified(object) <- value
 Used to change whether or not the model is simplified without recreating the
       object.
 }
-

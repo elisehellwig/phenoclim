@@ -19,4 +19,3 @@ cardinaltemps(object) <- value
 Used to change the cardinal temperature parameters without recreating the
       object.
 }
-

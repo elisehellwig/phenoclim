@@ -21,4 +21,3 @@ Returns the parameters for a phenological model
 
 Accesses the parameters of a PlantModel object
 }
-

@@ -30,4 +30,3 @@ Calculates RMSE for the combined model of thermal time accumulation given a
     certain set of cardinal temperatures and thermal time accumulation
     length.
 }
-

@@ -37,4 +37,3 @@ temp <- seq(-5, 50)
 gdh <- linear(temp, 4, sum=FALSE)
 plot(gdh ~ temp)
 }
-

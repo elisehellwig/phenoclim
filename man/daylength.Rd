@@ -21,4 +21,3 @@ The length of the day in hours, along with the time of sunrise and
 This function calculates the length of a day given the day of the year and
     the latitude of the location.
 }
-

@@ -30,4 +30,3 @@ The thermal sums for a given series of years.
 \description{
 Calculates thermal time sums for either the TTT or DT time model
 }
-

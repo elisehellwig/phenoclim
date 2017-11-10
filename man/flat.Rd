@@ -40,4 +40,3 @@ temp <- seq(-5, 50)
 gdh <- flat(temp, 4, 25, sum=FALSE)
 plot(gdh ~ temp)
 }
-

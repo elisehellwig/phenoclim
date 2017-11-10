@@ -19,4 +19,3 @@ parsOptimized(object) <- value
 \description{
 Used to change the functional form without recreating the object.
 }
-

@@ -38,4 +38,3 @@ An object of the class ParameterList.
 This function creates an object of the class ParameterList. Plant objects
     require objects of the class ParameterList for their parameters slot.
 }
-

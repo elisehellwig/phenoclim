@@ -18,4 +18,3 @@ stages(object) <- value
 \description{
 Used to change the number of stages without recreating the object.
 }
-

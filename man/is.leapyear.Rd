@@ -19,4 +19,3 @@ Checks if a year is a leap year
 y <- seq(1990, 2010)
 is.leapyear(y)
 }
-

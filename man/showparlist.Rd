@@ -16,4 +16,3 @@ A data.frame with the columns type, form, length, stage, Base,
 \description{
 Legwork behind the ParameterList show method
 }
-

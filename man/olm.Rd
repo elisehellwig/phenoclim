@@ -22,4 +22,3 @@ Returns the lm object phenological models
 
 Accesses the linear models of a PlantModel object
 }
-

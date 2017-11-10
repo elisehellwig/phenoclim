@@ -37,4 +37,3 @@ This function creates a function to be passed to the DEoptim function that
 optimizes the cardinal temperatures and the length of thermal time or day
 accumulation for a PlantModel object.
 }
-

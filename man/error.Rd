@@ -21,4 +21,3 @@ Returns the RMSE for a phenological model
 
 Accesses the RMSE of a PlantModel object
 }
-

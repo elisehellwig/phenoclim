@@ -42,4 +42,3 @@ If tempname is left as NA the function will try to detect the
     correct column (either temp, tmin or tmax). However, it is safer to just
     specify the correct column name.
 }
-

@@ -19,4 +19,3 @@ crossvalidated(object) <- value
 Used to change whether or not the error is crossvalidated without recreating
       the object.
 }
-

@@ -18,4 +18,3 @@ error(object) <- value
 \description{
 Used to change the error without recreating the object.
 }
-

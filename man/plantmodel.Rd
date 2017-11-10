@@ -42,4 +42,3 @@ A PlantModel object.
 \description{
 `plantmodel` fits phenological models of two general types: thermal time accumulation and day accumulation (for more information see ____).
 }
-

@@ -45,4 +45,3 @@ temp <- seq(-5, 50)
 gdh <- triangle(temp, 4, 25, 36, sum=FALSE)
 plot(gdh ~ temp)
 }
-

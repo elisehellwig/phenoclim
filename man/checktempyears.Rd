@@ -20,4 +20,3 @@ Logical. Returns TRUE if all years of phenology data also have
 This function checks to make sure that for every year where there is
     phenology data there is also temperature data.
 }
-

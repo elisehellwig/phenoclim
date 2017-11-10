@@ -8,4 +8,3 @@
 \description{
 phenoclim: a package for phenological analysis and prediction
 }
-

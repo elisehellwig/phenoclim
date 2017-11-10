@@ -51,4 +51,3 @@ temp <- seq(-5, 50)
 gdh <- asymcur(temp, 4, 25, 36, sum=FALSE)
 plot(gdh ~ temp)
 }
-

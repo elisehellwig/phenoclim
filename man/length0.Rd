@@ -16,4 +16,3 @@ logical, TRUE if the vector is of length 0, FALSE if it has a length
 \description{
 Checks if length of vector is zero
 }
-

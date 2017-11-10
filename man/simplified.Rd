@@ -22,4 +22,3 @@ Is the model simplified?
 
 Accesses whether the model in the ParameterList object is simplified
 }
-

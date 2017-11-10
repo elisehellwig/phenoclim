@@ -48,4 +48,3 @@ temp <- seq(-5, 50)
 gdh <- trapezoid(temp, 4, 25, 36, 40, sum=FALSE)
 plot(gdh ~ temp)
 }
-

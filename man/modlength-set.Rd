@@ -18,4 +18,3 @@ modlength(object) <- value
 \description{
 Used to change the model length without recreating the object.
 }
-

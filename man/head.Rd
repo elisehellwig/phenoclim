@@ -16,4 +16,3 @@
 \description{
 Return the First of an Object
 }
-

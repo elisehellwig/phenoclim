@@ -22,4 +22,3 @@ A list of two the first contains the daily extracted temps if they
 \description{
 Extracts the right templist based on the forms provided
 }
-

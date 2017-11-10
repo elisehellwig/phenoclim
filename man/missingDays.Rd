@@ -21,4 +21,3 @@ A vector with the days that are missing from the time series.
 \description{
 Checks for missing days in a time series
 }
-

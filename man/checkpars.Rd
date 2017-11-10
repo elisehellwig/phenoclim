@@ -15,4 +15,3 @@ logical, TRUE if the cardinal temperatures are organized least to greatest, FALS
 \description{
 Checks to see if parameters are in the correct order
 }
-

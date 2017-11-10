@@ -19,4 +19,3 @@ for more information.}
 \description{
 Used to change the model type without recreating the object.
 }
-

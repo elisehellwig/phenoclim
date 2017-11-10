@@ -30,4 +30,3 @@ This function returns TRUE if there are no missing observations
 This function checks a time series, in the form of a data.frame, for days
     that are missing from the series.
 }
-

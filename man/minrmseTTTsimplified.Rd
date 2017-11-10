@@ -30,4 +30,3 @@ Calculates RMSE for the simplified model of day accumulation given a
     certain set of cardinal temperatures and day accumulation
     length.
 }
-

@@ -16,4 +16,3 @@ The function returns true if the model type is one of the allowed
 \description{
 Checks model type
 }
-

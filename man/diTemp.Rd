@@ -26,4 +26,3 @@ This function calculates hourly temperatures for a given place based on its
 \examples{
 diTemp(35, "2013-02-18", 8, 17)
 }
-

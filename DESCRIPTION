@@ -17,8 +17,9 @@ Description: Cleans temperature data, uses it to calculate thermal time with a
     uses the TT and HT model to predict harvest and flowering.
 License: GPL-3
 LazyData: TRUE
-RoxygenNote: 6.0.0
-Collate:
+RoxygenNote: 6.0.1
+Collate: 
+    'backwards.R'
     'general.R'
     'thermal.R'
     'parameterfunctions.R'

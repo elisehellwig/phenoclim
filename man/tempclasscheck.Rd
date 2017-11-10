@@ -20,4 +20,3 @@ This function returns True if the class of the temperature is
 This function checks to make sure the temperature data is in the right format
     given the functional form used to calculate thermal time with it.
 }
-

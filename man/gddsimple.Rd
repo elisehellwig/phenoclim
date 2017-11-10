@@ -39,4 +39,3 @@ temp <- data.frame(tmin=runif(10, 0, 10), tmax=runif(10, 13, 25))
 gddsimple(temp, 4, sum=TRUE)
 gddsimple(temp, 4, sum=FALSE)
 }
-

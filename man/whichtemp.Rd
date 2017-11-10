@@ -19,4 +19,3 @@ A list of temperature data based on the functional form of the model.
 \description{
 Returns the right temperature list
 }
-

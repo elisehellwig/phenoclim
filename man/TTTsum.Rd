@@ -28,4 +28,3 @@ The thermal sums for a given series of years.
 Calculates thermal time sums for a given amount of thermal time after
 flowering for a series of years.
 }
-

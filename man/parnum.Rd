@@ -19,4 +19,3 @@ The number of parameters required for the thermal time functional
 This function returns the number of parameters a supplied thermal time
     functional form (form) requires.
 }
-

@@ -21,4 +21,3 @@ Returns the phenology data.frame
 
 Accesses the phenology data.frame of a PlantModel object
 }
-

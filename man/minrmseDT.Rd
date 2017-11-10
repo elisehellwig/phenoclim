@@ -29,4 +29,3 @@ The RMSE value for a given set of cardinal temperatures and thermal
 Calculates RMSE for the thermal model given a certain set of cardinal
     temperatures and thermal time accumulation length.
 }
-

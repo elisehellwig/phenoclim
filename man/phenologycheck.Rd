@@ -20,4 +20,3 @@ This function returns TRUE if all the variables necessary to fit a
 This function checks to see if the phenology data.frame has all of the
     correct columns.
 }
-
