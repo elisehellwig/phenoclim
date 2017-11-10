@@ -14,10 +14,10 @@ Authors@R: person("Elise", "Hellwig",
 URL: https://bitbucket.org/echellwig/phenoclim
 Description: Cleans temperature data, uses it to calculate thermal time with a
     set number of thermal time models, optimizes thermal time cardinal temperatures
-    uses the TT model to predict harvest.
+    uses the TT and HT model to predict harvest and flowering.
 License: GPL-3
 LazyData: TRUE
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.0
 Collate:
     'general.R'
     'thermal.R'
