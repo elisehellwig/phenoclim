@@ -35,6 +35,9 @@ yearconversion <- function(fdat, firstyear=NA, lastyear=NA,
 
     n <- nrow(fdat)
 
+    #This is where the problem is because there are missing years so it doesnt
+    #know what to use for the previous year flowering or end of counting back
+    #date.
     fullyears <- ifelse(is.leapyear(firstyear:lastyear), 366, 365)
     print(length(fullyears))
     l0prime <- fdat[2:n, bloomvar] + (fullyears[-n] - fdat[1:(n-1), matvar])
