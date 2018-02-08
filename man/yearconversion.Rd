@@ -5,7 +5,7 @@
 \title{Converts years for bloom modeling}
 \usage{
 yearconversion(fdat, firstyear = NA, lastyear = NA, bloomvar = "event1",
-  matvar = "event2", id.vars = NA)
+  matvar = "event2", id.vars = NA, var = NA)
 }
 \arguments{
 \item{fdat}{dataframe, contains the phenology data}
@@ -23,6 +23,8 @@ data.}
 \item{id.vars}{character, the name of columns that you would like to use to
 identify the different observations (ex. ID or cultivar). These must be
 these must be present in the fdat data.frame.}
+
+\item{var}{character, name of a specific cultivar to extract.}
 }
 \value{
 A data.frame with all of the converted phenology data in it.

@@ -4,7 +4,7 @@
 \alias{DTsum}
 \title{Calculates thermal time sums for DT model}
 \usage{
-DTsum(pars, fdat, tdat, form, length, stage)
+DTsum(pars, fdat, tdat, form, length, stage, forward)
 }
 \arguments{
 \item{pars}{Cardinal temperatures}
@@ -19,7 +19,11 @@ DTsum(pars, fdat, tdat, form, length, stage)
 either a set length of time (one number) or the total length of the
 stage (one length for each entry in fdat).}
 
-\item{stage}{the number of the stage of the phenological model}
+\item{stage}{the number of the stage of the phenological model.}
+
+\item{forward}{logical, Do count forward from the starting event (as
+opposed to backward)? If you have negative values in your event days
+you forward should probably be FALSE.}
 }
 \value{
 The thermal sums for a given series of years.
