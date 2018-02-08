@@ -37,12 +37,13 @@ DTsum <- function(pars, fdat, tdat, form, length, stage) {
     #for each year extract temperature vector data frame or list so it can be
         #used to calculate thermal time
 	templist <- lapply(1:length(years), function(i) {
+	    tempdays <- seq(start[i], end[i], by=1)
 
 	    if (is.data.frame(tdat[[1]])) {
-            tdat[[as.character(years[i])]][start[i]:end[i],]
+            tdat[[as.character(years[i])]][tempdays,]
 
 	    } else {
-	        tdat[[as.character(years[i])]][start[i]:end[i]]
+	        tdat[[as.character(years[i])]][tempdays]
 	    }
 	})
 
