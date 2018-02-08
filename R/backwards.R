@@ -11,26 +11,25 @@
 #'     data.
 #' @param matvar character, the name of the column that contains the harvest
 #'     data.
+#' @param id.vars character, the name of columns that you would like to use to
+#'     identify the different observations (ex. ID or cultivar). These must be
+#'     these must be present in the fdat data.frame.
 #' @return A data.frame with all of the converted phenology data in it.
 #' @export
 yearconversion <- function(fdat, firstyear=NA, lastyear=NA,
-                           bloomvar='event1', matvar='event2') {
+                           bloomvar='event1', matvar='event2',
+                           id.vars=NA) {
 
 
-    if (is.na(firstyear)) {
-        firstyear <- min(fdat[,'year'])
-    } else if (firstyear >= min(fdat[,'year'])) {
-        fdat <- fdat[fdat$year>=firstyear, ]
-    } else {
-        stop('The first year must be the same year or later as the first year you have phenology data.')
+    if ( is.numeric(firstyear)) {
+        if (firstyear >= min(fdat[,'year'])) {
+            fdat <- fdat[fdat$year>=firstyear, ]
+        }
     }
 
-    if (is.na(lastyear)) {
-        lastyear <- max(fdat[,'year'])
-    } else if (lastyear <= max(fdat[,'year'])) {
-        fdat <- fdat[fdat$year<=lastyear, ]
-    } else {
-        stop('The last year must be the same year or earlier as the last year you have phenology data.')
+    if (is.numeric(lastyear)) {
+        if ( (lastyear <= max(fdat[,'year'])))
+            fdat <- fdat[fdat$year<=lastyear, ]
     }
 
     n <- nrow(fdat)
@@ -38,17 +37,32 @@ yearconversion <- function(fdat, firstyear=NA, lastyear=NA,
     #This is where the problem is because there are missing years so it doesnt
     #know what to use for the previous year flowering or end of counting back
     #date.
-    fullyears <- ifelse(is.leapyear(firstyear:lastyear), 366, 365)
-    print(length(fullyears))
+    years <- fdat[,'year']
+    fullyears <- ifelse(is.leapyear(years), 366, 365)
+    #print(length(fullyears))
     l0prime <- fdat[2:n, bloomvar] + (fullyears[-n] - fdat[1:(n-1), matvar])
     l0mean <- mean(l0prime)
-    l0 <- c(l0mean, l0prime)
+    l0 <- round(c(l0mean, l0prime))
 
-    conv <- data.frame(year=firstyear:lastyear,
+    conv <- data.frame(year=years,
                        event1=fdat[,bloomvar],
                        event0=(fdat[,matvar] - fullyears),
                        length0=l0)
+
+    if (!is.na(id.vars)) {
+        conv <- cbind(fdat[,id.vars], conv)
+        names(conv)[1:length(id.vars)] <- id.vars
+    }
+
     return(conv)
 }
+
+
+
+
+
+
+
+
 
 
