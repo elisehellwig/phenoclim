@@ -15,7 +15,7 @@ NULL
 #' @param length the length of thermal time accumulation (in days). It can be
 #'     either a set length of time (one number) or the total length of the
 #'     stage (one length for each entry in fdat).
-#' @param stage the number of the stage of the phenological model
+#' @param stage the number of the stage of the phenological model.
 #' @return The thermal sums for a given series of years.
 DTsum <- function(pars, fdat, tdat, form, length, stage) {
 
