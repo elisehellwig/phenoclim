@@ -21,9 +21,12 @@ NULL
 #' @param simple logical, is the simplified version of the model being run?
 #' @param listindex numeric, the index of the ParameterList from parlist that
 #'     you are at
+#' @param forward logical, Do count forward from the starting event (as
+#'     opposed to backward)? If you have negative values in your event days
+#'     you forward should probably be FALSE.
 #' @return the function that is passed to DEoptim to optimize.
 objective <- function(parlist, phenology, templist, stage, CT, L,
-                      simple, listindex) {
+                      simple, listindex, forward) {
 
     #extract parameters from ParameterList object
     pars <- cardinaltemps(parlist[[listindex]])[[stage]]
@@ -32,7 +35,12 @@ objective <- function(parlist, phenology, templist, stage, CT, L,
     ml <- modlength(parlist[[listindex]])[stage]
 
     #create vector of names of events (columns)
-    events <- paste0('event', stage:(stage+1))
+    if (forward) {
+        events <- paste0('event', stage:(stage+1))
+    } else {
+        events <- c('event1','event0')
+    }
+
 
     #create data.frame with only the columns necessary
     fdat <- phenology[, c('year', events, paste0('length', stage))]
@@ -48,7 +56,7 @@ objective <- function(parlist, phenology, templist, stage, CT, L,
     fun <- function(x) {
         return(minrmse(x, fdat, templist, modeltype(parlist[[listindex]]),
                        form(parlist[[listindex]])[stage], stage, ct, l,
-                       simple[listindex]))
+                       simple[listindex], forward=forward))
     }
 
     return(fun)

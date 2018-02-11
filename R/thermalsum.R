@@ -16,8 +16,11 @@ NULL
 #'     either a set length of time (one number) or the total length of the
 #'     stage (one length for each entry in fdat).
 #' @param stage the number of the stage of the phenological model.
+#' @param forward logical, Do count forward from the starting event (as
+#'     opposed to backward)? If you have negative values in your event days
+#'     you forward should probably be FALSE.
 #' @return The thermal sums for a given series of years.
-DTsum <- function(pars, fdat, tdat, form, length, stage) {
+DTsum <- function(pars, fdat, tdat, form, length, stage, forward) {
 
 	# for walnut
 	#fdat is data for the 'fruit'
@@ -28,22 +31,35 @@ DTsum <- function(pars, fdat, tdat, form, length, stage) {
         start <- fdat[, paste0('event',stage)] #the day of the starting event
         end <- start+length #the start + the length of the model/threshold
 
+        #create the index of days we want temperatures for
+        tempindex <- startEnd(start, end, hourly=FALSE, forward=forward)
+
+
     } else { #if it is a GDH model
         start <- (fdat[, paste0('event',stage)]*24)-23 #convert days to hours
-        end <- start+length*24 # convert days to hours
+
+        if (forward) {# convert days to hours
+            end <- start+length*24
+        } else {
+            end <- start-length*24
+        }
+
+        #create the index of hours we want temperatures for
+        tempindex <- startEnd(start, end, hourly=TRUE, forward=forward)
+
     }
+
 
 
     #for each year extract temperature vector data frame or list so it can be
         #used to calculate thermal time
 	templist <- lapply(1:length(years), function(i) {
-	    tempdays <- seq(start[i], end[i], by=1)
 
 	    if (is.data.frame(tdat[[1]])) {
-            tdat[[as.character(years[i])]][tempdays,]
+            tdat[[as.character(years[i])]][tempindex[[i]],]
 
 	    } else {
-	        tdat[[as.character(years[i])]][tempdays]
+	        tdat[[as.character(years[i])]][tempindex[[i]]]
 	    }
 	})
 
@@ -84,8 +100,11 @@ DTsum <- function(pars, fdat, tdat, form, length, stage) {
 #'     either a set length of time (one number) or the total length of the
 #'     stage (one length for each entry in fdat).
 #' @param stage the number of the stage of the phenological model
+#' @param forward logical, Do count forward from the starting event (as
+#'     opposed to backward)? If you have negative values in your event days
+#'     you forward should probably be FALSE.
 #' @return The thermal sums for a given series of years.
-TTTsum <- function(pars, fdat, tdat, form, length, stage) {
+TTTsum <- function(pars, fdat, tdat, form, length, stage, forward) {
 
     #print(str(pars))
 
@@ -95,20 +114,38 @@ TTTsum <- function(pars, fdat, tdat, form, length, stage) {
     #getting the temperatures
     if (form %in% c('gdd', 'gddsimple')) {
 
+
+        if (forward) { #creating index to extract temperatures we want
+            tempindex <- startEnd(start, 365, hourly=FALSE, forward=TRUE)
+        } else {
+            tempindex <- startEnd(start, (start-length), hourly=FALSE,
+                                  forward=FALSE)
+        }
         #extracting temperature vectors but only data from the start date
         #until the end of the year
+
+
         templist <- lapply(1:length(years), function(i) {
-            tdat[[as.character(years[i])]][start[i]:365,]
+            tdat[[as.character(years[i])]][tempindex[[i]],]
         })
 
 
     } else if (form %in% c('linear', 'flat', 'triangle', 'asymcur',
                            'anderson')) {
 
+
+        if (forward) {  #creating index to extract temperatures we want
+            tempindex <- startEnd(start, 365, hourly=TRUE, forward=TRUE)
+        } else {
+            tempindex <- startEnd(start, (start-length), hourly=TRUE,
+                                  forward=FALSE)
+        }
+
         #extracting temperature vectors but only data from the start hour
-        #until the end of the year
+        #until the end of the year for forward
+
         templist <- lapply(1:length(years), function(i) {
-            tdat[[as.character(years[i])]][(start[i]*24-1):(365*24)]
+            tdat[[as.character(years[i])]][tempindex[[i]]]
         })
 
     } else {
@@ -138,19 +175,23 @@ TTTsum <- function(pars, fdat, tdat, form, length, stage) {
 #'     either a set length of time (one number) or the total length of the
 #'     stage (one length for each entry in fdat).
 #' @param stage the number of the stage of the phenological model
+#' @param forward logical, Do count forward from the starting event (as
+#'     opposed to backward)? If you have negative values in your event days
+#'     you forward should probably be FALSE.
 #' @return The thermal sums for a given series of years.
 #' @export
-thermalsum <- function(pars, fdat, tdat, modtype, form, length, stage) {
+thermalsum <- function(pars, fdat, tdat, modtype, form, length, stage,
+                       forward=TRUE) {
 
     if (!(is.numeric(length) | is.integer(length))) {
         stop('Length must be numeric or an integer')
     }
 
     if (modtype=='DT') {
-        ths <- DTsum(pars, fdat, tdat, form, length, stage)
+        ths <- DTsum(pars, fdat, tdat, form, length, stage, forward)
 
     } else if (modtype=='TTT') {
-        ths <- TTTsum(pars, fdat, tdat, form, length, stage)
+        ths <- TTTsum(pars, fdat, tdat, form, length, stage, forward)
         #print(ths)
 
     } else {
