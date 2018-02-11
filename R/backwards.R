@@ -14,12 +14,17 @@
 #' @param id.vars character, the name of columns that you would like to use to
 #'     identify the different observations (ex. ID or cultivar). These must be
 #'     these must be present in the fdat data.frame.
+#' @param var character, name of a specific cultivar to extract.
 #' @return A data.frame with all of the converted phenology data in it.
 #' @export
 yearconversion <- function(fdat, firstyear=NA, lastyear=NA,
                            bloomvar='event1', matvar='event2',
-                           id.vars=NA) {
+                           id.vars=NA, var=NA) {
 
+
+    if (!is.na(var)){
+        fdat <- fdat[fdat$cultivar==var, ]
+    }
 
     if ( is.numeric(firstyear)) {
         if (firstyear >= min(fdat[,'year'])) {
@@ -34,7 +39,7 @@ yearconversion <- function(fdat, firstyear=NA, lastyear=NA,
 
     n <- nrow(fdat)
 
-    #This is where the problem is because there are missing years so it doesnt
+    #This is where the problem is because there are missing years so it does
     #know what to use for the previous year flowering or end of counting back
     #date.
     years <- fdat[,'year']
@@ -57,10 +62,49 @@ yearconversion <- function(fdat, firstyear=NA, lastyear=NA,
     return(conv)
 }
 
+#' Creates day or hour counts
+#'
+#' This function creates day and hour indexes to ube used to extract temperature
+#'     data. It has options to work for harvest and bloom models.
+#'
+#' @param start num, vector of starting days.
+#' @param stglength num, a stage length or vector of stage lengths
+#' @param hourly logical, is the model an hourly model
+#' @param forward is the model a forward fitting model (harvest) or a backward
+#'      fitting model (bloom)
+#' @return a vector of indexes that can be used to extract temperature data.
+#' @export
+startEnd <- function(start, stglength, hourly=TRUE, forward=TRUE) {
+
+    if (hourly) {
+        start <- start*24 - 23
+        lengthmod <- stglength*24
+
+    } else {
+        lengthmod <- stglength
+
+    }
+
+    if (forward) {
+        end <- start+lengthmod
+        increment <- 1
+    } else {
+        end <- start-lengthmod
+        increment <- -1
+    }
+
+    if (length(start)>1) {
+        startend <- lapply(seq_along(start), function(i) {
+                seq(start[i], end[i], by=increment)
+            })
+    } else {
+        startend <- seq(start, end, by=increment)
+    }
 
 
 
-
+    return(startend)
+}
 
 
 
