@@ -15,10 +15,11 @@
 #'     list that should either be of length one or the length of the number of
 #'     stages. Each element of the list should contain the same number of
 #'     cardinal parameters.
-#' @slot modlength numeric. Stores the length of time or thermal time that is
-#'     accumulated in the model. There should be either one value (if there is
-#'     only one or if all the stages have the same parameters) or as many values
-#'     as there are stages.
+#' @slot modlength list. Stores the length of time or thermal time that is
+#'     accumulated in the model. If the model is a forward model, there should
+#'     be either one value for each element. For a backwards model there can be
+#'     one or two depending on whether the model is simplified or not
+#'     (simplified means one value, full means two).
 #' @slot parsOptimized character. Determines what parameters are optimized in the model.
 #'     `parsOptimized` is a character vector that can contain "cardinaltemps",
 #'     "modlength" or both, but it must contain at least one of the two.
@@ -32,7 +33,7 @@ setClass('ParameterList',
                     simplified='logical',
                     form = 'character',
          	        cardinaltemps = "list",
-                    modlength = "numeric",
+                    modlength = "list",
                     parsOptimized = 'character',
                     forward='character'))
 
@@ -67,7 +68,7 @@ setGeneric('simplified', function(object) standardGeneric('simplified'))
 #' Returns the returns a vector of accumulation lengths
 #'
 #' @param object An object of class ParameterList
-#' @return A vector of model lengths
+#' @return A list of model lengths
 #' @export
 setGeneric('modlength', function(object) standardGeneric('modlength'))
 
@@ -110,7 +111,8 @@ setGeneric('forward', function(object) standardGeneric('forward'))
 #' Used to change the model length without recreating the object.
 #'
 #' @param object An object of class ParameterList
-#' @param value A vector of acccumulation lengths.
+#' @param value A list of acccumulation lengths or start/stop pairs if
+#'     forward=FALSE.
 #' @export
 setGeneric('modlength<-', function(object, value) {
     standardGeneric('modlength<-')})
