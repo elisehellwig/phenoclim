@@ -19,10 +19,13 @@
 #'     accumulated in the model. There should be either one value (if there is
 #'     only one or if all the stages have the same parameters) or as many values
 #'     as there are stages.
-#' @slot parsOptimized Determines what parameters are optimized in the model.
+#' @slot parsOptimized character. Determines what parameters are optimized in the model.
 #'     `parsOptimized` is a character vector that can contain "cardinaltemps",
 #'     "modlength" or both, but it must contain at least one of the two.
 #'     Currently this cannot vary by stage.
+#' @slot forward logical. Should the model count forward after bloom (TRUE), or
+#'     backward from bloom FALSE. Forward is used for harvest
+#'     models and backward is used for bloom models.
 setClass('ParameterList',
          slots=list(stages='numeric',
                     modeltype='character',
@@ -30,7 +33,8 @@ setClass('ParameterList',
                     form = 'character',
          	        cardinaltemps = "list",
                     modlength = "numeric",
-                    parsOptimized = 'character'))
+                    parsOptimized = 'character',
+                    forward='character'))
 
 
 #############################################################
@@ -90,6 +94,15 @@ setGeneric('form', function(object) standardGeneric('form'))
 #'     (cardinaltemps, modlength or both).
 #' @export
 setGeneric('parsOptimized', function(object) standardGeneric('parsOptimized'))
+
+
+#' Returns whether the model is forward or backward
+#'
+#' @param object An object of class ParameterList
+#' @return logical, whether the model counts forward from bloom or not.
+#' @export
+setGeneric('forward', function(object) standardGeneric('forward'))
+
 
 
 #' Setting the modlength
@@ -171,6 +184,19 @@ setGeneric('modeltype<-', function(object, value) standardGeneric('modeltype<-')
 #' @export
 setGeneric('simplified<-', function(object, value) {
     standardGeneric('simplified<-')} )
+
+
+#' Setting whether the model counts forward from bloom
+#'
+#'  Used to change whether the model counts forward from bloom (TRUE) or
+#'      backward from bloom (FALSE).
+#'
+#' @param object An object of class ParameterList
+#' @param value logical, does the model count forward from bloom?
+#' @export
+setGeneric('forward<-', function(object, value) {
+    standardGeneric('forward<-')} )
+
 
 
 
