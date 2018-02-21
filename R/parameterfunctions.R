@@ -80,6 +80,7 @@ boundlength <- function(form, CT, L, simple, f) {
 
     CT <- any(CT) #do any models need to estimate cardinal temperatures
     L <- any(L) #do any models need to estimate threshold?
+    simple <- all(simple)
 
     if ((!CT) & (!L)) {
         stop('You must estimate the cardinal temperatures, the model length, or both.')
