@@ -39,6 +39,8 @@ rmsd <- function(x, y, na.rm=FALSE) {
     return(rmsd)
 }
 
+
+
 ##############################################
 
 
@@ -94,7 +96,7 @@ extracttemp <- function(tdat, years, starts, ends, tempname=NA,
         endvec <- rep(ends, length(startvec))
 
     } else { #if not there is a problem
-        stop('Starts must either have an end day for each year or the end day must be the same for all years')
+        stop('Ends must either have an end day for each year or the end day must be the same for all years')
 
     }
 
@@ -272,20 +274,30 @@ whichtemp <- function(form, daily, hourly) {
 #' @param years numeric, the years for which temperature data is needed.
 #' @param forms list or character, the functional forms that will be used to
 #'     calculate the thermal time.
+#' @param fwd logical, is the model a forward model?
 #' @return A list of two the first contains the daily extracted temps if they
 #'     are needed (if not it contains NA) and the second element contains the
 #'     hourly extracted temps if they are needed (if not it contains NA).
 #' @export
-extracttemplist <- function(temps, years, forms) {
+extracttemplist <- function(temps, years, forms, fwd) {
 
     hforms <- c('linear','flat','anderson','triangle','asymcur') #GDH forms
     ttforms <- unlist(forms) #vector of thermal time forms we care about
+
+    if (fwd) {
+        starts <- 1
+        ends <- 365
+    } else {
+        starts <- min(temps[,'day'])
+        ends <- max(temps[,'day'])
+    }
+
 
     if ('gdd' %in% ttforms | 'gddsimple' %in% ttforms) {
         #do we care about GDD forms?
         daytemps <- unique(temps[,c('year','day','tmin','tmax')])
         #if so extract daily data for those forms
-        daytemplist <- extracttemp(daytemps, years, 1, 365,
+        daytemplist <- extracttemp(daytemps, years, starts, ends,
                                    tempname=c('tmin','tmax'))
     } else {
         daytemplist <- NA
@@ -295,7 +307,7 @@ extracttemplist <- function(temps, years, forms) {
     if (ifelse(any(ttforms %in% hforms), TRUE, FALSE)) {
         #do we care about hourly forms, if so extract hourly data for those
             #forms
-        hourtemplist <- extracttemp(temps, years, 1, 365, tempname='temp')
+        hourtemplist <- extracttemp(temps, years, starts, ends, tempname='temp')
     } else {
         hourtemplist <- NA
     }
