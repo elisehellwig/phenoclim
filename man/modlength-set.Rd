@@ -13,7 +13,8 @@ modlength(object) <- value
 \arguments{
 \item{object}{An object of class ParameterList}
 
-\item{value}{A vector of acccumulation lengths.}
+\item{value}{A list of acccumulation lengths or start/stop pairs if
+forward=FALSE.}
 }
 \description{
 Used to change the model length without recreating the object.

@@ -4,7 +4,7 @@
 \alias{minrmseDT}
 \title{Calculates DT model RMSE}
 \usage{
-minrmseDT(pars, fdat, tdat, form, length, stage)
+minrmseDT(pars, fdat, tdat, form, length, stage, forward)
 }
 \arguments{
 \item{pars}{Cardinal temperatures}
@@ -20,6 +20,10 @@ either a set length of time (one number) or the total length of the
 stage (one length for each entry in fdat).}
 
 \item{stage}{the number of the stage of the phenological model}
+
+\item{forward}{logical, Do count forward from the starting event (as
+opposed to backward)? If you have negative values in your event days
+you forward should probably be FALSE.}
 }
 \value{
 The RMSE value for a given set of cardinal temperatures and thermal

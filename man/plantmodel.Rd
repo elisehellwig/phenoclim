@@ -5,7 +5,7 @@
 \title{Fits phenological models}
 \usage{
 plantmodel(phenology, temps, parlist, lbounds, ubounds, cores = 1L,
-  iterations = 200, ensemble = FALSE)
+  iterations = 200, ensemble = FALSE, forward = TRUE)
 }
 \arguments{
 \item{phenology}{data.frame, contains the phenological data.
@@ -35,6 +35,10 @@ use to fit the model.}
 evolution optimization of the phenological parameters.}
 
 \item{ensemble}{logical, should an ensemble prediction be used?}
+
+\item{forward}{logical, Do count forward from the starting event (as
+opposed to backward)? If you have negative values in your event days
+you forward should probably be FALSE.}
 }
 \value{
 A PlantModel object.

@@ -5,12 +5,15 @@
 \name{parsOptimized}
 \alias{parsOptimized}
 \alias{parsOptimized,ParameterList-method}
+\alias{forward,ParameterList-method}
 \alias{parsOptimized,PlantModel-method}
 \title{Returns the parameters to estimate}
 \usage{
 parsOptimized(object)
 
 \S4method{parsOptimized}{ParameterList}(object)
+
+\S4method{forward}{ParameterList}(object)
 
 \S4method{parsOptimized}{PlantModel}(object)
 }
@@ -25,6 +28,8 @@ character, the names of the parameters to be estimated
 Returns the parameters to estimate
 
 Accesses which parameters to estimate for the ParameterList object
+
+Accesses whether the model counts forward from bloom
 
 Accesses what parameters are to be optimized
 }

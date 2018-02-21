@@ -18,7 +18,7 @@ modlength(object)
 \item{object}{An object of class ParameterList}
 }
 \value{
-A vector of model lengths
+A list of model lengths
 }
 \description{
 Returns the returns a vector of accumulation lengths
