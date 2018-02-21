@@ -168,9 +168,15 @@ showparlist <- function(object) {
 
     mlen <- object@modlength
 
-    if ((!object@forward) & (!object@simplified)) {
-        ml <- sapply(mlen, function(day) {
-            abs(l[2]-l[1])
+    if ((!object@forward)) {
+        ml <- sapply(mlen, function(l) {
+
+            if (length(day) >1 ) {
+                abs(l[2]-l[1])
+            } else {
+                l
+            }
+
         })
     }
 
