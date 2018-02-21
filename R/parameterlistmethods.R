@@ -107,21 +107,14 @@ setValidity("ParameterList", function(object) {
         msg <- c(msg, 'The model type is not one of the accepted types.')
     }
 
-    if (object@forward) {
-        if (length(object@modlength) != length(ct)) {
-            valid <- FALSE
-            msg <- c(msg,
-                     'The number of accumulation lengths and the number of parameter sets are not the same.')
-        }
 
-    } else {
-        if ( (length(object@modlength)/2) != length(ct)) {
-            valid <- FALSE
-            msg <- c(msg,
-                     'The number of start/stop pairs and the number of parameter sets are not the same.')
-        }
-
+    if (length(object@modlength) != length(ct)) {
+        valid <- FALSE
+        msg <- c(msg,
+                 'The number of accumulation lengths (or start/stop pairs) and the number of parameter sets are not the same.')
     }
+
+
 
 
     ensemblefrm <- which(frm=='ensemble')
