@@ -18,9 +18,6 @@ NULL
 #'     and an error message with a list of the missing variables.
 phenologycheck <- function(n, df, flower) {
 
-
-
-
     if (flower) {
         pnames <- c('year', paste0('event', 0:1))
     } else {
