@@ -160,7 +160,7 @@ showparlist <- function(object) {
         if (length(ct)==3) {                             #temperatures
             ct
         } else {
-            c(ct, rep(NA, 3-length(ct)))
+            c(ct, rep(' ', 3-length(ct)))
         }
     })
     pars <- as.data.frame(do.call(rbind, ctlist)) #converting ctlist list to df
@@ -168,24 +168,24 @@ showparlist <- function(object) {
     names(pars) <- c('Base','Opt.','Crit.') #giving the columns names
 
     mlen <- object@modlength
+    stgtyp <- object@stagetype
 
-    if ((!object@forward)) {
-        ml <- sapply(mlen, function(l) {
+    ml <- sapply(mlen, function(l) {
+        if (length(day) >1 ) {
+            abs(l[2]-l[1])
+        } else {
+            l
+        }
 
-            if (length(day) >1 ) {
-                abs(l[2]-l[1])
-            } else {
-                l
-            }
+    })
 
-        })
-    }
 
     #adding information from different stages
     stagelength <- data.frame(stage=1:n,
                               type=rep(object@modeltype, n),
                               form=forms,
-                              length=round(mlen))
+                              length=round(ml),
+                              stagetype=rep(stgtyp, n))
 
     lengthpars <- cbind(stagelength, pars) #putting stage length and parameter
                                             #information together
