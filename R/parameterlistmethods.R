@@ -64,11 +64,11 @@ setMethod("parsOptimized", "ParameterList",
               return(object@parsOptimized)
           })
 
-#' Accesses whether the model counts forward from bloom
-#' @rdname parsOptimized
-setMethod("forward", "ParameterList",
+#' Accesses whether model is for PlantModel or FlowerModel
+#' @rdname stagetype
+setMethod("stagetype", "ParameterList",
           function(object) {
-              return(object@forward)
+              return(object@stagetype)
           })
 
 ##############################
@@ -143,6 +143,26 @@ setValidity("ParameterList", function(object) {
     if (all(ifelse(parsOptimized(object) %in% pO, FALSE, TRUE))) {
         valid <- FALSE
         msg <- c(msg, "estimate must include at least one of 'cardinaltemps' or 'modelength'. ")
+    }
+
+    stgtyp <- stagetype(object)
+    modelclassnames <- c('FlowerModel','PlantModel')
+
+    if (length(stgtyp)>1) {
+        valid <- FALSE
+        msg <- c(msg, 'Each parameterlist can only have one stagetype.')
+    }
+
+    if (!(stgtyp[1] %in% modelclassnames)) {
+        valid <- FALSE
+        msg <- c(msg, 'Stagetype must be PlantModel or FlowerModel')
+    }
+
+
+    n <- stages(object)
+    if (stgtyp=='FlowerModel' & n!=1) {
+        valid <- FALSE
+        msg <- c(msg, 'If stagetype is flower, there can only be one stage.')
     }
 
     if (valid) return(TRUE) else return(msg)
@@ -231,10 +251,10 @@ setMethod('parsOptimized<-', 'ParameterList',
           })
 
 
-#' @rdname forward-set
-setMethod('forward<-', 'ParameterList',
+#' @rdname stagetype-set
+setMethod('stagetype<-', 'ParameterList',
           function(object, value) {
-              object@forward <- value
+              object@stagetype <- value
 
               if (validObject(object)) {
                   return(object)
