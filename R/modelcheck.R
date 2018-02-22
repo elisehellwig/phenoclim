@@ -12,14 +12,23 @@ NULL
 #'
 #' @param n integer, number of stages in the model
 #' @param df data.frame, the data.frame containing the phenology data.
+#' @param flower logical, is the model a FlowerModel?
 #' @return This function returns TRUE if all the variables necessary to fit a
 #'     PlantModel are present. If not it returns a vector with the logical FALSE
 #'     and an error message with a list of the missing variables.
-phenologycheck <- function(n, df) {
+phenologycheck <- function(n, df, flower) {
 
-    pnames <- c('year', paste0('event', 1:n)) #column names
+
+
+
+    if (flower) {
+        pnames <- c('year', paste0('event', 0:1))
+    } else {
+        pnames <- c('year', paste0('event', 1:n)) #column names
+    }
+
     missingcols <- setdiff(pnames, names(df)) #check if there are missing
-                                              #columns in the data.frame
+    #columns in the data.frame
 
     if (length0(missingcols)) {
         return(TRUE)
