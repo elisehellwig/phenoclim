@@ -24,8 +24,8 @@
 #'     `parsOptimized` is a character vector that can contain "cardinaltemps",
 #'     "modlength" or both, but it must contain at least one of the two.
 #'     Currently this cannot vary by stage.
-#' @slot stagetype character. Is this a parameter list for a PlantModel
-#'     ('plant') or a FlowerModel ('flower').
+#' @slot stagetype character. Is this a parameter list for a 'PlantModel'
+#'     or a 'FlowerModel'.
 setClass('ParameterList',
          slots=list(stages='numeric',
                     modeltype='character',
