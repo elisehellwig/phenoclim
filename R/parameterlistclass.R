@@ -24,9 +24,8 @@
 #'     `parsOptimized` is a character vector that can contain "cardinaltemps",
 #'     "modlength" or both, but it must contain at least one of the two.
 #'     Currently this cannot vary by stage.
-#' @slot forward logical. Should the model count forward after bloom (TRUE), or
-#'     backward from bloom FALSE. Forward is used for harvest
-#'     models and backward is used for bloom models.
+#' @slot stagetype character. Is this a parameter list for a PlantModel
+#'     ('plant') or a FlowerModel ('flower').
 setClass('ParameterList',
          slots=list(stages='numeric',
                     modeltype='character',
@@ -35,7 +34,7 @@ setClass('ParameterList',
          	        cardinaltemps = "list",
                     modlength = "list",
                     parsOptimized = 'character',
-                    forward='character'))
+                    stagetype='character'))
 
 
 #############################################################
@@ -100,9 +99,9 @@ setGeneric('parsOptimized', function(object) standardGeneric('parsOptimized'))
 #' Returns whether the model is forward or backward
 #'
 #' @param object An object of class ParameterList
-#' @return logical, whether the model counts forward from bloom or not.
+#' @return character, whether the model is a PlantModel or a FlowerModel
 #' @export
-setGeneric('forward', function(object) standardGeneric('forward'))
+setGeneric('stagetype', function(object) standardGeneric('stagetype'))
 
 
 
@@ -188,16 +187,16 @@ setGeneric('simplified<-', function(object, value) {
     standardGeneric('simplified<-')} )
 
 
-#' Setting whether the model counts forward from bloom
+#' Setting stages as PlantModels or a FlowerModels
 #'
-#'  Used to change whether the model counts forward from bloom (TRUE) or
-#'      backward from bloom (FALSE).
+#'  Used to change whether the model uses the PlantModel class or the
+#'  FlowerModel class.
 #'
 #' @param object An object of class ParameterList
 #' @param value logical, does the model count forward from bloom?
 #' @export
-setGeneric('forward<-', function(object, value) {
-    standardGeneric('forward<-')} )
+setGeneric('stagetype<-', function(object, value) {
+    standardGeneric('stagetype<-')} )
 
 
 
