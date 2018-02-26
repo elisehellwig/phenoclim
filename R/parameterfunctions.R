@@ -70,34 +70,36 @@ parnum <- function(form) {
 #' @param CT logical, do the cardinal temperatures need to be estimated?
 #' @param L logical, does the thermal time accumulation length need to be
 #'     estimated?
-#' @param simple logical, is the model a simplified model?
-#' @param f logical, is the model a forward model or a backward model?
+#' @param start logical, is the start day estimated?
 #' @return The length the bounds vectors need to be.
-boundlength <- function(form, CT, L, simple, f) {
+boundlength <- function(form, CT, L, start=FALSE) {
 
     #what is the maximum number of parameters any form requires?
     pn <- max(sapply(form, function(fm) parnum(fm)))
 
     CT <- any(CT) #do any models need to estimate cardinal temperatures
     L <- any(L) #do any models need to estimate threshold?
-    simple <- all(simple)
+
+    if (start) {
+        lengthnum <- 2
+    } else {
+        lengthnum <- 1
+    }
 
     if ((!CT) & (!L)) {
         stop('You must estimate the cardinal temperatures, the model length, or both.')
 
     } else if (L & (!CT)) { #if you are only estimating length
-        parslength <- 1     #you only need to estimate one parameter
+            parslength <- lengthnum  #you only need to estimate one or two
+                                      #parameters
 
     } else if (L & CT) {    # if you are estimating length and Cardinal temps
-        parslength <- pn + 1 #you need to estimate 1+pn parameters
+        parslength <- pn + lengthnum #you need to estimate 1+pn parameters
 
     } else {
         parslength <- pn #if you are only estimating cardinal times you need to
     }                       #estimate pn parameters
 
-    if (L & f & (!simple)) {
-        parslength <- parslength + 1
-    }
 
 
     return(parslength)
