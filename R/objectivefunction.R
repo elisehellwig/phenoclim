@@ -26,24 +26,38 @@ NULL
 #'     you forward should probably be FALSE.
 #' @return the function that is passed to DEoptim to optimize.
 objective <- function(parlist, phenology, templist, stage, CT, L,
-                      simple, listindex, forward) {
+                      simple, listindex, startday, stgtype) {
+
+    if (stgtype=='FlowerModel') {
+        PL <- parlist
+    } else {
+        PL <- parlist[[listindex]]
+    }
 
     #extract parameters from ParameterList object
-    pars <- cardinaltemps(parlist[[listindex]])[[stage]]
+    if (stgtype=='FlowerModel') {
+        pars <- cardinaltemps(PL)[[1]]
+    } else {
+        pars <- cardinaltemps(PL)[[stage]]
+    }
+
 
     #extract model length/threshold from parameterlist object
-    ml <- modlength(parlist[[listindex]])[stage]
+    ml <- modlength(PL)
 
     #create vector of names of events (columns)
-    if (forward) {
-        events <- paste0('event', stage:(stage+1))
-    } else {
+    if (stgtype=='FlowerModel') {
         events <- c('event1','event0')
+        fnames <- c('year', events)
+    } else {
+        events <- paste0('event', stage:(stage+1))
+        fnames <- c('year', events, paste0('length', stage))
+
     }
 
 
     #create data.frame with only the columns necessary
-    fdat <- phenology[, c('year', events, paste0('length', stage))]
+    fdat <- phenology[, fnames]
 
 
     #which parameters are geting estimated
@@ -54,9 +68,8 @@ objective <- function(parlist, phenology, templist, stage, CT, L,
     #create a function that evaluates returns the rmse of the model that can be
         #minimized using the function DEoptim()
     fun <- function(x) {
-        return(minrmse(x, fdat, templist, modeltype(parlist[[listindex]]),
-                       form(parlist[[listindex]])[stage], stage, ct, l,
-                       simple[listindex], forward=forward))
+        return(minrmse(x, fdat, templist, modeltype(PL), form(PL)[stage], stage,
+                       ct, l, simple[listindex], stgtype=stgtype))
     }
 
     return(fun)
