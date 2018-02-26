@@ -4,7 +4,7 @@
 \alias{thermalsum}
 \title{Calculates thermal time sums}
 \usage{
-thermalsum(pars, fdat, tdat, modtype, form, length, stage, forward = TRUE)
+thermalsum(pars, fdat, tdat, modtype, form, length, stage, stgtype)
 }
 \arguments{
 \item{pars}{Cardinal temperatures}
@@ -24,9 +24,9 @@ stage (one length for each entry in fdat).}
 
 \item{stage}{the number of the stage of the phenological model}
 
-\item{forward}{logical, Do count forward from the starting event (as
-opposed to backward)? If you have negative values in your event days
-you forward should probably be FALSE.}
+\item{stgtype}{character, type of model to be estimating, options are
+'PlantModel' or 'FlowerModel'. If you have negative day values, you
+probably want flower model.}
 }
 \value{
 The thermal sums for a given series of years.

@@ -21,9 +21,9 @@ stage (one length for each entry in fdat).}
 
 \item{stage}{the number of the stage of the phenological model}
 
-\item{forward}{logical, Do count forward from the starting event (as
-opposed to backward)? If you have negative values in your event days
-you forward should probably be FALSE.}
+\item{stgtype}{character, type of model to be estimating, options are
+'PlantModel' or 'FlowerModel'. If you have negative day values, you
+probably want flower model.}
 }
 \value{
 The RMSE value for a given set of cardinal temperatures and thermal
