@@ -5,7 +5,7 @@
 \title{Generates the Objective function}
 \usage{
 objective(parlist, phenology, templist, stage, CT, L, simple, listindex,
-  forward)
+  startday, stgtype)
 }
 \arguments{
 \item{parlist}{ParameterList, contains all of the parlist needed to
@@ -30,9 +30,12 @@ if not L should be the accumulation length to be used.}
 \item{listindex}{numeric, the index of the ParameterList from parlist that
 you are at}
 
-\item{forward}{logical, Do count forward from the starting event (as
-opposed to backward)? If you have negative values in your event days
-you forward should probably be FALSE.}
+\item{startday}{logical, is the day to start counting being optimized? (ie.
+not using bloom as startday)}
+
+\item{stgtyp}{character, type of model to be estimating, options are
+'PlantModel' or 'FlowerModel'. If you have negative day values, you
+probably want flower model.}
 }
 \value{
 the function that is passed to DEoptim to optimize.

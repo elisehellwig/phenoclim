@@ -4,7 +4,7 @@
 \alias{boundlength}
 \title{Length of the bounds variables}
 \usage{
-boundlength(form, CT, L, simple, f)
+boundlength(form, CT, L, start = FALSE)
 }
 \arguments{
 \item{form}{character, the thermal time functional form.}
@@ -14,9 +14,7 @@ boundlength(form, CT, L, simple, f)
 \item{L}{logical, does the thermal time accumulation length need to be
 estimated?}
 
-\item{simple}{logical, is the model a simplified model?}
-
-\item{f}{logical, is the model a forward model or a backward model?}
+\item{start}{logical, is the start day estimated?}
 }
 \value{
 The length the bounds vectors need to be.

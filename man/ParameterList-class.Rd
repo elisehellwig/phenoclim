@@ -34,13 +34,12 @@ be either one value for each element. For a backwards model there can be
 one or two depending on whether the model is simplified or not
 (simplified means one value, full means two).}
 
-\item{\code{parsOptimized}}{character. Determines what parameters are optimized in the model.
-`parsOptimized` is a character vector that can contain "cardinaltemps",
-"modlength" or both, but it must contain at least one of the two.
-Currently this cannot vary by stage.}
+\item{\code{parsOptimized}}{character. Determines what parameters are optimized in
+the model. `parsOptimized` is a character vector that can contain
+"cardinaltemps", "modlength" or both, but it must contain at least one
+of the two. Currently this cannot vary by stage.}
 
-\item{\code{forward}}{logical. Should the model count forward after bloom (TRUE), or
-backward from bloom FALSE. Forward is used for harvest
-models and backward is used for bloom models.}
+\item{\code{stagetype}}{character. Is this a parameter list for a 'PlantModel'
+or a 'FlowerModel'.}
 }}
 
