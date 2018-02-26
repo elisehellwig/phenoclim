@@ -1,4 +1,4 @@
-#' @include constructors.R plantmodelcheck.R objectivefunction.R plantmodelmethods.R
+#' @include constructors.R modelcheck.R objectivefunction.R flowermodelmethods.R
 NULL
 
 # This document contains the function that fits phenological models for Plant
@@ -10,16 +10,14 @@ NULL
 #' `flowermodel` fits phenological models of two general types: thermal time accumulation and day accumulation (for more information see ____).
 #'
 #' @param phenology data.frame, contains the phenological data.
-#'     Required columns are `year`, and `event1` through `eventN` where `N`
-#'     is the number of phenological events in the model.
+#'     Required columns are `year`, `event1` and `event0` which represents the
+#'     harvest date from the previous year.
 #' @param temps data.frame, contains the temperature data. There should be a
 #'     column for year, day of the year, hourly temperature (named temp) or min
 #'     max daily temperatures (named tmin and tmax), and hour if the
 #'     temperatures are hourly.
-#' @param parlist list of ParameterLists, contains the parameter values and
-#'     functional form of the thermal time calculations. Note as of right now.
-#'     All ParameterLists must have the same number of stages, and the same
-#'     model type.
+#' @param parlist ParameterList, contains the parameter values and
+#'     functional form of the thermal time calculations.
 #' @param lbounds numeric, a vector of lower bounds for the parameters in the
 #'     model
 #' @param ubounds numeric, a vector of the upper bounds for the parameters in
@@ -28,106 +26,84 @@ NULL
 #'     use to fit the model.
 #' @param iterations numeric, the number of iterations used in the differential
 #'     evolution optimization of the phenological parameters.
-#' @param ensemble logical, should an ensemble prediction be used?
+#' @param ensemble logical, should an ensemble prediction be used? NOT
+#'     currently implemented.
+#' @param startday logical, is the day to start counting being optimized? (ie.
+#'     not using bloom as startday)
 #' @return A PlantModel object.
 #' @export
 flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
-                       cores=1L, iterations=200) {
+                       cores=1L, iterations=200, ensemble=FALSE,
+                       startday=TRUE) {
 
 
-    stages <- stages(parlist[[1]]) #extract # of stages from the Parameterlist
+    stages <- 1 #Number of stages in FlowerModel
     n <- stages+1 #number of events
-    events <- paste0('event', 1:n) #event column names
+    events <- paste0('event', 0:1) #event column names
     lengthcols <- paste0('length',1:stages) #length column names
-    fwd <- forward(parlist)
 
-    #are the models simplified?
-    simple <- sapply(parlist, function(pl) simplified(pl))
-    ttforms <- lapply(parlist, function(pl) form(pl)) #list of functional forms
-    m <- length(parlist) #number of functional forms
+    ss <- modlength(parlist)
+    startday2 <- all(ifelse(length(ss) > 1, TRUE, FALSE))
 
-    ij <- expand.grid(1:stages, 1:m) #unique combos of form numbers and stages
-    names(ij) <- c('stage','pl') #giving columns names
+    if (!identical(startday, startday2)) {
+        stop('If startday=TRUE, each modlength must be of length 2. If startday=FALSE, each modlength must be of length 1.')
+    }
+
+
+    simple <- simplified(parlist)  #is the model simplified?
+    ttform <- form(parlist) #functional form
+
 
     #extracting the appropriate form names
-    ij$form <- sapply(1:nrow(ij), function(i) {
-        ttforms[[ij[i,2]]][ij[i,1]]
-    })
 
     #Checking to make sure all of the right variables and etc are present
-    checktemps(temps, phenology, ttforms)
+    checktemps(temps, phenology, ttform)
 
-    for (i in 1:m) {
-        for (j in 1:stages) {
-            if (ttforms[[i]][j]=='anderson') {
-                cardinaltemps(parlist[[i]])[[j]] <- c(4,25,36)
-        }
-
-        }
+    if (ttform=='anderson') {
+        cardinaltemps(parlist) <-list(c(4,25,36))
     }
 
 
 
     #detects if you are estimating the cardinal temperatures
-    estimateCT <- sapply(1:m, function(i) {
 
-        #are you estimating cardinal temperatures?
-        if ('cardinaltemps' %in% parsOptimized(parlist[[i]])) {
+    #are you estimating cardinal temperatures?
+    if ('cardinaltemps' %in% parsOptimized(parlist[[i]])) {
 
-            if ('anderson' %in% ttforms[[i]]) { #is the form anderson?
-               FALSE #if the form is anderson, you don't estimate cardinal temps
-            } else {
-               TRUE #otherwise estimateCT is true
-            }
-
+        if ('anderson' %in% ttform) { #is the form anderson?
+            estimateCT <- FALSE #if the form is anderson, you don't estimate cardinal temps
         } else {
-            FALSE
+            estimateCT <- TRUE #otherwise estimateCT is true
         }
-    })
+
+    } else {
+        estimateCT <- FALSE
+    }
+
 
 
    #for which models are you estimating model length/threshold
-    estimatelength <- sapply(parlist, function(pl) {
-        if ('modlength' %in% parsOptimized(pl)) TRUE else FALSE
-    })
-
+    estimatelength <- ifelse('modlength' %in% parsOptimized(parlist),
+                             TRUE, FALSE)
 
     #phenology data with only the year and event data.
-    pdat <- phenology[, c('year', events)]
+    d <- phenology[, c('year', events)]
 
-    #data frame with the length of the stages
-    ldat <- as.data.frame(sapply(1:stages, function(i) {
-        abs(eventi(pdat,i+1) - eventi(pdat, i))
-        }))
+    #average flowering day model
+    if (modeltype(parlist[[1]])=='DT' & simple[1]) {
 
-    #naming the stage length columns
-    names(ldat) <- lengthcols
-
-    #joining the event and length data frames
-    d <- data.frame(pdat, ldat)
-
-
-    if (modeltype(parlist[[1]])=='DT' & simple[1]) { #average stage length model
-
-        lmlist <- lapply(1:stages, function(i) { #average stage length lm
-            fmla <- paste0(lengthcols[i]," ~ 1")
-            lm(fmla, data=d)
-        })
+        #average flowering day lm
+        DTsimp <- lm(event1 ~ 1, data=d)
 
         #extracting fitted data
-        fits <- lapply(1:length(lmlist), function(i) {
-            as.data.frame(sapply(1:length(ttforms), function(j) {
-                fitted(lmlist[[i]])
-            }))
-        })[[1]]
+        fits <- unname(fitted(DTsimp))
 
-        newlength <- lapply(1:m, function(i) { #getting the new average
-            fits[1,1]                           #season length of the fits
-        })
+        #getting the new average season length of the fits
+        newbloom <- unname(coef(DTsimp)[1])
 
     } else {
 
-        blen <- boundlength(ttforms, estimateCT, estimatelength, simple, fwd)
+        blen <- boundlength(ttform, estimateCT, estimatelength, startday)
 
 
         #note this won't work for more than one stage
@@ -138,18 +114,14 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
         }
 
 
-        extractedtemps <- extracttemplist(temps, pdat$year, ttforms)
+        extractedtemps <- extracttemplist(temps, pdat$year, ttform)
         daytemplist <- extractedtemps[[1]]
         hourtemplist <- extractedtemps[[2]]
+        relevanttemplist <- whichtemp(ttform, daytemplist, hourtemplist)
 
-
-        functionlist <- lapply(1:m, function(j) {
-                lapply(1:stages, function(i) {
-                    objective(parlist, d, whichtemp(ttforms[[j]][i],daytemplist,
-                                                    hourtemplist),
-                              i, estimateCT,estimatelength, simple, j, fwd)
-            })
-        })
+        objfun <- objective(parlist, d, relevanttemplist,1, estimateCT,
+                            estimatelength, simple, 1, startday, 'FlowerModel')
+#####Changed things to work up to here####
 
         lboundlist <- lapply(1:m, function(i) {
             lapply(1:length(ttforms[[i]]), function(j) {
