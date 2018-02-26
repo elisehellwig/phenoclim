@@ -21,9 +21,11 @@ NULL
 #' @param simple logical, is the simplified version of the model being run?
 #' @param listindex numeric, the index of the ParameterList from parlist that
 #'     you are at
-#' @param forward logical, Do count forward from the starting event (as
-#'     opposed to backward)? If you have negative values in your event days
-#'     you forward should probably be FALSE.
+#' @param startday logical, is the day to start counting being optimized? (ie.
+#'     not using bloom as startday)
+#' @param stgtyp character, type of model to be estimating, options are
+#'     'PlantModel' or 'FlowerModel'. If you have negative day values, you
+#'     probably want flower model.
 #' @return the function that is passed to DEoptim to optimize.
 objective <- function(parlist, phenology, templist, stage, CT, L,
                       simple, listindex, startday, stgtype) {
