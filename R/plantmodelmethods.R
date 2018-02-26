@@ -1,4 +1,5 @@
 #' @include plantmodelclass.R
+NULL
 
 # methods for the PlantModel class
 
