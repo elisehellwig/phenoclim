@@ -20,10 +20,10 @@
 #'     be either one value for each element. For a backwards model there can be
 #'     one or two depending on whether the model is simplified or not
 #'     (simplified means one value, full means two).
-#' @slot parsOptimized character. Determines what parameters are optimized in the model.
-#'     `parsOptimized` is a character vector that can contain "cardinaltemps",
-#'     "modlength" or both, but it must contain at least one of the two.
-#'     Currently this cannot vary by stage.
+#' @slot parsOptimized character. Determines what parameters are optimized in
+#'      the model. `parsOptimized` is a character vector that can contain
+#'      "cardinaltemps", "modlength" or both, but it must contain at least one
+#'      of the two. Currently this cannot vary by stage.
 #' @slot stagetype character. Is this a parameter list for a 'PlantModel'
 #'     or a 'FlowerModel'.
 setClass('ParameterList',
@@ -96,7 +96,7 @@ setGeneric('form', function(object) standardGeneric('form'))
 setGeneric('parsOptimized', function(object) standardGeneric('parsOptimized'))
 
 
-#' Returns whether the model is forward or backward
+#' Returns whether the model is a 'PlantModel' or a 'FlowerModel'
 #'
 #' @param object An object of class ParameterList
 #' @return character, whether the model is a PlantModel or a FlowerModel
