@@ -29,10 +29,13 @@ NULL
 #' @param iterations numeric, the number of iterations used in the differential
 #'     evolution optimization of the phenological parameters.
 #' @param ensemble logical, should an ensemble prediction be used?
+#' @param startday logical, is the day to start counting being optimized? (ie.
+#'     not using bloom as startday)
 #' @return A PlantModel object.
 #' @export
 plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
-                       cores=1L, iterations=200, ensemble=FALSE) {
+                       cores=1L, iterations=200, ensemble=FALSE,
+                       startday=FALSE) {
 
 
     stages <- stages(parlist[[1]]) #extract # of stages from the Parameterlist
@@ -44,6 +47,15 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
     simple <- sapply(parlist, function(pl) simplified(pl))
     ttforms <- lapply(parlist, function(pl) form(pl)) #list of functional forms
     m <- length(parlist) #number of functional forms
+
+    #list of length of modlengths, to check if startday should be T or F
+    modlens <- sapply(parlist, function(pl) length(modlength(pl)))
+    #do any of the modlengths have both start and end day (length=2)
+    startday2 <- any(ifelse(modlens>1, TRUE, FALSE))
+
+    if (!all(startday, startday2)) {
+        stop('If startday=TRUE, each modlength must be of length 2. If startday=FALSE, each modlength must be of length 1.')
+    }
 
     ij <- expand.grid(1:stages, 1:m) #unique combos of form numbers and stages
     names(ij) <- c('stage','pl') #giving columns names
@@ -126,11 +138,12 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
     } else {
 
-        if (boundlength(ttforms, estimateCT, estimatelength)!=length(lbounds)) {
+        blen <- boundlength(ttforms, estimateCT, estimatelength, startday)
+
+        if (blen!=length(lbounds)) {
             stop(paste0('The bounds have the wrong number of parameter values. ',
                         'Your bounds are of length ', length(lbounds),
-                        ', and they should be of length ',
-                        boundlength(ttforms, estimateCT, estimatelength), '.'))
+                        ', and they should be of length ', blen, '.'))
         }
 
 
@@ -143,7 +156,8 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
                 lapply(1:stages, function(i) {
                     objective(parlist, d, whichtemp(ttforms[[j]][i],daytemplist,
                                                     hourtemplist),
-                              i, estimateCT,estimatelength, simple, j)
+                              i, estimateCT,estimatelength, simple, j, startday,
+                              'PlantModel')
             })
         })
 
