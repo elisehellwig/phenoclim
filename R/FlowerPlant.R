@@ -1,0 +1,4 @@
+responseVar <- function(model, stage) {
+
+
+}
