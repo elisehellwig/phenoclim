@@ -1,4 +1,4 @@
-#' @include thermalsum.R parameterfunctions.R
+#' @include thermalsum.R parameterfunctions.R FlowerPlant.R
 NULL
 
 # This document contains functions that are minimized using the DEoptim
@@ -25,14 +25,7 @@ NULL
 #'     time accumulation length.
 minrmseDT <- function(pars, fdat, tdat, form, length, stage, stgtype) {
 
-    if (stgtype=='PlantModel') {#set name of response variable
-        responsename <- paste0('length', stage)
-
-    } else if (stgtype=='FlowerModel') {
-        responsename <- paste0('event', stage)
-    } else {
-        stop('stgtype must be PlantModel or FlowerModel.')
-    }
+    responsename <- responseVar(stgtype, stage)
 
     if (checkpars(pars)) { #if parameters are in ascending order
 
@@ -77,9 +70,10 @@ minrmseDT <- function(pars, fdat, tdat, form, length, stage, stgtype) {
 #'     probably want flower model.
 #' @return The RMSE value for a given set of cardinal temperatures and thermal
 #'     time accumulation length.
-minrmseTTTsimplified <- function(pars, fdat, tdat, form, length, stage) {
+minrmseTTTsimplified <- function(pars, fdat, tdat, form, length, stage,
+                                 stgtype) {
 
-    responsename <- paste0('length',stage) #name of length response variable
+    responsename <- responseVar(stgtype, stage) #name of response variable
 
     if (checkpars(pars)) { #are parameters in ascending order
 
@@ -125,7 +119,7 @@ minrmseTTTsimplified <- function(pars, fdat, tdat, form, length, stage) {
 #'     time accumulation length.
 minrmseTTT <- function(pars, fdat, tdat, form, length, stage, stgtype) {
 
-    responsename <- paste0('length',stage) #creating response column name
+    responsename <- responseVar(stgtype, stage) #name of response variable
 
     if (!checkpars(pars)) { #are cardinal temperatures in ascending order
        rmse <- Inf #if not, rmse is infinite
