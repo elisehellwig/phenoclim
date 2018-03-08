@@ -18,21 +18,28 @@ NULL
 #'     either a set length of time (one number) or the total length of the
 #'     stage (one length for each entry in fdat).
 #' @param stage the number of the stage of the phenological model
-#' @param forward logical, Do count forward from the starting event (as
-#'     opposed to backward)? If you have negative values in your event days
-#'     you forward should probably be FALSE.
+#' @param stgtype character, type of model to be estimating, options are
+#'     'PlantModel' or 'FlowerModel'. If you have negative day values, you
+#'     probably want flower model.
 #' @return The RMSE value for a given set of cardinal temperatures and thermal
 #'     time accumulation length.
-minrmseDT <- function(pars, fdat, tdat, form, length, stage, forward) {
+minrmseDT <- function(pars, fdat, tdat, form, length, stage, stgtype) {
 
-    responsename <- paste0('length',stage) #define name of response variable
+    if (stgtype=='PlantModel') {#set name of response variable
+        responsename <- paste0('length', stage)
+
+    } else if (stgtype=='FlowerModel') {
+        responsename <- paste0('event', stage)
+    } else {
+        stop('stgtype must be PlantModel or FlowerModel.')
+    }
 
     if (checkpars(pars)) { #if parameters are in ascending order
 
         #calculate the thermal sum for each year using the cardinal temps and
             #day threshold
         tsums <- thermalsum(pars, fdat, tdat, 'DT', form, length, stage,
-                            forward)
+                            stgtype)
 
         #use that data as a predictor in a model to predict stage length
         mod <- lm(fdat[,responsename] ~ tsums)
@@ -65,9 +72,9 @@ minrmseDT <- function(pars, fdat, tdat, form, length, stage, forward) {
 #'     either a set length of time (one number) or the total length of the
 #'     stage (one length for each entry in fdat).
 #' @param stage the number of the stage of the phenological model
-#' @param forward logical, Do count forward from the starting event (as
-#'     opposed to backward)? If you have negative values in your event days
-#'     you forward should probably be FALSE.
+#' @param stgtype character, type of model to be estimating, options are
+#'     'PlantModel' or 'FlowerModel'. If you have negative day values, you
+#'     probably want flower model.
 #' @return The RMSE value for a given set of cardinal temperatures and thermal
 #'     time accumulation length.
 minrmseTTTsimplified <- function(pars, fdat, tdat, form, length, stage) {
@@ -78,7 +85,7 @@ minrmseTTTsimplified <- function(pars, fdat, tdat, form, length, stage) {
 
         #calculate day thermal time threshold is met
         daymet <- thermalsum(pars, fdat, tdat, 'TTT', form, length,
-                                      stage, forward)
+                                      stage, stgtype)
 
         if (any(is.infinite(daymet))){ #were any of the thermal sums
             #that did not resolve
@@ -111,12 +118,12 @@ minrmseTTTsimplified <- function(pars, fdat, tdat, form, length, stage) {
 #'     either a set length of time (one number) or the total length of the
 #'     stage (one length for each entry in fdat).
 #' @param stage the number of the stage of the phenological model
-#' @param forward logical, Do count forward from the starting event (as
-#'     opposed to backward)? If you have negative values in your event days
-#'     you forward should probably be FALSE.
+#' @param stgtype character, type of model to be estimating, options are
+#'     'PlantModel' or 'FlowerModel'. If you have negative day values, you
+#'     probably want flower model.
 #' @return The RMSE value for a given set of cardinal temperatures and thermal
 #'     time accumulation length.
-minrmseTTT <- function(pars, fdat, tdat, form, length, stage) {
+minrmseTTT <- function(pars, fdat, tdat, form, length, stage, stgtype) {
 
     responsename <- paste0('length',stage) #creating response column name
 
@@ -128,7 +135,7 @@ minrmseTTT <- function(pars, fdat, tdat, form, length, stage) {
 
         #calculate day thermal time threshold is met
         daymet <- thermalsum(pars, fdat, tdat, 'TTT', form, length, stage,
-                             forward)
+                             stgtype)
         #print(daymet)
 
         if (any(is.infinite(daymet))) {
@@ -176,7 +183,9 @@ minrmseTTT <- function(pars, fdat, tdat, form, length, stage) {
 #' @param L logical, should the model accumulation length be optimized. If not L
 #'     is the (numeric) model accumulation length.
 #' @param simple logical, should the simplified version of the model be run?
-#' @param forward logical, Do count forward from the starting event (as
+#' @param startday logical, is the day to start counting being optimized? (ie.
+#'     not using bloom as startday)
+#' @param stgtype logical, Do count forward from the starting event (as
 #'     opposed to backward)? If you have negative values in your event days
 #'     you forward should probably be FALSE. Bloom model forward=false, harvest
 #'     model forward=true.
@@ -184,22 +193,35 @@ minrmseTTT <- function(pars, fdat, tdat, form, length, stage) {
 #'     time accumulation length.
 #' @export
 minrmse <- function(pars, fdat, tdat, modtype, form, stage, CT, L, simple,
-                    forward) {
+                    startday, stgtype) {
 
     ctlen <- parnum(form) #what is the number of parameter values for the form
 
     #assigning parameter values to variables based on what parameters are
         #in the model
     if (isTRUE(L) & isTRUE(CT)) {
-        length <- pars[1]
-        ct <- pars[2:(ctlen+1)]
+
+        if (!startday) {
+            length <- pars[1]
+            ct <- pars[2:(ctlen+1)]
+
+        } else {
+            mlen <- pars[1:2]
+            ct <- pars[3:(ctlen+2)]
+        }
+
 
     } else if (!isTRUE(L) & isTRUE(CT)) {
-        length <- L
+        mlen <- L
         ct <- pars[1:ctlen]
 
     } else {
-        length <- pars[1]
+        if (!startday) {
+            mlen <- pars[1]
+        } else {
+            mlen <- pars[1:2]
+        }
+
         ct <- CT[1:ctlen]
 
     }
@@ -208,17 +230,17 @@ minrmse <- function(pars, fdat, tdat, modtype, form, stage, CT, L, simple,
 
 
     if (modtype=='DT' & !simple) {
-        rmse <- minrmseDT(ct, fdat, tdat, form, length, stage, forward=forward)
+        rmse <- minrmseDT(ct, fdat, tdat, form, mlen, stage, stgtype=stgtype)
 
     } else if (modtype == 'TTT' & simple) {
-        rmse <- minrmseTTTsimplified(ct, fdat, tdat, form, length, stage,
-                                     forward=forward)
+        rmse <- minrmseTTTsimplified(ct, fdat, tdat, form, mlen, stage,
+                                     stgtype=stgtype)
 
     } else if (modtype == 'TTT') {
-        rmse <- minrmseTTT(ct, fdat, tdat, form, length, stage,
-                           forward=forward)
+        rmse <- minrmseTTT(ct, fdat, tdat, form, mlen, stage,
+                           stgtype=stgtype)
     } else {
-        stop('Only options for modeltypes are thermal and day.')
+        stop('Only options for modeltypes are TTT and DT.')
     }
 
     return(rmse)
