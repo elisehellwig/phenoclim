@@ -1,3 +1,34 @@
+#' @include FlowerPlant.R
+NULL
+
+
+createEnd <- function(l1, l2, stgtype, startday) {
+
+    if (stgtype=='PlantModel') {
+        multiplier <- 1
+    } else {
+        multiplier <- -1
+    }
+
+    if (startday) {
+        if (l2<0) {
+            End <- l2*24 + 23
+        }
+
+    } else {
+        End <- l1 + multiplier*(l2*24-23)
+    }
+
+    return(End)
+}
+
+
+
+
+
+
+
+
 #' Converts years for bloom modeling
 #'
 #' Models for bloom necessarily incorporte phenology data from multiple years.
@@ -70,11 +101,14 @@ yearconversion <- function(fdat, firstyear=NA, lastyear=NA,
 #' @param start num, vector of starting days.
 #' @param stglength num, a stage length or vector of stage lengths
 #' @param hourly logical, is the model an hourly model
-#' @param forward is the model a forward fitting model (harvest) or a backward
-#'      fitting model (bloom)
+#' @param startday logical, is the start day being estimated in this model, as
+#'     opposed to using the bloom date.
+#' @param stgtype character, is the model a PlantModel or a FlowerModel?
+#'     Options are 'PlantModel' or 'FlowerModel'.
 #' @return a vector of indexes that can be used to extract temperature data.
 #' @export
-startEnd <- function(start, stglength, hourly=TRUE, forward=TRUE) {
+startEnd <- function(start, stglength, hourly=TRUE, stgtype) {
+
 
     if (hourly) {
         start <- start*24 - 23
@@ -85,7 +119,7 @@ startEnd <- function(start, stglength, hourly=TRUE, forward=TRUE) {
 
     }
 
-    if (forward) {
+    if (stgtype=='PlantModel') {
         end <- start+lengthmod
         increment <- 1
     } else {
@@ -110,15 +144,16 @@ startEnd <- function(start, stglength, hourly=TRUE, forward=TRUE) {
 
 #' Moves temperature data a year later
 #'
-#' This function takes temperature data and converts the year to the next year
-#'     and also converts the days to be negative, counting back from 0 as
-#'     Dec 31.
+#' This function takes temperature data and converts the year to the next year,
+#'     converts the days to be negative (counting back from 0 as Dec 31), and
+#'     creates a day index to use in extracting temps. The day index sets the
+#'     start date to be 1.
 #' @param year numeric, the year you need to add temperature data to
 #' @param tdat data.frame, the object that stores all your temperature data.
 #' @param start numeric, the day of the year to go back to in the previous year.
 #' @param hourly logical, is the data hourly?
 #' @return A data.frame that contains all of the temperature data points with
-#'     negative days
+#'     negative days as well as day
 yearflip <- function(year, tdat, start, hourly=TRUE) {
 
     beforeyear <- year-1
@@ -127,20 +162,23 @@ yearflip <- function(year, tdat, start, hourly=TRUE) {
 
 
     if (leap_year(beforeyear)) {
-        beforedat$negday <- beforedat$day - 366
-
+        yearlength <- 366
     } else {
-        beforedat$negday <- beforedat$day - 365
+        yearlength <- 365
     }
+
+    beforedat$dayindex <- beforedat$day - (start-1)
 
     if (hourly) {
         df <- data.frame(year=year,
-                         day=beforedat$negday,
+                         day=beforedat$day,
+                         dayindex=beforedat$dayindex,
                          temp=beforedat$temp,
                          hour=beforedat$hour)
     } else {
         df <- data.frame(year=year,
-                         day=beforedat$negday,
+                         day=beforedat$day,
+                         dayindex=beforedat$dayindex,
                          temp=beforedat$temp)
     }
 
@@ -159,7 +197,7 @@ yearflip <- function(year, tdat, start, hourly=TRUE) {
 #' @param start numeric, the day of the year to go back to in the previous year.
 #' @param hourly logical, is the data hourly?
 #' @return A data.frame that contains all of the temperature data points with
-#'     negative days.
+#'     negative days and a day index that starts from 1.
 #' @export
 tempyearconversion <- function(tdat, start, hourly=TRUE) {
 
@@ -174,21 +212,30 @@ tempyearconversion <- function(tdat, start, hourly=TRUE) {
         yearflip(y, tdat, start, hourly)
     })
 
-    tdatnames <- c('year','day','temp')
+    tdatnames <- c('year','day','dayindex','temp')
 
     if (hourly) {
         tdatnames <- c(tdatnames,'hour')
     }
 
     tdat <- tdat[,tdatnames]
+    #need to convert tdat days to add 1 +365 - start
+
+    shift <- yearlength(tdat[,'year']) - (start-1)
+    tdat$dayindex <- tdat[,'day'] + shift
 
     tdfthin <- rbind(tdat, tempdf)
 
-    smalldays <- which(tdfthin$day<start & tdfthin$year>minyr)
+    indexEnd <- start+shift
+    smalldays <- ifelse(tdfthin$day<(indexEnd), TRUE, NA)*1:length(indexEnd)
+    smalldays <- smalldaysTF[!is.na(smalldays)]
+
 
     tdfsmall <- tdfthin[smalldays, ]
+    tdfsmalltoo <- tdfsmall[tdfsmall$year > minyr, ]
 
-    return(tdfsmall)
+
+    return(tdfsmalltoo)
 
 }
 
