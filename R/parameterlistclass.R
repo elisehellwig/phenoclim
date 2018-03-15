@@ -15,11 +15,10 @@
 #'     list that should either be of length one or the length of the number of
 #'     stages. Each element of the list should contain the same number of
 #'     cardinal parameters.
-#' @slot modlength list. Stores the length of time or thermal time that is
-#'     accumulated in the model. If the model is a forward model, there should
-#'     be either one value for each element. For a backwards model there can be
-#'     one or two depending on whether the model is simplified or not
-#'     (simplified means one value, full means two).
+#' @slot modlength vector. Stores the length of time or thermal time that is
+#'     accumulated in the model.
+#' @slot limits list. Stores the start/stop pairs if modlength is NA. Otherwise
+#'     stores the start with NA.
 #' @slot parsOptimized character. Determines what parameters are optimized in
 #'      the model. `parsOptimized` is a character vector that can contain
 #'      "cardinaltemps", "modlength" or both, but it must contain at least one
@@ -32,7 +31,8 @@ setClass('ParameterList',
                     simplified='logical',
                     form = 'character',
          	        cardinaltemps = "list",
-                    modlength = "list",
+                    modlength = "vector",
+                    limits = 'list',
                     parsOptimized = 'character',
                     stagetype='character'))
 
@@ -70,6 +70,14 @@ setGeneric('simplified', function(object) standardGeneric('simplified'))
 #' @return A list of model lengths
 #' @export
 setGeneric('modlength', function(object) standardGeneric('modlength'))
+
+#' Returns the returns a vector of start/stop pairs
+#'
+#' @param object An object of class ParameterList
+#' @return A list of the start/stop pairs of the model
+#' @export
+setGeneric('limits', function(object) standardGeneric('limits'))
+
 
 
 #' Returns the returns a list of cardinal temperatures
@@ -115,6 +123,19 @@ setGeneric('stagetype', function(object) standardGeneric('stagetype'))
 #' @export
 setGeneric('modlength<-', function(object, value) {
     standardGeneric('modlength<-')})
+
+
+#' Setting the modlength
+#'
+#' Used to change the limits without recreating the object.
+#'
+#' @param object An object of class ParameterList
+#' @param value A list of start/stop pairs
+#'
+#' @export
+setGeneric('limits<-', function(object, value) {
+    standardGeneric('limits<-')})
+
 
 
 #' Setting the cardinal temps
