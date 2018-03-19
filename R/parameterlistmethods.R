@@ -25,6 +25,13 @@ setMethod("modeltype", "ParameterList",
           })
 
 
+#' Accesses the model limits of the ParameterList object
+#' @rdname limits
+setMethod("limits", "ParameterList",
+          function(object) {
+              return(object@limits)
+          })
+
 #' Accesses whether the model in the ParameterList object is simplified
 #' @rdname simplified
 setMethod("simplified", "ParameterList",
@@ -94,8 +101,13 @@ setValidity("ParameterList", function(object) {
 
     ct <- cardinaltemps(object)
     frm <- object@form
+    lims <- object@limits
     forms <- c('gdd', 'gddsimple','linear','flat', 'asymcur','anderson',
                'triangle', 'trapezoid', 'ensemble')
+    lens <- c(length(ct), length(object@modlength), length(object@limits))
+    limlenlog <- sapply(lims, function(l) {
+        if (length(l)==2) FALSE else TRUE
+    })
 
     if (any(ifelse(frm %in% forms, FALSE, TRUE))) {
         valid <- FALSE
@@ -108,13 +120,16 @@ setValidity("ParameterList", function(object) {
     }
 
 
-    if (length(object@modlength) != length(ct)) {
+    if (abs(max(lens) - min(lens)) > 0.001) {
         valid <- FALSE
         msg <- c(msg,
-                 'The number of accumulation lengths (or start/stop pairs) and the number of parameter sets are not the same.')
+                 'The number of accumulation lengths, of start/stop pairs, of parameter sets are not the same.')
     }
 
-
+    if (any(limlenlog)) {
+        valid <- FALSE
+        msg <- c(msg, 'Every element of limits must be of length 2, even if they are both NAs.')
+    }
 
 
     ensemblefrm <- which(frm=='ensemble')
@@ -221,6 +236,18 @@ setMethod('stages<-', 'ParameterList',
 setMethod('modeltype<-', 'ParameterList',
           function(object, value) {
               object@modeltype <- value
+
+              if (validObject(object)) {
+                  return(object)
+              }
+          })
+
+
+
+#' @rdname limits-set
+setMethod('limits<-', 'ParameterList',
+          function(object, value) {
+              object@limits <- value
 
               if (validObject(object)) {
                   return(object)
