@@ -59,6 +59,16 @@ parnum <- function(form) {
 
 ##############################################
 
+limpars <- function(lims) {
+
+
+}
+
+
+
+
+##############################################
+
 #' Length of the bounds variables
 #'
 #' This function returns the length that the lbounds and ubounds variables
@@ -70,37 +80,40 @@ parnum <- function(form) {
 #' @param CT logical, do the cardinal temperatures need to be estimated?
 #' @param L logical, does the thermal time accumulation length need to be
 #'     estimated?
-#' @param start logical, is the start day estimated?
+#' @param lim logical list, do the start/ends need to be estimated?
 #' @return The length the bounds vectors need to be.
-boundlength <- function(form, CT, L, start=FALSE) {
+boundlength <- function(form, CT, L, lim) {
 
     #what is the maximum number of parameters any form requires?
     pn <- max(sapply(form, function(fm) parnum(fm)))
 
+    limlength <- max(sapply(lims, function(l) {
+        length(which(l))
+    }))
+
+    if (limlength==0) {
+        lim <- FALSE
+    } else {
+        lim <- TRUE
+    }
+
     CT <- any(CT) #do any models need to estimate cardinal temperatures
     L <- any(L) #do any models need to estimate threshold?
 
-    if (start) {
-        lengthnum <- 2
+    logipars <- c(CT, L, lim) # vector of whether we are estimating each
+                                #parameter
+
+    if (!any(logipars)) {
+        stop('You must at least estimate one of the following: cardinal temperatures, the model length, the model limits (start/stop days).')
+
+    } else if (L & limlength==2) {
+        stop('If you estimate length, you can only estimate start or end day, not both')
+
     } else {
-        lengthnum <- 1
+        parslength <- sum(c(pn, 1, limlength)*logipars)
+
+
     }
-
-    if ((!CT) & (!L)) {
-        stop('You must estimate the cardinal temperatures, the model length, or both.')
-
-    } else if (L & (!CT)) { #if you are only estimating length
-            parslength <- lengthnum  #you only need to estimate one or two
-                                      #parameters
-
-    } else if (L & CT) {    # if you are estimating length and Cardinal temps
-        parslength <- pn + lengthnum #you need to estimate 1+pn parameters
-
-    } else {
-        parslength <- pn #if you are only estimating cardinal times you need to
-    }                       #estimate pn parameters
-
-
 
     return(parslength)
 }
@@ -133,6 +146,11 @@ parslist <- function(temps, pars, sum=FALSE, full=FALSE) {
         pl <- list(temps, pars[1], pars[2], pars[3], pars[4], pars[5], sum)
 
 
+    } else if (length(pars)==6) {
+        pl <- list(temps, pars[1], pars[2], pars[3], pars[4], pars[5], pars[6],
+                   sum)
+
+
     } else {
         stop('There are no models with more than 5 parameters')
     }
@@ -140,13 +158,33 @@ parslist <- function(temps, pars, sum=FALSE, full=FALSE) {
     return(pl)
 }
 
+##############################################
+
+#' Calculates length of model
+#'
+#' @param ml numeric, the lengths of each of the stages, or NA
+#' @param lims list, the start/stop pairs for each of the stages.
+#' @return A vector with the lengths of each of the stages.
+calclength <- function(ml, lims) {
+    mllog <- ifelse(is.na(ml), FALSE, TRUE)
+
+    mlength <- sapply(seq_along(ml), function(i) {
+        if (mllog[i]) {
+            ml[i]
+        } else {
+            lims[[i]][2]-lims[[i]][1]
+        }
+    })
+
+    return(mlength)
+}
 
 ##############################################
 
 #' Legwork behind the ParameterList show method
 #'
 #' @param object Parameterlist object
-#' @return A data.frame with the columns type, form, length, stage, Base,
+#' @return A data.frame with the columns type, form, length, lims, stage, Base,
 #'     Optimal, and Critical
 showparlist <- function(object) {
     n <- object@stages #number of stages in a model
@@ -170,17 +208,10 @@ showparlist <- function(object) {
     names(pars) <- c('Base','Opt.','Crit.') #giving the columns names
 
     mlen <- object@modlength
+    limlists <- object@limits
     stgtyp <- object@stagetype
 
-    ml <- sapply(mlen, function(l) {
-        if (length(day) >1 ) {
-            abs(l[2]-l[1])
-        } else {
-            l
-        }
-
-    })
-
+    ml <- calclength(mlen, limlists)
 
     #adding information from different stages
     stagelength <- data.frame(stage=1:n,
