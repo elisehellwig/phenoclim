@@ -25,3 +25,11 @@ responseVar <- function(Model, stage) {
 
     return(respVar)
 }
+
+
+yearlength <- function(y) {
+
+    wl <- ifelse(leapyear(y), 366, 365)
+
+    return(yl)
+}
