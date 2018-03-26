@@ -7,10 +7,10 @@
 responseVar(Model, stage)
 }
 \arguments{
-\item{Model}{character, the type of model used, either PlantModel or
-FlowerModel}
-
 \item{stage}{numeric, what stage is the is the model predicting for.}
+
+\item{ModelClass}{character, the type of model used, either PlantModel or
+FlowerModel}
 }
 \value{
 The name of the response variable as a character.

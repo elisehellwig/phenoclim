@@ -2,11 +2,10 @@
 NULL
 
 
-createEnd <- function(l1, l2, classtype, startday, hourly=FALSE) {
+createEnd <- function(l1, l2, classtype, startday) {
 
-    if (classtype=='FlowerModel') {
-
-
+    if (classtype=='PlantModel') {
+        multiplier <- 1
     } else {
         multiplier <- -1
     }
@@ -35,6 +34,9 @@ createEnd <- function(l1, l2, classtype, startday, hourly=FALSE) {
 #' Models for bloom necessarily incorporte phenology data from multiple years.
 #'     this is not compatible with the current phenoclim model paradigm. So this
 #'     function groups the phenogical events by blooming event not by year.
+#'     This function ONLY converts the phenological event days. It does not
+#'     provide an indext for extracting temperatures and calculating thermal
+#'     time. For that you need to use ____.
 #'
 #' @param fdat dataframe, contains the phenology data
 #' @param firstyear numeric, the first year you would like to predict bloom.
@@ -49,7 +51,7 @@ createEnd <- function(l1, l2, classtype, startday, hourly=FALSE) {
 #' @param var character, name of a specific cultivar to extract.
 #' @return A data.frame with all of the converted phenology data in it.
 #' @export
-yearconversion <- function(fdat, firstyear=NA, lastyear=NA,
+yearflippheno <- function(fdat, firstyear=NA, lastyear=NA,
                            bloomvar='event1', matvar='event2',
                            id.vars=NA, var=NA) {
 
@@ -149,13 +151,14 @@ startEnd <- function(start, stglength, hourly=TRUE, stgtype) {
 #'     converts the days to be negative (counting back from 0 as Dec 31), and
 #'     creates a day index to use in extracting temps. The day index sets the
 #'     start date to be 1.
+#'
 #' @param year numeric, the year you need to add temperature data to
 #' @param tdat data.frame, the object that stores all your temperature data.
 #' @param start numeric, the day of the year to go back to in the previous year.
 #' @param hourly logical, is the data hourly?
 #' @return A data.frame that contains all of the temperature data points with
 #'     negative days as well as day
-yearflip <- function(year, tdat, start, hourly=TRUE) {
+yearfliptemp <- function(year, tdat, start, hourly=TRUE) {
 
     beforeyear <- year-1
     beforerows <- which(tdat[,'year']==beforeyear & tdat[,'day']>=start)

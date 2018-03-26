@@ -5,7 +5,7 @@
 \title{Creates ParameterList object}
 \usage{
 parameterlist(n, mt, simple, ff, ct, length, lims,
-  optimized = c("cardinaltemps", "modlength"), stageclass = "PlantModel")
+  optimized = c("cardinaltemps", "modlength"), ModelClass = "PlantModel")
 }
 \arguments{
 \item{n}{integer, the number of stages in the model.}
@@ -35,7 +35,7 @@ limits has to be NA.}
 model.Can contain "cardinaltemps", "modlength" or both, but it must
 contain at least one of the two.}
 
-\item{stageclass}{character, the class to be fit. Options are
+\item{ModelClass}{character, the class to be fit. Options are
 'PlantModel' or 'FlowerModel'.}
 }
 \value{
