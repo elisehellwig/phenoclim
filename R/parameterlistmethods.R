@@ -73,9 +73,9 @@ setMethod("parsOptimized", "ParameterList",
 
 #' Accesses whether model is for PlantModel or FlowerModel
 #' @rdname stagetype
-setMethod("stagetype", "ParameterList",
+setMethod("mclass", "ParameterList",
           function(object) {
-              return(object@stagetype)
+              return(object@mclass)
           })
 
 ##############################
@@ -160,24 +160,24 @@ setValidity("ParameterList", function(object) {
         msg <- c(msg, "estimate must include at least one of 'cardinaltemps' or 'modelength'. ")
     }
 
-    stgtyp <- stagetype(object)
+    classtype <- mclass(object)
     modelclassnames <- c('FlowerModel','PlantModel')
 
-    if (length(stgtyp)>1) {
+    if (length(classtype)>1) {
         valid <- FALSE
-        msg <- c(msg, 'Each parameterlist can only have one stagetype.')
+        msg <- c(msg, 'Each parameterlist can only have one model class.')
     }
 
-    if (!(stgtyp[1] %in% modelclassnames)) {
+    if (!(classtype[1] %in% modelclassnames)) {
         valid <- FALSE
-        msg <- c(msg, 'Stagetype must be PlantModel or FlowerModel')
+        msg <- c(msg, 'mclass must be PlantModel or FlowerModel')
     }
 
 
     n <- stages(object)
-    if (stgtyp=='FlowerModel' & n!=1) {
+    if (classtype=='FlowerModel' & n!=1) {
         valid <- FALSE
-        msg <- c(msg, 'If stagetype is flower, there can only be one stage.')
+        msg <- c(msg, 'If mclass is FlowerModel, there can only be one stage.')
     }
 
     if (valid) return(TRUE) else return(msg)
@@ -279,9 +279,9 @@ setMethod('parsOptimized<-', 'ParameterList',
 
 
 #' @rdname stagetype-set
-setMethod('stagetype<-', 'ParameterList',
+setMethod('mclass<-', 'ParameterList',
           function(object, value) {
-              object@stagetype <- value
+              object@mclass <- value
 
               if (validObject(object)) {
                   return(object)

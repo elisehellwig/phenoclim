@@ -1,4 +1,4 @@
-#' @include parameterlistmethods.R
+#' @include parameterlistmethods.R flipday.R
 NULL
 
 
@@ -16,11 +16,31 @@ NULL
 #'     either a set length of time (one number) or the total length of the
 #'     stage (one length for each entry in fdat).
 #' @param stage the number of the stage of the phenological model.
-#' @param forward logical, Do count forward from the starting event (as
-#'     opposed to backward)? If you have negative values in your event days
-#'     you forward should probably be FALSE.
+#' @param stgtype character, type of model to be estimating, options are
+#'     'PlantModel' or 'FlowerModel'. If you have negative day values, you
+#'     probably want flower model.
 #' @return The thermal sums for a given series of years.
-DTsum <- function(pars, fdat, tdat, form, length, stage, forward) {
+DTsum <- function(pars, fdat, tdat, form, length, stage, stgtype) {
+
+
+    if (stgtype=='FlowerModel') {
+
+
+    } else {
+        if (length(length)>1) {
+            start <- length[1] #the day of the starting event
+            end <- length[2]
+        } else {
+            #the day of the starting event
+            start <- fdat[, paste0('event',stage)]
+
+            #the start + the length of the model/threshold
+            end <- start+length
+
+        }
+    }
+
+
 
 	# for walnut
 	#fdat is data for the 'fruit'
@@ -28,17 +48,14 @@ DTsum <- function(pars, fdat, tdat, form, length, stage, forward) {
 
     if (form %in% c('gdd','gddsimple')) { #if it is a GDD model
 
-        start <- fdat[, paste0('event',stage)] #the day of the starting event
-        end <- start+length #the start + the length of the model/threshold
-
         #create the index of days we want temperatures for
         tempindex <- startEnd(start, end, hourly=FALSE, forward=forward)
 
 
     } else { #if it is a GDH model
-        start <- (fdat[, paste0('event',stage)]*24)-23 #convert days to hours
+        start <- (start*24)-23 #convert days to hours
 
-        if (forward) {# convert days to hours
+        if (stgtype=='PlantModel') {# convert days to hours
             end <- start+length*24
         } else {
             end <- start-length*24
@@ -175,23 +192,23 @@ TTTsum <- function(pars, fdat, tdat, form, length, stage, forward) {
 #'     either a set length of time (one number) or the total length of the
 #'     stage (one length for each entry in fdat).
 #' @param stage the number of the stage of the phenological model
-#' @param forward logical, Do count forward from the starting event (as
-#'     opposed to backward)? If you have negative values in your event days
-#'     you forward should probably be FALSE.
+#' @param stgtype character, type of model to be estimating, options are
+#'     'PlantModel' or 'FlowerModel'. If you have negative day values, you
+#'     probably want flower model.
 #' @return The thermal sums for a given series of years.
 #' @export
 thermalsum <- function(pars, fdat, tdat, modtype, form, length, stage,
-                       forward=TRUE) {
+                       stgtype) {
 
     if (!(is.numeric(length) | is.integer(length))) {
         stop('Length must be numeric or an integer')
     }
 
     if (modtype=='DT') {
-        ths <- DTsum(pars, fdat, tdat, form, length, stage, forward)
+        ths <- DTsum(pars, fdat, tdat, form, length, stage, stgtype)
 
     } else if (modtype=='TTT') {
-        ths <- TTTsum(pars, fdat, tdat, form, length, stage, forward)
+        ths <- TTTsum(pars, fdat, tdat, form, length, stage, stgtype)
         #print(ths)
 
     } else {

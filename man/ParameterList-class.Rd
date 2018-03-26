@@ -28,18 +28,18 @@ list that should either be of length one or the length of the number of
 stages. Each element of the list should contain the same number of
 cardinal parameters.}
 
-\item{\code{modlength}}{list. Stores the length of time or thermal time that is
-accumulated in the model. If the model is a forward model, there should
-be either one value for each element. For a backwards model there can be
-one or two depending on whether the model is simplified or not
-(simplified means one value, full means two).}
+\item{\code{modlength}}{vector. Stores the length of time or thermal time that is
+accumulated in the model.}
+
+\item{\code{limits}}{list. Stores the start/stop pairs if modlength is NA. Otherwise
+stores the start with NA.}
 
 \item{\code{parsOptimized}}{character. Determines what parameters are optimized in
 the model. `parsOptimized` is a character vector that can contain
 "cardinaltemps", "modlength" or both, but it must contain at least one
 of the two. Currently this cannot vary by stage.}
 
-\item{\code{stagetype}}{character. Is this a parameter list for a 'PlantModel'
-or a 'FlowerModel'.}
+\item{\code{mclass}}{character. Is this a parameter list going to be used to
+fit a 'PlantModel' or a 'FlowerModel'.}
 }}
 

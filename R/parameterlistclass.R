@@ -23,8 +23,8 @@
 #'      the model. `parsOptimized` is a character vector that can contain
 #'      "cardinaltemps", "modlength" or both, but it must contain at least one
 #'      of the two. Currently this cannot vary by stage.
-#' @slot stagetype character. Is this a parameter list for a 'PlantModel'
-#'     or a 'FlowerModel'.
+#' @slot mclass character. Is this a parameter list going to be used to
+#'     fit a 'PlantModel' or a 'FlowerModel'.
 setClass('ParameterList',
          slots=list(stages='numeric',
                     modeltype='character',
@@ -34,7 +34,7 @@ setClass('ParameterList',
                     modlength = "vector",
                     limits = 'list',
                     parsOptimized = 'character',
-                    stagetype='character'))
+                    mclass='character'))
 
 
 #############################################################
@@ -109,7 +109,7 @@ setGeneric('parsOptimized', function(object) standardGeneric('parsOptimized'))
 #' @param object An object of class ParameterList
 #' @return character, whether the model is a PlantModel or a FlowerModel
 #' @export
-setGeneric('stagetype', function(object) standardGeneric('stagetype'))
+setGeneric('mclass', function(object) standardGeneric('mclass'))
 
 
 
@@ -216,8 +216,8 @@ setGeneric('simplified<-', function(object, value) {
 #' @param object An object of class ParameterList
 #' @param value logical, does the model count forward from bloom?
 #' @export
-setGeneric('stagetype<-', function(object, value) {
-    standardGeneric('stagetype<-')} )
+setGeneric('mclass<-', function(object, value) {
+    standardGeneric('mclass<-')} )
 
 
 

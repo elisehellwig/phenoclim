@@ -121,7 +121,7 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
         objfun <- objective(parlist, d, relevanttemplist,1, estimateCT,
                             estimatelength, simple, 1, startday, 'FlowerModel')
-#####Changed things to work up to here####
+#######Things are changed up to hear for FlowerModel and startday#######
 
         lboundlist <- lapply(1:m, function(i) {
             lapply(1:length(ttforms[[i]]), function(j) {

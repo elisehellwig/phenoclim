@@ -4,7 +4,7 @@
 \alias{minrmseTTTsimplified}
 \title{Calculates simplified TTT model RMSE}
 \usage{
-minrmseTTTsimplified(pars, fdat, tdat, form, length, stage)
+minrmseTTTsimplified(pars, fdat, tdat, form, length, stage, stgtype)
 }
 \arguments{
 \item{pars}{Cardinal temperatures}

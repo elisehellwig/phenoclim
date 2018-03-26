@@ -19,7 +19,7 @@ License: GPL-3
 LazyData: TRUE
 RoxygenNote: 6.0.1
 Collate: 
-    'backwards.R'
+    'FlowerPlant.R'
     'general.R'
     'thermal.R'
     'parameterfunctions.R'
@@ -28,6 +28,7 @@ Collate:
     'constructors.R'
     'plantmodelclass.R'
     'plantmodelmethods.R'
+    'flipday.R'
     'thermalsum.R'
     'minrmse.R'
     'objectivefunction.R'

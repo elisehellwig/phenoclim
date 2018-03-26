@@ -4,8 +4,8 @@
 \alias{parameterlist}
 \title{Creates ParameterList object}
 \usage{
-parameterlist(n, mt, simple, ff, ct, length, optimized = c("cardinaltemps",
-  "modlength"))
+parameterlist(n, mt, simple, ff, ct, length, lims,
+  optimized = c("cardinaltemps", "modlength"), stageclass = "PlantModel")
 }
 \arguments{
 \item{n}{integer, the number of stages in the model.}
@@ -24,12 +24,19 @@ temperatures for a given stage of the model. If ct is a list, each
 element of the list should be a vector of cardinal temperatures for a
 given stage of the model.}
 
-\item{length}{list of model lengths. Model lengths for the same stage should
-be in the same list element.}
+\item{length}{numeric vector of model lengths.}
+
+\item{lims}{list of start and stop pairs. Start is always the day close to
+flowering. This means that it will be the earliest day in a PlantModel,
+but the latest day in a FlowerModel. If length is not NA, one of the
+limits has to be NA.}
 
 \item{optimized}{character, Determines what parameters are optimized in the
 model.Can contain "cardinaltemps", "modlength" or both, but it must
 contain at least one of the two.}
+
+\item{stageclass}{character, the class to be fit. Options are
+'PlantModel' or 'FlowerModel'.}
 }
 \value{
 An object of the class ParameterList.

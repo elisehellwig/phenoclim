@@ -200,7 +200,7 @@ showparlist <- function(object) {
 
     mlen <- object@modlength
     limlists <- object@limits
-    stgtyp <- object@stagetype
+    classtyp <- object@mclass
 
     ml <- calclength(mlen, limlists)
 
@@ -209,7 +209,7 @@ showparlist <- function(object) {
                               type=rep(object@modeltype, n),
                               form=forms,
                               length=round(ml),
-                              stagetype=rep(stgtyp, n))
+                              class=rep(stgtyp, n))
 
     lengthpars <- cbind(stagelength, pars) #putting stage length and parameter
                                             #information together

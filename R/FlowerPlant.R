@@ -7,16 +7,16 @@
 #'     the stage and based on that decides what the name of the response
 #'     variable to be predicted in the linear model.
 #'
-#' @param Model character, the type of model used, either PlantModel or
+#' @param ModelClass character, the type of model used, either PlantModel or
 #'     FlowerModel
 #' @param stage numeric, what stage is the is the model predicting for.
 #' @return The name of the response variable as a character.
 responseVar <- function(Model, stage) {
 
-     if (Model=='PlantModel') {#set name of response variable
+     if (ModelClass=='PlantModel') {#set name of response variable
         respVar <- paste0('length', stage)
 
-    } else if (Model=='FlowerModel') {
+    } else if (ModelClass=='FlowerModel') {
         respVar <- paste0('event', stage)
     } else {
         stop('Model must be PlantModel or FlowerModel.')

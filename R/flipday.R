@@ -2,10 +2,11 @@
 NULL
 
 
-createEnd <- function(l1, l2, stgtype, startday) {
+createEnd <- function(l1, l2, classtype, startday, hourly=FALSE) {
 
-    if (stgtype=='PlantModel') {
-        multiplier <- 1
+    if (classtype=='FlowerModel') {
+
+
     } else {
         multiplier <- -1
     }

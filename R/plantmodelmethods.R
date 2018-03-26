@@ -159,6 +159,14 @@ setMethod("parsOptimized", "PlantModel",
           })
 
 
+#' Accesses the model class of a PlantModel object
+#' @rdname mclass
+setMethod("mclass", "PlantModel",
+          function(object) {
+
+              return(object@parameters[[1]]@mclass)
+          })
+
 
 ################################################################
 #validity method

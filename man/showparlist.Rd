@@ -10,7 +10,7 @@ showparlist(object)
 \item{object}{Parameterlist object}
 }
 \value{
-A data.frame with the columns type, form, length, stage, Base,
+A data.frame with the columns type, form, length, lims, stage, Base,
     Optimal, and Critical
 }
 \description{
