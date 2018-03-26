@@ -23,5 +23,6 @@ A data.frame that contains all of the temperature data points with
 This function takes temperature data and converts the year to the next year,
     converts the days to be negative (counting back from 0 as Dec 31), and
     creates a day index to use in extracting temps. The day index sets the
-    start date to be 1.
+    start date to be 1. This only converts data from one year. To do many
+    years use tempyearconversion()
 }

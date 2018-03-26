@@ -278,7 +278,7 @@ setMethod('parsOptimized<-', 'ParameterList',
           })
 
 
-#' @rdname stagetype-set
+#' @rdname mclass-set
 setMethod('mclass<-', 'ParameterList',
           function(object, value) {
               object@mclass <- value

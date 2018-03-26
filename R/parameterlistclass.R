@@ -214,7 +214,8 @@ setGeneric('simplified<-', function(object, value) {
 #'  FlowerModel class.
 #'
 #' @param object An object of class ParameterList
-#' @param value logical, does the model count forward from bloom?
+#' @param value character, is the model to be fit a 'PlantModel' or a
+#'     'FlowerModel'.
 #' @export
 setGeneric('mclass<-', function(object, value) {
     standardGeneric('mclass<-')} )

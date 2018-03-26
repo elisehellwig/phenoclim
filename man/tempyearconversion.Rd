@@ -2,7 +2,7 @@
 % Please edit documentation in R/flipday.R
 \name{tempyearconversion}
 \alias{tempyearconversion}
-\title{Creates temp data for Backwards model}
+\title{Creates temp data for FlowerModel}
 \usage{
 tempyearconversion(tdat, start, hourly = TRUE)
 }
@@ -19,7 +19,7 @@ A data.frame that contains all of the temperature data points with
 }
 \description{
 This function takes temperature data and reformats it so that it is
-    compatible with the backwards (bloom) model structure. This means
+    compatible with the FlowerModel model structure. This means
     extracting temperatures from the previous year and adding them to the
-    data but with negative numbers for days.
+    data but with negative numbers for days and a day index.
 }
