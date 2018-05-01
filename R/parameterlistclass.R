@@ -21,8 +21,8 @@
 #'     stores the start with NA.
 #' @slot parsOptimized character. Determines what parameters are optimized in
 #'      the model. `parsOptimized` is a character vector that can contain
-#'      "cardinaltemps", "modlength" or both, but it must contain at least one
-#'      of the two. Currently this cannot vary by stage.
+#'      "cardinaltemps", "threshold", and "end", but it must contain at least
+#'      one (or else why optimize). Currently this cannot vary by stage.
 #' @slot mclass character. Is this a parameter list going to be used to
 #'     fit a 'PlantModel' or a 'FlowerModel'.
 setClass('ParameterList',
