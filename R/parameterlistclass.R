@@ -31,7 +31,7 @@ setClass('ParameterList',
                     simplified='logical',
                     form = 'character',
          	        cardinaltemps = "list",
-                    modlength = "vector",
+                    threshold = "vector",
                     limits = 'list',
                     parsOptimized = 'character',
                     mclass='character'))
@@ -67,9 +67,9 @@ setGeneric('simplified', function(object) standardGeneric('simplified'))
 #' Returns the returns a vector of accumulation lengths
 #'
 #' @param object An object of class ParameterList
-#' @return A list of model lengths
+#' @return The time or thermal time threshold of the model.
 #' @export
-setGeneric('modlength', function(object) standardGeneric('modlength'))
+setGeneric('threshold', function(object) standardGeneric('threshold'))
 
 #' Returns the returns a vector of start/stop pairs
 #'
@@ -113,16 +113,15 @@ setGeneric('mclass', function(object) standardGeneric('mclass'))
 
 
 
-#' Setting the modlength
+#' Setting the model threshold
 #'
-#' Used to change the model length without recreating the object.
+#' Used to change the model threshold without recreating the object.
 #'
 #' @param object An object of class ParameterList
-#' @param value A list of acccumulation lengths or start/stop pairs if
-#'     forward=FALSE.
+#' @param value The time or thermal time threshold of the model.
 #' @export
-setGeneric('modlength<-', function(object, value) {
-    standardGeneric('modlength<-')})
+setGeneric('threshold<-', function(object, value) {
+    standardGeneric('threshold<-')})
 
 
 #' Setting the modlength

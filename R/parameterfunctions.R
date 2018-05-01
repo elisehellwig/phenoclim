@@ -143,7 +143,7 @@ parslist <- function(temps, pars, sum=FALSE, full=FALSE) {
 
 
     } else {
-        stop('There are no models with more than 5 parameters')
+        stop('There are no models with more than 6 parameters')
     }
 
     return(pl)
@@ -198,7 +198,7 @@ showparlist <- function(object) {
     pars <- round(pars)
     names(pars) <- c('Base','Opt.','Crit.') #giving the columns names
 
-    mlen <- object@modlength
+    mlen <- object@threshold
     limlists <- object@limits
     classtyp <- object@mclass
 
@@ -208,7 +208,7 @@ showparlist <- function(object) {
     stagelength <- data.frame(stage=1:n,
                               type=rep(object@modeltype, n),
                               form=forms,
-                              length=round(ml),
+                              threshold=round(ml),
                               class=rep(stgtyp, n))
 
     lengthpars <- cbind(stagelength, pars) #putting stage length and parameter

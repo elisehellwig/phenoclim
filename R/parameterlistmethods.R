@@ -40,9 +40,9 @@ setMethod("simplified", "ParameterList",
           })
 
 
-#' Accesses the modlength vector of a ParameterList object
-#' @rdname modlength
-setMethod("modlength", "ParameterList",
+#' Accesses the threshold vector of a ParameterList object
+#' @rdname threshold
+setMethod("threshold", "ParameterList",
           function(object) {
               return(object@modlength)
           })
@@ -188,10 +188,10 @@ setValidity("ParameterList", function(object) {
 ###############################
 #replacement methods
 
-#' @rdname modlength-set
-setMethod('modlength<-', 'ParameterList',
+#' @rdname threshold-set
+setMethod('threshold<-', 'ParameterList',
           function(object, value) {
-              object@modlength <- value
+              object@threshold <- value
 
               if (validObject(object)) {
                   return(object)
