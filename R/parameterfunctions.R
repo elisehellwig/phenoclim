@@ -69,18 +69,15 @@ parnum <- function(form) {
 #'
 #' @param form character, the thermal time functional form.
 #' @param CT logical, do the cardinal temperatures need to be estimated?
-#' @param L logical, does the thermal time accumulation length need to be
+#' @param Thresh logical, does the model threshold need to be
 #'     estimated?
+#' @param End logical, does the
 #' @param lim logical list, do the start/ends need to be estimated?
 #' @return The length the bounds vectors need to be.
-boundlength <- function(form, CT, L, lim) {
+boundlength <- function(form, CT, Thresh, start, end) {
 
     #what is the maximum number of parameters any form requires?
     pn <- max(sapply(form, function(fm) parnum(fm)))
-
-    limlength <- max(sapply(lims, function(l) {
-        length(which(l))
-    }))
 
     if (limlength==0) {
         lim <- FALSE
@@ -88,20 +85,35 @@ boundlength <- function(form, CT, L, lim) {
         lim <- TRUE
     }
 
-    CT <- any(CT) #do any models need to estimate cardinal temperatures
-    L <- any(L) #do any models need to estimate threshold?
+    #lining up whether we are estimating the threshold, start, and end values
+        #for each stage, and checking to make sure we are not estimating all 3
+        #in one of the stages
+    tse <- cbind(Thresh, start, end)
+    estimateall <- apply(tse, 1, all)
 
-    logipars <- c(CT, L, lim) # vector of whether we are estimating each
+    if (any(estimateall)) {
+        stop(paste0('You are attempting to estimate the model threshold and start and end days for the following stage(s): ', paste(which(estimateall), collapse=', ' ), '. You can only estimate two of the three parameters, as the third one is defined implicitly when you define the first two.'))
+    }
+
+    CT <- any(CT) #do any models need to estimate cardinal temperatures
+    Thresh <- any(Thresh) #do any models need to estimate threshold?
+    tseLogi <- apply(tse, 1, any)
+
+    logipars <- c(CT, tseLogi) # vector of whether we are estimating each
                                 #parameter
 
     if (!any(logipars)) {
-        stop('You must at least estimate one of the following: cardinal temperatures, the model length, the model limits (start/stop days).')
-
-    } else if (L & limlength==2) {
-        stop('If you estimate length, you can only estimate start or end day, not both')
+        stop('You must at least estimate one of the following: cardinal temperatures, the model threshold, the model limits (start/stop days).')
 
     } else {
-        parslength <- sum(c(pn, 1, limlength)*logipars)
+
+        #this may cause problems later
+
+        #what is the max number of length related pars estimated in a stage
+        tsemax <- max(apply(tse, 1, sum))
+
+        #total max number of parameters we will have for any model
+        parslength <- pn*CT + tsemax
 
 
     }
