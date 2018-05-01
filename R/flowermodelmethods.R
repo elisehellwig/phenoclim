@@ -138,11 +138,11 @@ setMethod("cardinaltemps", "FlowerModel",
           })
 
 #' Accesses the model lengths of a FlowerModel object
-#' @rdname modlength
-setMethod("modlength", "FlowerModel",
+#' @rdname threshold
+setMethod("threshold", "FlowerModel",
           function(object) {
               ml <- lapply(object@parameters, function(parlist) {
-                  parlist@modlength
+                  parlist@threshold
               })
               return(ml)
           })
@@ -183,7 +183,7 @@ setValidity("FlowerModel", function(object) {
    }
 
 
-    if (length(modlength(object@parameters[[1]])) != n) {
+    if (length(threshold(object@parameters[[1]])) != n) {
         valid <- FALSE
         msg <- c(msg,
                  'The number of stages is not the same as the number of parameter value sets.')
