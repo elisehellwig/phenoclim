@@ -19,7 +19,7 @@ NULL
 #'     temperatures for a given stage of the model. If ct is a list, each
 #'     element of the list should be a vector of cardinal temperatures for a
 #'     given stage of the model.
-#' @param length numeric vector of model lengths.
+#' @param modelthreshold numeric vector of model thresholds.
 #' @param lims list of start and stop pairs. Start is always the day close to
 #'     flowering. This means that it will be the earliest day in a PlantModel,
 #'     but the latest day in a FlowerModel. If length is not NA, one of the
@@ -31,7 +31,7 @@ NULL
 #'     'PlantModel' or 'FlowerModel'.
 #' @return An object of the class ParameterList.
 #' @export
-parameterlist <- function(n, mt, simple, ff, ct, length, lims,
+parameterlist <- function(n, mt, simple, ff, ct, modelthreshold, lims,
     optimized=c('cardinaltemps','modlength'), ModelClass='PlantModel') {
 
     if (class(ct)=='list') {#if cardinal temps are in a list
@@ -40,7 +40,7 @@ parameterlist <- function(n, mt, simple, ff, ct, length, lims,
         #creat ParameterList class object
         newobject <- new('ParameterList', stages=n, modeltype=mt,
                          simplified=simple, form=ff, cardinaltemps=ct,
-                         modlength=length, parsOptimized=optimized,
+                         threshold=modelthreshold, parsOptimized=optimized,
                          mclass=ModelClass)
 
     } else if (class(ct) %in% c('data.frame', 'matrix') ) { #if ct not in list
@@ -49,7 +49,7 @@ parameterlist <- function(n, mt, simple, ff, ct, length, lims,
         #then create ParameterList class object
         newobject <- new('ParameterList', stages=n, modeltype=mt,
                          simplified=simple, form=ff, cardinaltemps=ctlist,
-                         modlength=length, parsOptimized=optimized,
+                         threshold=modelthreshold, parsOptimized=optimized,
                          mclass=ModelClass)
     } else {
         stop('ct must be of the type list, data.frame, or matrix.')
