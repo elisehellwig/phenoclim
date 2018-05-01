@@ -46,16 +46,11 @@ rmsd <- function(x, y, na.rm=FALSE) {
 
 #' Extracts temperatures from a data frame
 #'
-#' This function extracts temperature data from a data frame for specific days
-#'     in a year over a given set of years. It is used with the yearsums and
-#'     minrmse functions.
+#' This function extracts temperature data from a data frame over a given set of
+#'     years. It is used in \code(extracttemplist() ).
 #'
 #' @param tdat a data frame containing the temperature data.
 #' @param years a vector of years over which to extract temperature data.
-#' @param starts a number or vector of numbers between 1 and 365 (inclusive)
-#'     specifying what days of the year to begin the temperature data extraction.
-#' @param ends a number or vector of numbers between 1 and 365 (inclusive)
-#'     specifying what days of the year to end the temperature data extraction.
 #' @param tempname name of the column that contains the temperature data. The
 #'      function will try and detect the name of the column if tempname is left
 #'      as NA.
@@ -64,7 +59,7 @@ rmsd <- function(x, y, na.rm=FALSE) {
 #'     numeric.
 #' @return \code{extracttemp} returns a list the same length as \code{years},
 #'     where each element of the list is a vector of all the temperatures in
-#'     between \code{starts} and \code{ends} that year.
+#'     that year.
 #' @details If tempname is left as NA the function will try to detect the
 #'     correct column (either temp, tmin or tmax). However, it is safer to just
 #'     specify the correct column name.
@@ -274,24 +269,14 @@ whichtemp <- function(form, daily, hourly) {
 #' @param years numeric, the years for which temperature data is needed.
 #' @param forms list or character, the functional forms that will be used to
 #'     calculate the thermal time.
-#' @param fwd logical, is the model a forward model?
 #' @return A list of two the first contains the daily extracted temps if they
 #'     are needed (if not it contains NA) and the second element contains the
 #'     hourly extracted temps if they are needed (if not it contains NA).
 #' @export
-extracttemplist <- function(temps, years, forms, fwd) {
+extracttemplist <- function(temps, years, forms) {
 
     hforms <- c('linear','flat','anderson','triangle','asymcur') #GDH forms
     ttforms <- unlist(forms) #vector of thermal time forms we care about
-
-    if (fwd) {
-        starts <- 1
-        ends <- 365
-    } else {
-        starts <- min(temps[,'day'])
-        ends <- max(temps[,'day'])
-    }
-
 
     if ('gdd' %in% ttforms | 'gddsimple' %in% ttforms) {
         #do we care about GDD forms?
