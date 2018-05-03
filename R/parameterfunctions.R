@@ -86,6 +86,7 @@ boundlength <- function(form, CT, Thresh, start, end) {
     if (length(start)==1) {
         start <- rep(start, length(Thresh))
     }
+
     tse <- cbind(Thresh, start, end)
     estimateall <- apply(tse, 1, all)
 
