@@ -26,10 +26,10 @@ setMethod("modeltype", "ParameterList",
 
 
 #' Accesses the start day of the ParameterList object
-#' @rdname start
-setMethod("start", "ParameterList",
+#' @rdname startday
+setMethod("startday", "ParameterList",
           function(object) {
-              return(object@start)
+              return(object@startday)
           })
 
 
@@ -94,7 +94,7 @@ setValidity("ParameterList", function(object) {
 
     ct <- cardinaltemps(object)
     frm <- object@form
-    strt <- object@start
+    strt <- object@startday
     forms <- c('gdd', 'gddsimple','linear','flat', 'asymcur','anderson',
                'triangle', 'trapezoid', 'ensemble')
     lens <- c(length(ct), length(object@threshold), length(strt))
@@ -233,10 +233,10 @@ setMethod('modeltype<-', 'ParameterList',
 
 
 
-#' @rdname start-set
-setMethod('start<-', 'ParameterList',
+#' @rdname startday-set
+setMethod('startday<-', 'ParameterList',
           function(object, value) {
-              object@start <- value
+              object@startday <- value
 
               if (validObject(object)) {
                   return(object)

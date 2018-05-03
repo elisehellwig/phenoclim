@@ -28,7 +28,7 @@ Returns the returns a vector of thresholds
 
 Accesses the threshold vector of a ParameterList object
 
-Accesses the model lengths of a plant object
+Accesses the model thresholds of a plant object
 
 Accesses the model lengths of a FlowerModel object
 }

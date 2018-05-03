@@ -15,7 +15,7 @@
 #'     cardinal parameters.
 #' @slot threshold vector. Stores the threshold of time or thermal time that is
 #'     accumulated in the model. Set to NA to run the base (simplified) model.
-#' @slot start numeric, stores the start day for accumulating time or thermal
+#' @slot startday numeric, stores the start day for accumulating time or thermal
 #'     time. If NA, model starts at event1 (bloom) for PlantModel and event0
 #'     (harvest) for FlowerModel.
 #' @slot parsOptimized character. Determines what parameters are optimized in
@@ -30,7 +30,7 @@ setClass('ParameterList',
                     form = 'character',
          	        cardinaltemps = "list",
                     threshold = "vector",
-                    start = 'vector',
+                    startday = 'vector',
                     parsOptimized = 'character',
                     mclass='character'))
 
@@ -67,7 +67,7 @@ setGeneric('threshold', function(object) standardGeneric('threshold'))
 #' @return A vector of the start days or NAs for starting at bloom for
 #'     PlantModels and harvest for FlowerModels
 #' @export
-setGeneric('start', function(object) standardGeneric('start'))
+setGeneric('startday', function(object) standardGeneric('startday'))
 
 
 
@@ -123,8 +123,8 @@ setGeneric('threshold<-', function(object, value) {
 #' @param value A vector of start days for the model or NAs for starting at
 #'     bloom for PlantModels and harvest for FlowerModels
 #' @export
-setGeneric('start<-', function(object, value) {
-    standardGeneric('start<-')})
+setGeneric('startday<-', function(object, value) {
+    standardGeneric('startday<-')})
 
 
 

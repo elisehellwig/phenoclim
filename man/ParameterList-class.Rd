@@ -28,7 +28,7 @@ cardinal parameters.}
 \item{\code{threshold}}{vector. Stores the threshold of time or thermal time that is
 accumulated in the model. Set to NA to run the base (simplified) model.}
 
-\item{\code{start}}{numeric, stores the start day for accumulating time or thermal
+\item{\code{startday}}{numeric, stores the start day for accumulating time or thermal
 time. If NA, model starts at event1 (bloom) for PlantModel and event0
 (harvest) for FlowerModel.}
 

@@ -138,7 +138,7 @@ setMethod("cardinaltemps", "PlantModel",
               return(ct)
           })
 
-#' Accesses the model lengths of a plant object
+#' Accesses the model thresholds of a plant object
 #' @rdname threshold
 setMethod("threshold", "PlantModel",
           function(object) {
@@ -147,6 +147,18 @@ setMethod("threshold", "PlantModel",
               })
               return(ml)
           })
+
+
+#' Accesses the start days of a plant object
+#' @rdname startday
+setMethod("startday", "PlantModel",
+          function(object) {
+              ml <- lapply(object@parameters, function(parlist) {
+                  parlist@startday
+              })
+              return(ml)
+          })
+
 
 #' Accesses what parameters are to be optimized
 #' @rdname parsOptimized
