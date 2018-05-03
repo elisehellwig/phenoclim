@@ -4,7 +4,7 @@
 \alias{thermalsum}
 \title{Calculates thermal time sums}
 \usage{
-thermalsum(pars, fdat, tdat, modtype, form, length, stage, stgtype)
+thermalsum(pars, fdat, tdat, modtype, form, length, lims, stage, mclass)
 }
 \arguments{
 \item{pars}{Cardinal temperatures}
@@ -18,15 +18,16 @@ either DT (Day Threshold) or TTT (Thermal Time Threshold).}
 
 \item{form}{the functional form of the thermal time accumulation}
 
-\item{length}{the length of thermal time accumulation (in days). It can be
-either a set length of time (one number) or the total length of the
-stage (one length for each entry in fdat).}
+\item{length}{numeric, the length of thermal time accumulation (in days). It
+can be either a set length of time (one number) or the total length of
+the stage (one length for each entry in fdat).}
+
+\item{lims}{numeric, start stop pair if no length or start day.}
 
 \item{stage}{the number of the stage of the phenological model}
 
-\item{stgtype}{character, type of model to be estimating, options are
-'PlantModel' or 'FlowerModel'. If you have negative day values, you
-probably want flower model.}
+\item{mclass}{character, type of model to be estimating, options are
+'PlantModel' or 'FlowerModel'.}
 }
 \value{
 The thermal sums for a given series of years.

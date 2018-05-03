@@ -15,32 +15,37 @@ NULL
 #' @param length the length of thermal time accumulation (in days). It can be
 #'     either a set length of time (one number) or the total length of the
 #'     stage (one length for each entry in fdat).
+#' @param lims numeric, start/stop pair if no length or start day.
 #' @param stage the number of the stage of the phenological model.
-#' @param stgtype character, type of model to be estimating, options are
+#' @param mclass character, class of model to be estimating, options are
 #'     'PlantModel' or 'FlowerModel'. If you have negative day values, you
 #'     probably want flower model.
 #' @return The thermal sums for a given series of years.
-DTsum <- function(pars, fdat, tdat, form, length, stage, stgtype) {
+DTsum <- function(pars, fdat, tdat, form, length, lims, stage, mclass) {
 
 
-    if (stgtype=='FlowerModel') {
+    if (mclass=='FlowerModel') {
+        start <- 1 # all FMs start at 1 because we use an index
 
 
-    } else {
-        if (length(length)>1) {
-            start <- length[1] #the day of the starting event
-            end <- length[2]
+        if (any(is.na(lims))) { #if both limits aren't present
+                                #we end at flowering
+            yrlen <- ifelse(is.leapyear(fdat$year), 366, 365) #year lengths
+            shift <- yrlen - which(!is.na(lims))#What is the shift?
+            end <- fdat[,'event1'] + shift # index of day of flowering
         } else {
-            #the day of the starting event
-            start <- fdat[, paste0('event',stage)]
-
-            #the start + the length of the model/threshold
-            end <- start+length
 
         }
-    }
+        end <- length #otherwise we end at the end of the length
 
+    } else {
+        #the day of the starting event
+        start <- fdat[, paste0('event',stage)]
 
+        #the start + the length of the model/threshold
+        end <- start+length
+
+        }
 
 	# for walnut
 	#fdat is data for the 'fruit'
@@ -56,9 +61,9 @@ DTsum <- function(pars, fdat, tdat, form, length, stage, stgtype) {
         start <- (start*24)-23 #convert days to hours
 
         if (stgtype=='PlantModel') {# convert days to hours
-            end <- start+length*24
+            end <- start+length*24 #adding for plant model
         } else {
-            end <- start-length*24
+            end <- start-length*24 #subtracting for flower model
         }
 
         #create the index of hours we want temperatures for
@@ -188,27 +193,27 @@ TTTsum <- function(pars, fdat, tdat, form, length, stage, forward) {
 #' @param modtype character, specifies what type of model is being run. Can be
 #'     either DT (Day Threshold) or TTT (Thermal Time Threshold).
 #' @param form the functional form of the thermal time accumulation
-#' @param length the length of thermal time accumulation (in days). It can be
-#'     either a set length of time (one number) or the total length of the
-#'     stage (one length for each entry in fdat).
+#' @param length numeric, the length of thermal time accumulation (in days). It
+#'     can be either a set length of time (one number) or the total length of
+#'     the stage (one length for each entry in fdat).
+#' @param lims numeric, start stop pair if no length or start day.
 #' @param stage the number of the stage of the phenological model
-#' @param stgtype character, type of model to be estimating, options are
-#'     'PlantModel' or 'FlowerModel'. If you have negative day values, you
-#'     probably want flower model.
+#' @param mclass character, type of model to be estimating, options are
+#'     'PlantModel' or 'FlowerModel'.
 #' @return The thermal sums for a given series of years.
 #' @export
-thermalsum <- function(pars, fdat, tdat, modtype, form, length, stage,
-                       stgtype) {
+thermalsum <- function(pars, fdat, tdat, modtype, form, length, lims, stage,
+                       mclass) {
 
     if (!(is.numeric(length) | is.integer(length))) {
         stop('Length must be numeric or an integer')
     }
 
     if (modtype=='DT') {
-        ths <- DTsum(pars, fdat, tdat, form, length, stage, stgtype)
+        ths <- DTsum(pars, fdat, tdat, form, length, lims, stage, mclass)
 
     } else if (modtype=='TTT') {
-        ths <- TTTsum(pars, fdat, tdat, form, length, stage, stgtype)
+        ths <- TTTsum(pars, fdat, tdat, form, length, lims, stage, mclass)
         #print(ths)
 
     } else {

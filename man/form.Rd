@@ -22,7 +22,7 @@ form(object)
 }
 \value{
 character, the name of the functional form of the model of thermal
-    time accumulation.
+    time.
 }
 \description{
 Returns the functional form

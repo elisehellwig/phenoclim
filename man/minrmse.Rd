@@ -4,8 +4,8 @@
 \alias{minrmse}
 \title{Calculates model RMSE}
 \usage{
-minrmse(pars, fdat, tdat, modtype, form, stage, CT, L, simple, startday,
-  stgtype)
+minrmse(pars, fdat, tdat, modtype, form, stage, CT, TH, simple, startday,
+  modclass)
 }
 \arguments{
 \item{pars}{vector with threshold value and cardinal temperatures}
@@ -24,15 +24,15 @@ threshold) or 'TTT' (thermal time threshold)}
 \item{CT}{logical, should the cardinal temperatures be optimized. If not CT
 is the vector of cardinal temperatures}
 
-\item{L}{logical, should the model accumulation length be optimized. If not L
-is the (numeric) model accumulation length.}
+\item{TH}{logical, should the model accumulation threshold be optimized. If
+not L is the (numeric) model accumulation threshold.}
 
 \item{simple}{logical, should the simplified version of the model be run?}
 
 \item{startday}{logical, is the day to start counting being optimized? (ie.
 not using bloom as startday)}
 
-\item{stgtype}{logical, Do count forward from the starting event (as
+\item{modclass}{logical, Do count forward from the starting event (as
 opposed to backward)? If you have negative values in your event days
 you forward should probably be FALSE. Bloom model forward=false, harvest
 model forward=true.}

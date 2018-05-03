@@ -4,7 +4,7 @@
 \alias{extracttemplist}
 \title{Extracts the right templist based on the forms provided}
 \usage{
-extracttemplist(temps, years, forms, fwd)
+extracttemplist(temps, years, forms)
 }
 \arguments{
 \item{temps}{data.frame, where all the temperature data is stored.}
@@ -13,8 +13,6 @@ extracttemplist(temps, years, forms, fwd)
 
 \item{forms}{list or character, the functional forms that will be used to
 calculate the thermal time.}
-
-\item{fwd}{logical, is the model a forward model?}
 }
 \value{
 A list of two the first contains the daily extracted temps if they

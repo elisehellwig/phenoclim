@@ -35,8 +35,8 @@ evolution optimization of the phenological parameters.}
 \item{ensemble}{logical, should an ensemble prediction be used? NOT
 currently implemented.}
 
-\item{startday}{logical, is the day to start counting being optimized? (ie.
-not using bloom as startday)}
+\item{stopcount}{logical, is the day to stop accumulating time or TT to be
+optimized? (ie. not using bloom as when we stop counting)}
 }
 \value{
 A PlantModel object.

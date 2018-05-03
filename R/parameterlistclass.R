@@ -27,7 +27,6 @@
 setClass('ParameterList',
          slots=list(stages='numeric',
                     modeltype='character',
-                    simplified='logical',
                     form = 'character',
          	        cardinaltemps = "list",
                     threshold = "vector",
@@ -68,7 +67,7 @@ setGeneric('threshold', function(object) standardGeneric('threshold'))
 #' @return A vector of the start days or NAs for starting at bloom for
 #'     PlantModels and harvest for FlowerModels
 #' @export
-setGeneric('start', function(object) standardGeneric('limits'))
+setGeneric('start', function(object) standardGeneric('start'))
 
 
 

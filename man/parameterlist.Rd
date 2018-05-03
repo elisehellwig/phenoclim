@@ -4,7 +4,7 @@
 \alias{parameterlist}
 \title{Creates ParameterList object}
 \usage{
-parameterlist(n, mt, simple, ff, ct, length, lims,
+parameterlist(n, mt, simple, ff, ct, modelthreshold, lims,
   optimized = c("cardinaltemps", "modlength"), ModelClass = "PlantModel")
 }
 \arguments{
@@ -24,7 +24,7 @@ temperatures for a given stage of the model. If ct is a list, each
 element of the list should be a vector of cardinal temperatures for a
 given stage of the model.}
 
-\item{length}{numeric vector of model lengths.}
+\item{modelthreshold}{numeric vector of model thresholds.}
 
 \item{lims}{list of start and stop pairs. Start is always the day close to
 flowering. This means that it will be the earliest day in a PlantModel,

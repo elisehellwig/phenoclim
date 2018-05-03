@@ -25,18 +25,11 @@ setMethod("modeltype", "ParameterList",
           })
 
 
-#' Accesses the model limits of the ParameterList object
-#' @rdname limits
-setMethod("limits", "ParameterList",
+#' Accesses the start day of the ParameterList object
+#' @rdname start
+setMethod("start", "ParameterList",
           function(object) {
-              return(object@limits)
-          })
-
-#' Accesses whether the model in the ParameterList object is simplified
-#' @rdname simplified
-setMethod("simplified", "ParameterList",
-          function(object) {
-              return(object@simplified)
+              return(object@start)
           })
 
 
@@ -101,13 +94,10 @@ setValidity("ParameterList", function(object) {
 
     ct <- cardinaltemps(object)
     frm <- object@form
-    lims <- object@limits
+    strt <- object@start
     forms <- c('gdd', 'gddsimple','linear','flat', 'asymcur','anderson',
                'triangle', 'trapezoid', 'ensemble')
-    lens <- c(length(ct), length(object@modlength), length(object@limits))
-    limlenlog <- sapply(lims, function(l) {
-        if (length(l)==2) FALSE else TRUE
-    })
+    lens <- c(length(ct), length(object@threshold), length(strt))
 
     if (any(ifelse(frm %in% forms, FALSE, TRUE))) {
         valid <- FALSE
@@ -123,14 +113,13 @@ setValidity("ParameterList", function(object) {
     if (abs(max(lens) - min(lens)) > 0.001) {
         valid <- FALSE
         msg <- c(msg,
-                 'The number of accumulation lengths, of start/stop pairs, of parameter sets are not the same.')
+                 'The number of thresholds, starts, and cardinal temp sets are not the same.')
     }
 
-    if (any(limlenlog)) {
+    if (!is.numeric(strt) | is.integer(strt)) {
         valid <- FALSE
-        msg <- c(msg, 'Every element of limits must be of length 2, even if they are both NAs.')
+        msg <- c(msg, 'The start value must be numeric or an integer.')
     }
-
 
     ensemblefrm <- which(frm=='ensemble')
     ctnum <- sapply(ct, function(v) length(v))
@@ -153,11 +142,11 @@ setValidity("ParameterList", function(object) {
         msg <- c(msg, 'The number of parameters does not fit the model form.')
     }
 
-    pO <- c('cardinaltemps','modlength')
+    pO <- c('cardinaltemps','threshold','start')
 
     if (all(ifelse(parsOptimized(object) %in% pO, FALSE, TRUE))) {
         valid <- FALSE
-        msg <- c(msg, "estimate must include at least one of 'cardinaltemps' or 'modelength'. ")
+        msg <- c(msg, "estimate must include at least one of 'cardinaltemps' or 'start', or 'threshold'. ")
     }
 
     classtype <- mclass(object)
@@ -244,27 +233,16 @@ setMethod('modeltype<-', 'ParameterList',
 
 
 
-#' @rdname limits-set
-setMethod('limits<-', 'ParameterList',
+#' @rdname start-set
+setMethod('start<-', 'ParameterList',
           function(object, value) {
-              object@limits <- value
+              object@start <- value
 
               if (validObject(object)) {
                   return(object)
               }
           })
 
-
-
-#' @rdname simplified-set
-setMethod('simplified<-', 'ParameterList',
-          function(object, value) {
-              object@simplified <- value
-
-              if (validObject(object)) {
-                  return(object)
-              }
-          })
 
 
 #' @rdname parsOptimized-set

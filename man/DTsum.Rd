@@ -4,7 +4,7 @@
 \alias{DTsum}
 \title{Calculates thermal time sums for DT model}
 \usage{
-DTsum(pars, fdat, tdat, form, length, stage, stgtype)
+DTsum(pars, fdat, tdat, form, length, lims, stage, mclass)
 }
 \arguments{
 \item{pars}{Cardinal temperatures}
@@ -19,9 +19,11 @@ DTsum(pars, fdat, tdat, form, length, stage, stgtype)
 either a set length of time (one number) or the total length of the
 stage (one length for each entry in fdat).}
 
+\item{lims}{numeric, start/stop pair if no length or start day.}
+
 \item{stage}{the number of the stage of the phenological model.}
 
-\item{stgtype}{character, type of model to be estimating, options are
+\item{mclass}{character, class of model to be estimating, options are
 'PlantModel' or 'FlowerModel'. If you have negative day values, you
 probably want flower model.}
 }

@@ -12,12 +12,6 @@ extracttemp(tdat, years, starts, ends, tempname = NA, yearname = "year",
 
 \item{years}{a vector of years over which to extract temperature data.}
 
-\item{starts}{a number or vector of numbers between 1 and 365 (inclusive)
-specifying what days of the year to begin the temperature data extraction.}
-
-\item{ends}{a number or vector of numbers between 1 and 365 (inclusive)
-specifying what days of the year to end the temperature data extraction.}
-
 \item{tempname}{name of the column that contains the temperature data. The
 function will try and detect the name of the column if tempname is left
 as NA.}
@@ -30,12 +24,11 @@ numeric.}
 \value{
 \code{extracttemp} returns a list the same length as \code{years},
     where each element of the list is a vector of all the temperatures in
-    between \code{starts} and \code{ends} that year.
+    that year.
 }
 \description{
-This function extracts temperature data from a data frame for specific days
-    in a year over a given set of years. It is used with the yearsums and
-    minrmse functions.
+This function extracts temperature data from a data frame over a given set of
+    years. It is used in \code(extracttemplist() ).
 }
 \details{
 If tempname is left as NA the function will try to detect the

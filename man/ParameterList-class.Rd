@@ -16,9 +16,6 @@ ParameterList stores parameters for running the phenological models
 are 'DT' for Day threshold and 'TTT' for thermal time threshold. See ____
 for more information.}
 
-\item{\code{simplified}}{logical. Should the simplified version of the model type be
-used.}
-
 \item{\code{form}}{character. The functional form of the thermal time accumulation
 model. Current options are gdd, gddsimple, linear, flat, triangle, and
 anderson.}
@@ -28,16 +25,17 @@ list that should either be of length one or the length of the number of
 stages. Each element of the list should contain the same number of
 cardinal parameters.}
 
-\item{\code{modlength}}{vector. Stores the length of time or thermal time that is
-accumulated in the model.}
+\item{\code{threshold}}{vector. Stores the threshold of time or thermal time that is
+accumulated in the model. Set to NA to run the base (simplified) model.}
 
-\item{\code{limits}}{list. Stores the start/stop pairs if modlength is NA. Otherwise
-stores the start with NA.}
+\item{\code{start}}{numeric, stores the start day for accumulating time or thermal
+time. If NA, model starts at event1 (bloom) for PlantModel and event0
+(harvest) for FlowerModel.}
 
 \item{\code{parsOptimized}}{character. Determines what parameters are optimized in
 the model. `parsOptimized` is a character vector that can contain
-"cardinaltemps", "modlength" or both, but it must contain at least one
-of the two. Currently this cannot vary by stage.}
+"cardinaltemps", "threshold", "start" but it must contain at
+least one (or else why optimize). Currently this cannot vary by stage.}
 
 \item{\code{mclass}}{character. Is this a parameter list going to be used to
 fit a 'PlantModel' or a 'FlowerModel'.}
