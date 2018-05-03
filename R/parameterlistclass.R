@@ -6,8 +6,6 @@
 #' @slot modeltype character. The type of phenological model to be used. Options
 #'     are 'DT' for Day threshold and 'TTT' for thermal time threshold. See ____
 #'     for more information.
-#' @slot simplified logical. Should the simplified version of the model type be
-#'      used.
 #' @slot form character. The functional form of the thermal time accumulation
 #'     model. Current options are gdd, gddsimple, linear, flat, triangle, and
 #'     anderson.
@@ -15,14 +13,15 @@
 #'     list that should either be of length one or the length of the number of
 #'     stages. Each element of the list should contain the same number of
 #'     cardinal parameters.
-#' @slot modlength vector. Stores the length of time or thermal time that is
-#'     accumulated in the model.
-#' @slot limits list. Stores the start/stop pairs if modlength is NA. Otherwise
-#'     stores the start with NA.
+#' @slot threshold vector. Stores the threshold of time or thermal time that is
+#'     accumulated in the model. Set to NA to run the base (simplified) model.
+#' @slot start numeric, stores the start day for accumulating time or thermal
+#'     time. If NA, model starts at event1 (bloom) for PlantModel and event0
+#'     (harvest) for FlowerModel.
 #' @slot parsOptimized character. Determines what parameters are optimized in
 #'      the model. `parsOptimized` is a character vector that can contain
-#'      "cardinaltemps", "threshold", and "end", but it must contain at least
-#'      one (or else why optimize). Currently this cannot vary by stage.
+#'      "cardinaltemps", "threshold", "start" but it must contain at
+#'      least one (or else why optimize). Currently this cannot vary by stage.
 #' @slot mclass character. Is this a parameter list going to be used to
 #'     fit a 'PlantModel' or a 'FlowerModel'.
 setClass('ParameterList',
@@ -32,7 +31,7 @@ setClass('ParameterList',
                     form = 'character',
          	        cardinaltemps = "list",
                     threshold = "vector",
-                    limits = 'list',
+                    start = 'vector',
                     parsOptimized = 'character',
                     mclass='character'))
 
@@ -55,28 +54,21 @@ setGeneric('stages', function(object) standardGeneric('stages'))
 #' @export
 setGeneric('modeltype', function(object) standardGeneric('modeltype'))
 
-#' Is the model simplified?
+
+#' Returns the returns a vector of thresholds
 #'
 #' @param object An object of class ParameterList
-#' @return logical, is the simplified version of the model being fit? See ____
-#'      for more information.
-#' @export
-setGeneric('simplified', function(object) standardGeneric('simplified'))
-
-
-#' Returns the returns a vector of accumulation lengths
-#'
-#' @param object An object of class ParameterList
-#' @return The time or thermal time threshold of the model.
+#' @return The time or thermal time thresholds for the model.
 #' @export
 setGeneric('threshold', function(object) standardGeneric('threshold'))
 
-#' Returns the returns a vector of start/stop pairs
+#' Returns the returns a vector of start days
 #'
 #' @param object An object of class ParameterList
-#' @return A list of the start/stop pairs of the model
+#' @return A vector of the start days or NAs for starting at bloom for
+#'     PlantModels and harvest for FlowerModels
 #' @export
-setGeneric('limits', function(object) standardGeneric('limits'))
+setGeneric('start', function(object) standardGeneric('limits'))
 
 
 
@@ -91,7 +83,7 @@ setGeneric('cardinaltemps', function(object) standardGeneric('cardinaltemps'))
 #'
 #' @param object An object of class ParameterList
 #' @return character, the name of the functional form of the model of thermal
-#'     time accumulation.
+#'     time.
 #' @export
 setGeneric('form', function(object) standardGeneric('form'))
 
@@ -124,16 +116,16 @@ setGeneric('threshold<-', function(object, value) {
     standardGeneric('threshold<-')})
 
 
-#' Setting the modlength
+#' Setting the start day of the model
 #'
-#' Used to change the limits without recreating the object.
+#' Used to change the start day without recreating the object.
 #'
 #' @param object An object of class ParameterList
-#' @param value A list of start/stop pairs
-#'
+#' @param value A vector of start days for the model or NAs for starting at
+#'     bloom for PlantModels and harvest for FlowerModels
 #' @export
-setGeneric('limits<-', function(object, value) {
-    standardGeneric('limits<-')})
+setGeneric('start<-', function(object, value) {
+    standardGeneric('start<-')})
 
 
 
@@ -193,18 +185,6 @@ setGeneric('stages<-', function(object, value) standardGeneric('stages<-'))
 #'     for more information.
 #' @export
 setGeneric('modeltype<-', function(object, value) standardGeneric('modeltype<-'))
-
-
-#' Setting whether the model is simplified
-#'
-#'  Used to change whether or not the model is simplified without recreating the
-#'       object.
-#'
-#' @param object An object of class ParameterList
-#' @param value logical, is the model simplified?
-#' @export
-setGeneric('simplified<-', function(object, value) {
-    standardGeneric('simplified<-')} )
 
 
 #' Setting stages as PlantModels or a FlowerModels
