@@ -3,6 +3,7 @@
 #' @docType package
 #' @name phenoclim
 #'
+#' @import ehelpr
 #' @importFrom methods setClass setGeneric setMethod new validObject
 #' @importFrom plyr ldply
 #' @importFrom reshape2 melt
@@ -10,6 +11,5 @@
 #' @importFrom parallel mclapply
 #' @importFrom stats fitted formula lm predict
 #' @importFrom dismo kfold
-#' @importFrom utils head
 #' @importFrom lubridate leap_year
 NULL

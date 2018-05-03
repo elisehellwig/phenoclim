@@ -1,43 +1,3 @@
-#' Calculates the Root Mean Squared Deviation/Error
-#'
-#' This function calculates the root mean squared error/deviation (RMSD/E)
-#'     between two vectors of numbers.
-#'
-#' @param x numeric, the first vector
-#' @param y numeric, the second vector
-#' @param na.rm logical, should NAs be removed from the vectors?
-#' @return This function returns the RMSD of the two vectors.
-#' @examples
-#' a <- rnorm(10)
-#' b <- rnorm(10)
-#' rmsd(a,b)
-#' @export
-rmsd <- function(x, y, na.rm=FALSE) {
-
-    if (length(x)!=length(y)) { #make sure vectors are the same length
-        stop('Vectors x and y must be of equal length.')
-    }
-
-
-    if (na.rm) {
-
-        xrows <- which(is.na(x)) #identifying the NAs in both vectors
-        yrows <- which(is.na(y))
-
-        rows <- union(xrows, yrows) #getting all the rows with NAs
-
-        x1 <- x[-rows] #removing all the rows with NAs from both x and y
-        y1 <- y[-rows]
-
-    } else {
-        x1 <- x
-        y1 <- y
-    }
-
-    rmsd <- sqrt(sum((x1-y1)^2)/length(x1)) #calculating the RMSD
-
-    return(rmsd)
-}
 
 
 
@@ -298,20 +258,5 @@ extracttemplist <- function(temps, years, forms) {
     }
 
     return(list(daytemplist, hourtemplist))
-}
-
-#' Return the First of an Object
-#' @param x a list that you want to see the first n entries of
-#' @param n integer, number of entries of the list you want to see
-#' @param ... anything else you can past to head
-#' @rdname head
-#' @export
-head.list <- function(x, n=6L, ...) {
-    stopifnot(length(n) == 1L)
-    origN <- n
-    n <- if (n < 0L)
-        max(length(x) + n, 0L)
-    else min(n, length(x))
-    lapply(x[seq_len(n)], head, origN, ...)
 }
 

@@ -1,14 +1,15 @@
 Package: phenoclim
 Type: Package
 Title: Phenological Analysis in R
-Version: 0.6.0
+Version: 0.8.0
 Imports:
     plyr,
     reshape2,
     methods,
     DEoptim,
     parallel,
-    dismo
+    dismo,
+    ehelpr
 Authors@R: person("Elise", "Hellwig",
                   email = "echellwig@ucdavis.edu", role = c("aut", "cre"))
 URL: https://bitbucket.org/echellwig/phenoclim
