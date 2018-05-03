@@ -79,15 +79,13 @@ boundlength <- function(form, CT, Thresh, start, end) {
     #what is the maximum number of parameters any form requires?
     pn <- max(sapply(form, function(fm) parnum(fm)))
 
-    if (limlength==0) {
-        lim <- FALSE
-    } else {
-        lim <- TRUE
-    }
-
     #lining up whether we are estimating the threshold, start, and end values
         #for each stage, and checking to make sure we are not estimating all 3
         #in one of the stages
+
+    if (length(start)==1) {
+        start <- rep(start, length(Thresh))
+    }
     tse <- cbind(Thresh, start, end)
     estimateall <- apply(tse, 1, all)
 
