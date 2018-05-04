@@ -4,8 +4,8 @@
 \alias{objectivePlant}
 \title{Generates the Objective function for a PlantModel}
 \usage{
-objectivePlant(parlist, phenology, templist, stage, CT, Threshold, simple,
-  listindex, startday)
+objectivePlant(parlist, phenology, templist, stage, CT, Start, Threshold,
+  listindex)
 }
 \arguments{
 \item{parlist}{ParameterList, contains all of the parlist needed to
@@ -22,17 +22,15 @@ thermal time.}
 \item{CT}{Should the cardinal temperatures be optimized? If yes CT is TRUE,
 if not CT should be a vector of the cardinal temperatures.}
 
+\item{Start}{logical/numeric, is the day to start counting being optimized?
+If it is, put TRUE, if not Start should be the starting day to be used.}
+
 \item{Threshold}{logical, Should model threshold be optimized? If yes,
 Threshold is TRUE, if not Threshold should be the model threshold to be
 used.}
 
-\item{simple}{logical, is the simplified version of the model being run?}
-
 \item{listindex}{numeric, the index of the ParameterList from parlist that
 you are at}
-
-\item{startday}{logical, is the day to start counting being optimized? (ie.
-not using bloom as startday)}
 }
 \value{
 the function that is passed to DEoptim to optimize.

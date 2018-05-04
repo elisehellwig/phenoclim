@@ -4,19 +4,17 @@
 \alias{boundlength}
 \title{Length of the bounds variables}
 \usage{
-boundlength(form, CT, Thresh, start, end)
+boundlength(form, CT, Start, Thresh)
 }
 \arguments{
 \item{form}{character, the thermal time functional form.}
 
 \item{CT}{logical, do the cardinal temperatures need to be estimated?}
 
+\item{Start}{logical, does the start day need to be estimated?}
+
 \item{Thresh}{logical, does the model threshold need to be
 estimated?}
-
-\item{End}{logical, does the}
-
-\item{lim}{logical list, do the start/ends need to be estimated?}
 }
 \value{
 The length the bounds vectors need to be.

@@ -4,8 +4,7 @@
 \alias{minrmse}
 \title{Calculates model RMSE}
 \usage{
-minrmse(pars, fdat, tdat, modtype, form, stage, CT, TH, simple, startday,
-  modclass)
+minrmse(pars, fdat, tdat, modtype, form, stage, CT, S, TH, simple, modclass)
 }
 \arguments{
 \item{pars}{vector with threshold value and cardinal temperatures}
@@ -22,15 +21,15 @@ threshold) or 'TTT' (thermal time threshold)}
 \item{stage}{the number of the stage of the phenological model}
 
 \item{CT}{logical, should the cardinal temperatures be optimized. If not CT
-is the vector of cardinal temperatures}
+is the vector of cardinal temperatures.}
+
+\item{S}{logical, is the day to start counting being optimized? (ie.
+not using bloom as startday for PlantModels and Harvest for FlowerModels)}
 
 \item{TH}{logical, should the model accumulation threshold be optimized. If
 not L is the (numeric) model accumulation threshold.}
 
 \item{simple}{logical, should the simplified version of the model be run?}
-
-\item{startday}{logical, is the day to start counting being optimized? (ie.
-not using bloom as startday)}
 
 \item{modclass}{logical, Do count forward from the starting event (as
 opposed to backward)? If you have negative values in your event days
