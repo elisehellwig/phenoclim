@@ -12,11 +12,42 @@ In order to specify the type of model you would like to run you will need to spe
 1. Start counting chill/heat at harvest. Count it for X days. Use the amount of chill/heat counted to predict flowering. Parameters:
     * variablepars = c('start', 'threshold')
     * startday = 0
-2. Start counting chill/heat at harvest. Then count it until X day of the year. Use the amount of chill/heat to predict flowering. Parameters
+    * threshold = X
+2. Start counting chill/heat at harvest. Then count it until X day of the year. Use the amount of chill/heat to predict flowering. Parameters:
     * variablepars = c('start')
-    * startday=0
+    * startday = 0
+    * threshold = X
 3. Start counting chill/heat X days after harvest. Then count it for Y days. Use the amount of chill/heat accumulated to predict flowering. Parameters:
-    *
+    * variablepars = c('start', 'threshold')
+    * startday = X
+    * threshold = Y
+4. Start counting chill/heat X days after harvest. Then count it until the Y day of the year. Use the amount of chill/heat accumulated to predict flowering. Parameters:
+    * variablepars = c(start)
+    * start = X
+    * threshold = Y
+5. Start counting chill/heat on X day of the year. Then count until Y day of the year. Use the amount of chill/heat accumulated to predict flowering. Parameters:
+    * variablepars = NA
+    * start = X
+    * threshold = Y
+
+###Chill/Heat Threshold Model (modeltype='TTT')
+1. Start counting days at harvest. Count days until you have accumulated X amount of chill/heat. Use the days counted to predict flowering. Parameters:
+    * variablepars = c('start')
+    * start = 0
+    * threshold = X
+2. Start counting days X days after harvest. Count days until you have accumulated Y amount of chill/heat. Use the days counted to predict flowering. Parameters:
+    * variablepars = c('start')
+    * start = X
+    * threshold = Y
+3. Start counting days on X day of the year. Count days until you have accumulated Y amount of chill/heat. Use the days counted to predict flowering. Parameters:
+    * variablepars = NA
+    * startday = X
+    * threshold = Y
+
+
+## Parameters for Modeling Stage Length
+    
+
 
 
 
