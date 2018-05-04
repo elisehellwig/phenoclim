@@ -4,7 +4,8 @@
 \alias{minrmse}
 \title{Calculates model RMSE}
 \usage{
-minrmse(pars, fdat, tdat, modtype, form, stage, CT, S, TH, simple, modclass)
+minrmse(pars, fdat, tdat, modtype, form, stage, CT, S, TH, simple, stgype,
+  modclass)
 }
 \arguments{
 \item{pars}{vector with threshold value and cardinal temperatures}
@@ -35,6 +36,8 @@ not L is the (numeric) model accumulation threshold.}
 opposed to backward)? If you have negative values in your event days
 you forward should probably be FALSE. Bloom model forward=false, harvest
 model forward=true.}
+
+\item{stgtype}{character, what is the type of model (TTT or DT)}
 }
 \value{
 The RMSE value for a given set of cardinal temperatures and thermal

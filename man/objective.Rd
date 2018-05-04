@@ -19,16 +19,13 @@ thermal time.}
 
 \item{stage}{numeric, the stage of the model.}
 
-\item{CT}{Should the cardinal temperatures be optimized? If yes CT is TRUE,
-if not CT should be a vector of the cardinal temperatures.}
+\item{CT}{Should the cardinal temperatures be optimized?}
 
 \item{Start}{logical, Should model start day be optimized? If yes,
-Start is TRUE, if not Start should be the start day to be
-used.}
+Start is TRUE.}
 
-\item{Threshold}{logical, Should model threshold be optimized? If yes,
-Threshold is TRUE, if not Threshold should be the model threshold to be
-used.}
+\item{Threshold}{logical, Should model threshold be optimized? If yes, it is
+TRUE}
 
 \item{listindex}{numeric, the index of the ParameterList from parlist that
 you are at}

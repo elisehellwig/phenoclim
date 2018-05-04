@@ -5,7 +5,7 @@
 \title{Fits phenological models}
 \usage{
 flowermodel(phenology, temps, parlist, lbounds, ubounds, cores = 1L,
-  iterations = 200, ensemble = FALSE, startday = TRUE)
+  iterations = 200, ensemble = FALSE)
 }
 \arguments{
 \item{phenology}{data.frame, contains the phenological data.
@@ -34,9 +34,6 @@ evolution optimization of the phenological parameters.}
 
 \item{ensemble}{logical, should an ensemble prediction be used? NOT
 currently implemented.}
-
-\item{stopcount}{logical, is the day to stop accumulating time or TT to be
-optimized? (ie. not using bloom as when we stop counting)}
 }
 \value{
 A PlantModel object.
