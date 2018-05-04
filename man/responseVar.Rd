@@ -4,13 +4,13 @@
 \alias{responseVar}
 \title{Returns response variable name}
 \usage{
-responseVar(Model, stage)
+responseVar(ModelClass, stage)
 }
 \arguments{
-\item{stage}{numeric, what stage is the is the model predicting for.}
-
 \item{ModelClass}{character, the type of model used, either PlantModel or
 FlowerModel}
+
+\item{stage}{numeric, what stage is the is the model predicting for.}
 }
 \value{
 The name of the response variable as a character.
