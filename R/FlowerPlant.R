@@ -11,7 +11,7 @@
 #'     FlowerModel
 #' @param stage numeric, what stage is the is the model predicting for.
 #' @return The name of the response variable as a character.
-responseVar <- function(Model, stage) {
+responseVar <- function(ModelClass, stage) {
 
      if (ModelClass=='PlantModel') {#set name of response variable
         respVar <- paste0('length', stage)
