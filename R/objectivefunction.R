@@ -49,6 +49,10 @@ objective <- function(parlist, phenology, templist, stage, CT, Start,
     #is the threshold estimated
     if (!Threshold) th <- threshold(PL)[stage] else th <- Threshold
 
+    if (is.na(th)) {
+        stop('the variable th cannot be NA at this point. Something went wrong')
+    }
+
     #are the cardinal temps estimated
     if (!CT) ct <- cardinaltemps(PL)[[stage]] else ct <- CT
 

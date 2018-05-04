@@ -173,52 +173,56 @@ minrmseTTT <- function(pars, fdat, tdat, form, length, stage, stgtype) {
 #' @param form the functional form of the thermal time accumulation
 #' @param stage the number of the stage of the phenological model
 #' @param CT logical, should the cardinal temperatures be optimized. If not CT
-#'     is the vector of cardinal temperatures
-#' @param L logical, should the model accumulation length be optimized. If not L
-#'     is the (numeric) model accumulation length.
+#'     is the vector of cardinal temperatures.
+#' @param S logical, is the day to start counting being optimized? (ie.
+#'     not using bloom as startday for PlantModels and Harvest for FlowerModels)
+#' @param TH logical, should the model accumulation threshold be optimized. If
+#'     not L is the (numeric) model accumulation threshold.
 #' @param simple logical, should the simplified version of the model be run?
-#' @param startday logical, is the day to start counting being optimized? (ie.
-#'     not using bloom as startday)
-#' @param stgtype logical, Do count forward from the starting event (as
+#' @param stgtype character, what is the type of model (TTT or DT)
+#' @param modclass logical, Do count forward from the starting event (as
 #'     opposed to backward)? If you have negative values in your event days
 #'     you forward should probably be FALSE. Bloom model forward=false, harvest
 #'     model forward=true.
 #' @return The RMSE value for a given set of cardinal temperatures and thermal
 #'     time accumulation length.
 #' @export
-minrmse <- function(pars, fdat, tdat, modtype, form, stage, CT, L, simple,
-                    startday, stgtype) {
+minrmse <- function(pars, fdat, tdat, modtype, form, stage, CT, S, TH, simple,
+                    stgype, modclass) {
 
     ctlen <- parnum(form) #what is the number of parameter values for the form
+    plen <- length(pars)
 
     #assigning parameter values to variables based on what parameters are
         #in the model
-    if (isTRUE(L) & isTRUE(CT)) {
 
-        if (!startday) {
-            length <- pars[1]
-            ct <- pars[2:(ctlen+1)]
-
-        } else {
-            mlen <- pars[1:2]
-            ct <- pars[3:(ctlen+2)]
-        }
+    ##########partitioning out the parameters####################
+    if (isTRUE(CT)) ct <- pars[(plen-ctlen+1):plen] else ct <- CT[1:ctlen]
 
 
-    } else if (!isTRUE(L) & isTRUE(CT)) {
-        mlen <- L
-        ct <- pars[1:ctlen]
+    #is the threshold estimated
+    if (!isTRUE(TH)) {#case 2: optimizing threshold
+        th <- TH
+
+    } else if (isTRUE(S)) { #case 2: optimizing threshold and start day
+        th <- pars[2]
 
     } else {
-        if (!startday) {
-            mlen <- pars[1]
-        } else {
-            mlen <- pars[1:2]
-        }
-
-        ct <- CT[1:ctlen]
-
+        th <- pars[1] #case 3: optimizing threshold, start day not estimated
     }
+
+
+    #is the startday estimated
+    if (isTRUE(S)) {
+        s <- pars[1]
+
+    } else if (is.na(S)) { #case 2: not estimating start day, start day is
+        s <- events[1]   #the earlier event (ex. harvest for predicting bloom)
+
+    } else {
+        s <- S #case 3: not optimizing start day
+    }                          #start day is a constant day of the year
+
 
     #print(simple)
 
