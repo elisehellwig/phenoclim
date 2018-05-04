@@ -14,14 +14,11 @@ NULL
 #' @param templist list, contains all the temperature data for estimating
 #'     thermal time.
 #' @param stage numeric, the stage of the model.
-#' @param CT Should the cardinal temperatures be optimized? If yes CT is TRUE,
-#'     if not CT should be a vector of the cardinal temperatures.
+#' @param CT Should the cardinal temperatures be optimized?
 #' @param Start logical, Should model start day be optimized? If yes,
-#'     Start is TRUE, if not Start should be the start day to be
-#'     used.
-#' @param Threshold logical, Should model threshold be optimized? If yes,
-#'     Threshold is TRUE, if not Threshold should be the model threshold to be
-#'     used.
+#'     Start is TRUE.
+#' @param Threshold logical, Should model threshold be optimized? If yes, it is
+#'     TRUE
 #' @param simple logical, is the simplified version of the model being run?
 #' @param listindex numeric, the index of the ParameterList from parlist that
 #'     you are at
@@ -32,162 +29,47 @@ NULL
 objective <- function(parlist, phenology, templist, stage, CT, Start,
                       Threshold, listindex, mclass) {
 
-    if (stgtype=='FlowerModel') {
-        #extract parameters from parlist object
-
-        fun <- objectiveFlower(parlist, phenology, templist, stage, CT, Start,
-                               Threshold, simple, listindex)
+    #extract parameters from ParameterList object
+    if (mclass=='FlowerModel') {
+        PL <- parlist
+        events <- paste0('event', 0:1)
+        fnames <- c('year', events)
 
     } else {
-        #extract parameters from ParameterList object
-        fun <- objectivePlant(parlist, phenology, templist, stage, CT, Start,
-                              Threshold, simple, listindex)
+        PL <- parlist[[listindex]]
+
+        events <- paste0('event', stage:(stage+1))
+        fnames <- c('year', events, paste0('length', stage))
+
     }
 
-    return(fun)
-
-}
-
-#' Generates the Objective function for a Flower Model
-#'
-#' This function creates a function to be passed to the DEoptim function that
-#' optimizes the cardinal temperatures and the length of thermal time or day
-#' accumulation for a FlowerModel object.
-#'
-#' @param parlist ParameterList, contains all of the parlist needed to
-#'     create the phenology model/PlantModel object.
-#' @param phenology data.frame, contains all of the phenology data necessary for
-#'     running the phenology model.
-#' @param templist list, contains all the temperature data for estimating
-#'     thermal time.
-#' @param stage numeric, the stage of the model.
-#' @param CT Should the cardinal temperatures be optimized? If yes CT is TRUE,
-#'     if not CT should be a vector of the cardinal temperatures.
-#' @param Threshold logical, Should model threshold be optimized? If yes,
-#'     Threshold is TRUE, if not Threshold should be the model threshold to be
-#'     used.
-#' @param simple logical, is the simplified version of the model being run?
-#' @param listindex numeric, the index of the ParameterList from parlist that
-#'     you are at
-#' @param startday logical, is the day to start counting being optimized? (ie.
-#'     not using bloom as startday)
-#' @return the function that is passed to DEoptim to optimize.
-objectiveFlower <- function(parlist, phenology, templist, stage, CT, Threshold,
-                            simple, listindex, startday) {
-
-    #extract parameters from parlist object
-    CTpars <- cardinaltemps(parlist)[[1]]
-
-
-    #extract threshold from parameterlist object
-    th <-
-
-    #create vector of names of events (columns)
-    events <- c('event1','event0')
-    fnames <- c('year', events)
-
-
-    #create data.frame with only the columns necessary
-    fdat <- phenology[, fnames]
-
-
-    ###########which parameters are geting estimated############
-
-    #are cardinal temps estimated
-    if (CT) ct <- TRUE else ct <- CTpars
+    #what is the type of model (DT or TTT)
+    modtype <- modeltype(PL)
 
     #is the threshold estimated
-    if (Threshold) {
-        thresh <- TRUE
-    } else if (is.na(th)) {
-        thresh <- 'event1'
+    if (!Threshold) th <- threshold(PL)[stage] else th <- Threshold
 
-    } else {
-        thresh <- threshold(parlist)
-    }
+    #are the cardinal temps estimated
+    if (!CT) ct <- cardinaltemps(PL)[[stage]] else ct <- CT
 
-    #is the startday estimated
-    if (Start) {
-        stday <- TRUE
-    } else if (is.na(th)) {
-        stday <- 'event0'
-    } else {
-        stday <- startday(parlist)
-    }
-
-    #create a function that evaluates returns the rmse of the model that can be
-    #minimized using the function DEoptim()
-    fun <- function(x) {
-        return(minrmse(x, fdat, templist, modeltype(PL), form(PL)[stage],
-                       stage, ct, stday, thresh, simple,
-                       modclass='FlowerModel'))
-    }
-
-    return(fun)
-
-}
-
-
-
-#' Generates the Objective function for a PlantModel
-#'
-#' This function creates a function to be passed to the DEoptim function that
-#' optimizes the cardinal temperatures and the length of thermal time or day
-#' accumulation for a PlantModel object.
-#'
-#' @param parlist ParameterList, contains all of the parlist needed to
-#'     create the phenology model/PlantModel object.
-#' @param phenology data.frame, contains all of the phenology data necessary for
-#'     running the phenology model.
-#' @param templist list, contains all the temperature data for estimating
-#'     thermal time.
-#' @param stage numeric, the stage of the model.
-#' @param CT Should the cardinal temperatures be optimized? If yes CT is TRUE,
-#'     if not CT should be a vector of the cardinal temperatures.
-#' @param Start logical/numeric, is the day to start counting being optimized?
-#'     If it is, put TRUE, if not Start should be the starting day to be used.
-#' @param Threshold logical, Should model threshold be optimized? If yes,
-#'     Threshold is TRUE, if not Threshold should be the model threshold to be
-#'     used.
-#' @param listindex numeric, the index of the ParameterList from parlist that
-#'     you are at
-#' @return the function that is passed to DEoptim to optimize.
-objectivePlant <- function(parlist, phenology, templist, stage, CT, Start,
-                           Threshold, listindex) {
-
-    #extract parameters from ParameterList object
-    PL <- parlist[[listindex]]
-    CTpars <- cardinaltemps(PL)[[stage]]
-
-    #extract threshold from parameterlist object
-    th <- threshold(PL)
-
-
-    events <- paste0('event', stage:(stage+1))
-    fnames <- c('year', events, paste0('length', stage))
+    #is the start day estimated
+    if (!Start) s <- startday(PL)[stage] else s <- Start
 
 
     #create data.frame with only the columns necessary
     fdat <- phenology[, fnames]
-
-
-    #which parameters are geting estimated
-    if (CT[listindex]) ct <- TRUE else ct <- CTpars
-    if (Threshold[listindex]) thresh <- TRUE else thresh <- th
 
 
     #create a function that evaluates returns the rmse of the model that can be
     #minimized using the function DEoptim()
     fun <- function(x) {
         return(minrmse(x, fdat, templist, modeltype(PL), form(PL)[stage], stage,
-                       ct, thresh, simple[listindex], startday, stgtype=stgtype))
+                       ct, start, thresh, simple[listindex], stgtype=modtype,
+                       modclass = mclass(PL)))
     }
 
     return(fun)
-
 }
-
-
 
 
 
