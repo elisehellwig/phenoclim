@@ -25,12 +25,15 @@ list that should either be of length one or the length of the number of
 stages. Each element of the list should contain the same number of
 cardinal parameters.}
 
-\item{\code{threshold}}{vector. Stores the threshold of time or thermal time that is
+\item{\code{threshold}}{numeric. Stores the threshold of time or thermal time that is
 accumulated in the model. Set to NA to run the base (simplified) model.}
 
-\item{\code{startday}}{numeric, stores the start day for accumulating time or thermal
-time. If NA, model starts at event1 (bloom) for PlantModel and event0
-(harvest) for FlowerModel.}
+\item{\code{startday}}{numeric, stores the day of the year the model will start or
+the offset to the previous stage end that the model starts. A startday
+of 0 means either that the model starts the day the last stage ended.}
+
+\item{\code{varyingpars}}{character, c('threshold', 'start'). the parameters that
+will vary from year to year. If none will vary, set to NA.}
 
 \item{\code{parsOptimized}}{character. Determines what parameters are optimized in
 the model. `parsOptimized` is a character vector that can contain
