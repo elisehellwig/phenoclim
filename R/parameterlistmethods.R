@@ -41,6 +41,13 @@ setMethod("threshold", "ParameterList",
           })
 
 
+#' Accesses the varyingpars vector of a ParameterList object
+#' @rdname varyingpars
+setMethod("varyingpars", "ParameterList",
+          function(object) {
+              return(object@varyingpars)
+          })
+
 #' Accesses the cardinaltemps list of a ParameterList object
 #' @rdname cardinaltemps
 setMethod("cardinaltemps", "ParameterList",
@@ -97,6 +104,8 @@ setValidity("ParameterList", function(object) {
     strt <- object@startday
     forms <- c('gdd', 'gddsimple','linear','flat', 'asymcur','anderson',
                'triangle', 'trapezoid', 'ensemble')
+    vp <- c('start','threshold',NA)
+    varpars <- object@varyingpars
     lens <- c(length(ct), length(object@threshold), length(strt))
 
     if (any(ifelse(frm %in% forms, FALSE, TRUE))) {
@@ -119,6 +128,12 @@ setValidity("ParameterList", function(object) {
     if (!is.numeric(strt) | is.integer(strt)) {
         valid <- FALSE
         msg <- c(msg, 'The start value must be numeric or an integer.')
+    }
+
+    if (any(ifelse(varpars %in% vp, FALSE, TRUE))) {
+        valid <- FALSE
+        msg <- c(msg, 'varyingpars can only contain start and threshold or be
+                 NA.')
     }
 
     ensemblefrm <- which(frm=='ensemble')
@@ -243,6 +258,17 @@ setMethod('startday<-', 'ParameterList',
               }
           })
 
+
+
+#' @rdname varyingpars-set
+setMethod('varyingpars<-', 'ParameterList',
+          function(object, value) {
+              object@varyingpars <- value
+
+              if (validObject(object)) {
+                  return(object)
+              }
+          })
 
 
 #' @rdname parsOptimized-set
