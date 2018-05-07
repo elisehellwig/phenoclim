@@ -69,12 +69,11 @@ parnum <- function(form) {
 #'
 #' @param form character, the thermal time functional form.
 #' @param CT logical, do the cardinal temperatures need to be estimated?
+#' @param Start logical, does the start day need to be estimated?
 #' @param Thresh logical, does the model threshold need to be
 #'     estimated?
-#' @param End logical, does the
-#' @param lim logical list, do the start/ends need to be estimated?
 #' @return The length the bounds vectors need to be.
-boundlength <- function(form, CT, Thresh, start, end) {
+boundlength <- function(form, CT, Start, Thresh) {
 
     #what is the maximum number of parameters any form requires?
     pn <- max(sapply(form, function(fm) parnum(fm)))
@@ -83,23 +82,13 @@ boundlength <- function(form, CT, Thresh, start, end) {
         #for each stage, and checking to make sure we are not estimating all 3
         #in one of the stages
 
-    if (length(start)==1) {
-        start <- rep(start, length(Thresh))
-    }
-
-    tse <- cbind(Thresh, start, end)
-    estimateall <- apply(tse, 1, all)
-
-    if (any(estimateall)) {
-        stop(paste0('You are attempting to estimate the model threshold and start and end days for the following stage(s): ', paste(which(estimateall), collapse=', ' ), '. You can only estimate two of the three parameters, as the third one is defined implicitly when you define the first two.'))
-    }
 
     CT <- any(CT) #do any models need to estimate cardinal temperatures
-    Thresh <- any(Thresh) #do any models need to estimate threshold?
-    tseLogi <- apply(tse, 1, any)
+    anyThresh <- any(Thresh) #do any models need to estimate threshold?
+    anyStart <- any(Start) #do any models need to estimate startday?
 
-    logipars <- c(CT, tseLogi) # vector of whether we are estimating each
-                                #parameter
+    # vector of whether we are estimating each parameter
+    logipars <- c(CT, anyStart, anyThresh)
 
     if (!any(logipars)) {
         stop('You must at least estimate one of the following: cardinal temperatures, the model threshold, the model limits (start/stop days).')
@@ -109,10 +98,10 @@ boundlength <- function(form, CT, Thresh, start, end) {
         #this may cause problems later
 
         #what is the max number of length related pars estimated in a stage
-        tsemax <- max(apply(tse, 1, sum))
+        STmax <- max(apply(cbind(Start, Thresh), 1, sum))
 
         #total max number of parameters we will have for any model
-        parslength <- pn*CT + tsemax
+        parslength <- pn*CT + STmax
 
 
     }
@@ -209,17 +198,27 @@ showparlist <- function(object) {
     pars <- round(pars)
     names(pars) <- c('Base','Opt.','Crit.') #giving the columns names
 
-    mlen <- object@threshold
-    limlists <- object@limits
-    classtyp <- object@mclass
+    thresh <- object@threshold
+    start <- object@startday
+    modclass <- object@mclass
 
-    ml <- calclength(mlen, limlists)
+    if (modclass=='PlantModel') {
+       from <- ifelse(is.na(start), 'bloom', start)
+       to <- ifelse(is.na(thresh), 'harvest', thresh)
+    } else {
+        from <- ifelse(is.na(start), 'harvest', start)
+        to <- ifelse(is.na(thresh), 'bloom', thresh)
+    }
+
+
+
+    ml <- paste('from', from, 'to', to)
 
     #adding information from different stages
     stagelength <- data.frame(stage=1:n,
                               type=rep(object@modeltype, n),
                               form=forms,
-                              threshold=round(ml),
+                              length=ml,
                               class=rep(stgtyp, n))
 
     lengthpars <- cbind(stagelength, pars) #putting stage length and parameter
