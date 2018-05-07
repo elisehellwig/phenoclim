@@ -13,11 +13,13 @@
 #'     list that should either be of length one or the length of the number of
 #'     stages. Each element of the list should contain the same number of
 #'     cardinal parameters.
-#' @slot threshold vector. Stores the threshold of time or thermal time that is
+#' @slot threshold numeric. Stores the threshold of time or thermal time that is
 #'     accumulated in the model. Set to NA to run the base (simplified) model.
-#' @slot startday numeric, stores the start day for accumulating time or thermal
-#'     time. If NA, model starts at event1 (bloom) for PlantModel and event0
-#'     (harvest) for FlowerModel.
+#' @slot startday numeric, stores the day of the year the model will start or
+#'     the offset to the previous stage end that the model starts. A startday
+#'     of 0 means either that the model starts the day the last stage ended.
+#' @slot varyingpars character, c('threshold', 'start'). the parameters that
+#'     will vary from year to year. If none will vary, set to NA.
 #' @slot parsOptimized character. Determines what parameters are optimized in
 #'      the model. `parsOptimized` is a character vector that can contain
 #'      "cardinaltemps", "threshold", "start" but it must contain at
@@ -31,6 +33,7 @@ setClass('ParameterList',
          	        cardinaltemps = "list",
                     threshold = "vector",
                     startday = 'vector',
+                    varyingpars = 'character',
                     parsOptimized = 'character',
                     mclass='character'))
 
@@ -61,7 +64,7 @@ setGeneric('modeltype', function(object) standardGeneric('modeltype'))
 #' @export
 setGeneric('threshold', function(object) standardGeneric('threshold'))
 
-#' Returns the returns a vector of start days
+#' Returns  a vector of start days
 #'
 #' @param object An object of class ParameterList
 #' @return A vector of the start days or NAs for starting at bloom for
@@ -69,6 +72,14 @@ setGeneric('threshold', function(object) standardGeneric('threshold'))
 #' @export
 setGeneric('startday', function(object) standardGeneric('startday'))
 
+
+#' Returns the parameters that vary from year to year
+#'
+#' @param object An object of class ParameterList
+#' @return A vector of the parameters that will vary from year to year for
+#'     PlantModels and harvest for FlowerModels
+#' @export
+setGeneric('varyingpars', function(object) standardGeneric('varyingpars'))
 
 
 #' Returns the returns a list of cardinal temperatures
@@ -150,6 +161,19 @@ setGeneric('cardinaltemps<-', function(object, value) {
 #' @param value A list of cardinal temperatures
 #' @export
 setGeneric('form<-', function(object, value) standardGeneric('form<-'))
+
+
+
+#' Setting the varying parameters
+#'
+#'  Used to change the parameters that will vary without recreating the object.
+#'
+#' @param object An object of class ParameterList
+#' @param value A vector of parameters that will vary from year to year
+#' @export
+setGeneric('varyingpars<-', function(object, value) {
+    standardGeneric('varyingpars<-')})
+
 
 
 #' Setting the parameters to optimize
