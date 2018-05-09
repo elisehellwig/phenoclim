@@ -22,6 +22,8 @@ NULL
 #' @param simple logical, is the simplified version of the model being run?
 #' @param listindex numeric, the index of the ParameterList from parlist that
 #'     you are at
+#' @param varying character, c('start', 'threshold') should either of these pars
+#'     vary from year to year.
 #' @param mclass character, type of model to be estimating, options are
 #'     'PlantModel' or 'FlowerModel'. If you have negative day values, you
 #'     probably want flower model.
@@ -63,13 +65,12 @@ objective <- function(parlist, phenology, templist, stage, CT, Start,
     #create data.frame with only the columns necessary
     fdat <- phenology[, fnames]
 
-
     #create a function that evaluates returns the rmse of the model that can be
     #minimized using the function DEoptim()
     fun <- function(x) {
         return(minrmse(x, fdat, templist, modeltype(PL), form(PL)[stage], stage,
                        ct, start, thresh, simple[listindex], stgtype=modtype,
-                       modclass = mclass(PL)))
+                       varying=varyingpars(PL), modclass = mclass(PL)))
     }
 
     return(fun)
