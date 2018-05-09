@@ -4,7 +4,8 @@
 \alias{minrmse}
 \title{Calculates model RMSE}
 \usage{
-minrmse(pars, fdat, tdat, modtype, form, stage, CT, S, TH, simple, modclass)
+minrmse(pars, fdat, tdat, modtype, form, stage, CT, S, TH, simple, varying,
+  modclass)
 }
 \arguments{
 \item{pars}{vector with threshold value and cardinal temperatures}
@@ -30,6 +31,9 @@ not using bloom as startday for PlantModels and Harvest for FlowerModels)}
 not L is the (numeric) model accumulation threshold.}
 
 \item{simple}{logical, should the simplified version of the model be run?}
+
+\item{varying}{character, c('start', 'threshold') should either of these pars
+vary from year to year.}
 
 \item{modclass}{logical, Do count forward from the starting event (as
 opposed to backward)? If you have negative values in your event days

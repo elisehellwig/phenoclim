@@ -4,7 +4,7 @@
 \alias{minrmseDT}
 \title{Calculates DT model RMSE}
 \usage{
-minrmseDT(pars, fdat, tdat, form, thresh, stage, modclass)
+minrmseDT(pars, fdat, tdat, form, thresh, stage, varying, modclass)
 }
 \arguments{
 \item{pars}{Cardinal temperatures}
@@ -18,6 +18,9 @@ minrmseDT(pars, fdat, tdat, form, thresh, stage, modclass)
 \item{thresh}{the threshold in days that thermal time is accumulated for.}
 
 \item{stage}{the number of the stage of the phenological model}
+
+\item{varying}{character, c('start', 'threshold') should either of these pars
+vary from year to year.}
 
 \item{modclass}{character, type of model to be estimating, options are
 'PlantModel' or 'FlowerModel'. If you have negative day values, you

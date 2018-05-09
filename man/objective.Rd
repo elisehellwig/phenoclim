@@ -35,6 +35,9 @@ you are at}
 probably want flower model.}
 
 \item{simple}{logical, is the simplified version of the model being run?}
+
+\item{varying}{character, c('start', 'threshold') should either of these pars
+vary from year to year.}
 }
 \value{
 the function that is passed to DEoptim to optimize.

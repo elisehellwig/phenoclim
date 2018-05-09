@@ -22,6 +22,9 @@ minrmseTTTsimplified(pars, fdat, tdat, form, thresh, stage, modclass)
 \item{modclass}{character, type of model to be estimating, options are
 'PlantModel' or 'FlowerModel'. If you have negative day values, you
 probably want flower model.}
+
+\item{varying}{character, c('start', 'threshold') should either of these pars
+vary from year to year.}
 }
 \value{
 The RMSE value for a given set of cardinal temperatures and thermal
