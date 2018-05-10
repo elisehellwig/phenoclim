@@ -17,6 +17,8 @@ NULL
 #'     stage (one length for each entry in fdat).
 #' @param lims numeric, start/stop pair if no length or start day.
 #' @param stage the number of the stage of the phenological model.
+#' @param varying character, c('start', 'threshold') should either of these pars
+#'     vary from year to year.
 #' @param mclass character, class of model to be estimating, options are
 #'     'PlantModel' or 'FlowerModel'. If you have negative day values, you
 #'     probably want flower model.
@@ -193,27 +195,27 @@ TTTsum <- function(pars, fdat, tdat, form, length, stage, forward) {
 #' @param modtype character, specifies what type of model is being run. Can be
 #'     either DT (Day Threshold) or TTT (Thermal Time Threshold).
 #' @param form the functional form of the thermal time accumulation
-#' @param length numeric, the length of thermal time accumulation (in days). It
-#'     can be either a set length of time (one number) or the total length of
-#'     the stage (one length for each entry in fdat).
-#' @param lims numeric, start stop pair if no length or start day.
-#' @param stage the number of the stage of the phenological model
+#' @param start numeric, the day to start accumulating time or thermal time
+#'     towards the model threshold.
+#' @param thresh numeric, the length of thermal time accumulation (in either
+#'     days or thermal time units).
+#' @param stage the number of the stage of the phenological model.
 #' @param mclass character, type of model to be estimating, options are
 #'     'PlantModel' or 'FlowerModel'.
 #' @return The thermal sums for a given series of years.
 #' @export
-thermalsum <- function(pars, fdat, tdat, modtype, form, length, lims, stage,
-                       mclass) {
+thermalsum <- function(pars, fdat, tdat, modtype, form, start, thresh, stage,
+                       varying, mclass) {
 
-    if (!(is.numeric(length) | is.integer(length))) {
+    if (!(is.numeric(thresh) | is.integer(thresh))) {
         stop('Length must be numeric or an integer')
     }
 
     if (modtype=='DT') {
-        ths <- DTsum(pars, fdat, tdat, form, length, lims, stage, mclass)
+        ths <- DTsum(pars, fdat, tdat, form, start, thresh, stage, mclass)
 
     } else if (modtype=='TTT') {
-        ths <- TTTsum(pars, fdat, tdat, form, length, lims, stage, mclass)
+        ths <- TTTsum(pars, fdat, tdat, form, start, thresh, stage, mclass)
         #print(ths)
 
     } else {
