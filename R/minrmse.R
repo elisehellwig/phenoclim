@@ -15,6 +15,8 @@ NULL
 #' @param fdat the data.frame containing the phenological information
 #' @param tdat list containing the temperature information
 #' @param form the functional form of the thermal time accumulation
+#' @param start numeric, the day to start accumulating time or thermal time
+#'     towards the model threshold.
 #' @param thresh the threshold in days that thermal time is accumulated for.
 #' @param stage the number of the stage of the phenological model
 #' @param varying character, c('start', 'threshold') should either of these pars
@@ -22,13 +24,10 @@ NULL
 #' @param modclass character, type of model to be estimating, options are
 #'     'PlantModel' or 'FlowerModel'. If you have negative day values, you
 #'     probably want flower model.
-#' @param firstevent character, the name of the column that contains the
-#'     starting phenological event for the model. For FlowerModels this is the
-#'     harvest date.
 #' @return The RMSE value for a given set of cardinal temperatures and thermal
 #'     time accumulation length.
-minrmseDT <- function(pars, fdat, tdat, form, thresh, stage, varying,
-                      modclass, firstevent) {
+minrmseDT <- function(pars, fdat, tdat, form, start, thresh, stage, varying,
+                      modclass) {
 
     responsename <- responseVar(modclass, stage)
 
@@ -36,7 +35,7 @@ minrmseDT <- function(pars, fdat, tdat, form, thresh, stage, varying,
 
         #calculate the thermal sum for each year using the cardinal temps and
             #day threshold
-        tsums <- thermalsum(pars, fdat, tdat, 'DT', form, thresh, stage,
+        tsums <- thermalsum(pars, fdat, tdat, 'DT', form, start, thresh, stage,
                             varying, modclass)
 
         #use that data as a predictor in a model to predict stage length
@@ -66,7 +65,9 @@ minrmseDT <- function(pars, fdat, tdat, form, thresh, stage, varying,
 #' @param pars Cardinal temperatures
 #' @param fdat the data.frame containing the phenological information
 #' @param tdat list containing the temperature information
-#' @param form the functional form of the thermal time accumulation
+#' @param form the functional form of the thermal time accumulation.
+#' @param start numeric, the day to start accumulating time or thermal time
+#'     towards the model threshold.
 #' @param thresh the threshold in thermal time that days are counted for.
 #' @param stage the number of the stage of the phenological model
 #' @param varying character, c('start', 'threshold') should either of these pars
@@ -76,7 +77,7 @@ minrmseDT <- function(pars, fdat, tdat, form, thresh, stage, varying,
 #'     probably want flower model.
 #' @return The RMSE value for a given set of cardinal temperatures and thermal
 #'     time accumulation length.
-minrmseTTTsimplified <- function(pars, fdat, tdat, form, thresh, stage,
+minrmseTTTsimplified <- function(pars, fdat, tdat, form, start, thresh, stage,
                                  modclass) {
 
     responsename <- responseVar(modclass, stage) #name of response variable
@@ -84,7 +85,7 @@ minrmseTTTsimplified <- function(pars, fdat, tdat, form, thresh, stage,
     if (checkpars(pars)) { #are parameters in ascending order
 
         #calculate day thermal time threshold is met
-        daymet <- thermalsum(pars, fdat, tdat, 'TTT', form, length,
+        daymet <- thermalsum(pars, fdat, tdat, 'TTT', form, start, thresh,
                                       stage, varying, modclass)
 
         if (any(is.infinite(daymet))){ #were any of the thermal sums
@@ -115,6 +116,8 @@ minrmseTTTsimplified <- function(pars, fdat, tdat, form, thresh, stage,
 #' @param fdat the data.frame containing the phenological information
 #' @param tdat list containing the temperature information
 #' @param form the functional form of the thermal time accumulation
+#' @param start numeric, the day to start accumulating time or thermal time
+#'     towards the model threshold.
 #' @param thresh the threshold in thermal time that days are counted for.
 #' @param stage the number of the stage of the phenological model
 #' @param varying character, c('start', 'threshold') should either of these pars
@@ -124,7 +127,7 @@ minrmseTTTsimplified <- function(pars, fdat, tdat, form, thresh, stage,
 #'     probably want flower model.
 #' @return The RMSE value for a given set of cardinal temperatures and thermal
 #'     time accumulation length.
-minrmseTTT <- function(pars, fdat, tdat, form, length, stage, modclass) {
+minrmseTTT <- function(pars, fdat, tdat, form, start, thresh, stage, modclass) {
 
     responsename <- responseVar(modclass, stage) #name of response variable
 
@@ -135,8 +138,8 @@ minrmseTTT <- function(pars, fdat, tdat, form, length, stage, modclass) {
     }  else {
 
         #calculate day thermal time threshold is met
-        daymet <- thermalsum(pars, fdat, tdat, 'TTT', form, length, stage,
-                             varying, modclass)
+        daymet <- thermalsum(pars, fdat, tdat, 'TTT', form, start, thresh,
+                             stage, varying, modclass)
         #print(daymet)
 
         if (any(is.infinite(daymet))) {
