@@ -7,28 +7,6 @@ NULL
 #the days from the previous year are negative. This is finally accomplished in
 #the function tempyearconversion().
 
-createEnd <- function(l1, l2, classtype, startday) {
-
-    if (classtype=='PlantModel') {
-        multiplier <- 1
-    } else {
-        multiplier <- -1
-    }
-
-    if (startday) {
-        if (l2<0) {
-            End <- l2*24 + 23
-        }
-
-    } else {
-        End <- l1 + multiplier*(l2*24-23)
-    }
-
-    return(End)
-}
-
-
-
 
 #' Moves temperature data a year later
 #'
