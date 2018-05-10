@@ -17,7 +17,7 @@
 #'     vary from year to year.
 #' @param eventvec numeric, a vector that contains the day of the year for the
 #'     starting event of the model. For bloom the event is harvest.
-convertParameters <- function(pars, modtype, S, TH, vp, eventvec) {
+convertParameters <- function(pars, modtype, S, TH, vp, eventvec, years) {
 
     #Estimating start day
     if (isTRUE(S)) {
@@ -26,10 +26,11 @@ convertParameters <- function(pars, modtype, S, TH, vp, eventvec) {
     } else { #Not estimating start day
 
         if ('start' %in% vp) { #case: DT1-4, case TTT1-2
-            s <- eventvec + S
+            s <- S
 
         } else { #case: DT 5, TTT3
-            s <- S
+            yearlength <- ifelse(is.leapyear(years), 366, 365)
+            s <- yearlength - eventvec + S + 1
         }
 
     }
@@ -47,11 +48,11 @@ convertParameters <- function(pars, modtype, S, TH, vp, eventvec) {
 
         if (modtype=='DT' & ('threshold' %in% vp)) {
             #case DT1,3
-            th <- s + TH
+            th <- S + TH
 
         } else {
             #case DT2,4,5, TTT1-3
-            th <- TH
+            th <- yearlength - eventvect + TH + 1
 
         }
 
