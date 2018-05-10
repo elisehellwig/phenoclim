@@ -101,52 +101,6 @@ phenoyearconversion <- function(fdat, firstyear=NA, lastyear=NA,
     return(conv)
 }
 
-#' Creates day or hour counts
-#'
-#' This function creates day and hour indexes to ube used to extract temperature
-#'     data. It has options to work for harvest and bloom models.
-#'
-#' @param start num, vector of starting days.
-#' @param stglength num, a stage length or vector of stage lengths
-#' @param hourly logical, is the model an hourly model
-#' @param startday logical, is the start day being estimated in this model, as
-#'     opposed to using the bloom date.
-#' @param stgtype character, is the model a PlantModel or a FlowerModel?
-#'     Options are 'PlantModel' or 'FlowerModel'.
-#' @return a vector of indexes that can be used to extract temperature data.
-#' @export
-startEnd <- function(start, stglength, hourly=TRUE, stgtype) {
-
-
-    if (hourly) {
-        start <- start*24 - 23
-        lengthmod <- stglength*24
-
-    } else {
-        lengthmod <- stglength
-
-    }
-
-    if (stgtype=='PlantModel') {
-        end <- start+lengthmod
-        increment <- 1
-    } else {
-        end <- start-lengthmod
-        increment <- -1
-    }
-
-    if (length(start)>1) {
-        startend <- lapply(seq_along(start), function(i) {
-                seq(start[i], end[i], by=increment)
-            })
-    } else {
-        startend <- seq(start, end, by=increment)
-    }
-
-
-
-    return(startend)
-}
 
 
 
