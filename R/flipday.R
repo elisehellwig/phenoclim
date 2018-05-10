@@ -129,23 +129,11 @@ tempyearconversion <- function(tdat, start, hourly=TRUE) {
     #combine the before year data and the present year data
     tdfthin <- rbind(tdat, tempdf)
 
-
-    indexEnd <- start+shift #index of the last day used to predict flowering
-
-    #Which days are less than the last day used to predict flowering
-    smalldays <- ifelse(tdfthin$day<(indexEnd), TRUE, NA)*1:length(indexEnd)
-
-    #the days that we are going to use to predict flowering.
-    smalldays <- smalldaysTF[!is.na(smalldays)]
-
-    # extract the data we are going to use to predict flowering
-    tdfsmall <- tdfthin[smalldays, ]
-
     #remove any years that are before the first year
-    tdfsmalltoo <- tdfsmall[tdfsmall$year > minyr, ]
+    tdfsmall <- tdfthin[tdfthin$year >= minyr, ]
 
 
-    return(tdfsmalltoo)
+    return(tdfsmall)
 
 }
 
