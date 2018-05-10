@@ -70,7 +70,8 @@ objective <- function(parlist, phenology, templist, stage, CT, Start,
     fun <- function(x) {
         return(minrmse(x, fdat, templist, modeltype(PL), form(PL)[stage], stage,
                        ct, s, th, simple[listindex], stgtype=modtype,
-                       varying=varyingpars(PL), modclass = mclass(PL)))
+                       varying=varyingpars(PL), modclass = mclass(PL),
+                       firstevent=events[1]))
     }
 
     return(fun)
