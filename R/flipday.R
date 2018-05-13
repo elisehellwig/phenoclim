@@ -7,6 +7,36 @@ NULL
 #the days from the previous year are negative. This is finally accomplished in
 #the function tempyearconversion().
 
+#' Converts day of the year to day after event (DAE)
+#'
+#' This function takes in a day of the year and the day of a phenological event
+#'     and converts the day of the year to the number of days after the
+#'     phenological event. The year of each event must be specified so that the
+#'     appropriate year length can be used.
+#'
+#' @param day numeric, the day of the year you want to convert to days after
+#'     event
+#' @param event numeric, the day of the event for each year of interest
+#' @param years numeric, the year that each event happened
+#' @return A numeric vector specifying the number of days after the event that
+#'    the day of interest happened.
+dayToDAE <- function(day, event, years) {
+
+    if (length(event)!=length(years)) {
+        stop('You must have a year for each event.')
+    }
+
+    leapmod <- ifelse(event <= 59 & day>59 & leap_year(years), 1, 0)
+    ylength <- yearlength(years)
+
+    day <- ifelse(day < event, day+ylength, day)
+
+    dae <- day - event + leapmod
+
+    return(dae)
+}
+
+
 
 #' Moves temperature data a year later
 #'
