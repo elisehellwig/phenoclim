@@ -26,7 +26,13 @@ responseVar <- function(ModelClass, stage) {
     return(respVar)
 }
 
-
+#' Calculates number of days in a year
+#'
+#' This function determines whether or not a given year is a leap year anc then
+#'     if it is returns 366, and if not returns 365.
+#'
+#' @param y numeric a vector of years
+#' @return A numeric vector of the lengths of the years inputted.
 yearlength <- function(y) {
 
     wl <- ifelse(leapyear(y), 366, 365)
