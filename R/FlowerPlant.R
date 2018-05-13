@@ -35,7 +35,7 @@ responseVar <- function(ModelClass, stage) {
 #' @return A numeric vector of the lengths of the years inputted.
 yearlength <- function(y) {
 
-    wl <- ifelse(leapyear(y), 366, 365)
+    yl <- ifelse(leap_year(y), 366, 365)
 
     return(yl)
 }
