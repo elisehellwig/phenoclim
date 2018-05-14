@@ -28,31 +28,27 @@ NULL
 #'     evolution optimization of the phenological parameters.
 #' @param ensemble logical, should an ensemble prediction be used? NOT
 #'     currently implemented.
-#' @param startday logical, is the day to start counting being optimized? (ie.
-#'     not using bloom as startday)
 #' @return A PlantModel object.
 #' @export
 flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
-                       cores=1L, iterations=200, ensemble=FALSE,
-                       startday=TRUE) {
+                       cores=1L, iterations=200, ensemble=FALSE) {
 
 
+    parlist <- parlist[[1]]
     stages <- 1 #Number of stages in FlowerModel
     n <- stages+1 #number of events
     events <- paste0('event', 0:1) #event column names
-    lengthcols <- paste0('length',1:stages) #length column names
 
-    ss <- modlength(parlist)
-    startday2 <- all(ifelse(length(ss) > 1, TRUE, FALSE))
+    start <- startday(parlist) #start vector
+    thresh <- threshold(parlist) #model threshold
+    vp <- varyingpars(parlist) #which pars will vary
 
-    if (!identical(startday, startday2)) {
-        stop('If startday=TRUE, each modlength must be of length 2. If startday=FALSE, each modlength must be of length 1.')
+    if (is.na(thresh)) { #is the model simplified
+        simple <- TRUE
     }
 
-
-    simple <- simplified(parlist)  #is the model simplified?
+    mtype <- modeltype(parlist) #model type TTT or DT
     ttform <- form(parlist) #functional form
-
 
     #extracting the appropriate form names
 
@@ -68,7 +64,7 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
     #detects if you are estimating the cardinal temperatures
 
     #are you estimating cardinal temperatures?
-    if ('cardinaltemps' %in% parsOptimized(parlist[[i]])) {
+    if ('cardinaltemps' %in% parsOptimized(parlist)) {
 
         if ('anderson' %in% ttform) { #is the form anderson?
             estimateCT <- FALSE #if the form is anderson, you don't estimate cardinal temps
@@ -82,28 +78,39 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
 
 
-   #for which models are you estimating model length/threshold
-    estimatelength <- ifelse('modlength' %in% parsOptimized(parlist),
-                             TRUE, FALSE)
+   #for which models are you estimating /threshold
+    estimatethresh<-ifelse('threshold' %in% parsOptimized(parlist), TRUE, FALSE)
+
+    #is the end day being estimated?
+    estimatestart <- ifelse('start' %in% parsOptimized(parlist), TRUE, FALSE)
+
+    if (estimatestart & start==0) {
+        stop('If you want to opimize the start day you cannot set the start day to be the harvest readiness date from the previous year.')
+    }
+
+    if (estimatethresh & is.na(Threshold)) {
+        stop('If you want to opimize the threshold you cannot run the base model (threshold=NA).')
+    }
+
 
     #phenology data with only the year and event data.
     d <- phenology[, c('year', events)]
 
     #average flowering day model
-    if (modeltype(parlist[[1]])=='DT' & simple[1]) {
+    if (modeltype(parlist)=='DT' & simple) {
 
         #average flowering day lm
         DTsimp <- lm(event1 ~ 1, data=d)
 
         #extracting fitted data
-        fits <- unname(fitted(DTsimp))
+        fits <- round(unname(fitted(DTsimp)))
 
-        #getting the new average season length of the fits
-        newbloom <- unname(coef(DTsimp)[1])
+        #getting the new average bloom dates of the fits
+        newbloom <- round(unname(coef(DTsimp)[1]))
 
     } else {
 
-        blen <- boundlength(ttform, estimateCT, estimatelength, startday)
+        blen <- boundlength(ttform, estimateCT, estimatestart, estimatethresh)
 
 
         #note this won't work for more than one stage
@@ -119,8 +126,11 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
         hourtemplist <- extractedtemps[[2]]
         relevanttemplist <- whichtemp(ttform, daytemplist, hourtemplist)
 
-        objfun <- objective(parlist, d, relevanttemplist,1, estimateCT,
-                            estimatelength, simple, 1, startday, 'FlowerModel')
+###########################################################################
+        #working in here
+        objfun <- objective(parlist, d, relevanttemplist, 1, estimateCT,
+                            estimatestart, estimatethresh, simple, 1,
+                            'FlowerModel')
 #######Things are changed up to hear for FlowerModel and startday#######
 
         lboundlist <- lapply(1:m, function(i) {
