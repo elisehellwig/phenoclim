@@ -1,3 +1,6 @@
+#' @include flipday.R
+NULL
+
 
 #' Separates out Parameter Values for optimization
 #'
@@ -52,7 +55,7 @@ convertParameters <- function(pars, modtype, S, TH, vp, eventvec, years) {
 
         } else {
             #case DT2,4,5, TTT1-3
-            th <- yearlength - eventvect + TH + 1
+            th <- dayToDAE(TH, eventvec, years)
 
         }
 
