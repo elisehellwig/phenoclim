@@ -99,7 +99,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
    #for which models are you estimating model length/threshold
     estimatelength <- sapply(parlist, function(pl) {
-        if ('modlength' %in% parsOptimized(pl)) TRUE else FALSE
+        if ('threshold' %in% parsOptimized(pl)) TRUE else FALSE
     })
 
 
