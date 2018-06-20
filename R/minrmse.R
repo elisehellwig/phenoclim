@@ -218,8 +218,8 @@ minrmse <- function(pars, fdat, tdat, modtype, form, stage, CT, S, TH, simple,
     startthresh <- convertParameters(pars, modtype, S, TH, varying,
                                      fdat[,firstevent])
 
-    s <- startthresh[1]
-    th <- startthresh[2]
+    s <- startthresh[[1]]
+    th <- startthresh[[2]]
 
     #print(simple)
 

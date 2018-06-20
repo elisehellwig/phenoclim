@@ -61,6 +61,16 @@ convertParameters <- function(pars, modtype, S, TH, vp, eventvec, years) {
 
     }
 
-    return(c(s, th))
+    return(list(s, th))
 
 }
+
+
+startEnd <- function(start, end, form) {
+
+
+
+}
+
+
+
