@@ -15,7 +15,8 @@ NULL
 #' @param temps data.frame, contains the temperature data. There should be a
 #'     column for year, day of the year, hourly temperature (named temp) or min
 #'     max daily temperatures (named tmin and tmax), and hour if the
-#'     temperatures are hourly.
+#'     temperatures are hourly. Must have data from one year before you have
+#'     phenology data
 #' @param parlist ParameterList, contains the parameter values and
 #'     functional form of the thermal time calculations.
 #' @param lbounds numeric, a vector of lower bounds for the parameters in the
@@ -120,8 +121,11 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
                         ', and they should be of length ', blen, '.'))
         }
 
+        #ive decided to wrap all of the temp stuff into the extract temps thing
 
-        extractedtemps <- extracttemplist(temps, pdat$year, ttform)
+        tempyears <- c(min(d$year)-1, d$year)
+        extractedtemps <- extracttemplist(temps, modelyears, ttform, d$event0,
+                                          'FlowerModel')
         daytemplist <- extractedtemps[[1]]
         hourtemplist <- extractedtemps[[2]]
         relevanttemplist <- whichtemp(ttform, daytemplist, hourtemplist)
