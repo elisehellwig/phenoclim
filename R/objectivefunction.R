@@ -49,17 +49,29 @@ objective <- function(parlist, phenology, templist, stage, CT, Start,
     modtype <- modeltype(PL)
 
     #is the threshold estimated
-    if (!Threshold) th <- threshold(PL)[stage] else th <- Threshold
+    if (!Threshold) { #Mclass=Flowermodel, DT2,4-5; TTT1-3
+        th <- threshold(PL)[stage]
+
+    } else {#Mclass=Flowermodel, DT1, 3-4
+        th <- Threshold
+    }
 
     if (is.na(th)) {
         stop('the variable th cannot be NA at this point. Something went wrong')
     }
 
-    #are the cardinal temps estimated
-    if (!CT) ct <- cardinaltemps(PL)[[stage]] else ct <- CT
 
     #is the start day estimated
-    if (!Start) s <- startday(PL)[stage] else s <- Start
+    if (!Start) { #FlowerModel: DT5, TTT3
+        s <- startday(PL)[stage]
+
+    } else {
+        s <- Start
+    }
+
+
+    #are the cardinal temps estimated
+    if (!CT) ct <- cardinaltemps(PL)[[stage]] else ct <- CT
 
 
     #create data.frame with only the columns necessary
