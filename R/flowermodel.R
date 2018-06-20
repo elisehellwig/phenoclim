@@ -132,6 +132,9 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
 ###########################################################################
         #working in here
+        #current task is changing convertparameters to reflect the new temp
+        #extraction business, currently working in convertParameters inside
+        #minrmse
         objfun <- objective(parlist, d, relevanttemplist, 1, estimateCT,
                             estimatestart, estimatethresh, simple, 1,
                             'FlowerModel')
