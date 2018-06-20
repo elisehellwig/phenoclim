@@ -4,13 +4,6 @@
 
 
 
-
-
-
-
-
-
-
 #' Extracts temperatures from a data frame
 #'
 #' This function extracts temperature data from a data frame over a given set of
@@ -28,6 +21,7 @@
 #'     numeric.
 #' @param hourly logical, is this data for a model that requires hourly
 #'     temperature values?
+#' @param mclass character, c('PlantModel','FlowerModel').
 #' @return \code{extracttemp} returns a list the same length as \code{years},
 #'     where each element of the list is a vector of all the temperatures in
 #'     that year.
@@ -69,15 +63,15 @@ extracttemp <- function(tdat, years, firstevent, mclass,
         tempnames <- c(tempnames,'hour')
     }
 
-    convtemp <- tempyearconversion(tempdat, firstevent, hourly=hourly,
-                                    mclass=mclass)
+    convtemp <- tempyearconversion(tempdat, firstevent, modclass=mclass,
+                                   hourly=hourly)
 
     #extracting the temperature data from the data frame and putting it
     #in a list
     tlist <- lapply(1:length(yrs), function(i) {
-        rows <- which(tdat[,yearname]==yrs[i])
+        rows <- which(convtemp[,yearname]==yrs[i])
 
-        tdat[rows,tempnames]
+        convtemp[rows,tempnames]
     })
 
     #nameing the elements of the list
@@ -94,14 +88,17 @@ extracttemp <- function(tdat, years, firstevent, mclass,
 #' @param forms list or character, the functional forms that will be used to
 #'     calculate the thermal time.
 #' @param starts numeric, vector of days that the first event happened (bloom for PlantModels and harvest for FlowerModels)
+#' @param mclass character, c('PlantModel','FlowerModel').
 #' @return A list of two the first contains the daily extracted temps if they
 #'     are needed (if not it contains NA) and the second element contains the
 #'     hourly extracted temps if they are needed (if not it contains NA).
 #' @export
-extracttemplist <- function(temps, years, forms, starts) {
+extracttemplist <- function(temps, years, forms, starts, mclass) {
 
-    if ((length(starts)+1)!=length(years)) {
+    if ((length(starts)+1)!=length(years) & mclass=='FlowerModel') {
         stop('You must have temp data for one year before you have phenology data.')
+    } else if ((length(starts))!=length(years) & mclass=='PlantModel') {
+        stop('You must have temp data for each year you have phenology data.')
     }
 
     hforms <- c('linear','flat','anderson','triangle','asymcur') #GDH forms
@@ -113,7 +110,7 @@ extracttemplist <- function(temps, years, forms, starts) {
         #if so extract daily data for those forms
         daytemplist <- extracttemp(daytemps, years, starts,
                                    tempname=c('tmin','tmax'),
-                                   hourly=FALSE)
+                                   hourly=FALSE, mclass=mclass)
     } else {
         daytemplist <- NA
     }
@@ -123,7 +120,7 @@ extracttemplist <- function(temps, years, forms, starts) {
         #do we care about hourly forms, if so extract hourly data for those
         #forms
         hourtemplist <- extracttemp(temps, years, starts, tempname='temp',
-                                    hourly=TRUE)
+                                    hourly=TRUE, mclass=mclass)
     } else {
         hourtemplist <- NA
     }

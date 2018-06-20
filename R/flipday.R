@@ -60,14 +60,6 @@ yearfliptemp <- function(year, tdat, start, hourly=TRUE) {
     beforerows <- which(tdat[,'year']==beforeyear & tdat[,'day']>=start)
     beforedat <- tdat[beforerows,]#extracts all data from the before year
 
-
-    #get the number of days in the before year
-    if (leap_year(beforeyear)) {
-        yearlength <- 366
-    } else {
-        yearlength <- 365
-    }
-
     #Create the day index (starts at 1 and goes to start)
     beforedat$dayindex <- beforedat$day - (start-1)
 
@@ -82,7 +74,8 @@ yearfliptemp <- function(year, tdat, start, hourly=TRUE) {
         df <- data.frame(year=year,
                          day=beforedat$day,
                          dayindex=beforedat$dayindex,
-                         temp=beforedat$temp)
+                         tmin=beforedat$tmin,
+                         tmax=beforedat$tmax)
     }
 
     return(df)
@@ -99,49 +92,101 @@ yearfliptemp <- function(year, tdat, start, hourly=TRUE) {
 #'
 #' @param tdat data.frame, the object that stores all your temperature data.
 #' @param start numeric, the day of the year to go back to in the previous year.
+#'    Must remove the last element to get the numbers to line up
 #' @param hourly logical, is the data hourly?
+#' @param modclass character, c('PlantModel','FlowerModel').
 #' @return A data.frame that contains all of the temperature data points with
 #'     negative days and a day index that starts from 1.
 #' @export
-tempyearconversion <- function(tdat, start, hourly=TRUE) {
+tempyearconversion <- function(tdat, start, modclass, hourly=TRUE) {
 
     #get all the years you have temperature data for
     years <- sort(unique(tdat[,'year']))
     yrs <- years[-1] #remove first one, it is the first before year
-    minyr <- min(yrs) #the first year to create temps for
+
+    if (modclass=='FlowerModel') {
+        yrs2 <- years[-length(years)]
+    } else {
+        yrs2 <- years
+    }
+
+    if (length(start)!=length(yrs2) & length(start)!=1) {
+        stop('You must either have 1 value for start or the same number as the number of years you are creating temperature data for.')
+    }
 
     #print(yrs)
 
-    # get the temp data for the before year for each year
-    tempdf <- ldply(yrs, function(y) {
-        #print(y)
-        yearfliptemp(y, tdat, start, hourly)
-    })
-
     #list only the variables we need
-    tdatnames <- c('year','day','dayindex','temp')
+    tdatnames <- c('year','day')
 
     if (hourly) { #add variable hour if necessary
-        tdatnames <- c(tdatnames,'hour')
+        tdatnames <- c(tdatnames,'temp', 'hour')
+    } else {
+        tdatnames <- c(tdatnames,'tmin', 'tmax')
+    }
+
+    if (length(start)==1) {
+        start <- rep(start, length(yrs2))
     }
 
     #extract only the variables we need from our data.frame
     tdat <- tdat[,tdatnames]
-    #need to convert tdat days to add 1 +365 - start
+
+    #we only get out data for the years that are not the first year in our
+    #dataset
+
+    if (modclass=='FlowerModel') {
+        tdat2 <- tdat[tdat$year %in% yrs, ]
+    } else {
+        tdat2 <- tdat[tdat$year %in% years, ]
+    }
+
 
     #shift the day index to reflect the fact we have added temperature data onto
-    #the beginning of the time series (from the previous year)
-    shift <- yearlength(tdat[,'year']) - (start-1)
-    tdat$dayindex <- tdat[,'day'] + shift
+    #the beginning of the time series (from the previous year) or remove temp
+        #data from the series so the index always starts at 1.
+
+
+    yrlens <- yearlength(yrs2)
+
+    shiftsmall <- -start
+
+    shiftlist <- lapply(seq_along(start), function(i) {
+        rep(shiftsmall[i], each=yrlens[i])
+    })
+    shift <- do.call(c, shiftlist)
+
+     if (modclass=='FlowerModel') {
+        shift <- yearlength(tdat2[,'year']) + shift
+
+    }
+
+    tdat2$dayindex <- tdat2[,'day'] + shift
+
+    if (modclass=='FlowerModel') {
+
+         # get the temp data for the before year for each year
+        tempdf <- ldply(seq_along(yrs2), function(i) {
+            #print(y)
+            yearfliptemp(yrs[i], tdat, start[i], hourly)
+        })
+
+        tdf <- rbind(tdat2, tempdf)
+
+    } else if (modclass=='PlantModel') {
+        tdf <- tdat2 # renaming
+
+    } else {
+        stop('modclass must be either PlantModel or FlowerModel')
+    }
+
+    #need to convert tdat days to add 1 +365 - start
+
+
 
     #combine the before year data and the present year data
-    tdfthin <- rbind(tdat, tempdf)
 
-    #remove any years that are before the first year
-    tdfsmall <- tdfthin[tdfthin$year >= minyr, ]
-
-
-    return(tdfsmall)
+    return(tdf)
 
 }
 
