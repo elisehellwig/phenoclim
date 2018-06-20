@@ -16,26 +16,44 @@ NULL
 #'     towards the model threshold.
 #' @param end numeric, the length of thermal time accumulation, in days.
 #' @param stage the number of the stage of the phenological model.
+#' @param varying character, c('start', 'threshold') should either of these
+#'     pars vary from year to year.
 #' @param mclass character, class of model to be estimating, options are
 #'     'PlantModel' or 'FlowerModel'. If you have negative day values, you
 #'     probably want flower model.
 #' @return The thermal sums for a given series of years.
-DTsum <- function(ctemps, fdat, tdat, form, start, end, stage, mclass) {
+DTsum <- function(ctemps, fdat, tdat, form, start, end, stage, varying,
+                  mclass) {
 
 	# for walnut
 	#fdat is data for the 'fruit'
     years <- fdat[,'year'] #extracting the years we are interested in
 
     if (form %in% c('gdd','gddsimple')) { #if it is a GDD model
-        startindex <- start #keep days as days
-        endindex <- end
+        startindex <- start + 1 #keep days as days
+        endindex <- startindex + thresh #this needs to be tested. I dont know
+                                        #if I need to add startindex or not.
 
     } else { #if it is a GDH model
-        startindex <- (start*24)-23 #convert days to hours
-        startindex <- start+end*24
+        startindex <- 1 + (start*24) #convert days to hours
+        endindex <- startindex+thresh*24
 
     }
 
+    #creating the index for which temperatures we want to extract
+    if (length(startindex)==1) {
+        tempindex <- lapply(seq_along(startindex), function(i) {
+            startindex:endindex
+        })
+
+    } else if (length(startindex)==length(years)) {
+        tempindex <- lapply(seq_along(startindex), function(i) {
+            startindex[i]:endindex[i]
+        })
+
+    } else {
+        stop('startindex must either have a length of 1 or be the same length as the number of years in the data.')
+    }
 
 
     #for each year extract temperature vector data frame or list so it can be
@@ -53,7 +71,7 @@ DTsum <- function(ctemps, fdat, tdat, form, start, end, stage, mclass) {
 	if (form %in% c('gdd','gddsimple', 'linear','flat','triangle','asymcur')) {
 
 	    #calculate thermal sum
-	    tsums <- sapply(1:length(start), function(i) {
+	    tsums <- sapply(1:length(years), function(i) {
 	        #create list of parameters and data to send to do.call+form
 	        plist <- parslist(templist[[i]], unlist(pars), sum=TRUE)
 	        do.call(form, plist) #calculate the thermal time
@@ -164,6 +182,8 @@ TTTsum <- function(pars, fdat, tdat, form, start, thresh, stage, forward) {
 #' @param thresh numeric, the length of thermal time accumulation (in either
 #'     days or thermal time units).
 #' @param stage the number of the stage of the phenological model.
+#' @param varying character, c('start', 'threshold') should either of these pars
+#'     vary from year to year.
 #' @param mclass character, type of model to be estimating, options are
 #'     'PlantModel' or 'FlowerModel'.
 #' @return The thermal sums for a given series of years.
@@ -172,11 +192,12 @@ thermalsum <- function(ctemps, fdat, tdat, modtype, form, start, thresh, stage,
                        varying, mclass) {
 
     if (!(is.numeric(thresh) | is.integer(thresh))) {
-        stop('Length must be numeric or an integer')
+        stop('Model threshold must be numeric or an integer')
     }
 
     if (modtype=='DT') {
-        ths <- DTsum(ctemps, fdat, tdat, form, start, thresh, stage, mclass)
+        ths <- DTsum(ctemps, fdat, tdat, form, start, thresh, stage, varying,
+                     mclass)
 
     } else if (modtype=='TTT') {
         ths <- TTTsum(ctemps, fdat, tdat, form, start, thresh, stage, mclass)
