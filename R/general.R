@@ -4,90 +4,6 @@
 ##############################################
 
 
-#' Extracts temperatures from a data frame
-#'
-#' This function extracts temperature data from a data frame over a given set of
-#'     years. It is used in \code(extracttemplist() ).
-#'
-#' @param tdat a data frame containing the temperature data.
-#' @param years a vector of years over which to extract temperature data.
-#' @param tempname name of the column that contains the temperature data. The
-#'      function will try and detect the name of the column if tempname is left
-#'      as NA.
-#' @param yearname the name of the column that specifies the year.
-#' @param dayname the name of the column that specifies the day of the year,
-#'     numeric.
-#' @return \code{extracttemp} returns a list the same length as \code{years},
-#'     where each element of the list is a vector of all the temperatures in
-#'     that year.
-#' @details If tempname is left as NA the function will try to detect the
-#'     correct column (either temp, tmin or tmax). However, it is safer to just
-#'     specify the correct column name.
-#' @export
-extracttemp <- function(tdat, years, starts, ends, tempname=NA,
-                        yearname='year', dayname='day') {
-
-
-    #checks if there is a start day for each year
-    if (length(starts)==length(years)) {
-        startvec <- starts
-
-    #checks if the start day is the same for each year
-    } else if (length(starts)==1) {
-        startvec <- rep(starts, length(years))
-
-    } else { #if not there is a problem
-        stop('Starts must either have a start day for each year or the start date must be the same for all years')
-
-    }
-
-
-    #checks if there is a end day for each year
-    if (length(ends)==length(years)) {
-        endvec <- ends
-
-    #checks if the end day is the same for each year
-    } else if (length(ends)==1) {
-        endvec <- rep(ends, length(startvec))
-
-    } else { #if not there is a problem
-        stop('Ends must either have an end day for each year or the end day must be the same for all years')
-
-    }
-
-    #checking to see if the function needs to dectect the temperature column
-    if (is.na(tempname[1])) {
-
-        #detecting the temperature column
-        if ('temp' %in% names(tdat)) {
-            tnames <- 'temp'
-
-        } else if ('tmin' %in% names(tdat) & 'tmax' %in% names(tdat)) {
-            tnames <- c('tmin','tmax')
-
-        } else {
-            stop('The names of the variables with temperature data must be
-                    temp, tmin and tmax, or it must be specified with the
-                    tempname argument.')
-        }
-
-    } else {
-        tnames <- tempname
-    }
-
-    #extracting the temperature data from the data frame and putting it
-    #in a list
-    tlist <- lapply(1:length(years), function(i) {
-        rows <- which(tdat[,yearname]==years[i] & tdat[,dayname]>=startvec[i] & tdat[,dayname]<=endvec[i])
-
-        tdat[rows,tnames]
-    })
-
-    #nameing the elements of the list
-    names(tlist) <- years
-	return(tlist)
-}
-
 
 ##############################################
 
@@ -233,7 +149,7 @@ whichtemp <- function(form, daily, hourly) {
 #'     are needed (if not it contains NA) and the second element contains the
 #'     hourly extracted temps if they are needed (if not it contains NA).
 #' @export
-extracttemplist <- function(temps, years, forms) {
+extracttemplist <- function(temps, years, forms, starts, ends) {
 
     hforms <- c('linear','flat','anderson','triangle','asymcur') #GDH forms
     ttforms <- unlist(forms) #vector of thermal time forms we care about
