@@ -9,7 +9,7 @@ NULL
 #'
 #' Calculates RMSE for the thermal model given a certain set of cardinal
 #'     temperatures and the Time/Day threshold. Counts the amount of thermal
-#'     time required to reach the day threshold.
+#'     time required to reach the day threshold. #These are the DT1,3 models
 #'
 #' @param pars Cardinal temperatures
 #' @param fdat the data.frame containing the phenological information
@@ -60,7 +60,7 @@ minrmseDT <- function(pars, fdat, tdat, form, start, thresh, stage, varying,
 #' Calculates RMSE for the simplified model of day accumulation given a
 #'     certain set of cardinal temperatures and day accumulation
 #'     length. Counts the amount of thermal time required to reach the season
-#'     length.
+#'     length. This corresponds to model TTT1-3
 #'
 #' @param pars Cardinal temperatures
 #' @param fdat the data.frame containing the phenological information
@@ -110,7 +110,7 @@ minrmseTTTsimplified <- function(pars, fdat, tdat, form, start, thresh, stage,
 #' Calculates RMSE for the combined model of thermal time accumulation given a
 #'     certain set of cardinal temperatures and thermal time accumulation
 #'     length. Counts the number of days necessary to reach the Thermal time
-#'     threshold
+#'     threshold and use that number to predict the event. TTT1-3
 #'
 #' @param pars Cardinal temperatures
 #' @param fdat the data.frame containing the phenological information
@@ -213,10 +213,14 @@ minrmse <- function(pars, fdat, tdat, modtype, form, stage, CT, S, TH, simple,
     if (isTRUE(CT)) ct <- pars[(plen-ctlen+1):plen] else ct <- CT[1:ctlen]
 
 
-
+    if (modclass=='FlowerModel') {
+        years <- fdat$year-1
+    } else {
+        years <- fdat$year
+    }
 
     startthresh <- convertParameters(pars, modtype, S, TH, varying,
-                                     fdat[,firstevent])
+                                     fdat[,firstevent], years)
 
     s <- startthresh[[1]]
     th <- startthresh[[2]]
