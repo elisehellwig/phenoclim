@@ -26,12 +26,17 @@ dayToDAE <- function(day, event, years) {
         stop('You must have a year for each event.')
     }
 
+    # Is there an extra day between the event and the day of the year we are
+    #interested in? if so leapmod will be 1, else 0
     leapmod <- ifelse(event <= 59 & day>59 & leap_year(years), 1, 0)
+
+    #length of the years in question
     ylength <- yearlength(years)
 
+    #extending days of the year to greater than 365 if necessary
     day <- ifelse(day < event, day+ylength, day)
 
-    dae <- day - event + leapmod
+    dae <- day - event + leapmod + 1
 
     return(dae)
 }
