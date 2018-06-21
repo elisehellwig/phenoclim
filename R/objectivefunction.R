@@ -29,7 +29,7 @@ NULL
 #'     probably want flower model.
 #' @return the function that is passed to DEoptim to optimize.
 objective <- function(parlist, phenology, templist, stage, CT, Start,
-                      Threshold, listindex, mclass) {
+                      Threshold, listindex, varying, mclass) {
 
     #extract parameters from ParameterList object
     if (mclass=='FlowerModel') {
