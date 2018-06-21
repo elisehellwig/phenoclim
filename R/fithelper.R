@@ -32,7 +32,7 @@ dayToDAE <- function(day, event, years) {
     #extending days of the year to greater than 365 if necessary
     day <- ifelse(day < event, day+ylength, day)
 
-    dae <- day - event + leapmod + 1
+    dae <- day - event + leapmod + 1 #still not sure if we shoudl be adding 1
 
     return(dae)
 }
