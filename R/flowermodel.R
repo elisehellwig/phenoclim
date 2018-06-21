@@ -124,7 +124,7 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
         #ive decided to wrap all of the temp stuff into the extract temps thing
 
         tempyears <- c(min(d$year)-1, d$year)
-        extractedtemps <- extracttemplist(temps, modelyears, ttform, d$event0,
+        extractedtemps <- extracttemplist(temps, tempyears, ttform, d$event0,
                                           'FlowerModel')
         daytemplist <- extractedtemps[[1]]
         hourtemplist <- extractedtemps[[2]]
