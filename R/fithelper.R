@@ -2,6 +2,42 @@
 NULL
 
 
+
+#' Converts day of the year to day after event (DAE)
+#'
+#' This function takes in a day of the year and the day of a phenological event
+#'     and converts the day of the year to the number of days after the
+#'     phenological event. The year of each event must be specified so that the
+#'     appropriate year length can be used.
+#'
+#' @param day numeric, the day of the year you want to convert to days after
+#'     event
+#' @param event numeric, the day of the event for each year of interest
+#' @param years numeric, the year that each event happened
+#' @return A numeric vector specifying the number of days after the event that
+#'    the day of interest happened.
+dayToDAE <- function(day, event, years) {
+
+    if (length(event)!=length(years)) {
+        stop('You must have a year for each event.')
+    }
+
+    # Is there an extra day between the event and the day of the year we are
+    #interested in? if so leapmod will be 1, else 0
+    leapmod <- ifelse(event <= 59 & day>59 & leap_year(years), 1, 0)
+
+    #length of the years in question
+    ylength <- yearlength(years)
+
+    #extending days of the year to greater than 365 if necessary
+    day <- ifelse(day < event, day+ylength, day)
+
+    dae <- day - event + leapmod + 1
+
+    return(dae)
+}
+
+
 #' Separates out Parameter Values for optimization
 #'
 #' Assigns parameter values for start and threshold based on model type,
@@ -27,16 +63,22 @@ convertParameters <- function(pars, modtype, S, TH, vp, eventvec, years) {
         s <- pars[1]
 
     } else { #Not estimating start day
-
-        if ('start' %in% vp) { #case: DT1-4, case TTT1-2
-            s <- S
-
-        } else { #case: DT 5, TTT3
-            yearlength <- ifelse(is.leapyear(years), 366, 365)
-            s <- yearlength - eventvec + S + 1
-        }
+        s <- S
 
     }
+
+    #does start day vary from year to year?
+    if ('start' %in% vp) { #case: DT1-4, case TTT1-2
+        s_prime <- s
+
+    } else { #case: DT 5, TTT3
+        s_prime <- dayToDAE()
+
+        yearlength <- ifelse(is.leapyear(years), 366, 365)
+        s <- yearlength - eventvec + S + 1
+    }
+
+
 
     #Estimating threshold
     if (isTRUE(TH)) {
@@ -62,13 +104,6 @@ convertParameters <- function(pars, modtype, S, TH, vp, eventvec, years) {
     }
 
     return(list(s, th))
-
-}
-
-
-startEnd <- function(start, end, form) {
-
-
 
 }
 

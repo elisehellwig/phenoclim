@@ -3,8 +3,8 @@ NULL
 
 
 #note the point of this file is to create a temperature data.frame that
-#contains the data for a FlowerModel. Both with a day and a dayindex, where
-#the days from the previous year are negative. This is finally accomplished in
+#contains the data for a FlowerModel. Temperature data has a day index which is
+#1 when on the day of the starting event. This is finally accomplished in
 #the function tempyearconversion().
 
 #' Converts day of the year to day after event (DAE)
