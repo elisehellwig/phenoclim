@@ -22,14 +22,12 @@ NULL
 #' @param simple logical, is the simplified version of the model being run?
 #' @param listindex numeric, the index of the ParameterList from parlist that
 #'     you are at
-#' @param varying character, c('start', 'threshold') should either of these pars
-#'     vary from year to year.
 #' @param mclass character, type of model to be estimating, options are
 #'     'PlantModel' or 'FlowerModel'. If you have negative day values, you
 #'     probably want flower model.
 #' @return the function that is passed to DEoptim to optimize.
 objective <- function(parlist, phenology, templist, stage, CT, Start,
-                      Threshold, listindex, varying, mclass) {
+                      Threshold, listindex, mclass) {
 
     #extract parameters from ParameterList object
     if (mclass=='FlowerModel') {
