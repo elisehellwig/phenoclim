@@ -32,18 +32,23 @@ yearfliptemp <- function(year, tdat, start, hourly=TRUE) {
 
     #Create the day index (starts at 1 and goes to start)
     beforedat$dayindex <- beforedat$day - (start-1)
-
     #creates data.frame with the temp data and the day index
     if (hourly) {
+        beforedat$index <- 1:(length(beforedat$hour))
+
         df <- data.frame(year=year,
                          day=beforedat$day,
                          dayindex=beforedat$dayindex,
-                         temp=beforedat$temp,
-                         hour=beforedat$hour)
+                         hour=beforedat$hour,
+                         index=beforedat$index,
+                         temp=beforedat$temp)
+
+
     } else {
         df <- data.frame(year=year,
                          day=beforedat$day,
                          dayindex=beforedat$dayindex,
+                         index=beforedat$dayindex,
                          tmin=beforedat$tmin,
                          tmax=beforedat$tmax)
     }
@@ -119,19 +124,39 @@ tempyearconversion <- function(tdat, start, modclass, hourly=TRUE) {
 
     yrlens <- yearlength(yrs2)
 
-    shiftsmall <- -start
+    dayshiftsmall <- -start
 
-    shiftlist <- lapply(seq_along(start), function(i) {
-        rep(shiftsmall[i], each=yrlens[i])
+    dayshiftlist <- lapply(seq_along(start), function(i) {
+        rep(dayshiftsmall[i], each=yrlens[i])
     })
-    shift <- do.call(c, shiftlist)
+
+    dayshift <- do.call(c, dayshiftlist)
+
+    if (hourly) {
+        hourshiftsmall <- -start*24
+        hourshiftlist <- lapply(seq_along(start), function(i) {
+            rep(hourshiftsmall[i], each=yrlens[i])
+        })
+        hourshift <- do.call(c, dayshiftlist)
+    }
+
 
      if (modclass=='FlowerModel') {
-        shift <- yearlength(tdat2[,'year']) + shift
+        dayshift <- yearlength(tdat2[,'year']) + dayshift
+
+        if (hourly) {
+            hourshift <- yearlength(tdat2[,'year'])*24 + hourshift
+        }
 
     }
 
-    tdat2$dayindex <- tdat2[,'day'] + shift
+    if (hourly) {
+        tdat2$index <- tdat2[,'hour'] + hourshift
+    } else {
+        tdat2$index <- tdat2[, 'day'] + dayshift
+    }
+
+    tdat2$dayindex <- tdat2[,'day'] + dayshift
 
     if (modclass=='FlowerModel') {
 
