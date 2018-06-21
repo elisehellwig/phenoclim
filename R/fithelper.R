@@ -72,10 +72,8 @@ convertParameters <- function(pars, modtype, S, TH, vp, eventvec, years) {
         s_prime <- s
 
     } else { #case: DT 5, TTT3
-        s_prime <- dayToDAE()
+        s_prime <- dayToDAE(s, eventvec, years)
 
-        yearlength <- ifelse(is.leapyear(years), 366, 365)
-        s <- yearlength - eventvec + S + 1
     }
 
 
@@ -90,20 +88,23 @@ convertParameters <- function(pars, modtype, S, TH, vp, eventvec, years) {
         }
 
     } else { #not estimating threshold
-
-        if (modtype=='DT' & ('threshold' %in% vp)) {
-            #case DT1,3
-            th <- S + TH
-
-        } else {
-            #case DT2,4,5, TTT1-3
-            th <- dayToDAE(TH, eventvec, years)
-
-        }
+       th <- TH
 
     }
 
-    return(list(s, th))
+
+
+    if (modtype=='DT' & ('threshold' %in% vp)) {
+        #case DT1,3
+        th_prime <- s_prime + th
+
+    } else {
+        #case DT2,4,5, TTT1-3
+        th_prime <- dayToDAE(th, eventvec, years)
+
+    }
+
+    return(list(s_prime, th_prime))
 
 }
 
