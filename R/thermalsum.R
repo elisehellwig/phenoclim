@@ -70,19 +70,28 @@ DTsum <- function(ctemps, fdat, tdat, form, start, thresh, stage, varying,
 	    }
 	})
 
-	if (form %in% c('gdd','gddsimple', 'linear','flat','triangle','asymcur')) {
+	if (form %in% c('gdd','gddsimple')) {
+	    #calculate thermal sum
+	    tsums <- sapply(1:length(years), function(i) {
+	        #create list of parameters and data to send to do.call+form
+	        plist <- parslist(templist[[i]][,c('tmin','tmax')],
+	                          unlist(pars), sum=TRUE)
+	        do.call(form, plist) #calculate the thermal time
+	    })
+
+	} else if (form %in% c('linear','flat','triangle','asymcur')) {
 
 	    #calculate thermal sum
 	    tsums <- sapply(1:length(years), function(i) {
 	        #create list of parameters and data to send to do.call+form
-	        plist <- parslist(templist[[i]], unlist(pars), sum=TRUE)
+	        plist <- parslist(templist[[i]]$temp, unlist(pars), sum=TRUE)
 	        do.call(form, plist) #calculate the thermal time
 	    })
 
 
 	} else if (form=='anderson') { #same as above just if you are working with
         tsums <- sapply(1:length(start), function(i) { #anderson functional form
-            plist <- parslist(templist[[i]], c(4,25,36), sum=TRUE)
+            plist <- parslist(templist[[i]]$temp, c(4,25,36), sum=TRUE)
             do.call('asymcur', plist)
         })
 
