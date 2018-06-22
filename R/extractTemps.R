@@ -57,7 +57,7 @@ extracttemp <- function(tdat, years, firstevent, mclass,
             tnames <- tempname
         }
 
-    tempnames <- c(tnames, 'day', 'dayindex')
+    tempnames <- c(tnames, 'day', 'dayindex', 'index')
 
     if (hourly) {
         tempnames <- c(tempnames,'hour')
