@@ -132,21 +132,29 @@ tempyearconversion <- function(tdat, start, modclass, hourly=TRUE) {
 
     dayshift <- do.call(c, dayshiftlist)
 
+
+    #######################This is a problem#######################
     if (hourly) {
-        hourshiftsmall <- -start*24
+
+        #creating the indexes for hours in the main section of the year for
+        #each year
+        hourshiftvec <- ( (yrlens + 1) - start)*24
+        hr_dat <- ldply(seq_along(yrs2), function(i) {
+            td <- tdat2[tdat2$year==yrs2[i], ]
+            td$index <- 1:length(tdat2[tdat2$year==y, 'day']) + hourshiftvec[i]
+            td
+        })
+
+
         hourshiftlist <- lapply(seq_along(start), function(i) {
-            rep(hourshiftsmall[i], each=yrlens[i])
+            hr_inds[[i]] + hourshiftvec[i]
         })
         hourshift <- do.call(c, dayshiftlist)
     }
-
+    ################################################
 
      if (modclass=='FlowerModel') {
         dayshift <- yearlength(tdat2[,'year']) + dayshift
-
-        if (hourly) {
-            hourshift <- yearlength(tdat2[,'year'])*24 + hourshift
-        }
 
     }
 
