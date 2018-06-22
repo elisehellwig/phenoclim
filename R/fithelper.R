@@ -68,14 +68,10 @@ convertParameters <- function(pars, modtype, S, TH, vp, eventvec, years) {
     }
 
     #does start day vary from year to year?
-    if ('start' %in% vp) { #case: DT1-4, case TTT1-2
-        s_prime <- s
-
-    } else { #case: DT 5, TTT3
-        s_prime <- dayToDAE(s, eventvec, years)
+    if (!('start' %in% vp)) {#case: DT 5, TTT3
+        s <- dayToDAE(s, eventvec, years)
 
     }
-
 
 
     #Estimating threshold
@@ -93,18 +89,14 @@ convertParameters <- function(pars, modtype, S, TH, vp, eventvec, years) {
     }
 
 
-
-    if (modtype=='DT' & ('threshold' %in% vp)) {
-        #case DT1,3
-        th_prime <- s_prime + th
-
-    } else {
-        #case DT2,4,5, TTT1-3
-        th_prime <- dayToDAE(th, eventvec, years)
+    #Note if it is a TTT model threshold can't vary from year to year.
+    if (modtype=='DT' & (!('threshold' %in% vp)) ) {
+        th <- dayToDAE(th, eventvec, years) - s
 
     }
 
-    return(list(s_prime, th_prime))
+
+    return(list(s, th))
 
 }
 
