@@ -14,7 +14,7 @@ NULL
 #' @param form the functional form of the thermal time accumulation
 #' @param start numeric, the day to start accumulating time or thermal time
 #'     towards the model threshold.
-#' @param end numeric, the length of thermal time accumulation, in days.
+#' @param thresh numeric, the length of thermal time accumulation, in days.
 #' @param stage the number of the stage of the phenological model.
 #' @param varying character, c('start', 'threshold') should either of these
 #'     pars vary from year to year.
@@ -22,21 +22,23 @@ NULL
 #'     'PlantModel' or 'FlowerModel'. If you have negative day values, you
 #'     probably want flower model.
 #' @return The thermal sums for a given series of years.
-DTsum <- function(ctemps, fdat, tdat, form, start, end, stage, varying,
+DTsum <- function(ctemps, fdat, tdat, form, start, thresh, stage, varying,
                   mclass) {
 
 	# for walnut
 	#fdat is data for the 'fruit'
     years <- fdat[,'year'] #extracting the years we are interested in
 
+
     if (form %in% c('gdd','gddsimple')) { #if it is a GDD model
-        startindex <- start + 1 #keep days as days
-        endindex <- startindex + thresh #this needs to be tested. I dont know
+        startindex <- start #keep days as days
+        endindex <- start + thresh
+        #this needs to be tested. I dont know
                                         #if I need to add startindex or not.
 
     } else { #if it is a GDH model
-        startindex <- 1 + (start*24) #convert days to hours
-        endindex <- startindex+thresh*24
+        startindex <- 1 + ((start-1)*24) #convert days to hours
+        endindex <- startindex + thresh*24
 
     }
 
