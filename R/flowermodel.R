@@ -132,7 +132,7 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
 ###########################################################################
         #working in here
-        #current task is working on updating DTsum to work with the new
+        #current task is working on updating TTTsum to work with the new
         #temperature data structure and indexing
         objfun <- objective(parlist, d, relevanttemplist, 1, estimateCT,
                             estimatestart, estimatethresh, simple, 1,
