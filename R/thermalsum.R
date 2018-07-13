@@ -33,6 +33,8 @@ DTsum <- function(ctemps, yrs, tdat, form, start, thresh, varying,
 
    }
 
+   #print(1)
+
     if (!is.POSIXct(start[1])) {
         stop('The parameter start must be a POSIXct class vector.')
     }
@@ -48,6 +50,8 @@ DTsum <- function(ctemps, yrs, tdat, form, start, thresh, varying,
         }
     }
 
+
+   #print(2)
     modInterval <- interval(start, end)
 
     if (length(modInterval)==1) {
