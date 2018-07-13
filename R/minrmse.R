@@ -29,8 +29,6 @@ NULL
 minrmseDT <- function(pars, fdat, tdat, form, start, thresh, stage, varying,
                       modclass) {
 
-    #years we have phenology data for
-    yrs <- fdat[, 'year']
 
     responsename <- responseVar(modclass, stage)
 
@@ -38,21 +36,21 @@ minrmseDT <- function(pars, fdat, tdat, form, start, thresh, stage, varying,
 
         #calculate the thermal sum for each year using the cardinal temps and
             #day threshold
-        tsums <- thermalsum(pars, yrs, tdat, 'DT', form, start, thresh,
+        tsums <- thermalsum(pars, fdat$year, tdat, 'DT', form, start, thresh,
                             varying, modclass)
 
         #use that data as a predictor in a model to predict stage length
         mod <- lm(fdat[,responsename] ~ tsums)
         fit <- fitted(mod) #extract fitted values
 
-        rmse <- rmsd(fit, fdat[,responsename]) #calculate RMSE of fitted values
+        rmsd <- rmse(fit, fdat[,responsename]) #calculate RMSE of fitted values
 
     } else {
-        rmse <- Inf #if cardinal temperatures are not in ascending order the
+        rmsd <- Inf #if cardinal temperatures are not in ascending order the
                         #rmse is infinite.
     }
 
-    return(rmse)
+    return(rmsd)
 
 }
 
@@ -88,22 +86,22 @@ minrmseTTTsimplified <- function(pars, fdat, tdat, form, start, thresh, stage,
     if (checkpars(pars)) { #are parameters in ascending order
 
         #calculate day thermal time threshold is met
-        daymet <- thermalsum(pars, fdat, tdat, 'TTT', form, start, thresh,
-                                      stage, varying, modclass)
+        daymet <- thermalsum(pars, fdat$year, tdat, 'TTT', form, start, thresh,
+                                      varying, modclass)
 
         if (any(is.infinite(daymet))){ #were any of the thermal sums
             #that did not resolve
-            rmse <- Inf
+            rmsd <- Inf
         } else {
-            rmse <- rmsd(daymet, fdat[,responsename]) #calculate rmse
+            rmsd <- rmse(daymet, fdat[,responsename]) #calculate rmse
         }
 
     } else {
-        rmse <- Inf #if cardinal temps not in ascending order rmse is infinite
+        rmsd <- Inf #if cardinal temps not in ascending order rmse is infinite
     }
 
 
-    return(rmse)
+    return(rmsd)
 
 }
 
@@ -135,18 +133,18 @@ minrmseTTT <- function(pars, fdat, tdat, form, start, thresh, stage, modclass) {
     responsename <- responseVar(modclass, stage) #name of response variable
 
     if (!checkpars(pars)) { #are cardinal temperatures in ascending order
-       rmse <- Inf #if not, rmse is infinite
+       rmsd <- Inf #if not, rmse is infinite
 
 
     }  else {
 
         #calculate day thermal time threshold is met
-        daymet <- thermalsum(pars, fdat, tdat, 'TTT', form, start, thresh,
-                             stage, varying, modclass)
+        daymet <- thermalsum(pars, fdat$year, tdat, 'TTT', form, start, thresh,
+                             varying, modclass)
         #print(daymet)
 
         if (any(is.infinite(daymet))) {
-            rmse <- Inf #if any year, the threshold is not met, rmse is inf
+            rmsd <- Inf #if any year, the threshold is not met, rmse is inf
 
 
         } else {
@@ -158,10 +156,10 @@ minrmseTTT <- function(pars, fdat, tdat, form, start, thresh, stage, modclass) {
                                     #stage length
                 mod <- lm(fdat[,responsename] ~ daymet)
                 fit <- fitted(mod) #extract fitted data
-                rmse <- rmsd(fit, fdat[,responsename]) #calculate rmse
+                rmsd <- rmse(fit, fdat[,responsename]) #calculate rmse
 
             } else {
-                rmse <- Inf #if not, rmse is infinite
+                rmsd <- Inf #if not, rmse is infinite
             }
 
         }
