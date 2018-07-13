@@ -1,4 +1,4 @@
-#' @include parameterlistmethods.R flipday.R
+#' @include parameterlistmethods.R
 NULL
 
 
@@ -94,7 +94,7 @@ DTsum <- function(ctemps, yrs, tdat, form, start, thresh, varying,
 #' flowering for a series of years.
 #'
 #' @param pars Cardinal temperatures
-#' @param fdat the data.frame containing the phenological information
+#' @param yrs the years we have phenology data for.
 #' @param tdat list containing the temperature information
 #' @param form the functional form of the thermal time accumulation
 #' @param start numeric, the day to start accumulating time or thermal time
@@ -107,11 +107,9 @@ DTsum <- function(ctemps, yrs, tdat, form, start, thresh, varying,
 #'     'PlantModel' or 'FlowerModel'. If you have negative day values, you
 #'     probably want flower model.
 #' @return The thermal sums for a given series of years.
-TTTsum <- function(pars, fdat, tdat, form, start, thresh, varying, mclass) {
+TTTsum <- function(pars, yrs, tdat, form, start, thresh, varying, mclass) {
 
     #print(str(pars))
-
-    years <- fdat[,'year'] #extract years
 
     if (!is.POSIXct(start[1])) {
         stop('The parameter start must be a POSIXct class vector.')
@@ -119,16 +117,16 @@ TTTsum <- function(pars, fdat, tdat, form, start, thresh, varying, mclass) {
 
 
     if (mclass=='FlowerModel') {
-        end <- dayToDate(years, 184)
+        end <- dayToDate(yrs, 184)
 
     } else {
-        end <- dayToDate(years, 365)
+        end <- dayToDate(yrs, 365)
     }
 
     modInterval <- interval(start, end)
 
     if (length(modInterval)==1) {
-        modInterval <- rep(modInterval, length(years))
+        modInterval <- rep(modInterval, length(yrs))
 
     }
 
@@ -149,7 +147,7 @@ TTTsum <- function(pars, fdat, tdat, form, start, thresh, varying, mclass) {
     }
 
 
-    templist <- lapply(1:length(years), function(i) {
+    templist <- lapply(1:length(yrs), function(i) {
         td <- tdat[which(tdat$dt %within% modInterval[i]), ]
         td[order(td$dt), tnames]
     })
@@ -167,7 +165,7 @@ TTTsum <- function(pars, fdat, tdat, form, start, thresh, varying, mclass) {
 #' Calculates thermal time sums for either the TTT or DT time model
 #'
 #' @param ctemps Cardinal temperatures
-#' @param fdat the data.frame containing the phenological information
+#' @param yrs numeric, the years we have phenology data for.
 #' @param tdat list containing the temperature information
 #' @param modtype character, specifies what type of model is being run. Can be
 #'     either DT (Day Threshold) or TTT (Thermal Time Threshold).
@@ -182,7 +180,7 @@ TTTsum <- function(pars, fdat, tdat, form, start, thresh, varying, mclass) {
 #'     'PlantModel' or 'FlowerModel'.
 #' @return The thermal sums for a given series of years.
 #' @export
-thermalsum <- function(ctemps, fdat, tdat, modtype, form, start, thresh, stage,
+thermalsum <- function(ctemps, yrs, tdat, modtype, form, start, thresh, stage,
                        varying, mclass) {
 
     if (!(is.numeric(thresh) | is.integer(thresh))) {
@@ -190,10 +188,10 @@ thermalsum <- function(ctemps, fdat, tdat, modtype, form, start, thresh, stage,
     }
 
     if (modtype=='DT') {
-        ths <- DTsum(ctemps, fdat, tdat, form, start, thresh, varying, mclass)
+        ths <- DTsum(ctemps, yrs, tdat, form, start, thresh, varying, mclass)
 
     } else if (modtype=='TTT') {
-        ths <- TTTsum(ctemps, fdat, tdat, form, start, thresh, mclass)
+        ths <- TTTsum(ctemps, yrs, tdat, form, start, thresh, mclass)
         #print(ths)
 
     } else {
