@@ -67,7 +67,6 @@ DTsum <- function(ctemps, yrs, tdat, form, start, thresh, varying,
         tnames <- 'temp'
     }
 
-    print(modInterval[1])
 
     ids <- lapply(1:length(yrs), function(i) {
 
@@ -77,7 +76,6 @@ DTsum <- function(ctemps, yrs, tdat, form, start, thresh, varying,
         tdat[which(tdat$dt %within% modInterval[i]), tnames]
     })
 
-    print(head(templist[[1]]))
 
     tsums <- sapply(1:length(yrs), function(i) {
         #create list of parameters and data to send to do.call+form
