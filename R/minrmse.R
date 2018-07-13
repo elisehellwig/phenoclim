@@ -29,13 +29,16 @@ NULL
 minrmseDT <- function(pars, fdat, tdat, form, start, thresh, stage, varying,
                       modclass) {
 
+    #years we have phenology data for
+    yrs <- fdat[, 'year']
+
     responsename <- responseVar(modclass, stage)
 
     if (checkpars(pars)) { #if parameters are in ascending order
 
         #calculate the thermal sum for each year using the cardinal temps and
             #day threshold
-        tsums <- thermalsum(pars, fdat, tdat, 'DT', form, start, thresh, stage,
+        tsums <- thermalsum(pars, yrs, tdat, 'DT', form, start, thresh,
                             varying, modclass)
 
         #use that data as a predictor in a model to predict stage length
