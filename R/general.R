@@ -136,4 +136,24 @@ whichtemp <- function(form, daily, hourly) {
     }
 }
 
+########################################################
 
+#' Calculates the RMSE
+#'
+#' @param predicted numeric, the vector of predicted values
+#' @param observed numeric, the vector of observed values
+#' @return The root mean squared error of the two numeric vectors.
+#' @examples
+#' a <- rnorm(10)
+#' b <- rnorm(10)
+#' rmse(a,b)
+#' @export
+rmse <- function(predicted, observed) {
+
+    dif <- predicted - observed #calculates residuals
+
+    #squares, averages and takes square root of resids
+    rmsd <- sqrt(mean(dif^2))
+
+    return(rmsd)
+}
