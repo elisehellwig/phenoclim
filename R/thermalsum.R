@@ -180,7 +180,7 @@ TTTsum <- function(pars, yrs, tdat, form, start, thresh, varying, mclass) {
 #'     'PlantModel' or 'FlowerModel'.
 #' @return The thermal sums for a given series of years.
 #' @export
-thermalsum <- function(ctemps, yrs, tdat, modtype, form, start, thresh, stage,
+thermalsum <- function(ctemps, yrs, tdat, modtype, form, start, thresh,
                        varying, mclass) {
 
     if (!(is.numeric(thresh) | is.integer(thresh))) {
