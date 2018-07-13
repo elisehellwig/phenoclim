@@ -1,4 +1,3 @@
-#' @include flipday.R
 
 # This file will have all the functions needed to change a normal data frame into a templist for using in the models
 
@@ -37,6 +36,14 @@ extracttemp <- function(tdat, years, firstevent, mclass,
     tempdat <- tdat[tdat$year %in% years, ]
     yrs <- years[-1]
 
+    types <- sapply(1:ncol(tempdat), function(i) {
+        class(tempdat[,i])[1]
+    })
+
+    if (!('POSIXct' %in% types)) {
+        stop("You must have a date-time column (class POSIXct) in your temperature data.")
+    }
+
     #checking to see if the function needs to dectect the temperature column
     if (is.na(tempname[1])) {
 
@@ -57,22 +64,33 @@ extracttemp <- function(tdat, years, firstevent, mclass,
             tnames <- tempname
         }
 
-    tempnames <- c(tnames, 'day', 'dayindex', 'index')
+    dateID <- which('POSIXct' %in% types)
+    datename <- names(dav)[dateID]
+    tempnames <- c(tnames, datename, 'day')
 
     if (hourly) {
         tempnames <- c(tempnames,'hour')
     }
 
-    convtemp <- tempyearconversion(tempdat, firstevent, modclass=mclass,
-                                   hourly=hourly)
 
     #extracting the temperature data from the data frame and putting it
     #in a list
-    tlist <- lapply(1:length(yrs), function(i) {
-        rows <- which(convtemp[,yearname]==yrs[i])
 
-        convtemp[rows,tempnames]
-    })
+    if (mclass=='FlowerModel') {
+
+        tlist <- lapply(1:length(yrs), function(i) {
+            rows <- which(tempdat[,yearname] %in% c(yrs[i], yrs[i]-1))
+            tempdat[rows,tempnames]
+        })
+
+    } else {
+
+        tlist <- lapply(1:length(yrs), function(i) {
+            rows <- which(tempdat[,yearname]==yrs[i])
+            tempdat[rows,tempnames]
+        })
+
+    }
 
     #nameing the elements of the list
     names(tlist) <- yrs
