@@ -9,7 +9,7 @@ NULL
 #' a series of years.
 #'
 #' @param ctemps Cardinal temperatures
-#' @param fdat the data.frame containing the phenological information
+#' @param yrs the years we have phenology data for.
 #' @param tdat list containing the temperature information
 #' @param form the functional form of the thermal time accumulation
 #' @param start numeric, the day to start accumulating time or thermal time
@@ -21,12 +21,17 @@ NULL
 #'     'PlantModel' or 'FlowerModel'. If you have negative day values, you
 #'     probably want flower model.
 #' @return The thermal sums for a given series of years.
-DTsum <- function(ctemps, fdat, tdat, form, start, thresh, varying,
+DTsum <- function(ctemps, yrs, tdat, form, start, thresh, varying,
                   mclass) {
 
-	# for walnut
-	#fdat is data for the 'fruit'
-    years <- fdat[,'year'] #extracting the years we are interested in
+    #possible forms
+   posforms <-  c('anderson','linear','flat','triangle','asymcur','gdd',
+                  'gddsimple')
+
+   if (!(form %in% posforms)) {
+       stop('form must be linear, flat, triangle, asymcur, anderson, gdd, or gddsimple.')
+
+   }
 
     if (!is.POSIXct(start[1])) {
         stop('The parameter start must be a POSIXct class vector.')
@@ -46,9 +51,9 @@ DTsum <- function(ctemps, fdat, tdat, form, start, thresh, varying,
     modInterval <- interval(start, end)
 
     if (length(modInterval)==1) {
-        modInterval <- rep(modInterval, length(years))
+        modInterval <- rep(modInterval, length(yrs))
 
-    } else if (!(length(modInterval)==length(years))) {
+    } else if (!(length(modInterval)==length(yrs))) {
         stop('modInterval must be either length one or have a length equal to the number of years in the data.')
     }
 
@@ -56,35 +61,30 @@ DTsum <- function(ctemps, fdat, tdat, form, start, thresh, varying,
     #for each year extract temperature vector data frame or list so it can be
         #used to calculate thermal time
 
+    if (form %in% c('gdd','gddsimple')) {
+        tnames <- c('tmin','tmax')
+    } else {
+        tnames <- 'temp'
+    }
 
-	if (form %in% c('gdd','gddsimple')) {
-	    #calculate thermal sum
-	    tsums <- sapply(1:length(years), function(i) {
-	        #create list of parameters and data to send to do.call+form
-	        plist <- parslist(templist[[i]][,c('tmin','tmax')],
-	                          unlist(pars), sum=TRUE)
-	        do.call(form, plist) #calculate the thermal time
-	    })
+    print(modInterval[1])
 
-	} else if (form %in% c('linear','flat','triangle','asymcur')) {
+    ids <- lapply(1:length(yrs), function(i) {
 
-	    #calculate thermal sum
-	    tsums <- sapply(1:length(years), function(i) {
-	        #create list of parameters and data to send to do.call+form
-	        plist <- parslist(templist[[i]]$temp, unlist(pars), sum=TRUE)
-	        do.call(form, plist) #calculate the thermal time
-	    })
+    })
 
+    templist <- lapply(1:length(yrs), function(i) {
+        tdat[which(tdat$dt %within% modInterval[i]), tnames]
+    })
 
-	} else if (form=='anderson') { #same as above just if you are working with
-        tsums <- sapply(1:length(start), function(i) { #anderson functional form
-            plist <- parslist(templist[[i]]$temp, c(4,25,36), sum=TRUE)
-            do.call('asymcur', plist)
-        })
+    print(head(templist[[1]]))
 
-	} else {
-        stop('form must be linear, flat, triangle, asymcur, anderson, gdd, or gddsimple.')
-	}
+    tsums <- sapply(1:length(yrs), function(i) {
+        #create list of parameters and data to send to do.call+form
+        plist <- parslist(templist[[i]], unlist(ctemps), sum=TRUE)
+        do.call(form, plist) #calculate the thermal time
+    })
+
 
 	return(tsums)
 }
@@ -134,28 +134,27 @@ TTTsum <- function(pars, fdat, tdat, form, start, thresh, varying, mclass) {
 
     }
 
+
+
+
     #getting the temperatures
    if (form %in% c('gdd', 'gddsimple')) {
-
-        templist <- lapply(1:length(years), function(i) {
-            td <- tdat[[as.character(years[i])]]
-            td <- td[td$dt %within% modInterval[i],]
-            td[order(td$dt), c('tmin','tmax')]
-        })
+        tnames <- c('tmin','tmax')
 
    } else if (form %in% c('linear', 'flat', 'triangle', 'asymcur',
                           'anderson')) {
-
-       templist <- lapply(1:length(years), function(i) {
-           td <- tdat[[as.character(years[i])]]
-           td <- td[td$dt %within% modInterval[i],]
-           td[order(td$dt), 'temp']
-       })
+        tnames <- 'temp'
 
    } else {
         stop('type must be one of the following: gdd, gddsimple, linear
              flat, triangle, asymcur, anderson')
     }
+
+
+    templist <- lapply(1:length(years), function(i) {
+        td <- tdat[which(tdat$dt %within% modInterval[i]), ]
+        td[order(td$dt), tnames]
+    })
 
     #Calculating which day the plant will reach the thermal time threshold
     day <- predictevent(unlist(pars), templist, form, thresh)
