@@ -214,14 +214,8 @@ minrmse <- function(pars, fdat, tdat, modtype, form, stage, CT, S, TH, simple,
     if (isTRUE(CT)) ct <- pars[(plen-ctlen+1):plen] else ct <- CT[1:ctlen]
 
 
-    if (modclass=='FlowerModel') {
-        years <- fdat$year-1
-    } else {
-        years <- fdat$year
-    }
-
     startthresh <- convertParameters(pars, modtype, S, TH, varying,
-                                     fdat[,firstevent], years)
+                                     fdat[,firstevent], fdat$year, modclass)
 
     s <- startthresh[[1]]
     th <- startthresh[[2]]
