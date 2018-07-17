@@ -110,26 +110,21 @@ TTTsum <- function(pars, yrs, tdat, form, start, thresh, varying, mclass) {
 
     #print(str(pars))
 
-    if (!is.POSIXct(start[1])) {
-        stop('The parameter start must be a POSIXct class vector.')
-    }
-
+    startDate <- dayToDate(yrs, start, mclass)
 
     if (mclass=='FlowerModel') {
-        end <- dayToDate(yrs, 184)
+        endDate <- dayToDate(yrs, 184, 'FlowerModel')
 
     } else {
-        end <- dayToDate(yrs, 365)
+        endDate <- dayToDate(yrs, 365, 'PlantModel')
     }
 
-    modInterval <- interval(start, end)
+    modInterval <- interval(startDate, endDate)
 
     if (length(modInterval)==1) {
         modInterval <- rep(modInterval, length(yrs))
 
     }
-
-
 
 
     #getting the temperatures
