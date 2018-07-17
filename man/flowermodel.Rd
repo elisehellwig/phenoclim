@@ -15,7 +15,8 @@ harvest date from the previous year.}
 \item{temps}{data.frame, contains the temperature data. There should be a
 column for year, day of the year, hourly temperature (named temp) or min
 max daily temperatures (named tmin and tmax), and hour if the
-temperatures are hourly.}
+temperatures are hourly. Must have data from one year before you have
+phenology data}
 
 \item{parlist}{ParameterList, contains the parameter values and
 functional form of the thermal time calculations.}

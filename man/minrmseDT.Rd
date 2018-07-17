@@ -4,7 +4,7 @@
 \alias{minrmseDT}
 \title{Calculates DT model RMSE}
 \usage{
-minrmseDT(pars, fdat, tdat, form, thresh, stage, varying, modclass)
+minrmseDT(pars, fdat, tdat, form, start, thresh, stage, varying, modclass)
 }
 \arguments{
 \item{pars}{Cardinal temperatures}
@@ -14,6 +14,9 @@ minrmseDT(pars, fdat, tdat, form, thresh, stage, varying, modclass)
 \item{tdat}{list containing the temperature information}
 
 \item{form}{the functional form of the thermal time accumulation}
+
+\item{start}{numeric, the day to start accumulating time or thermal time
+towards the model threshold.}
 
 \item{thresh}{the threshold in days that thermal time is accumulated for.}
 
@@ -33,5 +36,5 @@ The RMSE value for a given set of cardinal temperatures and thermal
 \description{
 Calculates RMSE for the thermal model given a certain set of cardinal
     temperatures and the Time/Day threshold. Counts the amount of thermal
-    time required to reach the day threshold.
+    time required to reach the day threshold. #These are the DT1,3 models
 }

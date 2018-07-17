@@ -5,7 +5,7 @@
 \title{Calculates model RMSE}
 \usage{
 minrmse(pars, fdat, tdat, modtype, form, stage, CT, S, TH, simple, varying,
-  modclass)
+  modclass, firstevent)
 }
 \arguments{
 \item{pars}{vector with threshold value and cardinal temperatures}
@@ -24,25 +24,28 @@ threshold) or 'TTT' (thermal time threshold)}
 \item{CT}{logical, should the cardinal temperatures be optimized. If not CT
 is the vector of cardinal temperatures.}
 
-\item{S}{logical, is the day to start counting being optimized? (ie.
-not using bloom as startday for PlantModels and Harvest for FlowerModels)}
+\item{S}{logical/numeric, is the day to start counting being optimized? If
+not, the value associated with the start day should be provided.}
 
-\item{TH}{logical, should the model accumulation threshold be optimized. If
-not L is the (numeric) model accumulation threshold.}
+\item{TH}{logical/numeric, should the model threshold be optimized. If
+not L is the (numeric) model threshold.}
 
 \item{simple}{logical, should the simplified version of the model be run?}
 
 \item{varying}{character, c('start', 'threshold') should either of these pars
 vary from year to year.}
 
-\item{modclass}{logical, Do count forward from the starting event (as
-opposed to backward)? If you have negative values in your event days
-you forward should probably be FALSE. Bloom model forward=false, harvest
-model forward=true.}
+\item{modclass}{character, type of model to be estimating, options are
+'PlantModel' or 'FlowerModel'. If you have negative day values, you
+probably want flower model.}
+
+\item{firstevent}{character, the name of the column that contains the
+starting phenological event for the model. For FlowerModels this is the
+harvest date.}
 }
 \value{
-The RMSE value for a given set of cardinal temperatures and thermal
-    time accumulation length.
+The RMSE value for a given set of cardinal temperatures start day
+    model threshold.
 }
 \description{
 Calculates RMSE for a Day Threshold (DT) or Thermal Time Threshold (TTT)

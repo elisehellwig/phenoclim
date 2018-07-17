@@ -9,7 +9,6 @@ Imports:
     DEoptim,
     parallel,
     dismo,
-    ehelpr
 Authors@R: person("Elise", "Hellwig",
                   email = "echellwig@ucdavis.edu", role = c("aut", "cre"))
 URL: https://bitbucket.org/echellwig/phenoclim
@@ -29,7 +28,6 @@ Collate:
     'constructors.R'
     'plantmodelclass.R'
     'plantmodelmethods.R'
-    'flipday.R'
     'thermalsum.R'
     'minrmse.R'
     'objectivefunction.R'

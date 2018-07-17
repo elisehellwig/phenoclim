@@ -4,7 +4,7 @@
 \alias{minrmseTTT}
 \title{Calculates TTT model RMSE}
 \usage{
-minrmseTTT(pars, fdat, tdat, form, length, stage, modclass)
+minrmseTTT(pars, fdat, tdat, form, start, thresh, stage, modclass)
 }
 \arguments{
 \item{pars}{Cardinal temperatures}
@@ -15,13 +15,16 @@ minrmseTTT(pars, fdat, tdat, form, length, stage, modclass)
 
 \item{form}{the functional form of the thermal time accumulation}
 
+\item{start}{numeric, the day to start accumulating time or thermal time
+towards the model threshold.}
+
+\item{thresh}{the threshold in thermal time that days are counted for.}
+
 \item{stage}{the number of the stage of the phenological model}
 
 \item{modclass}{character, type of model to be estimating, options are
 'PlantModel' or 'FlowerModel'. If you have negative day values, you
 probably want flower model.}
-
-\item{thresh}{the threshold in thermal time that days are counted for.}
 
 \item{varying}{character, c('start', 'threshold') should either of these pars
 vary from year to year.}
@@ -34,5 +37,5 @@ The RMSE value for a given set of cardinal temperatures and thermal
 Calculates RMSE for the combined model of thermal time accumulation given a
     certain set of cardinal temperatures and thermal time accumulation
     length. Counts the number of days necessary to reach the Thermal time
-    threshold
+    threshold and use that number to predict the event. TTT1-3
 }

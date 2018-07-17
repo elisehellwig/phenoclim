@@ -4,7 +4,7 @@
 \alias{minrmseTTTsimplified}
 \title{Calculates simplified TTT model RMSE}
 \usage{
-minrmseTTTsimplified(pars, fdat, tdat, form, thresh, stage, modclass)
+minrmseTTTsimplified(pars, fdat, tdat, form, start, thresh, stage, modclass)
 }
 \arguments{
 \item{pars}{Cardinal temperatures}
@@ -13,7 +13,10 @@ minrmseTTTsimplified(pars, fdat, tdat, form, thresh, stage, modclass)
 
 \item{tdat}{list containing the temperature information}
 
-\item{form}{the functional form of the thermal time accumulation}
+\item{form}{the functional form of the thermal time accumulation.}
+
+\item{start}{numeric, the day to start accumulating time or thermal time
+towards the model threshold.}
 
 \item{thresh}{the threshold in thermal time that days are counted for.}
 
@@ -34,5 +37,5 @@ The RMSE value for a given set of cardinal temperatures and thermal
 Calculates RMSE for the simplified model of day accumulation given a
     certain set of cardinal temperatures and day accumulation
     length. Counts the amount of thermal time required to reach the season
-    length.
+    length. This corresponds to model TTT1-3
 }

@@ -4,26 +4,29 @@
 \alias{TTTsum}
 \title{Calculates thermal time sums for TTT model}
 \usage{
-TTTsum(pars, fdat, tdat, form, length, stage, forward)
+TTTsum(pars, yrs, tdat, form, start, thresh, varying, mclass)
 }
 \arguments{
 \item{pars}{Cardinal temperatures}
 
-\item{fdat}{the data.frame containing the phenological information}
+\item{yrs}{the years we have phenology data for.}
 
 \item{tdat}{list containing the temperature information}
 
 \item{form}{the functional form of the thermal time accumulation}
 
-\item{length}{the length of thermal time accumulation (in days). It can be
-either a set length of time (one number) or the total length of the
-stage (one length for each entry in fdat).}
+\item{start}{numeric, the day to start accumulating time or thermal time
+towards the model threshold.}
 
-\item{stage}{the number of the stage of the phenological model}
+\item{thresh}{numeric, the length of thermal time accumulation (in either
+days or thermal time units).}
 
-\item{forward}{logical, Do count forward from the starting event (as
-opposed to backward)? If you have negative values in your event days
-you forward should probably be FALSE.}
+\item{varying}{character, c('start', 'threshold') should either of these
+pars vary from year to year.}
+
+\item{mclass}{character, class of model to be estimating, options are
+'PlantModel' or 'FlowerModel'. If you have negative day values, you
+probably want flower model.}
 }
 \value{
 The thermal sums for a given series of years.
