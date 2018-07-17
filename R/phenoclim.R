@@ -3,7 +3,6 @@
 #' @docType package
 #' @name phenoclim
 #'
-#' @import ehelpr
 #' @importFrom methods setClass setGeneric setMethod new validObject
 #' @importFrom plyr ldply
 #' @importFrom reshape2 melt
