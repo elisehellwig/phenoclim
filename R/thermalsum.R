@@ -1,4 +1,4 @@
-#' @include parameterlistmethods.R
+#' @include parameterlistmethods.R fithelper.R
 NULL
 
 
@@ -34,25 +34,20 @@ DTsum <- function(ctemps, yrs, tdat, form, start, thresh, varying,
    }
 
    #print(1)
+    #convert start days to dates
+    startDate <- dayToDate(yrs, start, mclass)
 
-    if (!is.POSIXct(start[1])) {
-        stop('The parameter start must be a POSIXct class vector.')
-    }
 
     if ('threshold' %in% varying) {
-        end <- start + days(thresh)
+        endDate <- startDate + days(thresh)
 
     } else {
-        if (!is.POSIXct(thresh[1])) {
-            end <- dayToDate(thresh)+days(1)
-        } else {
-            end <- thresh
-        }
+        endDate <- dayToDate(yrs, thresh, mclass)+days(1)
     }
 
 
    #print(2)
-    modInterval <- interval(start, end)
+    modInterval <- interval(startDate, endDate)
 
     if (length(modInterval)==1) {
         modInterval <- rep(modInterval, length(yrs))
