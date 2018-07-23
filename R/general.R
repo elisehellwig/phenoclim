@@ -1,9 +1,5 @@
-
-
-
-##############################################
-
-
+#' @include parameterfunctions.R
+NULL
 
 ##############################################
 
@@ -36,10 +32,20 @@ length0 <- function(x) {
 #' returns a column of the phenology data.frame
 #'
 #' @param dat the phenology data frame
+#' @param modclass class of model, FlowerModel or PlantModel
 #' @param i the number of the phenology event to be extracted
 #' @return A vector with the julian days of the ith phenological event
-eventi <- function(dat, i) {
-    d <- dat[,paste0('event',i)]
+eventi <- function(dat, modclass, i) {
+
+    if (modclass=='FlowerModel') {
+        d <- dat[,paste0('event',i)]
+
+    } else if (modclass=='PlantModel') {
+        d <- dat[,paste0('event',i+1)]
+    } else {
+        stop('Modclass must be FlowerModel or PlantModel.')
+    }
+
     return(d)
 }
 
