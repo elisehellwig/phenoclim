@@ -46,10 +46,10 @@ DTsum <- function(ctemps, yrs, tdat, form, startDate, thresh, varying,
         endDate <- thresh
     }
 
-   print(head(startDate))
-   print(head(endDate))
+   #print(head(startDate))
+   #print(head(endDate))
     modInterval <- interval(startDate, endDate)
-    print(3)
+    #print(3)
 
     if (length(modInterval)==1) {
         modInterval <- rep(modInterval, length(yrs))
