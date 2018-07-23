@@ -79,7 +79,7 @@ minrmseDT <- function(pars, fdat, tdat, form, start, thresh, stage, varying,
 #' @return The RMSE value for a given set of cardinal temperatures and thermal
 #'     time accumulation length.
 minrmseTTTsimplified <- function(pars, fdat, tdat, form, start, thresh, stage,
-                                 modclass) {
+                                 varying, modclass) {
 
     responsename <- responseVar(modclass, stage) #name of response variable
 
@@ -128,7 +128,8 @@ minrmseTTTsimplified <- function(pars, fdat, tdat, form, start, thresh, stage,
 #'     probably want flower model.
 #' @return The RMSE value for a given set of cardinal temperatures and thermal
 #'     time accumulation length.
-minrmseTTT <- function(pars, fdat, tdat, form, start, thresh, stage, modclass) {
+minrmseTTT <- function(pars, fdat, tdat, form, start, thresh, stage,
+                       varying, modclass) {
 
     responsename <- responseVar(modclass, stage) #name of response variable
 
@@ -150,7 +151,8 @@ minrmseTTT <- function(pars, fdat, tdat, form, start, thresh, stage, modclass) {
         } else {
 
             #is the day met before the end of the stage in questions?
-            positive <- ifelse(daymet > eventi(fdat, stage+1), FALSE, TRUE)
+            positive <- ifelse(daymet > eventi(fdat, modclass, stage),
+                               FALSE, TRUE)
 
             if (all(positive)) {  #if so create model to use day met to predict
                                     #stage length
@@ -165,7 +167,7 @@ minrmseTTT <- function(pars, fdat, tdat, form, start, thresh, stage, modclass) {
         }
     }
 
-    return(rmse)
+    return(rmsd)
 
 }
 
