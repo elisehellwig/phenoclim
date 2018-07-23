@@ -91,8 +91,8 @@ DTsum <- function(ctemps, yrs, tdat, form, startDate, thresh, varying,
 #' @param yrs the years we have phenology data for.
 #' @param tdat list containing the temperature information
 #' @param form the functional form of the thermal time accumulation
-#' @param start numeric, the day to start accumulating time or thermal time
-#'     towards the model threshold.
+#' @param startDate POSIXct, the date to start accumulating time or thermal
+#'     time towards the model threshold.
 #' @param thresh numeric, the length of thermal time accumulation (in either
 #'     days or thermal time units).
 #' @param varying character, c('start', 'threshold') should either of these
@@ -101,11 +101,9 @@ DTsum <- function(ctemps, yrs, tdat, form, startDate, thresh, varying,
 #'     'PlantModel' or 'FlowerModel'. If you have negative day values, you
 #'     probably want flower model.
 #' @return The thermal sums for a given series of years.
-TTTsum <- function(pars, yrs, tdat, form, start, thresh, varying, mclass) {
+TTTsum <- function(pars, yrs, tdat, form, startDate, thresh, varying, mclass) {
 
     #print(str(pars))
-
-    startDate <- dayToDate(yrs, start, mclass)
 
     if (mclass=='FlowerModel') {
         endDate <- dayToDate(yrs+1, 184, 'FlowerModel')
@@ -159,9 +157,9 @@ TTTsum <- function(pars, yrs, tdat, form, start, thresh, varying, mclass) {
 #' @param modtype character, specifies what type of model is being run. Can be
 #'     either DT (Day Threshold) or TTT (Thermal Time Threshold).
 #' @param form the functional form of the thermal time accumulation
-#' @param start numeric, the day to start accumulating time or thermal time
-#'     towards the model threshold.
-#' @param thresh numeric, the length of thermal time accumulation (in either
+#' @param start POSIXct, the date to start accumulating time or thermal
+#'     time towards the model threshold.
+#' @param thresh the length of thermal time accumulation (in either
 #'     days or thermal time units).
 #' @param varying character, c('start', 'threshold') should either of these
 #'     pars vary from year to year.
@@ -172,9 +170,6 @@ TTTsum <- function(pars, yrs, tdat, form, start, thresh, varying, mclass) {
 thermalsum <- function(ctemps, yrs, tdat, modtype, form, start, thresh,
                        varying, mclass) {
 
-    if (!(is.numeric(thresh) | is.integer(thresh))) {
-        stop('Model threshold must be numeric or an integer')
-    }
 
     if (modtype=='DT') {
         ths <- DTsum(ctemps, yrs, tdat, form, start, thresh, varying, mclass)
