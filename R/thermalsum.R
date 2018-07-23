@@ -12,16 +12,18 @@ NULL
 #' @param yrs the years we have phenology data for.
 #' @param tdat list containing the temperature information
 #' @param form the functional form of the thermal time accumulation
-#' @param start numeric, the day to start accumulating time or thermal time
-#'     towards the model threshold.
-#' @param thresh numeric, the length of thermal time accumulation, in days.
+#' @param startDate POSIXct, the date to start accumulating time or thermal
+#'     time towards the model threshold.
+#' @param thresh Period or POSIXct, the duration of the thermal time
+#'     accumulation (threshold varies). or the date to stop accumulating thermal
+#'     time (threshold does not vary).
 #' @param varying character, c('start', 'threshold') should either of these
 #'     pars vary from year to year.
 #' @param mclass character, class of model to be estimating, options are
 #'     'PlantModel' or 'FlowerModel'. If you have negative day values, you
 #'     probably want flower model.
 #' @return The thermal sums for a given series of years.
-DTsum <- function(ctemps, yrs, tdat, form, start, thresh, varying,
+DTsum <- function(ctemps, yrs, tdat, form, startDate, thresh, varying,
                   mclass) {
 
     #possible forms
@@ -33,18 +35,11 @@ DTsum <- function(ctemps, yrs, tdat, form, start, thresh, varying,
 
    }
 
-   #print(1)
-    #convert start days to dates
-    startDate <- dayToDate(yrs, start, mclass)
-
 
     if ('threshold' %in% varying) {
-        endDate <- startDate + days(thresh)
+        endDate <- startDate + thresh
 
-    } else {
-        endDate <- dayToDate(yrs, thresh, mclass)+days(1)
     }
-
 
    #print(2)
     modInterval <- interval(startDate, endDate)
