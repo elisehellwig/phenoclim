@@ -39,6 +39,8 @@ DTsum <- function(ctemps, yrs, tdat, form, startDate, thresh, varying,
     if ('threshold' %in% varying) {
         endDate <- startDate + thresh
 
+    } else {
+        endDate <- thresh
     }
 
    #print(2)
