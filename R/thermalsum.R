@@ -183,7 +183,7 @@ thermalsum <- function(ctemps, yrs, tdat, modtype, form, start, thresh,
     print('thermalsum')
 
 
-    if (is.numeric(start) | is.numeric(thresh)) {
+    if (is.numeric(start) | (is.numeric(thresh) & modtype=='DT')) {
 
         if (is.na(startingevent[1])) {
             stop('You must specify the starting event in days if you want to
