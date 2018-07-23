@@ -4,10 +4,12 @@
 \alias{eventi}
 \title{returns a column of the phenology data.frame}
 \usage{
-eventi(dat, i)
+eventi(dat, modclass, i)
 }
 \arguments{
 \item{dat}{the phenology data frame}
+
+\item{modclass}{class of model, FlowerModel or PlantModel}
 
 \item{i}{the number of the phenology event to be extracted}
 }

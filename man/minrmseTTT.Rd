@@ -4,7 +4,7 @@
 \alias{minrmseTTT}
 \title{Calculates TTT model RMSE}
 \usage{
-minrmseTTT(pars, fdat, tdat, form, start, thresh, stage, modclass)
+minrmseTTT(pars, fdat, tdat, form, start, thresh, stage, varying, modclass)
 }
 \arguments{
 \item{pars}{Cardinal temperatures}
@@ -22,12 +22,12 @@ towards the model threshold.}
 
 \item{stage}{the number of the stage of the phenological model}
 
+\item{varying}{character, c('start', 'threshold') should either of these pars
+vary from year to year.}
+
 \item{modclass}{character, type of model to be estimating, options are
 'PlantModel' or 'FlowerModel'. If you have negative day values, you
 probably want flower model.}
-
-\item{varying}{character, c('start', 'threshold') should either of these pars
-vary from year to year.}
 }
 \value{
 The RMSE value for a given set of cardinal temperatures and thermal

@@ -26,8 +26,10 @@ vary from year to year.}
 starting event of the model. For bloom the event is harvest.}
 }
 \value{
-list of the correct start day vector and the threshold vector based
-    on the type of model being run.
+list of the correct start POSIXct date vector and the threshold
+    vector based on the type of model being run. If the day of the threshold
+    varies by year it is a 'Period' vector. If it does not, it is a POSIXct
+    date vector.
 }
 \description{
 Assigns parameter values for start and threshold based on model type,

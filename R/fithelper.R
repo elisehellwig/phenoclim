@@ -86,8 +86,10 @@ dayToDate <- function(years, days, modclass, varying, hours=NA,
 #'     vary from year to year.
 #' @param eventvec numeric, a vector that contains the day of the year for the
 #'     starting event of the model. For bloom the event is harvest.
-#' @return list of the correct start day vector and the threshold vector based
-#'     on the type of model being run.
+#' @return list of the correct start POSIXct date vector and the threshold
+#'     vector based on the type of model being run. If the day of the threshold
+#'     varies by year it is a 'Period' vector. If it does not, it is a POSIXct
+#'     date vector.
 convertParameters <- function(pars, modtype, S, TH, vp, eventvec, years,
                               modclass) {
 

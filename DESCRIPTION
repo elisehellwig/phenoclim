@@ -20,9 +20,9 @@ LazyData: TRUE
 RoxygenNote: 6.0.1
 Collate: 
     'FlowerPlant.R'
+    'parameterfunctions.R'
     'general.R'
     'thermal.R'
-    'parameterfunctions.R'
     'parameterlistclass.R'
     'parameterlistmethods.R'
     'constructors.R'

@@ -4,15 +4,17 @@
 \alias{dayToDate}
 \title{Converts day of the year to date-time}
 \usage{
-dayToDate(years, days, modclass, hours = NA, startTime = "00:00:00",
-  timezone = "America/Los_Angeles")
+dayToDate(years, days, modclass, varying, hours = NA,
+  startTime = "00:00:00", timezone = "America/Los_Angeles")
 }
 \arguments{
 \item{years}{numeric, a vector of years to use for each day of the year}
 
-\item{days}{numeric, the day of the year you want to convert to date-time}
+\item{days}{numeric, the day of the year you want to convert to date-time.}
 
 \item{modclass}{character, 'PlantModel' or 'FlowerModel'.}
+
+\item{varying}{character,}
 
 \item{hours}{numeric, a vector of hours to use in your date-time conversion}
 
