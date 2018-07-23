@@ -113,10 +113,10 @@ TTTsum <- function(pars, yrs, tdat, form, start, thresh, varying, mclass) {
     startDate <- dayToDate(yrs, start, mclass)
 
     if (mclass=='FlowerModel') {
-        endDate <- dayToDate(yrs, 184, 'FlowerModel')
+        endDate <- dayToDate(yrs+1, 184, 'FlowerModel')
 
     } else {
-        endDate <- dayToDate(yrs, 365, 'PlantModel')
+        endDate <- dayToDate(yrs, rep(365, length(yrs)), 'PlantModel')
     }
 
     modInterval <- interval(startDate, endDate)
@@ -185,7 +185,7 @@ thermalsum <- function(ctemps, yrs, tdat, modtype, form, start, thresh,
         ths <- DTsum(ctemps, yrs, tdat, form, start, thresh, varying, mclass)
 
     } else if (modtype=='TTT') {
-        ths <- TTTsum(ctemps, yrs, tdat, form, start, thresh, mclass)
+        ths <- TTTsum(ctemps, yrs, tdat, form, start, thresh, varying, mclass)
         #print(ths)
 
     } else {
