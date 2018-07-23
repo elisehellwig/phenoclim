@@ -66,6 +66,59 @@ dayToDate <- function(years, days, modclass, varying, hours=NA,
 
 }
 
+#' Formats parameters in days to Dates
+#'
+#' Assigns parameter values for start and threshold based on model type,
+#'     which parameters are being estimated and which parameters are varying
+#'     from year to year.
+#'
+#' @param years numeric, a vector of years to use for each day of the year.
+#' @param eventday numeric, a vector that contains the day of the year for the
+#'     starting event of the model. For bloom the event is harvest.
+#' @param startday numeric, vector of days to start count thermal time each
+#'     year.
+#' @param threshold numeric, the threshold of the model.
+#' @param modtype character, is the model a day threshold ('DT') model or a
+#'     thermal time threshold model ('TTT').
+#' @param varying character, c('start', 'threshold') should either of these pars
+#'     vary from year to year.
+#' @param modclass character, PlantModel or FlowerModel
+#' @return list of the correct start POSIXct date vector and the threshold
+#'     vector based on the type of model being run. If the day of the threshold
+#'     varies by year it is a 'Period' vector. If it does not, it is a POSIXct
+#'     date vector.
+formatParameters <- function(years, eventday, startday, threshold, modtype,
+                             modclass, varying) {
+
+
+    #does start day vary from year to year?
+    if ('start' %in% varying) {
+        startday <- startday + eventday
+    }
+
+    #convert days of the year to dates
+    sdate <- dayToDate(years, startday, modclass)
+
+    #Note if it is a TTT model threshold can't vary from year to year.
+    if (modtype=='DT') {
+
+        if ('threshold' %in% varying) {
+            threshdate <- days(threshold)
+
+        } else {
+            threshdate <- dayToDate(years, threshold, modclass) + days(1)
+        }
+
+    } else { #not actually a date, rather a number of thermal time units
+        threshdate <- threshold
+    }
+
+    sth <- list(sdate, threshdate)
+
+    return(sth)
+
+}
+
 
 
 #' Separates out Parameter Values for optimization
@@ -86,6 +139,8 @@ dayToDate <- function(years, days, modclass, varying, hours=NA,
 #'     vary from year to year.
 #' @param eventvec numeric, a vector that contains the day of the year for the
 #'     starting event of the model. For bloom the event is harvest.
+#' @param years numeric, a vector of years to use for each day of the year.
+#' @param modclass character, PlantModel or FlowerModel
 #' @return list of the correct start POSIXct date vector and the threshold
 #'     vector based on the type of model being run. If the day of the threshold
 #'     varies by year it is a 'Period' vector. If it does not, it is a POSIXct
@@ -93,6 +148,7 @@ dayToDate <- function(years, days, modclass, varying, hours=NA,
 convertParameters <- function(pars, modtype, S, TH, vp, eventvec, years,
                               modclass) {
 
+    print('cp')
     #Estimating start day
     if (isTRUE(S)) {
         s <- pars[1]
@@ -102,13 +158,6 @@ convertParameters <- function(pars, modtype, S, TH, vp, eventvec, years,
 
     }
 
-    #does start day vary from year to year?
-    if ('start' %in% vp) {
-        s <- s + eventvec
-    }
-
-    #convert days of the year to dates
-    s <- dayToDate(years, s, modclass)
 
     #Estimating threshold
     if (isTRUE(TH)) {
@@ -124,20 +173,9 @@ convertParameters <- function(pars, modtype, S, TH, vp, eventvec, years,
 
     }
 
-
-    #Note if it is a TTT model threshold can't vary from year to year.
-    if (modtype=='DT') {
-
-         if ('threshold' %in% vp) {
-            th <- days(th)
-
-        } else {
-            th <- dayToDate(years, th, modclass) + days(1)
-        }
-
-    }
+    STHlist <- formatParameters(years, eventvec, s, th, modtype, modclass,
+                                vp)
 
 
-    return(list(s, th))
-
+    return(STHlist)
 }
