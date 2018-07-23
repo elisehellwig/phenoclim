@@ -30,15 +30,16 @@ correctYears <- function(day, years, modclass) {
 #'     and converts them to a date-time vector of the class POSIXct
 #'
 #' @param years numeric, a vector of years to use for each day of the year
-#' @param days numeric, the day of the year you want to convert to date-time
+#' @param days numeric, the day of the year you want to convert to date-time.
+#' @param varying character,
 #' @param modclass character, 'PlantModel' or 'FlowerModel'.
 #' @param hours numeric, a vector of hours to use in your date-time conversion
 #' @param startTime character, used to specify the same time of day for each
 #'     date-time entry element. Only used if hours=NA.
 #' @return A POSIXct vector of date-times
 #' @export
-dayToDate <- function(years, days, modclass, hours=NA, startTime='00:00:00',
-                      timezone='America/Los_Angeles') {
+dayToDate <- function(years, days, modclass, varying, hours=NA,
+                      startTime='00:00:00', timezone='America/Los_Angeles') {
 
     if (length(days)==1) {
         days <- rep(days, length(years))
@@ -134,17 +135,13 @@ convertParameters <- function(pars, modtype, S, TH, vp, eventvec, years,
 
     }
 
-    #getting the correct years based on when the start day is
-    if (modclass=='FlowerModel') {
-        years <- ifelse(s>210, years-1, years)
-    }
-
     #does start day vary from year to year?
-    if (!('start' %in% vp)) {#case: DT 5, TTT3
-        s <- dayToDAE(s, eventvec, years)
-
+    if ('start' %in% vp) {
+        s <- s + eventvec
     }
 
+    #convert days of the year to dates
+    s <- dayToDate(years, s, modclass)
 
     #Estimating threshold
     if (isTRUE(TH)) {
@@ -162,8 +159,14 @@ convertParameters <- function(pars, modtype, S, TH, vp, eventvec, years,
 
 
     #Note if it is a TTT model threshold can't vary from year to year.
-    if (modtype=='DT' & (!('threshold' %in% vp)) ) {
-        th <- dayToDAE(th, eventvec, years) - s
+    if (modtype=='DT') {
+
+         if ('threshold' %in% vp) {
+            th <- days(th)
+
+        } else {
+            th <- dayToDate(years, th, modclass)
+        }
 
     }
 
