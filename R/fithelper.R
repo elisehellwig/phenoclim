@@ -13,7 +13,7 @@
 correctYears <- function(day, years, modclass) {
 
     if (modclass=='FlowerModel') {
-        correctedYears <- ifelse(day>180, years-1, years)
+        correctedYears <- ifelse(day>130, years-1, years)
     } else {
         correctedYears <- years
     }
@@ -39,6 +39,10 @@ correctYears <- function(day, years, modclass) {
 #' @export
 dayToDate <- function(years, days, modclass, hours=NA, startTime='00:00:00',
                       timezone='America/Los_Angeles') {
+
+    if (length(days)==1) {
+        days <- rep(days, length(years))
+    }
 
     cyears <- correctYears(days, years, modclass)
 
@@ -168,5 +172,7 @@ convertParameters <- function(pars, modtype, S, TH, vp, eventvec, years,
 
 }
 
+convertPhenology <- function(df) {
 
+}
 
