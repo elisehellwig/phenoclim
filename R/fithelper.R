@@ -132,7 +132,7 @@ convertParameters <- function(pars, modtype, S, TH, vp, eventvec, years,
             th <- days(th)
 
         } else {
-            th <- dayToDate(years, th, modclass)
+            th <- dayToDate(years, th, modclass) + days(1)
         }
 
     }
