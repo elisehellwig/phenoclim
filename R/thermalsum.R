@@ -26,6 +26,8 @@ NULL
 DTsum <- function(ctemps, yrs, tdat, form, startDate, thresh, varying,
                   mclass) {
 
+
+    print('DTsum')
     #possible forms
    posforms <-  c('anderson','linear','flat','triangle','asymcur','gdd',
                   'gddsimple')
@@ -36,6 +38,7 @@ DTsum <- function(ctemps, yrs, tdat, form, startDate, thresh, varying,
    }
 
 
+   #print(1)
     if ('threshold' %in% varying) {
         endDate <- startDate + thresh
 
@@ -43,8 +46,10 @@ DTsum <- function(ctemps, yrs, tdat, form, startDate, thresh, varying,
         endDate <- thresh
     }
 
-   #print(2)
+   print(head(startDate))
+   print(head(endDate))
     modInterval <- interval(startDate, endDate)
+    print(3)
 
     if (length(modInterval)==1) {
         modInterval <- rep(modInterval, length(yrs))
@@ -107,6 +112,8 @@ TTTsum <- function(pars, yrs, tdat, form, startDate, thresh, varying, mclass) {
 
     #print(str(pars))
 
+    print('TTTsum')
+
     if (mclass=='FlowerModel') {
         endDate <- dayToDate(yrs+1, 184, 'FlowerModel')
 
@@ -167,11 +174,34 @@ TTTsum <- function(pars, yrs, tdat, form, startDate, thresh, varying, mclass) {
 #'     pars vary from year to year.
 #' @param mclass character, type of model to be estimating, options are
 #'     'PlantModel' or 'FlowerModel'.
+#' @param startingevent numeric, days first event happened each year.
 #' @return The thermal sums for a given series of years.
 #' @export
 thermalsum <- function(ctemps, yrs, tdat, modtype, form, start, thresh,
-                       varying, mclass) {
+                       varying, mclass, startingevent=NA) {
 
+    print('thermalsum')
+
+
+    if (is.numeric(start) | is.numeric(thresh)) {
+
+        if (is.na(startingevent[1])) {
+            stop('You must specify the starting event in days if you want to
+                 input start and thresh as numericsd.')
+        } else {
+            sth <- formatParameters(yrs, startingevent, start, thresh, modtype,
+                                   mclass, varying)
+        }
+
+        if (is.numeric(start)) {
+            start <- sth[[1]]
+        }
+
+        if (is.numeric(thresh)) {
+            thresh <- sth[[2]]
+        }
+
+    }
 
     if (modtype=='DT') {
         ths <- DTsum(ctemps, yrs, tdat, form, start, thresh, varying, mclass)
