@@ -29,7 +29,7 @@ NULL
 minrmseDT <- function(pars, fdat, tdat, form, start, thresh, stage, varying,
                       modclass) {
 
-
+    print('minrmseDT')
     responsename <- responseVar(modclass, stage)
 
     if (checkpars(pars)) { #if parameters are in ascending order
@@ -80,6 +80,7 @@ minrmseDT <- function(pars, fdat, tdat, form, start, thresh, stage, varying,
 #'     time accumulation length.
 minrmseTTTsimplified <- function(pars, fdat, tdat, form, start, thresh, stage,
                                  varying, modclass) {
+    print('minrmseTTTsimp')
 
     responsename <- responseVar(modclass, stage) #name of response variable
 
@@ -130,6 +131,8 @@ minrmseTTTsimplified <- function(pars, fdat, tdat, form, start, thresh, stage,
 #'     time accumulation length.
 minrmseTTT <- function(pars, fdat, tdat, form, start, thresh, stage,
                        varying, modclass) {
+
+    print('minrmseTTT')
 
     responsename <- responseVar(modclass, stage) #name of response variable
 
@@ -211,6 +214,8 @@ minrmse <- function(pars, fdat, tdat, modtype, form, stage, CT, S, TH, simple,
 
     #assigning parameter values to variables based on what parameters are
         #in the model
+
+    print('minrmse')
 
     ##########partitioning out the parameters####################
     if (isTRUE(CT)) ct <- pars[(plen-ctlen+1):plen] else ct <- CT[1:ctlen]
