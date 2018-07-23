@@ -4,7 +4,7 @@
 \alias{DTsum}
 \title{Calculates thermal time sums for DT model}
 \usage{
-DTsum(ctemps, yrs, tdat, form, start, thresh, varying, mclass)
+DTsum(ctemps, yrs, tdat, form, startDate, thresh, varying, mclass)
 }
 \arguments{
 \item{ctemps}{Cardinal temperatures}
@@ -15,10 +15,12 @@ DTsum(ctemps, yrs, tdat, form, start, thresh, varying, mclass)
 
 \item{form}{the functional form of the thermal time accumulation}
 
-\item{start}{numeric, the day to start accumulating time or thermal time
-towards the model threshold.}
+\item{startDate}{POSIXct, the date to start accumulating time or thermal
+time towards the model threshold.}
 
-\item{thresh}{numeric, the length of thermal time accumulation, in days.}
+\item{thresh}{Period or POSIXct, the duration of the thermal time
+accumulation (threshold varies). or the date to stop accumulating thermal
+time (threshold does not vary).}
 
 \item{varying}{character, c('start', 'threshold') should either of these
 pars vary from year to year.}

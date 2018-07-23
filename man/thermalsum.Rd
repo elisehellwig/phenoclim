@@ -18,10 +18,10 @@ either DT (Day Threshold) or TTT (Thermal Time Threshold).}
 
 \item{form}{the functional form of the thermal time accumulation}
 
-\item{start}{numeric, the day to start accumulating time or thermal time
-towards the model threshold.}
+\item{start}{POSIXct, the date to start accumulating time or thermal
+time towards the model threshold.}
 
-\item{thresh}{numeric, the length of thermal time accumulation (in either
+\item{thresh}{the length of thermal time accumulation (in either
 days or thermal time units).}
 
 \item{varying}{character, c('start', 'threshold') should either of these

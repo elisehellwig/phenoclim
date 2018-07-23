@@ -4,7 +4,7 @@
 \alias{TTTsum}
 \title{Calculates thermal time sums for TTT model}
 \usage{
-TTTsum(pars, yrs, tdat, form, start, thresh, varying, mclass)
+TTTsum(pars, yrs, tdat, form, startDate, thresh, varying, mclass)
 }
 \arguments{
 \item{pars}{Cardinal temperatures}
@@ -15,8 +15,8 @@ TTTsum(pars, yrs, tdat, form, start, thresh, varying, mclass)
 
 \item{form}{the functional form of the thermal time accumulation}
 
-\item{start}{numeric, the day to start accumulating time or thermal time
-towards the model threshold.}
+\item{startDate}{POSIXct, the date to start accumulating time or thermal
+time towards the model threshold.}
 
 \item{thresh}{numeric, the length of thermal time accumulation (in either
 days or thermal time units).}
