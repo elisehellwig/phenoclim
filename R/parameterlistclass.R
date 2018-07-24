@@ -181,8 +181,8 @@ setGeneric('varyingpars<-', function(object, value) {
 #'  Used to change the functional form without recreating the object.
 #'
 #' @param object An object of class ParameterList
-#' @param value A character vector containing either 'cardinaltemps',
-#'     'modlength' or both.
+#' @param value A character vector containing 'cardinaltemps',
+#'     'threshold', 'start' or any combination of the three.
 #' @export
 setGeneric('parsOptimized<-', function(object, value) {
     standardGeneric('parsOptimized<-') })

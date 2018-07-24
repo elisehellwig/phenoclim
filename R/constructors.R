@@ -19,41 +19,47 @@ NULL
 #'     temperatures for a given stage of the model. If ct is a list, each
 #'     element of the list should be a vector of cardinal temperatures for a
 #'     given stage of the model.
-#' @param modelthreshold numeric vector of model thresholds.
-#' @param lims list of start and stop pairs. Start is always the day close to
-#'     flowering. This means that it will be the earliest day in a PlantModel,
-#'     but the latest day in a FlowerModel. If length is not NA, one of the
-#'     limits has to be NA.
+#' @param modelthreshold numeric vector of model thresholds (one for each
+#'     stage).
+#' @param start numeric vector of start days (one for each stage).
+#' @param varyingparameters character vector, which parameters will have the
+#'     of the year vary from year to year c('start', 'threshold')
 #' @param optimized character, Determines what parameters are optimized in the
-#'     model.Can contain "cardinaltemps", "modlength" or both, but it must
-#'     contain at least one of the two.
+#'     model. Can contain "cardinaltemps", "threshold", "start" or any
+#'     combination of all three, but it must contain at least one.
 #' @param ModelClass character, the class to be fit. Options are
 #'     'PlantModel' or 'FlowerModel'.
 #' @return An object of the class ParameterList.
 #' @export
-parameterlist <- function(n, mt, simple, ff, ct, modelthreshold, lims,
-    optimized=c('cardinaltemps','modlength'), ModelClass='PlantModel') {
+parameterlist <- function(n, mt, simple, ff, ct, modelthreshold, start,
+    varyingparameters, optimized=c('cardinaltemps','threshold','start'),
+    ModelClass='PlantModel') {
+
 
     if (class(ct)=='list') {#if cardinal temps are in a list
-                            #don't need to do anything to them
+        ctlist <- ct        #don't need to do anything to them
 
-        #creat ParameterList class object
-        newobject <- new('ParameterList', stages=n, modeltype=mt,
-                         simplified=simple, form=ff, cardinaltemps=ct,
-                         threshold=modelthreshold, parsOptimized=optimized,
-                         mclass=ModelClass)
 
-    } else if (class(ct) %in% c('data.frame', 'matrix') ) { #if ct not in list
+    } else if  (class(ct) %in% c('data.frame', 'matrix')) {#if ct not in list
         ctlist <- lapply(1:dim(ct)[1], function(i) ct[i,]) #convert ct to list
 
-        #then create ParameterList class object
-        newobject <- new('ParameterList', stages=n, modeltype=mt,
-                         simplified=simple, form=ff, cardinaltemps=ctlist,
-                         threshold=modelthreshold, parsOptimized=optimized,
-                         mclass=ModelClass)
     } else {
         stop('ct must be of the type list, data.frame, or matrix.')
     }
+
+
+    if (mt=='TTT' & 'threshold' %in% varyingpars) {
+        stop('Threshold day cannot vary year to year because it is measured in
+             thermal time.')
+
+    }
+
+
+    newobject <- new('ParameterList', stages=n, modeltype=mt,
+                    simplified=simple, form=ff, cardinaltemps=ctlist,
+                    threshold=modelthreshold, startday=start,
+                    varyingpars=varyingparameters, parsOptimized=optimized,
+                    mclass=ModelClass)
 
     return(newobject)
 }
