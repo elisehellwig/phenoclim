@@ -121,20 +121,12 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
                         ', and they should be of length ', blen, '.'))
         }
 
-        #ive decided to wrap all of the temp stuff into the extract temps thing
-
-        tempyears <- c(min(d$year)-1, d$year)
-        extractedtemps <- extracttemplist(temps, tempyears, ttform, d$event0,
-                                          'FlowerModel')
-        daytemplist <- extractedtemps[[1]]
-        hourtemplist <- extractedtemps[[2]]
-        relevanttemplist <- whichtemp(ttform, daytemplist, hourtemplist)
 
 ###########################################################################
         #working in here
         #current task is working on updating TTTsum to work with the new
         #temperature data structure and indexing
-        objfun <- objective(parlist, d, relevanttemplist, 1, estimateCT,
+        objfun <- objective(parlist, d, temps, 1, estimateCT,
                             estimatestart, estimatethresh, simple, 1,
                             'FlowerModel')
 #######Things are changed up to hear for FlowerModel and startday#######
