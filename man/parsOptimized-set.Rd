@@ -13,8 +13,8 @@ parsOptimized(object) <- value
 \arguments{
 \item{object}{An object of class ParameterList}
 
-\item{value}{A character vector containing either 'cardinaltemps',
-'modlength' or both.}
+\item{value}{A character vector containing 'cardinaltemps',
+'threshold', 'start' or any combination of the three.}
 }
 \description{
 Used to change the functional form without recreating the object.

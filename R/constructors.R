@@ -23,7 +23,8 @@ NULL
 #'     stage).
 #' @param start numeric vector of start days (one for each stage).
 #' @param varyingparameters character vector, which parameters will have the
-#'     of the year vary from year to year c('start', 'threshold')
+#'     of the year vary from year to year. Can contain,'start' and 'threshold',
+#'     or be NA.
 #' @param optimized character, Determines what parameters are optimized in the
 #'     model. Can contain "cardinaltemps", "threshold", "start" or any
 #'     combination of all three, but it must contain at least one.

@@ -4,8 +4,9 @@
 \alias{parameterlist}
 \title{Creates ParameterList object}
 \usage{
-parameterlist(n, mt, simple, ff, ct, modelthreshold, lims,
-  optimized = c("cardinaltemps", "modlength"), ModelClass = "PlantModel")
+parameterlist(n, mt, simple, ff, ct, modelthreshold, start, varyingparameters,
+  optimized = c("cardinaltemps", "threshold", "start"),
+  ModelClass = "PlantModel")
 }
 \arguments{
 \item{n}{integer, the number of stages in the model.}
@@ -24,16 +25,18 @@ temperatures for a given stage of the model. If ct is a list, each
 element of the list should be a vector of cardinal temperatures for a
 given stage of the model.}
 
-\item{modelthreshold}{numeric vector of model thresholds.}
+\item{modelthreshold}{numeric vector of model thresholds (one for each
+stage).}
 
-\item{lims}{list of start and stop pairs. Start is always the day close to
-flowering. This means that it will be the earliest day in a PlantModel,
-but the latest day in a FlowerModel. If length is not NA, one of the
-limits has to be NA.}
+\item{start}{numeric vector of start days (one for each stage).}
+
+\item{varyingparameters}{character vector, which parameters will have the
+of the year vary from year to year. Can contain,'start' and 'threshold',
+or be NA.}
 
 \item{optimized}{character, Determines what parameters are optimized in the
-model.Can contain "cardinaltemps", "modlength" or both, but it must
-contain at least one of the two.}
+model. Can contain "cardinaltemps", "threshold", "start" or any
+combination of all three, but it must contain at least one.}
 
 \item{ModelClass}{character, the class to be fit. Options are
 'PlantModel' or 'FlowerModel'.}
