@@ -11,8 +11,8 @@ NULL
 #'     create the phenology model.
 #' @param phenology data.frame, contains all of the phenology data necessary for
 #'     running the phenology model.
-#' @param templist list, contains all the temperature data for estimating
-#'     thermal time.
+#' @param temp data.frame, contains all the temperature data for estimating
+#'     thermal time and has a POSIXct date-time column for indexing
 #' @param stage numeric, the stage of the model.
 #' @param CT Should the cardinal temperatures be optimized?
 #' @param Start logical, Should model start day be optimized? If yes,
@@ -26,7 +26,7 @@ NULL
 #'     'PlantModel' or 'FlowerModel'. If you have negative day values, you
 #'     probably want flower model.
 #' @return the function that is passed to DEoptim to optimize.
-objective <- function(parlist, phenology, templist, stage, CT, Start,
+objective <- function(parlist, phenology, temp, stage, CT, Start,
                       Threshold, listindex, mclass) {
 
     #extract parameters from ParameterList object
@@ -35,12 +35,14 @@ objective <- function(parlist, phenology, templist, stage, CT, Start,
         events <- paste0('event', 0:1)
         fnames <- c('year', events)
 
-    } else {
+    } else if (mclass=='PlantModel') {
         PL <- parlist[[listindex]]
 
         events <- paste0('event', stage:(stage+1))
         fnames <- c('year', events, paste0('length', stage))
 
+    } else {
+        stop('Model class must be either FlowerModel or PlantModel.')
     }
 
     #what is the type of model (DT or TTT)
@@ -78,7 +80,7 @@ objective <- function(parlist, phenology, templist, stage, CT, Start,
     #create a function that evaluates returns the rmse of the model that can be
     #minimized using the function DEoptim()
     fun <- function(x) {
-        return(minrmse(x, fdat, templist, modeltype(PL), form(PL)[stage], stage,
+        return(minrmse(x, fdat, temp, modeltype(PL), form(PL)[stage], stage,
                        ct, s, th, simple[listindex], stgtype=modtype,
                        varying=varyingpars(PL), modclass = mclass(PL),
                        firstevent=events[1]))
