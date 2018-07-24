@@ -59,12 +59,22 @@ eventi <- function(dat, modclass, i) {
 #'
 #' @param phenology data.frame, the data.frame containing the phenology data.
 #' @param temperature, list, the list containing all the temperature data.
+#' @param modelclass character, is the model a FlowerModel or a PlantModel
 #' @return Logical. Returns TRUE if all years of phenology data also have
 #'     corresponding temperature data. Otherwise it returns the years that are
 #'     missing temperature data.
-checktempyears <- function(phenology, temperature) {
+checktempyears <- function(phenology, temperature, modelclass) {
 
-    pyears <- unique(phenology[,'year'])
+    if (modelclass='FlowerModel') {
+        pyears1 <- unique(phenology[,'year'])
+        pyears2 <- pyears-1
+        pyears <- union(pyears1, pyears2)
+
+    } else {
+        pyears <- unique(phenology[,'year'])
+    }
+
+
     tyears <- unique(temperature[,'year'])
 
     missingyears <- setdiff(pyears,tyears)
