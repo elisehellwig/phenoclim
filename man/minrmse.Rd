@@ -5,7 +5,7 @@
 \title{Calculates model RMSE}
 \usage{
 minrmse(pars, fdat, tdat, modtype, form, stage, CT, S, TH, simple, varying,
-  modclass, firstevent)
+  modclass, firstevent, startingevent = NA)
 }
 \arguments{
 \item{pars}{vector with threshold value and cardinal temperatures}
@@ -42,6 +42,10 @@ probably want flower model.}
 \item{firstevent}{character, the name of the column that contains the
 starting phenological event for the model. For FlowerModels this is the
 harvest date.}
+
+\item{startingevent}{numeric, days first event happened each year. Only
+necessary if you are running minrmse on its own (not within the
+flowermodel or plantmodel functions).}
 }
 \value{
 The RMSE value for a given set of cardinal temperatures start day

@@ -4,7 +4,8 @@
 \alias{thermalsum}
 \title{Calculates thermal time sums}
 \usage{
-thermalsum(ctemps, yrs, tdat, modtype, form, start, thresh, varying, mclass)
+thermalsum(ctemps, yrs, tdat, modtype, form, start, thresh, varying, mclass,
+  startingevent = NA)
 }
 \arguments{
 \item{ctemps}{Cardinal temperatures}
@@ -29,6 +30,8 @@ pars vary from year to year.}
 
 \item{mclass}{character, type of model to be estimating, options are
 'PlantModel' or 'FlowerModel'.}
+
+\item{startingevent}{numeric, days first event happened each year.}
 }
 \value{
 The thermal sums for a given series of years.

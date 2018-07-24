@@ -4,7 +4,7 @@
 \alias{objective}
 \title{Generates the Objective function}
 \usage{
-objective(parlist, phenology, templist, stage, CT, Start, Threshold, listindex,
+objective(parlist, phenology, temp, stage, CT, Start, Threshold, listindex,
   mclass)
 }
 \arguments{
@@ -14,8 +14,8 @@ create the phenology model.}
 \item{phenology}{data.frame, contains all of the phenology data necessary for
 running the phenology model.}
 
-\item{templist}{list, contains all the temperature data for estimating
-thermal time.}
+\item{temp}{data.frame, contains all the temperature data for estimating
+thermal time and has a POSIXct date-time column for indexing}
 
 \item{stage}{numeric, the stage of the model.}
 

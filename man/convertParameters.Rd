@@ -24,6 +24,10 @@ vary from year to year.}
 
 \item{eventvec}{numeric, a vector that contains the day of the year for the
 starting event of the model. For bloom the event is harvest.}
+
+\item{years}{numeric, a vector of years to use for each day of the year.}
+
+\item{modclass}{character, PlantModel or FlowerModel}
 }
 \value{
 list of the correct start POSIXct date vector and the threshold

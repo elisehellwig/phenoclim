@@ -4,7 +4,8 @@
 \alias{minrmseTTT}
 \title{Calculates TTT model RMSE}
 \usage{
-minrmseTTT(pars, fdat, tdat, form, start, thresh, stage, varying, modclass)
+minrmseTTT(pars, fdat, tdat, form, start, thresh, stage, varying, modclass,
+  startingevent = NA)
 }
 \arguments{
 \item{pars}{Cardinal temperatures}
@@ -28,6 +29,8 @@ vary from year to year.}
 \item{modclass}{character, type of model to be estimating, options are
 'PlantModel' or 'FlowerModel'. If you have negative day values, you
 probably want flower model.}
+
+\item{startingevent}{numeric, days first event happened each year.}
 }
 \value{
 The RMSE value for a given set of cardinal temperatures and thermal
