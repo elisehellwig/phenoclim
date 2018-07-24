@@ -27,12 +27,10 @@ NULL
 #'     use to fit the model.
 #' @param iterations numeric, the number of iterations used in the differential
 #'     evolution optimization of the phenological parameters.
-#' @param ensemble logical, should an ensemble prediction be used? NOT
-#'     currently implemented.
-#' @return A PlantModel object.
+#' @return A FlowerModel object.
 #' @export
 flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
-                       cores=1L, iterations=200, ensemble=FALSE) {
+                       cores=1L, iterations=200) {
 
 
     parlist <- parlist[[1]]
@@ -122,85 +120,59 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
         }
 
 
-###########################################################################
-        #working in here
-        #current task is working on updating TTTsum to work with the new
-        #temperature data structure and indexing
+
         objfun <- objective(parlist, d, temps, 1, estimateCT,
                             estimatestart, estimatethresh, simple, 1,
                             'FlowerModel')
-#######Things are changed up to hear for FlowerModel and startday#######
-
-        lboundlist <- lapply(1:m, function(i) {
-            lapply(1:length(ttforms[[i]]), function(j) {
-                bndlen <- boundlength(ttforms[[i]][j], estimateCT[i],
-                                      estimatelength[i])
-
-                lbounds[1:bndlen]
-            })
-        })
-
-        uboundlist <- lapply(1:m, function(i) {
-            lapply(1:length(ttforms[[i]]), function(j) {
-                bndlen <- boundlength(ttforms[[i]][j], estimateCT[i],
-                                      estimatelength[i])
-
-                ubounds[1:bndlen]
-            })
-        })
 
         #optimizing the parameters
-        if (cores > 1) {
-
-            optimlist <- mclapply(1:m, function(i) {
-                lapply(1:stages, function(j) {
-                   DEoptim(functionlist[[i]][[j]], lower=lboundlist[[i]][[j]],
-                           upper=uboundlist[[i]][[j]],
-                           control=DEoptim.control(itermax=iterations,
-                                                   trace=FALSE))$optim
-                })
-            }, mc.cores=cores)
-
-        } else {
-
-            optimlist <- lapply(1:m, function(i) {
-                lapply(1:stages, function(j) {
-                    DEoptim(functionlist[[i]][[j]], lower=lboundlist[[i]][[j]],
-                            upper=uboundlist[[i]][[j]],
+        #parameter order: Start Threshold Cardinaltemps
+        optimmod <- DEoptim(objfun,
+                            lower=lbounds,
+                            upper=ubounds,
                             control=DEoptim.control(itermax=iterations,
-                                                    trace=FALSE))$optim
-                })
-            })
-        }
+                                                    trace=FALSE)
+                            )$optim
 
         #print(2)
 
         #extracting those parameters
-        newlength <- lapply(1:m, function(i) {
-            if (estimatelength[i]) {
-                sapply(optimlist[[i]], function(ol) {
-                    unname(ol[["bestmem"]][1])
-                })
+
+        if (estimatestart) {
+            newstart <- unname(optimmod[["bestmem"]][1])
+
+            if (estimatethresh) {
+                newthreshold <- unname(optimmod[["bestmem"]][2])
             } else {
-                modlength(parlist[[i]])
+                newthreshold <- threshold(parlist)
             }
-        })
 
+        } else {
+            newstart <- startday(parlist)
 
-
-        newct <- lapply(1:m, function(i) {
-            if (estimatelength[i] & estimateCT[i]) {
-                lapply(optimlist[[i]], function(ol) {
-                    unname(ol[['bestmem']])[-1]
-                })
-            } else if (estimateCT[i] & !estimatelength[i]) {
-                lapply(optimlist[[i]], function(ol) {
-                    unname(ol[['bestmem']])
-                })
+            if (estimatethresh) {
+                newthreshold <- unname(optimmod[["bestmem"]][1])
             } else {
-                newct <- cardinaltemps(parlist[[i]])
+                newthreshold <- threshold(parlist)
             }
-        })
+
+        }
+
+        npars <- sum(c(estimatestart, estimatethresh))
+
+        if (estimateCT) {
+            if (npars>0) {
+                newct <- unname(optimmod[["bestmem"]][-(1:npars)])
+
+            } else {
+                newct <- unname(optimmod[["bestmem"]])
+            }
+        } else {
+            newct <- cardinaltemps(parlist)
+        }
+
+
+#######Things are changed up to hear for FlowerModel and startday#######
 
         #creating predictors for stage length based on the parameters
 
