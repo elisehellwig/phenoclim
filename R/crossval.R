@@ -50,16 +50,6 @@ crossval <- function(plant, temps, k, seed, fun='rmsd', lbounds, ubounds,
 
     measure <- matrix(rep(NA, m*k), nrow=m)
 
-    if (ensemble) {
-        ensemblefits <- lapply(1:k, function(i) data.frame())
-        ensembletest <- lapply(1:k, function(i) NA)
-    }
-
-    #print(1)
-    extractedtemps <- extracttemplist(temps, p$year, ttforms)
-    daytemplist <- extractedtemps[[1]]
-    hourtemplist <- extractedtemps[[2]]
-
    # print(2)
     for (i in 1:k) {
         train <- p[p$fold!=i, ]
@@ -86,7 +76,7 @@ crossval <- function(plant, temps, k, seed, fun='rmsd', lbounds, ubounds,
             tl <- whichtemp(ttforms[j], daytemplist, hourtemplist)
 
             as.data.frame(thermalsum(cardinaltemps(pl)[stage], test, tl,
-                         modeltype(pl), ttforms[j], round(modlength(pl)),stage))
+                         modeltype(pl), ttforms[j], round(threshold(pl)),stage))
         })
         #print(5)
         #print(parameters(pm))
@@ -102,13 +92,6 @@ crossval <- function(plant, temps, k, seed, fun='rmsd', lbounds, ubounds,
             unname(predict(trainmod[[j]][[stage]], newdata=testdata[[j]]))
         })
 
-        if (ensemble) {
-            ensemblefits[[i]] <- t(ldply(fit, function(v) v))
-            names(ensemblefits[[i]]) <- ttforms
-        }
-
-
-
 
         #print(fit)
         #print(7)
@@ -119,9 +102,7 @@ crossval <- function(plant, temps, k, seed, fun='rmsd', lbounds, ubounds,
             do.call(fun, list(fit[[j]], test[,response]))
         })
 
-        if (ensemble) {
-            ensembletest[[i]] <- test[, response]
-        }
+
         #print(parlist)
     }
 
@@ -129,20 +110,6 @@ crossval <- function(plant, temps, k, seed, fun='rmsd', lbounds, ubounds,
     #print(measure)
     avgmeasure <- apply(measure, 1, mean)
     #print(8)
-    if (ensemble) {
-        ensemblefitvec <- lapply(ensemblefits, function(df) {
-            apply(df, 1, mean)
-        })
-
-        ensembleerror <- sapply(1:k, function(i) {
-            do.call(fun, list(ensemblefitvec[[i]], ensembletest[[i]]))
-        })
-
-        ensembleavgerror <- mean(ensembleerror)
-        avgmeasure <- c(avgmeasure, ensembleavgerror)
-    }
-
-
 
     error(plant) <- avgmeasure
     crossvalidated(plant) <- TRUE
