@@ -6,6 +6,16 @@
 \usage{
 extractResults(pm, cultivars, form)
 }
+\arguments{
+\item{pm}{PlantModel or FlowerModel object}
+
+\item{cultivars}{character, the cultivars you want to extract results for.}
+
+\item{form}{character, the functional form you want to extract results for.}
+}
+\value{
+A data.frame with the results.
+}
 \description{
-Gets phenologial data and season length predictions
+This will get results from a PlantModel or FlowerModel object
 }

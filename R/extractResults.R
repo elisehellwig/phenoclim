@@ -1,8 +1,14 @@
 
 #' Gets phenologial data and season length predictions
+#'
+#' This will get results from a PlantModel or FlowerModel object
+#'
+#' @param pm PlantModel or FlowerModel object
+#' @param cultivars character, the cultivars you want to extract results for.
+#' @param form character, the functional form you want to extract results for.
+#' @return A data.frame with the results.
+#' @export
 extractResults <- function(pm, cultivars, form) {
-    require(plyr)
-    require(phenoclim)
 
     p <- ldply(cultivars, function(v) {
         pv <- phenology(pm[[v]])

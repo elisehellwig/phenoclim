@@ -8,7 +8,7 @@
 #' @importFrom reshape2 melt
 #' @importFrom DEoptim DEoptim DEoptim.control
 #' @importFrom parallel mclapply
-#' @importFrom stats fitted formula lm predict
+#' @importFrom stats fitted formula lm predict coef
 #' @importFrom dismo kfold
 #' @importFrom lubridate leap_year
 NULL
