@@ -20,6 +20,8 @@ dayToDate(years, days, modclass, varying, hours = NA,
 
 \item{startTime}{character, used to specify the same time of day for each
 date-time entry element. Only used if hours=NA.}
+
+\item{timezone}{character, the timezone that the data is from.}
 }
 \value{
 A POSIXct vector of date-times

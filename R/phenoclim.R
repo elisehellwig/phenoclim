@@ -10,5 +10,5 @@
 #' @importFrom parallel mclapply
 #' @importFrom stats fitted formula lm predict coef
 #' @importFrom dismo kfold
-#' @importFrom lubridate leap_year
+#' @importFrom lubridate leap_year interval %within%
 NULL

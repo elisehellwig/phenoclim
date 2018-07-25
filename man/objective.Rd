@@ -4,8 +4,8 @@
 \alias{objective}
 \title{Generates the Objective function}
 \usage{
-objective(parlist, phenology, temp, stage, CT, Start, Threshold, listindex,
-  mclass)
+objective(parlist, phenology, temp, stage, CT, Start, Threshold, simple,
+  listindex, mclass)
 }
 \arguments{
 \item{parlist}{ParameterList, contains all of the parlist needed to
@@ -27,14 +27,14 @@ Start is TRUE.}
 \item{Threshold}{logical, Should model threshold be optimized? If yes, it is
 TRUE}
 
+\item{simple}{logical, is the simplified version of the model being run?}
+
 \item{listindex}{numeric, the index of the ParameterList from parlist that
 you are at}
 
 \item{mclass}{character, type of model to be estimating, options are
 'PlantModel' or 'FlowerModel'. If you have negative day values, you
 probably want flower model.}
-
-\item{simple}{logical, is the simplified version of the model being run?}
 }
 \value{
 the function that is passed to DEoptim to optimize.
