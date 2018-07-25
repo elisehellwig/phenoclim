@@ -322,10 +322,10 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
                                                      modeltype(parlist[[i]]),
                                                      ttforms[[i]][1],1))
 
-        rmse <- sapply(1:m, function(i) {
+        rmsd <- sapply(1:m, function(i) {
             sapply(1:stages, function(j) {
                 observed <- paste0('length',j)
-                rmsd(d3[,fitnames[i]], d3[,observed])
+                rmse(d3[,fitnames[i]], d3[,observed])
             })
         })
     }
@@ -340,25 +340,17 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
 
     for (i in 1:m) {
-        modlength(DEparameters[[i]]) <- newlength[[i]]
+        threshold(DEparameters[[i]]) <- newlength[[i]]
         if ((!simple[1]) | (modeltype(parlist[[1]])=='TTT')) {
             cardinaltemps(DEparameters[[i]]) <- newct[[i]]
         }
     }
 
-    if (ensemble) {
-        DEparameters[[m+1]] <- parameterlist(n=stages,
-                                             mt=modeltype(parlist[[1]]),
-                                             simple=simple[1],
-                                             ff='ensemble',
-                                             ct=list(c(0,0,0)),
-                                             length=0)
-    }
 
     #print(8)
     pm <- new('PlantModel',
               parameters=DEparameters,
-              error=rmse,
+              error=rmsd,
               phenology=d3,
               olm=lmlist,
               crossvalidated=FALSE)
