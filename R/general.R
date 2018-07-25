@@ -65,7 +65,7 @@ eventi <- function(dat, modclass, i) {
 #'     missing temperature data.
 checktempyears <- function(phenology, temperature, modelclass) {
 
-    if (modelclass='FlowerModel') {
+    if (modelclass=='FlowerModel') {
         pyears1 <- unique(phenology[,'year'])
         pyears2 <- pyears-1
         pyears <- union(pyears1, pyears2)
