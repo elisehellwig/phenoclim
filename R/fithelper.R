@@ -36,6 +36,7 @@ correctYears <- function(day, years, modclass) {
 #' @param hours numeric, a vector of hours to use in your date-time conversion
 #' @param startTime character, used to specify the same time of day for each
 #'     date-time entry element. Only used if hours=NA.
+#' @param timezone character, the timezone that the data is from.
 #' @return A POSIXct vector of date-times
 #' @export
 dayToDate <- function(years, days, modclass, varying, hours=NA,

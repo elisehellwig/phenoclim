@@ -49,7 +49,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
     m <- length(parlist) #number of functional forms
 
     #list of length of modlengths, to check if startday should be T or F
-    modlens <- sapply(parlist, function(pl) length(modlength(pl)))
+    modlens <- sapply(parlist, function(pl) length(threshold(pl)))
     #do any of the modlengths have both start and end day (length=2)
     startday2 <- any(ifelse(modlens>1, TRUE, FALSE))
 
@@ -147,15 +147,9 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
         }
 
 
-        extractedtemps <- extracttemplist(temps, pdat$year, ttforms)
-        daytemplist <- extractedtemps[[1]]
-        hourtemplist <- extractedtemps[[2]]
-
-
         functionlist <- lapply(1:m, function(j) {
                 lapply(1:stages, function(i) {
-                    objective(parlist, d, whichtemp(ttforms[[j]][i],daytemplist,
-                                                    hourtemplist),
+                    objective(parlist, d, temps,
                               i, estimateCT,estimatelength, simple, j, startday,
                               'PlantModel')
             })
@@ -299,11 +293,6 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
         paste0('fit', modeltype(parlist[[ij[i,'pl']]]), ij[i,'form'],
                ij[i,'stage'])
     })
-
-    if (ensemble) {
-        fits$fitensemble <- apply(fits, 1, mean)
-    }
-
 
 
     if (exists('d2')) {

@@ -28,7 +28,7 @@ NULL
 #' @return the function that is passed to DEoptim to optimize.
 #' @export
 objective <- function(parlist, phenology, temp, stage, CT, Start,
-                      Threshold, listindex, mclass) {
+                      Threshold, simple, listindex, mclass) {
 
     print('objective')
     #extract parameters from ParameterList object
@@ -83,7 +83,7 @@ objective <- function(parlist, phenology, temp, stage, CT, Start,
     #minimized using the function DEoptim()
     fun <- function(x) {
         return(minrmse(x, fdat, temp, modeltype(PL), form(PL)[stage], stage,
-                       ct, s, th, simple[listindex], stgtype=modtype,
+                       ct, s, th, simple[listindex],
                        varying=varyingpars(PL), modclass = mclass(PL),
                        firstevent=events[1]))
     }

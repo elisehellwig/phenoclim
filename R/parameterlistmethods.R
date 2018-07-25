@@ -72,7 +72,7 @@ setMethod("parsOptimized", "ParameterList",
           })
 
 #' Accesses whether model is for PlantModel or FlowerModel
-#' @rdname stagetype
+#' @rdname mclass
 setMethod("mclass", "ParameterList",
           function(object) {
               return(object@mclass)
