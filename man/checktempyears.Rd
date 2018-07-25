@@ -4,12 +4,14 @@
 \alias{checktempyears}
 \title{Checks year presence in temperature list}
 \usage{
-checktempyears(phenology, temperature)
+checktempyears(phenology, temperature, modelclass)
 }
 \arguments{
 \item{phenology}{data.frame, the data.frame containing the phenology data.}
 
 \item{temperature, }{list, the list containing all the temperature data.}
+
+\item{modelclass}{character, is the model a FlowerModel or a PlantModel}
 }
 \value{
 Logical. Returns TRUE if all years of phenology data also have

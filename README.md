@@ -57,3 +57,37 @@ This is a basic example which shows you how to solve a common problem:
 ``` r
 ## basic example code
 ```
+
+
+Source list
+
+files <- c('FlowerPlant.R',
+    'parameterfunctions.R',
+    'general.R',
+    'thermal.R',
+    'parameterlistclass.R',
+    'parameterlistmethods.R',
+    'constructors.R',
+    'plantmodelclass.R',
+    'plantmodelmethods.R',
+    'fithelper.R',
+    'thermalsum.R',
+    'minrmse.R',
+    'objectivefunction.R',
+    'modelcheck.R',
+    'plantmodel.R',
+    'crossval.R',
+    'diurnal_temperature.R',
+    'extractResults.R',
+    'flowermodelclass.R',
+    'flowermodelmethods.R',
+    'flowermodel.R',
+    'phenoclim.R',
+    'preprocess.R')
+
+sapply(files, function(fn) {
+    source(paste0('R/'), fn)
+})
+
+
+
