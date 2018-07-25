@@ -26,9 +26,11 @@ NULL
 #'     'PlantModel' or 'FlowerModel'. If you have negative day values, you
 #'     probably want flower model.
 #' @return the function that is passed to DEoptim to optimize.
+#' @export
 objective <- function(parlist, phenology, temp, stage, CT, Start,
                       Threshold, listindex, mclass) {
 
+    print('objective')
     #extract parameters from ParameterList object
     if (mclass=='FlowerModel') {
         PL <- parlist
