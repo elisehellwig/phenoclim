@@ -218,7 +218,7 @@ showparlist <- function(object) {
                               type=rep(object@modeltype, n),
                               form=forms,
                               length=ml,
-                              class=rep(stgtyp, n))
+                              class=rep(modclass, n))
 
     lengthpars <- cbind(stagelength, pars) #putting stage length and parameter
                                             #information together
