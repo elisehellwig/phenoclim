@@ -22,7 +22,7 @@ modeltype(object)
 }
 \value{
 character, specifies what type of model the parameters are for.
-    Options are 'thermal' and 'day'
+    Options are 'DT' and 'TTT'
 }
 \description{
 Returns the model type

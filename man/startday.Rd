@@ -6,12 +6,15 @@
 \alias{startday}
 \alias{startday,ParameterList-method}
 \alias{startday,PlantModel-method}
+\alias{startday,PlantModel-method}
 \alias{startday,FlowerModel-method}
 \title{Returns  a vector of start days}
 \usage{
 startday(object)
 
 \S4method{startday}{ParameterList}(object)
+
+\S4method{startday}{PlantModel}(object)
 
 \S4method{startday}{PlantModel}(object)
 
@@ -32,4 +35,6 @@ Accesses the start day of the ParameterList object
 Accesses the start days of a plant object
 
 Accesses the start days of a plant object
+
+Accesses the start days of a FlowerModel object
 }

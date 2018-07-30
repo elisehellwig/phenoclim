@@ -20,6 +20,8 @@ for more information.}
 model. Current options are gdd, gddsimple, linear, flat, triangle, and
 anderson.}
 
+\item{\code{simplified}}{logical. Is the model to be fit a simplified model?}
+
 \item{\code{cardinaltemps}}{list. The cardinal temperatures for the model. This is a
 list that should either be of length one or the length of the number of
 stages. Each element of the list should contain the same number of
