@@ -187,7 +187,7 @@ thermalsum <- function(ctemps, yrs, tdat, modtype, form, start, thresh,
 
         if (is.na(startingevent[1])) {
             stop('You must specify the starting event in days if you want to
-                 input start and thresh as numericsd.')
+                 input start and thresh as numerics.')
         } else {
             sth <- formatParameters(yrs, startingevent, start, thresh, modtype,
                                    mclass, varying)
