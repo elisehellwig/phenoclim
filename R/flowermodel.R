@@ -196,7 +196,7 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
     if (!simple) {
 
        # print(4.1)
-
+        #predicting event one based on
         f <- formula(paste0('event1', ' ~ ',  predictornames))
         mod <- lm(f, data=d2)
 
@@ -206,11 +206,15 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
        # print(4.3)
     } else if (simple & modeltype(parlist)=='TTT') {
 
-                dat <- data.frame(y=1:10, x=1:10)
-                names(dat) <- c(paste0('length',i), predictornames[[j]][i])
-                f <- formula(paste(paste0('length',i), ' ~ ',
-                                   predictornames[[j]][i] ))
-                lm(f, data=dat)
+        #creates dummy data to force the creation of a linear model with
+        #beta=1 and alpha=0
+        dat <- data.frame(y=1:10, x=1:10)
+        names(dat) <- c('event1', predictornames)
+        f <- formula(paste0('event1 ~ ',predictornames))
+
+        #dummy model
+        mod <- lm(f, data=dat)
+
 
         fits <- predictors
 
@@ -218,38 +222,19 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
    # print(5)
 
-    names(fits) <- sapply(1:nrow(ij), function(i) {
-        paste0('fit', modeltype(parlist[[ij[i,'pl']]]), ij[i,'form'],
-               ij[i,'stage'])
-    })
-
-
-
+    #adding the fitted data to the dataframe
     if (exists('d2')) {
         d3 <- cbind(d2, fits)
     } else {
         d3 <- cbind(d, fits)
     }
 
+    #giving the fitted data a name
+    fitname <- paste0('fit', modeltype(parlist), ttform, 1)
+    names(d3)[ncol(d3)] <- fitname
     #print(fits)
 
-
-        fitnames <- sapply(1:m, function(i) paste0('fit',
-                                                     modeltype(parlist[[i]]),
-                                                     ttform[[i]][1],1))
-
-        rmse <- sapply(1:m, function(i) {
-            sapply(1:stages, function(j) {
-                observed <- paste0('length',j)
-                rmsd(d3[,fitnames[i]], d3[,observed])
-            })
-        })
-
-
-
-    #print(6)
-
-
+    rmsd <- rmse(d3[, fitname], d3[,'event1'])
 
   #  print(7)
     DEparameters <- parlist
@@ -257,16 +242,16 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
     threshold(DEparameters) <- newlength
     if ((!simple) | (modeltype(parlist)=='TTT')) {
-        cardinaltemps(DEparameters[[i]]) <- newct[[i]]
+        cardinaltemps(DEparameters) <- newct
     }
 
 
     #print(8)
-    fm <- new('PlantModel',
+    fm <- new('FlowerModel',
               parameters=DEparameters,
               error=rmse,
               phenology=d3,
-              olm=lmlist,
+              olm=mod,
               crossvalidated=FALSE)
 
     return(fm)
