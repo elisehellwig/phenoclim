@@ -96,13 +96,13 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
     if (modeltype(parlist)=='DT' & simple) {
 
         #average flowering day lm
-        DTsimp <- lm(event1 ~ 1, data=d)
+        mod <- lm(event1 ~ 1, data=d)
 
         #extracting fitted data
-        fits <- round(unname(fitted(DTsimp)))
+        fits <- round(unname(fitted(mod)))
 
         #getting the new average bloom dates of the fits
-        newbloom <- round(unname(coef(DTsimp)[1]))
+        newthreshold <- round(unname(coef(mod)[1]))
 
     } else { #everything but the DT simple model
 
@@ -227,7 +227,14 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
     }
 
     #giving the fitted data a name
-    fitname <- paste0('fit', modeltype(parlist), ttform, 1)
+
+    if (modeltype(parlist)=='DT' & simple) {
+        fitname <- 'DTsimple'
+    } else {
+        fitname <- paste0('fit', modeltype(parlist), ttform, 1)
+    }
+
+
     names(d3)[ncol(d3)] <- fitname
     #print(fits)
 
@@ -237,7 +244,6 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
     DEparameters <- parlist
 
 
-    threshold(DEparameters) <- newthreshold
     if ((!simple) | (modeltype(parlist)=='TTT')) {
         cardinaltemps(DEparameters) <- newct
     }
@@ -245,10 +251,10 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
     #print(8)
     fm <- new('FlowerModel',
-              parameters=DEparameters,
-              error=rmse,
+              parameters=list(DEparameters),
+              error=rmsd,
               phenology=d3,
-              olm=mod,
+              olm=list(mod),
               crossvalidated=FALSE)
 
     return(fm)

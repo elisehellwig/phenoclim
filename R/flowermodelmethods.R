@@ -9,8 +9,7 @@ setMethod("show",
 
               n <- object@parameters[[1]]@stages #extract stages
               pheno <- object@phenology #extract phenology data frame
-              eventcols <- paste0('event', 1:(n+1)) #create event column names
-              lengthcols <- paste0('length', 1:(n)) #create length column names
+              eventcols <- paste0('event', 0:1) #create event column names
               m <- length(object@parameters) #number of parameters
 
               parshow <- ldply(object@parameters, function(pl) {
@@ -24,13 +23,6 @@ setMethod("show",
                 #events
               avgdates <- round(apply(pheno[,eventcols], 2, mean))
 
-              #calculating the average lengths for each of the stages
-              if (is.numeric(pheno[,lengthcols])) {
-                  avglengths <- round(mean(pheno[,lengthcols]))
-              } else {
-                  avglengths <- round(apply(pheno[,lengthcols], 2, mean))
-              }
-
               #more statistics on the data
               rng <- range(pheno[,'year'])
               span <- rng[2] - rng[1]
@@ -40,8 +32,7 @@ setMethod("show",
               if (object@crossvalidated) cv <-'is' else cv <- 'is not'
 
               #creating what is displayed
-              cat('Stages; stage lengths; event days: ', n,'; ' ,
-                  paste(avglengths, collapse=', '), '; ',
+              cat('Stages; event days: ', n,'; ' ,
                   paste(avgdates, collapse=', '), '\n', sep='')
               #cat('The data spans ', span, ' years, and has ', obs,
                #   ' observations.', '\n', sep='')
@@ -198,7 +189,7 @@ setValidity("FlowerModel", function(object) {
         msg <- c(msg, modeltypecheck(mt)[1])
     }
 
-   if (!phenologycheck(n, pheno)[1]) {
+   if (!phenologycheck(n, pheno, TRUE)[1]) {
        valid <- FALSE
        msg <- c(msg, phenologycheck[-1])
    }
