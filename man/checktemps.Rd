@@ -4,7 +4,7 @@
 \alias{checktemps}
 \title{Checks temp data.frame is ship shape}
 \usage{
-checktemps(temp, pheno, forms)
+checktemps(temp, pheno, forms, modelclass)
 }
 \arguments{
 \item{temp}{data.frame, contains all the temperature data}
@@ -13,6 +13,9 @@ checktemps(temp, pheno, forms)
 
 \item{forms}{list, contains all the functional forms to be used to calculate
 the thermal time in the model.}
+
+\item{modelclass}{character, specifies the class of the model being fit,
+either 'PlantModel' or 'FlowerModel'}
 }
 \value{
 logical, TRUE if everything goes well, an error if not.
