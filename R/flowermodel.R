@@ -87,7 +87,7 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
         stop('If you want to opimize the start day you cannot set the start day to be the harvest readiness date from the previous year.')
     }
 
-    if (estimatethresh & is.na(Threshold)) {
+    if (estimatethresh & is.na(thresh)) {
         stop('If you want to opimize the threshold you cannot run the base model (threshold=NA).')
     }
 
@@ -107,7 +107,7 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
         #getting the new average bloom dates of the fits
         newbloom <- round(unname(coef(DTsimp)[1]))
 
-    } else {
+    } else { #everything but the DT simple model
 
         blen <- boundlength(ttform, estimateCT, estimatestart, estimatethresh)
 
@@ -135,6 +135,8 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
                             )$optim
 
         #print(2)
+
+# Part 2: extract optimized parameters ------------------------------------
 
         #extracting those parameters
 
@@ -172,64 +174,43 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
         }
 
 
-#######Things are changed up to hear for FlowerModel and startday#######
-
         #creating predictors for stage length based on the parameters
 
        # print(3)
-        predictornames <- lapply(1:m, function(i) {
-            sapply(1:stages, function(j) {
-                paste0(modeltype(parlist[[i]]), ttforms[[i]][j], j)
-            })
-        })
+        predictornames <- paste0(modeltype(parlist), ttform)
 
-
-
-        predictors <- as.data.frame(sapply(1:nrow(ij), function(i) {
-            s <- ij[i, 1]
-            fm <- ij[i, 2]
-            thermalsum(newct[[fm]][[s]], d,
-                       whichtemp(ij[i,'form'], daytemplist, hourtemplist),
-                       modeltype(parlist[[fm]]),
-                       ij[i,'form'],
-                       newlength[[fm]][s],
-                       s)
-        }))
+        predictors <- thermalsum(newct, d, temps, mtype, ttform, newthreshold,
+                                 s)
 
         names(predictors) <- unlist(predictornames)
         d2 <- cbind(d, predictors)
 
-    }
+    } #this closes everything but the DT simple model
+
+
+# Part 3: Run Model -------------------------------------------------------
+
 
     #print(4)
 
-    if (!simple[1]) {
+    if (!simple) {
 
        # print(4.1)
-        lmlist <- lapply(1:m, function(j) {
-            lapply(1:stages, function(i) {
-                f <- formula(paste(paste0('length',i), ' ~ ',
-                                   predictornames[[j]][i] ))
-                lm(f, data=d2)
-            })
-        })
+
+        f <- formula(paste0('event1', ' ~ ',  predictornames))
+        mod <- lm(f, data=d2)
 
        # print(4.2)
-        fits <- as.data.frame(sapply(unlist(lmlist, recursive=FALSE),
-                                     function(mod) fitted(mod)))
+        fits <- as.data.frame(fitted(mod))
 
        # print(4.3)
-    } else if (simple[1] & modeltype(parlist[[1]])=='TTT') {
+    } else if (simple & modeltype(parlist)=='TTT') {
 
-        lmlist <- lapply(1:m, function(j) {
-            lapply(1:stages, function(i) {
                 dat <- data.frame(y=1:10, x=1:10)
                 names(dat) <- c(paste0('length',i), predictornames[[j]][i])
                 f <- formula(paste(paste0('length',i), ' ~ ',
                                    predictornames[[j]][i] ))
                 lm(f, data=dat)
-            })
-        })
 
         fits <- predictors
 
@@ -242,10 +223,6 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
                ij[i,'stage'])
     })
 
-    if (ensemble) {
-        fits$fitensemble <- apply(fits, 1, mean)
-    }
-
 
 
     if (exists('d2')) {
@@ -256,24 +233,10 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
     #print(fits)
 
-    if (ensemble) {
-        fitnames <- c(sapply(1:m, function(i) paste0('fit',
-                                                     modeltype(parlist[[i]]),
-                                                     ttforms[[i]][1],1)),
-                      'fitensemble')
 
-        rmse <- sapply(1:(m+1), function(i) {
-            sapply(1:stages, function(j) {
-                observed <- paste0('length',j)
-                rmsd(d3[,fitnames[i]], d3[,observed])
-            })
-        })
-
-
-    } else {
         fitnames <- sapply(1:m, function(i) paste0('fit',
                                                      modeltype(parlist[[i]]),
-                                                     ttforms[[i]][1],1))
+                                                     ttform[[i]][1],1))
 
         rmse <- sapply(1:m, function(i) {
             sapply(1:stages, function(j) {
@@ -281,7 +244,7 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
                 rmsd(d3[,fitnames[i]], d3[,observed])
             })
         })
-    }
+
 
 
     #print(6)
@@ -292,22 +255,20 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
     DEparameters <- parlist
 
 
-    for (i in 1:m) {
-        modlength(DEparameters[[i]]) <- newlength[[i]]
-        if ((!simple[1]) | (modeltype(parlist[[1]])=='TTT')) {
-            cardinaltemps(DEparameters[[i]]) <- newct[[i]]
-        }
+    threshold(DEparameters) <- newlength
+    if ((!simple) | (modeltype(parlist)=='TTT')) {
+        cardinaltemps(DEparameters[[i]]) <- newct[[i]]
     }
 
 
     #print(8)
-    pm <- new('PlantModel',
+    fm <- new('PlantModel',
               parameters=DEparameters,
               error=rmse,
               phenology=d3,
               olm=lmlist,
               crossvalidated=FALSE)
 
-    return(pm)
+    return(fm)
 
 }
