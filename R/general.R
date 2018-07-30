@@ -17,6 +17,26 @@ is.leapyear <- function(year){
 
 ##############################################
 
+#' Is X a date or time object?
+#'
+#' This function tests if the object x is a date or time object (Period or
+#'     POSIXct).
+#'
+#'  @param x vector, the object you want to test
+#'  @value logical, is the object one of the date time classes specified above.
+#'  @export
+isDateTime <- function(x) {
+
+    classes <- c(is.period(x),
+                 is.POSIXct(x))
+
+    isanydt <- any(classes)
+
+    return(isanydt)
+}
+
+
+##############################################
 
 #' Checks if length of vector is zero
 #'
@@ -67,7 +87,7 @@ checktempyears <- function(phenology, temperature, modelclass) {
 
     if (modelclass=='FlowerModel') {
         pyears1 <- unique(phenology[,'year'])
-        pyears2 <- pyears-1
+        pyears2 <- pyears1-1
         pyears <- union(pyears1, pyears2)
 
     } else {
