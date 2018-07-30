@@ -91,7 +91,7 @@ dayToDate <- function(years, days, modclass, varying, hours=NA,
 formatParameters <- function(years, eventday, startday, threshold, modtype,
                              modclass, varying) {
 
-
+    #print('fp')
     #does start day vary from year to year?
     if ('start' %in% varying) {
         startday <- startday + eventday
@@ -102,6 +102,8 @@ formatParameters <- function(years, eventday, startday, threshold, modtype,
 
     #Note if it is a TTT model threshold can't vary from year to year.
     if (modtype=='DT') {
+
+        threshold <- round(threshold)
 
         if ('threshold' %in% varying) {
             threshdate <- days(threshold)
@@ -149,7 +151,7 @@ formatParameters <- function(years, eventday, startday, threshold, modtype,
 convertParameters <- function(pars, modtype, S, TH, vp, eventvec, years,
                               modclass) {
 
-    print('cp')
+    #print('cp')
     #Estimating start day
     if (isTRUE(S)) {
         s <- pars[1]

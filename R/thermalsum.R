@@ -27,7 +27,7 @@ DTsum <- function(ctemps, yrs, tdat, form, startDate, thresh, varying,
                   mclass) {
 
 
-    print('DTsum')
+    #print('DTsum')
     #possible forms
    posforms <-  c('anderson','linear','flat','triangle','asymcur','gdd',
                   'gddsimple')
@@ -112,7 +112,7 @@ TTTsum <- function(pars, yrs, tdat, form, startDate, thresh, varying, mclass) {
 
     #print(str(pars))
 
-    print('TTTsum')
+    #print('TTTsum')
 
     if (mclass=='FlowerModel') {
         endDate <- dayToDate(yrs+1, 184, 'FlowerModel')
@@ -180,10 +180,10 @@ TTTsum <- function(pars, yrs, tdat, form, startDate, thresh, varying, mclass) {
 thermalsum <- function(ctemps, yrs, tdat, modtype, form, start, thresh,
                        varying, mclass, startingevent=NA) {
 
-    print('thermalsum')
+    #print('thermalsum')
 
 
-    if (is.numeric(start) | (is.numeric(thresh) & modtype=='DT')) {
+    if (is.numeric(start) | (!isDateTime(thresh) & modtype=='DT')) {
 
         if (is.na(startingevent[1])) {
             stop('You must specify the starting event in days if you want to
