@@ -105,12 +105,15 @@ tempclasscheck <- function(frm, temp) {
 #' @param pheno data.frame, contains all the phenological data
 #' @param forms list, contains all the functional forms to be used to calculate
 #'     the thermal time in the model.
+#' @param modelclass character, specifies the class of the model being fit,
+#'     either 'PlantModel' or 'FlowerModel'
 #' @return logical, TRUE if everything goes well, an error if not.
-checktemps <- function(temp, pheno, forms) {
+checktemps <- function(temp, pheno, forms, modelclass) {
 
-    if (!checktempyears(pheno, temp)[[1]]) {
+    if (!checktempyears(pheno, temp, modelclass)[[1]]) {
         stop(paste('You are missing temperature data for the following years',
-                   paste(checktempyears(pheno, temp)[[2]], sep=", ")))
+                   paste(checktempyears(pheno, temp, modelclass)[[2]],
+                         sep=", ")))
     }
 
     tempclasscheck(forms, temp)

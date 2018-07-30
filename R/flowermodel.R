@@ -33,7 +33,6 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
                        cores=1L, iterations=200) {
 
 
-    parlist <- parlist[[1]]
     stages <- 1 #Number of stages in FlowerModel
     n <- stages+1 #number of events
     events <- paste0('event', 0:1) #event column names
@@ -50,7 +49,7 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
     #extracting the appropriate form names
 
     #Checking to make sure all of the right variables and etc are present
-    checktemps(temps, phenology, ttform)
+    checktemps(temps, phenology, ttform, 'FlowerModel')
 
     if (ttform=='anderson') {
         cardinaltemps(parlist) <-list(c(4,25,36))
