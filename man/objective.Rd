@@ -4,8 +4,8 @@
 \alias{objective}
 \title{Generates the Objective function}
 \usage{
-objective(parlist, phenology, temp, stage, CT, Start, Threshold, simple,
-  listindex, mclass)
+objective(parlist, phenology, temp, stage, CT, Start, Threshold, listindex,
+  mclass)
 }
 \arguments{
 \item{parlist}{ParameterList, contains all of the parlist needed to
@@ -26,8 +26,6 @@ Start is TRUE.}
 
 \item{Threshold}{logical, Should model threshold be optimized? If yes, it is
 TRUE}
-
-\item{simple}{logical, is the simplified version of the model being run?}
 
 \item{listindex}{numeric, the index of the ParameterList from parlist that
 you are at}

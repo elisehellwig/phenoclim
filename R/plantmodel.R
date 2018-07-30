@@ -150,7 +150,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
         functionlist <- lapply(1:m, function(j) {
                 lapply(1:stages, function(i) {
                     objective(parlist, d, temps,
-                              i, estimateCT,estimatelength, simple, j, startday,
+                              i, estimateCT,estimatelength, j, startday,
                               'PlantModel')
             })
         })
@@ -206,7 +206,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
                     unname(ol[["bestmem"]][1])
                 })
             } else {
-                modlength(parlist[[i]])
+                threshold(parlist[[i]])
             }
         })
 
@@ -241,7 +241,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
             s <- ij[i, 1]
             fm <- ij[i, 2]
             thermalsum(newct[[fm]][[s]], d,
-                       whichtemp(ij[i,'form'], daytemplist, hourtemplist),
+                       temps,
                        modeltype(parlist[[fm]]),
                        ij[i,'form'],
                        newlength[[fm]][s],

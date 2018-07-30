@@ -120,7 +120,7 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
 
         objfun <- objective(parlist, d, temps, 1, estimateCT,
-                            estimatestart, estimatethresh, simple, 1,
+                            estimatestart, estimatethresh, 1,
                             'FlowerModel')
 
         #optimizing the parameters
