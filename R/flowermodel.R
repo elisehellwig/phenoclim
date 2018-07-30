@@ -42,9 +42,7 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
     thresh <- threshold(parlist) #model threshold
     vp <- varyingpars(parlist) #which pars will vary
 
-    if (is.na(thresh)) { #is the model simplified
-        simple <- TRUE
-    }
+    simple <- simplified(parlist)
 
     mtype <- modeltype(parlist) #model type TTT or DT
     ttform <- form(parlist) #functional form
@@ -179,8 +177,8 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
        # print(3)
         predictornames <- paste0(modeltype(parlist), ttform)
 
-        predictors <- thermalsum(newct, d, temps, mtype, ttform, newthreshold,
-                                 s)
+        predictors <- thermalsum(newct, d$year, temps, mtype, ttform, newstart,
+                                 newthreshold, vp, d$event0)
 
         names(predictors) <- unlist(predictornames)
         d2 <- cbind(d, predictors)
@@ -240,7 +238,7 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
     DEparameters <- parlist
 
 
-    threshold(DEparameters) <- newlength
+    threshold(DEparameters) <- newthreshold
     if ((!simple) | (modeltype(parlist)=='TTT')) {
         cardinaltemps(DEparameters) <- newct
     }
