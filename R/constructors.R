@@ -36,7 +36,6 @@ parameterlist <- function(n, mt, simple, ff, ct, modelthreshold, start,
     varyingparameters, optimized=c('cardinaltemps','threshold','start'),
     ModelClass='PlantModel') {
 
-
     if (class(ct)=='list') {#if cardinal temps are in a list
         ctlist <- ct        #don't need to do anything to them
 
@@ -49,18 +48,24 @@ parameterlist <- function(n, mt, simple, ff, ct, modelthreshold, start,
     }
 
 
-    if (mt=='TTT' & 'threshold' %in% varyingpars) {
+
+    if ((mt=='TTT') & ('threshold' %in% varyingparameters)) {
         stop('Threshold day cannot vary year to year because it is measured in
              thermal time.')
 
     }
 
-
-    newobject <- new('ParameterList', stages=n, modeltype=mt,
-                    simplified=simple, form=ff, cardinaltemps=ctlist,
-                    threshold=modelthreshold, startday=start,
-                    varyingpars=varyingparameters, parsOptimized=optimized,
-                    mclass=ModelClass)
+    newobject <- new('ParameterList',
+                     stages=n,
+                     modeltype=mt,
+                     form=ff,
+                     simplified=simple,
+                     cardinaltemps=ctlist,
+                     threshold=modelthreshold,
+                     startday=start,
+                     varyingpars=varyingparameters,
+                     parsOptimized=optimized,
+                     mclass=ModelClass)
 
     return(newobject)
 }
