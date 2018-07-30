@@ -180,21 +180,23 @@ showparlist <- function(object) {
     n <- object@stages #number of stages in a model
 
 
-    if (length(object@form)==n) { #extracting forms from PlantModel
+    if (length(object@form)==n) { #extracting forms from parameterlist
         forms <- object@form
     } else { #replicating name if there is only on form
         forms <- rep(object@form, stages)
     }
 
     ctlist <- lapply(object@cardinaltemps, function(ct){ #reformating cardinal
+        ct <- round(ct, 2)
         if (length(ct)==3) {                             #temperatures
             ct
         } else {
             c(ct, rep(' ', 3-length(ct)))
         }
     })
+
     pars <- as.data.frame(do.call(rbind, ctlist)) #converting ctlist list to df
-    pars <- round(pars)
+    #pars <- round(pars)
     names(pars) <- c('Base','Opt.','Crit.') #giving the columns names
 
     thresh <- object@threshold
