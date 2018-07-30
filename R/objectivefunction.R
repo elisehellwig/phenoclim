@@ -19,7 +19,6 @@ NULL
 #'     Start is TRUE.
 #' @param Threshold logical, Should model threshold be optimized? If yes, it is
 #'     TRUE
-#' @param simple logical, is the simplified version of the model being run?
 #' @param listindex numeric, the index of the ParameterList from parlist that
 #'     you are at
 #' @param mclass character, type of model to be estimating, options are
@@ -28,7 +27,7 @@ NULL
 #' @return the function that is passed to DEoptim to optimize.
 #' @export
 objective <- function(parlist, phenology, temp, stage, CT, Start,
-                      Threshold, simple, listindex, mclass) {
+                      Threshold, listindex, mclass) {
 
     print('objective')
     #extract parameters from ParameterList object
@@ -49,6 +48,7 @@ objective <- function(parlist, phenology, temp, stage, CT, Start,
 
     #what is the type of model (DT or TTT)
     modtype <- modeltype(PL)
+    simple <- simplified(PL)
 
     #is the threshold estimated
     if (!Threshold) { #Mclass=Flowermodel, DT2,4-5; TTT1-3
