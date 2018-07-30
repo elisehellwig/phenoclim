@@ -45,7 +45,7 @@ setMethod("startday", "ParameterList",
 #' @rdname threshold
 setMethod("threshold", "ParameterList",
           function(object) {
-              return(object@modlength)
+              return(object@threshold)
           })
 
 
