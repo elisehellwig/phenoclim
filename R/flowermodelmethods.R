@@ -147,7 +147,7 @@ setMethod("threshold", "FlowerModel",
               return(ml)
           })
 
-#' Accesses the start days of a plant object
+#' Accesses the start days of a FlowerModel object
 #' @rdname startday
 setMethod("startday", "FlowerModel",
           function(object) {
@@ -157,6 +157,15 @@ setMethod("startday", "FlowerModel",
               return(ml)
           })
 
+#' Accesses the simplified parameter of a FlowerModel object
+#' @rdname simplified
+setMethod("simplified", "FlowerModel",
+          function(object) {
+              sm <- sapply(object@parameters, function(parlist) {
+                  parlist@simplified
+              })
+              return(sm)
+          })
 
 
 #' Accesses what parameters are to be optimized

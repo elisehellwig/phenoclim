@@ -9,6 +9,7 @@
 #' @slot form character. The functional form of the thermal time accumulation
 #'     model. Current options are gdd, gddsimple, linear, flat, triangle, and
 #'     anderson.
+#' @slot simplified logical. Is the model to be fit a simplified model?
 #' @slot cardinaltemps list. The cardinal temperatures for the model. This is a
 #'     list that should either be of length one or the length of the number of
 #'     stages. Each element of the list should contain the same number of
@@ -30,6 +31,7 @@ setClass('ParameterList',
          slots=list(stages='numeric',
                     modeltype='character',
                     form = 'character',
+                    simplified = 'logical',
          	        cardinaltemps = "list",
                     threshold = "vector",
                     startday = 'vector',
@@ -52,9 +54,18 @@ setGeneric('stages', function(object) standardGeneric('stages'))
 #'
 #' @param object An object of class ParameterList
 #' @return character, specifies what type of model the parameters are for.
-#'     Options are 'thermal' and 'day'
+#'     Options are 'DT' and 'TTT'
 #' @export
 setGeneric('modeltype', function(object) standardGeneric('modeltype'))
+
+
+#' Returns whether the model is simplified
+#'
+#' @param object An object of class ParameterList
+#' @return logical, return whether the model to be fit is a simplified model
+#' @export
+setGeneric('simplified', function(object) standardGeneric('simplified'))
+
 
 
 #' Returns the returns a vector of thresholds
@@ -136,6 +147,18 @@ setGeneric('threshold<-', function(object, value) {
 #' @export
 setGeneric('startday<-', function(object, value) {
     standardGeneric('startday<-')})
+
+
+#' Setting whether model is simplified
+#'
+#' Used to change whether or not the model is simplified without recreating the
+#'     object.
+#'
+#' @param object An object of class ParameterList
+#' @param value A logical vector specifying whether the model is simplified.
+#' @export
+setGeneric('simplified<-', function(object, value) {
+    standardGeneric('simplified<-')})
 
 
 

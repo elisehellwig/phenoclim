@@ -25,6 +25,14 @@ setMethod("modeltype", "ParameterList",
           })
 
 
+#' Accesses the simplified parameter of a ParameterList object
+#' @rdname simplified
+setMethod("simplified", "ParameterList",
+          function(object) {
+              return(object@simplified)
+          })
+
+
 #' Accesses the start day of the ParameterList object
 #' @rdname startday
 setMethod("startday", "ParameterList",
@@ -203,6 +211,15 @@ setMethod('threshold<-', 'ParameterList',
           })
 
 
+#' @rdname simplified-set
+setMethod('simplified<-', 'ParameterList',
+          function(object, value) {
+              object@simplified <- value
+
+              if (validObject(object)) {
+                  return(object)
+              }
+          })
 
 #' @rdname cardinaltemps-set
 setMethod('cardinaltemps<-', 'ParameterList',

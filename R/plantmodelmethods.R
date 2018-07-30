@@ -117,6 +117,19 @@ setMethod("form", "PlantModel",
               return(frms)
           })
 
+
+#' Accesses simplified parameter of a PlantModel object
+#' @rdname simplified
+setMethod("simplified", "PlantModel",
+          function(object) {
+              frms <- lapply(object@parameters, function(parlist) {
+                  #print(class(parlist))
+                  simplified(parlist)
+              })
+              return(frms)
+          })
+
+
 #' Accesses the model type of a PlantModel object
 #' @rdname modeltype
 setMethod("modeltype", "PlantModel",
@@ -144,6 +157,17 @@ setMethod("threshold", "PlantModel",
           function(object) {
               ml <- lapply(object@parameters, function(parlist) {
                   parlist@threshold
+              })
+              return(ml)
+          })
+
+
+#' Accesses the start days of a plant object
+#' @rdname startday
+setMethod("startday", "PlantModel",
+          function(object) {
+              ml <- lapply(object@parameters, function(parlist) {
+                  parlist@startday
               })
               return(ml)
           })
