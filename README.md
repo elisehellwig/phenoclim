@@ -86,7 +86,7 @@ files <- c('FlowerPlant.R',
     'preprocess.R')
 
 sapply(files, function(fn) {
-    source(paste0('R/'), fn)
+    source(file.path(funpath, fn))
 })
 
 
