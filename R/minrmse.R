@@ -240,8 +240,8 @@ minrmse <- function(pars, fdat, tdat, modtype, form, stage, CT, S, TH, simple,
 
 
     if (modtype=='DT' & !simple) {
-        print(class(s))
-        print(class(th))
+        # print(class(s))
+        # print(class(th))
         rmse <- minrmseDT(ct, fdat, tdat, form, s, th, stage, varying,
                           modclass, startingevent)
 

@@ -29,7 +29,7 @@ NULL
 objective <- function(parlist, phenology, temp, stage, CT, Start,
                       Threshold, listindex, mclass) {
 
-    print('objective')
+    #print('objective')
     #extract parameters from ParameterList object
     if (mclass=='FlowerModel') {
         PL <- parlist
