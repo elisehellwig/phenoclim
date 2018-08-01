@@ -249,7 +249,7 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
     }
 
     startday(DEparameters) <- newstart
-    threshold(DEparameters) <- newthresh
+    threshold(DEparameters) <- newthreshold
 
 
     print(8)
