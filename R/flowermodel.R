@@ -173,14 +173,14 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
         #creating predictors for stage length based on the parameters
 
-       # print(3)
+        print(3)
         predictornames <- paste0(modeltype(parlist), ttform)
 
         predictors <- thermalsum(newct, d$year, temps, mtype, ttform, newstart,
-                                 newthreshold, vp, d$event0)
+                                 newthreshold, vp, 'FlowerModel', d$event0)
 
-        names(predictors) <- unlist(predictornames)
         d2 <- cbind(d, predictors)
+        names(d2)[ncol(d2)] <- predictornames
 
     } #this closes everything but the DT simple model
 
@@ -188,7 +188,7 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
 # Part 3: Run Model -------------------------------------------------------
 
 
-    #print(4)
+    print(4)
 
     if (!simple) {
 
@@ -217,7 +217,7 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
     }
 
-   # print(5)
+    print(5)
 
     #adding the fitted data to the dataframe
     if (exists('d2')) {
@@ -240,16 +240,19 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
     rmsd <- rmse(d3[, fitname], d3[,'event1'])
 
-  #  print(7)
+    print(7)
     DEparameters <- parlist
 
 
     if ((!simple) | (modeltype(parlist)=='TTT')) {
-        cardinaltemps(DEparameters) <- newct
+        cardinaltemps(DEparameters) <- list(newct)
     }
 
+    startday(DEparameters) <- newstart
+    threshold(DEparameters) <- newthresh
 
-    #print(8)
+
+    print(8)
     fm <- new('FlowerModel',
               parameters=list(DEparameters),
               error=rmsd,
