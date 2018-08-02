@@ -199,27 +199,28 @@ showparlist <- function(object) {
     #pars <- round(pars)
     names(pars) <- c('Base','Opt.','Crit.') #giving the columns names
 
-    thresh <- object@threshold
-    start <- object@startday
+    thresh <- round(object@threshold)
+    start <- round(object@startday)
     modclass <- object@mclass
 
     if (modclass=='PlantModel') {
-       from <- ifelse(is.na(start), 'bloom', start)
-       to <- ifelse(is.na(thresh), 'harvest', thresh)
+       fromday <- ifelse(is.na(start), 'bloom', start)
+       tothresh <- ifelse(is.na(thresh), 'harvest', thresh)
     } else {
-        from <- ifelse(is.na(start), 'harvest', start)
-        to <- ifelse(is.na(thresh), 'bloom', thresh)
+        fromday <- ifelse(is.na(start), 'harvest', start)
+        tothresh <- ifelse(is.na(thresh), 'bloom', thresh)
     }
 
 
 
-    ml <- paste('from', from, 'to', to)
+    #ml <- paste('from', from, 'to', to)
 
     #adding information from different stages
     stagelength <- data.frame(stage=1:n,
                               type=rep(object@modeltype, n),
                               form=forms,
-                              length=ml,
+                              start=fromday,
+                              threshold=tothresh,
                               class=rep(modclass, n))
 
     lengthpars <- cbind(stagelength, pars) #putting stage length and parameter
