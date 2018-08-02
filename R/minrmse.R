@@ -34,9 +34,18 @@ minrmseDT <- function(pars, fdat, tdat, form, start, thresh, stage, varying,
 
     responsename <- responseVar(modclass, stage)
 
+    endDay <- fdat[,responsename]
+
+    if (modclass=='FlowerModel') {
+        endDate <- dayToDate(fdat$year, endDay, 'FlowerModel')
+
+    } else {
+        endDate <- dayToDate(fdat$year, endDay, 'PlantModel')
+    }
+
 
     #if parameters are in ascending order and start is before predicted event
-    if (checkpars(pars, start, fdat[, responsename], thresh)) {
+    if (checkpars(pars, start, endDate, thresh)) {
 
         #calculate the thermal sum for each year using the cardinal temps and
             #day threshold
@@ -89,7 +98,16 @@ minrmseTTTsimplified <- function(pars, fdat, tdat, form, start, thresh, stage,
 
     responsename <- responseVar(modclass, stage) #name of response variable
 
-    if (checkpars(pars, start, fdat[, responsename])) { #are parameters in ascending order
+    endDay <- fdat[,responsename]
+
+    if (modclass=='FlowerModel') {
+        endDate <- dayToDate(fdat$year, endDay, 'FlowerModel')
+
+    } else {
+        endDate <- dayToDate(fdat$year, endDay, 'PlantModel')
+    }
+
+    if (checkpars(pars, start, endDate)) { #are parameters in ascending order
 
         #calculate day thermal time threshold is met
         daymet <- thermalsum(pars, fdat$year, tdat, 'TTT', form, start, thresh,
@@ -138,11 +156,19 @@ minrmseTTTsimplified <- function(pars, fdat, tdat, form, start, thresh, stage,
 minrmseTTT <- function(pars, fdat, tdat, form, start, thresh, stage,
                        varying, modclass, startingevent=NA) {
 
-   # print('minrmseTTT')
-
+    #print('minrmseTTT')
     responsename <- responseVar(modclass, stage) #name of response variable
+    endDay <- fdat[,responsename]
 
-    if (!checkpars(pars, start, fdat[, responsename])) { #are cardinal temperatures in ascending order
+    if (modclass=='FlowerModel') {
+        endDate <- dayToDate(fdat$year, endDay, 'FlowerModel')
+
+    } else {
+        endDate <- dayToDate(fdat$year, endDay, 'PlantModel')
+    }
+
+    #print(checkpars(pars, start, fdat[, responsename]))
+    if (!checkpars(pars, start, endDate)) { #are cardinal temperatures in ascending order
        rmsd <- Inf #if not, rmse is infinite
 
 
@@ -165,9 +191,9 @@ minrmseTTT <- function(pars, fdat, tdat, form, start, thresh, stage,
 
             if (all(positive)) {  #if so create model to use day met to predict
                                     #stage length
-                mod <- lm(fdat[,responsename] ~ daymet)
+                mod <- lm(endDay ~ daymet)
                 fit <- fitted(mod) #extract fitted data
-                rmsd <- rmse(fit, fdat[,responsename]) #calculate rmse
+                rmsd <- rmse(fit, endDay) #calculate rmse
 
             } else {
                 rmsd <- Inf #if not, rmse is infinite

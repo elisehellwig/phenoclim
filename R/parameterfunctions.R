@@ -6,10 +6,13 @@
 #'      greatest
 #' @param start numeric, the day the model starts running
 #' @param end numeric, the day of the event to be predicted
+#' @param mclass character, the model class, "FlowerModel" or "PlantModel"
 #' @param thresh numeric, model threshold if the model is a time threshold model
 #' @return logical, TRUE if the cardinal temperatures are organized least to greatest, and start and thresh comes before predicted event. FALSE otherwise
-checkpars <- function(pars, start, end, thresh=NA) {
+checkpars <- function(pars, start, end, mclass, thresh=NA) {
 
+    #print(start)
+    #print(end)
     passcheck <- TRUE
 
      #check to see if there are more parameters than any of the models use
@@ -23,11 +26,15 @@ checkpars <- function(pars, start, end, thresh=NA) {
           passcheck <- FALSE
     }
 
+
+
+
     if (is.na(thresh)) {
         tooLate <- any(ifelse(start>end, TRUE, FALSE))
 
     } else {
-        tooLate <- any(ifelse(start>end | thresh>end, TRUE, FALSE))
+        threshDate <- start + days(thresh)
+        tooLate <- any(ifelse(start>end | threshDate>end, TRUE, FALSE))
     }
 
 

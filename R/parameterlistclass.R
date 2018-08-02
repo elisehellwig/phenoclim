@@ -35,7 +35,7 @@ setClass('ParameterList',
          	        cardinaltemps = "list",
                     threshold = "vector",
                     startday = 'vector',
-                    varyingpars = 'character',
+                    varyingpars = 'ANY',
                     parsOptimized = 'character',
                     mclass='character'))
 

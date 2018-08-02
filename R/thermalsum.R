@@ -118,7 +118,7 @@ TTTsum <- function(pars, yrs, tdat, form, startDate, thresh, varying, mclass) {
         endDate <- dayToDate(yrs+1, 184, 'FlowerModel')
 
     } else {
-        endDate <- dayToDate(yrs, rep(365, length(yrs)), 'PlantModel')
+        endDate <- dayToDate(yrs, 365, 'PlantModel')
     }
 
     modInterval <- interval(startDate, endDate)
