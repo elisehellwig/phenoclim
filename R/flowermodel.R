@@ -191,7 +191,7 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
     print(4)
 
     if (!simple) {
-
+        #print(d2[,predictornames])
        # print(4.1)
         #predicting event one based on
         f <- formula(paste0('event1', ' ~ ',  predictornames))
