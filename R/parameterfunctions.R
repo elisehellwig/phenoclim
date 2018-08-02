@@ -2,32 +2,43 @@
 
 #' Checks to see if parameters are in the correct order
 #'
-#' @param pars a vector of cardinal temperatures, should be organized least to greatest
-#' @return logical, TRUE if the cardinal temperatures are organized least to greatest, FALSE otherwise
-checkpars <- function(pars) {
+#' @param pars a vector of cardinal temperatures, should be organized least to
+#'      greatest
+#' @param start numeric, the day the model starts running
+#' @param end numeric, the day of the event to be predicted
+#' @return logical, TRUE if the cardinal temperatures are organized least to greatest, and start and thresh comes before predicted event. FALSE otherwise
+checkpars <- function(pars, start, end, thresh=NA) {
+
+    passcheck <- TRUE
 
      #check to see if there are more parameters than any of the models use
     if (length(pars)>4) {
         stop('There are no models with more than four parameters')
+    }
+
+    parsort <-sort(pars)#put parameters in ascending order
+
+    if (!identical(pars, parsort)) { #are parameters already in ascending
+          passcheck <- FALSE
+    }
+
+    if (is.na(thresh)) {
+        tooLate <- any(ifelse(start>end, TRUE, FALSE))
 
     } else {
-
-        parsort <-sort(pars)#put parameters in ascending order
-
-        if (identical(pars, parsort)) { #are parameters already in ascending
-            return(TRUE)                #order?
-
-        } else {
-            return(FALSE)
-        }
-
+        tooLate <- any(ifelse(start>end | thresh>end, TRUE, FALSE))
     }
+
+
+    if (tooLate) {
+        passcheck <- FALSE
+    }
+
+    return(passcheck)
 
 }
 
 #######################################
-
-
 
 #' Functional form parameter number
 #'
