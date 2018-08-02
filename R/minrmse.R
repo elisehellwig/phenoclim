@@ -34,7 +34,9 @@ minrmseDT <- function(pars, fdat, tdat, form, start, thresh, stage, varying,
 
     responsename <- responseVar(modclass, stage)
 
-    if (checkpars(pars)) { #if parameters are in ascending order
+
+    #if parameters are in ascending order and start is before predicted event
+    if (checkpars(pars, start, fdat[, responsename], thresh)) {
 
         #calculate the thermal sum for each year using the cardinal temps and
             #day threshold
@@ -87,7 +89,7 @@ minrmseTTTsimplified <- function(pars, fdat, tdat, form, start, thresh, stage,
 
     responsename <- responseVar(modclass, stage) #name of response variable
 
-    if (checkpars(pars)) { #are parameters in ascending order
+    if (checkpars(pars, start, fdat[, responsename])) { #are parameters in ascending order
 
         #calculate day thermal time threshold is met
         daymet <- thermalsum(pars, fdat$year, tdat, 'TTT', form, start, thresh,
@@ -140,7 +142,7 @@ minrmseTTT <- function(pars, fdat, tdat, form, start, thresh, stage,
 
     responsename <- responseVar(modclass, stage) #name of response variable
 
-    if (!checkpars(pars)) { #are cardinal temperatures in ascending order
+    if (!checkpars(pars, start, fdat[, responsename])) { #are cardinal temperatures in ascending order
        rmsd <- Inf #if not, rmse is infinite
 
 
