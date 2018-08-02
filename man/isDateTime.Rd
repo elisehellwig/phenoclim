@@ -6,12 +6,13 @@
 \usage{
 isDateTime(x)
 }
+\arguments{
+\item{x}{vector, the object you want to test}
+}
+\value{
+logical, is the object one of the date time classes specified above.
+}
 \description{
 This function tests if the object x is a date or time object (Period or
     POSIXct).
-}
-\details{
-@param x vector, the object you want to test
- @value logical, is the object one of the date time classes specified above.
- @export
 }

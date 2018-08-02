@@ -6,6 +6,7 @@
 #'      greatest
 #' @param start numeric, the day the model starts running
 #' @param end numeric, the day of the event to be predicted
+#' @param thresh numeric, model threshold if the model is a time threshold model
 #' @return logical, TRUE if the cardinal temperatures are organized least to greatest, and start and thresh comes before predicted event. FALSE otherwise
 checkpars <- function(pars, start, end, thresh=NA) {
 

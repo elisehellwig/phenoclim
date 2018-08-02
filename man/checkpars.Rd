@@ -4,13 +4,22 @@
 \alias{checkpars}
 \title{Checks to see if parameters are in the correct order}
 \usage{
-checkpars(pars)
+checkpars(pars, start, end, mclass, thresh = NA)
 }
 \arguments{
-\item{pars}{a vector of cardinal temperatures, should be organized least to greatest}
+\item{pars}{a vector of cardinal temperatures, should be organized least to
+greatest}
+
+\item{start}{numeric, the day the model starts running}
+
+\item{end}{numeric, the day of the event to be predicted}
+
+\item{mclass}{character, the model class, "FlowerModel" or "PlantModel"}
+
+\item{thresh}{numeric, model threshold if the model is a time threshold model}
 }
 \value{
-logical, TRUE if the cardinal temperatures are organized least to greatest, FALSE otherwise
+logical, TRUE if the cardinal temperatures are organized least to greatest, and start and thresh comes before predicted event. FALSE otherwise
 }
 \description{
 Checks to see if parameters are in the correct order
