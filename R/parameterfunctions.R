@@ -12,12 +12,13 @@ pickEnding <- function(n) {
     digits <- as.numeric(strsplit(as.character(n), '')[[1]])
 
     ones <- digits[length(digits)]
+    tens <- digits[(length(digits)-1)]
 
-    if (ones==1) {
+    if (ones==1 & tens!=1) {
         ending <- 'st'
-    } else if (ones==2) {
+    } else if (ones==2 & tens!=1) {
         ending <- 'nd'
-    } else if (ones==3) {
+    } else if (ones==3 & tens!=1) {
         ending <- 'rd'
     } else {
         ending <- 'th'
