@@ -1,3 +1,34 @@
+
+
+#' Picks correct ordinal indicator for a number
+#'
+#' This function returns the correct ordinal indicator for the number provided,
+#'     i.e. the two letter suffix used to denote that a number is a rank
+#'     (ex. 1st).
+#'
+#' @param n numeric or integer, a number that needs an ordinal indicator.
+#' @return character, the ordinal indicator of the number provided.
+pickEnding <- function(n) {
+    digits <- as.numeric(strsplit(as.character(n), '')[[1]])
+
+    ones <- digits[length(digits)]
+
+    if (ones==1) {
+        ending <- 'st'
+    } else if (ones==2) {
+        ending <- 'nd'
+    } else if (ones==3) {
+        ending <- 'rd'
+    } else {
+        ending <- 'th'
+    }
+
+    return(ending)
+}
+
+
+
+
 ##############################################
 
 #' Checks to see if parameters are in the correct order
@@ -237,10 +268,11 @@ showparlist <- function(object) {
 
     if ('start' %in% vp) {
         s1 <- 'Model starts '
-        s2 <- ' days after harvest,'
+        s2 <- ' days after harvest, '
     } else {
         s1 <- 'Model starts on the '
-        s2 <- ' day of the year,'
+        ois <- pickEnding(fromday)
+        s2 <- paste0(ois, ' day of the year, ')
     }
 
     if (('threshold' %in% vp)| mtype=='TTT') {
@@ -249,8 +281,9 @@ showparlist <- function(object) {
         if (mtype=='DT') s4 <- ' days.\n' else s4 <- ' thermal time units.\n'
 
     } else  {
-        t3 <- 'and runs until '
-        t4 <- ' day.\n'
+        s3 <- 'and runs until the '
+        oit <- pickEnding(tothresh)
+        s4 <- paste0(oit, ' day of the year.\n')
     }
 
     #adding information from different stages
