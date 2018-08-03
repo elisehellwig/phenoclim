@@ -197,7 +197,8 @@ calclength <- function(ml, lims) {
 #'     Optimal, and Critical
 showparlist <- function(object) {
     n <- object@stages #number of stages in a model
-
+    vp <- object@varyingpars #varying parameters
+    mtype <- object@modeltype #model type
 
     if (length(object@form)==n) { #extracting forms from parameterlist
         forms <- object@form
@@ -234,16 +235,35 @@ showparlist <- function(object) {
 
     #ml <- paste('from', from, 'to', to)
 
-    #adding information from different stages
-    stagelength <- data.frame(stage=1:n,
-                              type=rep(object@modeltype, n),
-                              form=forms,
-                              start=fromday,
-                              threshold=tothresh,
-                              class=rep(modclass, n))
+    if ('start' %in% vp) {
+        s1 <- 'Model starts '
+        s2 <- ' days after harvest,'
+    } else {
+        s1 <- 'Model starts on the '
+        s2 <- ' day of the year,'
+    }
 
-    lengthpars <- cbind(stagelength, pars) #putting stage length and parameter
+    if (('threshold' %in% vp)| mtype=='TTT') {
+        s3 <- 'and runs for '
+
+        if (mtype=='DT') s4 <- ' days.\n' else s4 <- ' thermal time units.\n'
+
+    } else  {
+        t3 <- 'and runs until '
+        t4 <- ' day.\n'
+    }
+
+    #adding information from different stages
+   modspecs <- data.frame(stage=1:n,
+                          type=rep(mtype, n),
+                          form=forms,
+                          simplified=object@simplified,
+                          class=rep(modclass, n))
+
+    lengthpars <- cbind(modspecs, pars) #putting stage length and parameter
                                             #information together
+
+    cat(paste0(s1, fromday, s2, s3, tothresh, s4))
     return(lengthpars)
 }
 
