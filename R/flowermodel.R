@@ -131,7 +131,7 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
                                                     trace=FALSE)
                             )$optim
 
-        #print(2)
+        print(2)
 
 # Part 2: extract optimized parameters ------------------------------------
 
