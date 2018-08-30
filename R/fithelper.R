@@ -91,7 +91,11 @@ dayToDate <- function(years, days, modclass, varying, hours=NA,
 formatParameters <- function(years, eventday, startday, threshold, modtype,
                              modclass, varying) {
 
-    #print('fp')
+    #print('formatpars')
+    #print(startday)
+    #print(threshold)
+
+     #print('fp')
     #does start day vary from year to year?
     if ('start' %in% varying) {
         startday <- startday + eventday
@@ -106,10 +110,20 @@ formatParameters <- function(years, eventday, startday, threshold, modtype,
         threshold <- round(threshold)
 
         if ('threshold' %in% varying) {
-            threshdate <- days(threshold)
+            threshdate <- sdate + days(threshold)
 
         } else {
-            threshdate <- dayToDate(years, threshold, modclass) + days(1)
+            threshdateF <- dayToDate(years, threshold, 'FlowerModel') + days(1)
+            threshdateP <- dayToDate(years, threshold, 'PlantModel') + days(1)
+
+            tooearly <- ifelse(threshdateF<sdate, TRUE, FALSE)
+
+            if (any(tooearly)) {
+                threshdate <- threshdateP
+            } else {
+                threshdate <- threshdateF
+            }
+
         }
 
     } else { #not actually a date, rather a number of thermal time units
