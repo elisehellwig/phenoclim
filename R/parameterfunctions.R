@@ -39,12 +39,13 @@ pickEnding <- function(n) {
 #' @param start numeric, the day the model starts running
 #' @param end numeric, the day of the event to be predicted
 #' @param mclass character, the model class, "FlowerModel" or "PlantModel"
-#' @param thresh numeric, model threshold if the model is a time threshold model
+#' @param thresh numeric, the threshold day for a DT model.
 #' @return logical, TRUE if the cardinal temperatures are organized least to greatest, and start and thresh comes before predicted event. FALSE otherwise
 checkpars <- function(pars, start, end, mclass, thresh=NA) {
 
-    #print(start)
-    #print(end)
+    #print('checkpars')
+   # print(start)
+   # print(thresh)
     passcheck <- TRUE
 
      #check to see if there are more parameters than any of the models use
@@ -60,13 +61,17 @@ checkpars <- function(pars, start, end, mclass, thresh=NA) {
 
 
 
-
-    if (is.na(thresh)) {
+    if (mclass=='PlantModel') {
         tooLate <- any(ifelse(start>end, TRUE, FALSE))
 
+
+    } else if (mclass=='FlowerModel') {
+
+        tooLate <- any(ifelse(start>=end | thresh>=end | thresh<=start,
+                              TRUE, FALSE))
+
     } else {
-        threshDate <- start + days(thresh)
-        tooLate <- any(ifelse(start>end | threshDate>end, TRUE, FALSE))
+        stop('mclass must be PlantModel or FlowerModel')
     }
 
 
@@ -74,6 +79,7 @@ checkpars <- function(pars, start, end, mclass, thresh=NA) {
         passcheck <- FALSE
     }
 
+    #print(passcheck)
     return(passcheck)
 
 }
@@ -271,9 +277,18 @@ showparlist <- function(object) {
         s1 <- 'Model starts '
         s2 <- ' days after harvest, '
     } else {
-        s1 <- 'Model starts on the '
-        ois <- pickEnding(fromday)
-        s2 <- paste0(ois, ' day of the year, ')
+
+        if (fromday %in% c('bloom','harvest')) {
+            s1 <- 'Model starts at '
+            s2 <- ', '
+
+        } else {
+            s1 <- 'Model starts on the '
+            ois <- pickEnding(fromday)
+            s2 <- paste0(ois, ' day of the year, ')
+        }
+
+
     }
 
     if (('threshold' %in% vp)| mtype=='TTT') {
@@ -282,9 +297,17 @@ showparlist <- function(object) {
         if (mtype=='DT') s4 <- ' days.\n' else s4 <- ' thermal time units.\n'
 
     } else  {
-        s3 <- 'and runs until the '
-        oit <- pickEnding(tothresh)
-        s4 <- paste0(oit, ' day of the year.\n')
+
+        if (fromday %in% c('bloom','harvest')) {
+            s3 <- 'and runs until '
+            s4 <- '.\n'
+
+        } else {
+            s3 <- 'and runs until the '
+            oit <- pickEnding(tothresh)
+            s4 <- paste0(oit, ' day of the year.\n')
+        }
+
     }
 
     #adding information from different stages
