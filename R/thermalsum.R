@@ -14,8 +14,7 @@ NULL
 #' @param form the functional form of the thermal time accumulation
 #' @param startDate POSIXct, the date to start accumulating time or thermal
 #'     time towards the model threshold.
-#' @param thresh Period or POSIXct, the duration of the thermal time
-#'     accumulation (threshold varies). or the date to stop accumulating thermal
+#' @param threshDate POSIXct, the date to stop accumulating thermal
 #'     time (threshold does not vary).
 #' @param varying character, c('start', 'threshold') should either of these
 #'     pars vary from year to year.
@@ -23,7 +22,7 @@ NULL
 #'     'PlantModel' or 'FlowerModel'. If you have negative day values, you
 #'     probably want flower model.
 #' @return The thermal sums for a given series of years.
-DTsum <- function(ctemps, yrs, tdat, form, startDate, thresh, varying,
+DTsum <- function(ctemps, yrs, tdat, form, startDate, threshDate, varying,
                   mclass) {
 
 
@@ -38,17 +37,9 @@ DTsum <- function(ctemps, yrs, tdat, form, startDate, thresh, varying,
    }
 
 
-   #print(1)
-    if ('threshold' %in% varying) {
-        endDate <- startDate + thresh
-
-    } else {
-        endDate <- thresh
-    }
-
    #print(head(startDate))
    #print(head(endDate))
-    modInterval <- interval(startDate, endDate)
+    modInterval <- interval(startDate, threshDate)
     #print(3)
 
     if (length(modInterval)==1) {
@@ -168,8 +159,8 @@ TTTsum <- function(pars, yrs, tdat, form, startDate, thresh, varying, mclass) {
 #' @param form the functional form of the thermal time accumulation
 #' @param start POSIXct, the date to start accumulating time or thermal
 #'     time towards the model threshold.
-#' @param thresh the length of thermal time accumulation (in either
-#'     days or thermal time units).
+#' @param thresh the length of thermal time accumulation (either a date or
+#'      thermal time units).
 #' @param varying character, c('start', 'threshold') should either of these
 #'     pars vary from year to year.
 #' @param mclass character, type of model to be estimating, options are
@@ -180,8 +171,10 @@ TTTsum <- function(pars, yrs, tdat, form, startDate, thresh, varying, mclass) {
 thermalsum <- function(ctemps, yrs, tdat, modtype, form, start, thresh,
                        varying, mclass, startingevent=NA) {
 
-    #print('thermalsum')
+   # print('thermalsum')
 
+    #print(start)
+    #print(thresh)
 
     if (is.numeric(start) | (!isDateTime(thresh) & modtype=='DT')) {
 
@@ -203,6 +196,9 @@ thermalsum <- function(ctemps, yrs, tdat, modtype, form, start, thresh,
 
     }
 
+    #print(start)
+    #print(thresh)
+
     if (modtype=='DT') {
         ths <- DTsum(ctemps, yrs, tdat, form, start, thresh, varying, mclass)
 
@@ -214,6 +210,7 @@ thermalsum <- function(ctemps, yrs, tdat, modtype, form, start, thresh,
         stop('Only options for model types are DT and TTT.')
     }
 
+    #print(ths)
     return(ths)
 }
 
