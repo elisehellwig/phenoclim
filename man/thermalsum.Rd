@@ -22,8 +22,8 @@ either DT (Day Threshold) or TTT (Thermal Time Threshold).}
 \item{start}{POSIXct, the date to start accumulating time or thermal
 time towards the model threshold.}
 
-\item{thresh}{the length of thermal time accumulation (in either
-days or thermal time units).}
+\item{thresh}{the length of thermal time accumulation (either a date or
+thermal time units).}
 
 \item{varying}{character, c('start', 'threshold') should either of these
 pars vary from year to year.}

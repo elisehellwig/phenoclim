@@ -16,7 +16,7 @@ greatest}
 
 \item{mclass}{character, the model class, "FlowerModel" or "PlantModel"}
 
-\item{thresh}{numeric, model threshold if the model is a time threshold model}
+\item{thresh}{numeric, the threshold day for a DT model.}
 }
 \value{
 logical, TRUE if the cardinal temperatures are organized least to greatest, and start and thresh comes before predicted event. FALSE otherwise
