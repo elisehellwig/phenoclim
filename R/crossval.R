@@ -38,15 +38,6 @@ crossval <- function(plant, temps, k, seed, fun='rmsd', lbounds, ubounds,
 
     ttforms <- sapply(parlist, function(pl) form(pl)[stage])
 
-    if ((!('ensemble' %in% ttforms)) & (ensemble)) {
-        stop('There is no ensemble prediction in the PlantModel, so there cannot be any in the crossvalidation')
-    }
-
-    if ('ensemble' %in% ttforms) {
-        ttforms <- ttforms[-m]
-        parlist <- parlist[1:(m-1)]
-        m <- m-1
-    }
 
     measure <- matrix(rep(NA, m*k), nrow=m)
 
@@ -73,9 +64,10 @@ crossval <- function(plant, temps, k, seed, fun='rmsd', lbounds, ubounds,
         testdata <- lapply(1:length(parlist), function(j) {
             pl <- parlist[[j]]
             #print(cardinaltemps(pl)[stage])
-            tl <- whichtemp(ttforms[j], daytemplist, hourtemplist)
 
-            as.data.frame(thermalsum(cardinaltemps(pl)[stage], test, tl,
+            #NOTE THIS NEEDS TO BE UPDATED TO REFLECT THE USE OF DATETIME
+            #INDEXING
+            as.data.frame(thermalsum(cardinaltemps(pl)[stage], test, temps,
                          modeltype(pl), ttforms[j], round(threshold(pl)),stage))
         })
         #print(5)
