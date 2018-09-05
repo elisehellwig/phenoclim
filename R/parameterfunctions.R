@@ -12,7 +12,12 @@ pickEnding <- function(n) {
     digits <- as.numeric(strsplit(as.character(n), '')[[1]])
 
     ones <- digits[length(digits)]
-    tens <- digits[(length(digits)-1)]
+
+    if (length(digits)==1) {
+        tens <- 0
+    } else {
+        tens <- digits[(length(digits)-1)]
+    }
 
     if (ones==1 & tens!=1) {
         ending <- 'st'
@@ -67,8 +72,13 @@ checkpars <- function(pars, start, end, mclass, thresh=NA) {
 
     } else if (mclass=='FlowerModel') {
 
-        tooLate <- any(ifelse(start>=end | thresh>=end | thresh<=start,
-                              TRUE, FALSE))
+        if (is.na(thresh)) {
+            tooLate <- any(ifelse(start>=end, TRUE, FALSE))
+
+        } else {
+            tooLate <- any(ifelse(start>=end | thresh>=end | thresh<=start,
+                                  TRUE, FALSE))
+        }
 
     } else {
         stop('mclass must be PlantModel or FlowerModel')
