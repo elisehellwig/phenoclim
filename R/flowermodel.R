@@ -245,11 +245,18 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
     print(7)
     DEparameters <- parlist
 
+    #print(7.1)
 
     if ((!simple) | (modeltype(parlist)=='TTT')) {
-        cardinaltemps(DEparameters) <- list(newct)
+       # print(7.2)
+        if (!is.list(newct)) {
+            newct <- list(newct)
+        }
+
+        cardinaltemps(DEparameters) <- newct
     }
 
+    #print(7.3)
     startday(DEparameters) <- newstart
     threshold(DEparameters) <- newthreshold
 
