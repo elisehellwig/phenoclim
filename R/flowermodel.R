@@ -32,16 +32,20 @@ NULL
 flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
                        cores=1L, iterations=200) {
 
-
     stages <- 1 #Number of stages in FlowerModel
     n <- stages+1 #number of events
+    m <- length(parlist)
     events <- paste0('event', 0:1) #event column names
 
-    start <- startday(parlist) #start vector
-    thresh <- threshold(parlist) #model threshold
+    #start vector
+    start <- sapply(parlist, function(pl) startday(pl))
+
+    #model threshold vector
+    thresh <- sapply(parlist, function(pl) startday(pl))
     vp <- varyingpars(parlist) #which pars will vary
 
-    simple <- simplified(parlist)
+    #are the models simplified
+    simple <- sapply(parlist, function(pl) simplified(pl))
 
     mtype <- modeltype(parlist) #model type TTT or DT
     ttform <- form(parlist) #functional form

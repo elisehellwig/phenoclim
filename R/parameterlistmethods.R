@@ -24,7 +24,6 @@ setMethod("modeltype", "ParameterList",
               return(object@modeltype)
           })
 
-
 #' Accesses the simplified parameter of a ParameterList object
 #' @rdname simplified
 setMethod("simplified", "ParameterList",
