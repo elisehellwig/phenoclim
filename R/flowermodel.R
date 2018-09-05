@@ -101,6 +101,8 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
         #extracting fitted data
         fits <- round(unname(fitted(mod)))
 
+        newstart <- 1
+
         #getting the new average bloom dates of the fits
         newthreshold <- round(unname(coef(mod)[1]))
 
