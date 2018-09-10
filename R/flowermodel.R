@@ -41,63 +41,59 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
     start <- sapply(parlist, function(pl) startday(pl))
 
     #model threshold vector
-    thresh <- sapply(parlist, function(pl) startday(pl))
-    vp <- varyingpars(parlist) #which pars will vary
+    thresh <- sapply(parlist, function(pl) threshold(pl))
+
+    #which pars will vary
+    vp <- sapply(parlist, function(pl) varyingpars(pl))
 
     #are the models simplified
-    simple <- sapply(parlist, function(pl) simplified(pl))
+    simple <- simplified(parlist[[1]])
 
-    mtype <- modeltype(parlist) #model type TTT or DT
-    ttform <- form(parlist) #functional form
+    mtype <- modeltype(parlist[[1]]) #model type TTT or DT
+    ttform <- sapply(parlist, function(pl) form(pl)) #functional form
 
     #extracting the appropriate form names
 
     #Checking to make sure all of the right variables and etc are present
     checktemps(temps, phenology, ttform, 'FlowerModel')
 
-    if (ttform=='anderson') {
-        cardinaltemps(parlist) <-list(c(4,25,36))
+    for (i in 1:m) {
+        if (ttform[i]=='anderson') {
+            cardinaltemps(parlist[[i]]) <-list(c(4,25,36))
+        }
     }
-
-
 
     #detects if you are estimating the cardinal temperatures
-
-    #are you estimating cardinal temperatures?
-    if ('cardinaltemps' %in% parsOptimized(parlist)) {
-
-        if ('anderson' %in% ttform) { #is the form anderson?
-            estimateCT <- FALSE #if the form is anderson, you don't estimate cardinal temps
-        } else {
-            estimateCT <- TRUE #otherwise estimateCT is true
-        }
-
-    } else {
-        estimateCT <- FALSE
-    }
-
+    estimateCT <- sapply(parlist, function(pl) {
+        if (!('cardinaltemps' %in% parsOptimized(pl))) {
+            FALSE
+        } else if (form(pl)=='anderson') FALSE else TRUE
+    })
 
 
    #for which models are you estimating /threshold
-    estimatethresh<-ifelse('threshold' %in% parsOptimized(parlist), TRUE, FALSE)
+    estimatethresh <- sapply(parlist, function(pl) {
+        if ('threshold' %in% parsOptimized(pl)) TRUE else FALSE
+    })
 
     #is the end day being estimated?
-    estimatestart <- ifelse('start' %in% parsOptimized(parlist), TRUE, FALSE)
+    estimatestart <- sapply(parlist, function(pl) {
+        if ('start' %in% parsOptimized(pl)) TRUE else FALSE
+    })
 
-    if (estimatestart & start==0) {
-        stop('If you want to opimize the start day you cannot set the start day to be the harvest readiness date from the previous year.')
-    }
 
-    if (estimatethresh & is.na(thresh)) {
-        stop('If you want to opimize the threshold you cannot run the base model (threshold=NA).')
-    }
+    ifelse(estimatestart & start==0,
+        stop('If you want to opimize the start day you cannot set the start day to be the harvest readiness date from the previous year.'), NULL)
+
+    ifelse(estimatethresh & is.na(thresh),
+        stop('If you want to opimize the threshold you cannot run the base model (threshold=NA).'), NULL)
 
 
     #phenology data with only the year and event data.
     d <- phenology[, c('year', events)]
 
     #average flowering day model
-    if (modeltype(parlist)=='DT' & simple) {
+    if (mtype=='DT' & simple) {
 
         #average flowering day lm
         mod <- lm(event1 ~ 1, data=d)
