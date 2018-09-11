@@ -158,7 +158,7 @@ boundlength <- function(form, CT, Start, Thresh) {
     logipars <- c(CT, anyStart, anyThresh)
 
     if (!any(logipars)) {
-        stop('You must at least estimate one of the following: cardinal temperatures, the model threshold, the model limits (start/stop days).')
+        stop('You must at least estimate one of the following: cardinal temperatures, start day, model threshold.')
 
     } else {
 
