@@ -1,4 +1,4 @@
-#' @include constructors.R modelcheck.R objectivefunction.R flowermodelmethods.R
+#' @include constructors.R modelcheck.R objectivefunction.R flowermodelmethods.R extraction.R
 NULL
 
 # This document contains the function that fits phenological models for Plant
@@ -110,8 +110,7 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
         blen <- boundlength(ttform, estimateCT, estimatestart, estimatethresh)
 
-
-        #note this won't work for more than one stage
+        #do your bounds have enough parameters?
         if (blen!=length(lbounds)) {
             stop(paste0('The bounds have the wrong number of parameter values. ',
                         'Your bounds are of length ', length(lbounds),
@@ -120,59 +119,72 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
 
 
-        objfun <- objective(parlist, d, temps, 1, estimateCT,
-                            estimatestart, estimatethresh, 1,
-                            'FlowerModel')
+        functionlist <- lapply(1:m, function(i) {
+            objective(parlist, d, temps, 1, estimateCT,
+                      estimatestart, estimatethresh, i,
+                      'FlowerModel')
+        })
+
+
+        #creating the appropriate length bounds for each thermal time form
+        lboundlist <- lapply(1:m, function(i) {
+            bndlen <- boundlength(ttforms[i], estimateCT[i],
+                                  estimatelength[i])
+
+            lbounds[1:bndlen]
+        })
+
+
+        uboundlist <- lapply(1:m, function(i) {
+            bndlen <- boundlength(ttforms[i], estimateCT[i],
+                                  estimatelength[i])
+
+            ubounds[1:bndlen]
+        })
 
         #optimizing the parameters
         #parameter order: Start Threshold Cardinaltemps
-        optimmod <- DEoptim(objfun,
-                            lower=lbounds,
-                            upper=ubounds,
-                            control=DEoptim.control(itermax=iterations,
-                                                    trace=FALSE)
-                            )$optim
+
+
+
+        #optimizing the parameters
+        if (cores > 1) {
+
+            optimlist <- mclapply(1:m, function(i) {
+                DEoptim(functionlist[[i]], lower=lboundlist[[i]],
+                    upper=uboundlist[[i]],
+                    control=DEoptim.control(itermax=iterations,
+                                            trace=FALSE))$optim
+            }, mc.cores=cores)
+
+        } else {
+
+            optimlist <- lapply(1:m, function(i) {
+                DEoptim(functionlist[[i]], lower=lboundlist[[i]],
+                        upper=uboundlist[[i]],
+                        control=DEoptim.control(itermax=iterations,
+                                                trace=FALSE))$optim
+                })
+        }
+
 
         print(2)
 
 # Part 2: extract optimized parameters ------------------------------------
 
         #extracting those parameters
+        estimatelist <- list(estimatestart, estimatethresh, estimateCT)
 
-        if (estimatestart) {
-            newstart <- unname(optimmod[["bestmem"]][1])
+        newstart <- extractParameters(estimatelist, 'start', parlist,
+                                      optimlist)
 
-            if (estimatethresh) {
-                newthreshold <- unname(optimmod[["bestmem"]][2])
-            } else {
-                newthreshold <- threshold(parlist)
-            }
+        newthresh <- extractParameters(estimatelist, 'threshold', parlist,
+                                       optimlist)
 
-        } else {
-            newstart <- startday(parlist)
+        newct <- extractParameters(estimatelist, 'cardinaltemps', parlist,
+                                   optimlist)
 
-            if (estimatethresh) {
-                newthreshold <- unname(optimmod[["bestmem"]][1])
-            } else {
-                newthreshold <- threshold(parlist)
-            }
-
-        }
-
-        npars <- sum(c(estimatestart, estimatethresh))
-
-        if (estimateCT) {
-            if (npars>0) {
-                newct <- unname(optimmod[["bestmem"]][-(1:npars)])
-
-            } else {
-                newct <- unname(optimmod[["bestmem"]])
-            }
-        } else {
-            newct <- cardinaltemps(parlist)
-        }
-
-
+#####################This still needs to be vectorized#######################
         #creating predictors for stage length based on the parameters
 
         print(3)
