@@ -96,7 +96,7 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
     if (mtype=='DT' & simple) {
 
         #average flowering day lm
-        mod <- lm(event1 ~ 1, data=d)
+        modlist <- lm(event1 ~ 1, data=d)
 
         #extracting fitted data
         fits <- round(unname(fitted(mod)))
@@ -184,17 +184,24 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
         newct <- extractParameters(estimatelist, 'cardinaltemps', parlist,
                                    optimlist)
 
-#####################This still needs to be vectorized#######################
         #creating predictors for stage length based on the parameters
 
         print(3)
-        predictornames <- paste0(modeltype(parlist), ttform)
+        predictornames <- lapply(1:m, function(i) {
+            paste0(mtype, ttform[i])
+        })
 
-        predictors <- thermalsum(newct, d$year, temps, mtype, ttform, newstart,
-                                 newthreshold, vp, 'FlowerModel', d$event0)
+
+        predictors <- as.data.frame(sapply(1:m, function(i) {
+            thermalsum(newct[[i]], d$year, temps, mtype, newstart[i],
+                       newthreshold[i], vp, 'FlowerModel', d$event0)
+        }))
+
 
         d2 <- cbind(d, predictors)
-        names(d2)[ncol(d2)] <- predictornames
+        nc2 <- ncol(d2)
+
+        names(d2)[(nc2-m+1):nc2] <- predictornames
 
     } #this closes everything but the DT simple model
 
@@ -208,23 +215,26 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
         #print(d2[,predictornames])
        # print(4.1)
         #predicting event one based on
-        f <- formula(paste0('event1', ' ~ ',  predictornames))
-        mod <- lm(f, data=d2)
+        modlist <- lapply(1:m, function(i) {
+            f <- formula(paste('event1', ' ~ ', predictornames[i] ))
+            lm(f, data=d2)
+        })
 
        # print(4.2)
-        fits <- as.data.frame(fitted(mod))
+        fits <- as.data.frame(sapply(modlist, fitted))
 
        # print(4.3)
     } else if (simple & modeltype(parlist)=='TTT') {
 
         #creates dummy data to force the creation of a linear model with
         #beta=1 and alpha=0
-        dat <- data.frame(y=1:10, x=1:10)
-        names(dat) <- c('event1', predictornames)
-        f <- formula(paste0('event1 ~ ',predictornames))
 
-        #dummy model
-        mod <- lm(f, data=dat)
+        modlist <- lapply(predictornames, function(pname) {
+            dat <- data.frame(y=1:10, x=1:10)
+            names(dat) <- c('event1', pname)
+            f <- formula(paste('event1', ' ~ ', pname))
+            lm(f, data=dat)
+        })
 
 
         fits <- predictors
@@ -240,45 +250,60 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
         d3 <- cbind(d, fits)
     }
 
+#####################This still needs to be vectorized#######################
+
     #giving the fitted data a name
 
-    if (modeltype(parlist)=='DT' & simple) {
-        fitname <- 'DTsimple'
-    } else {
-        fitname <- paste0('fit', modeltype(parlist), ttform, 1)
-    }
+    fitname <- sapply(1:m, function(i) {
+        if (mtype=='DT' & simple[i]) {
+            'DTsimple'
+        } else {
+            paste0('fit', mtype, ttform[i])
+        }
+    })
 
-
-    names(d3)[ncol(d3)] <- fitname
+    nc3 <- ncol(d3)
+    names(d3)[(nc3-m+1):nc3] <- fitname
     #print(fits)
 
-    rmsd <- rmse(d3[, fitname], d3[,'event1'])
+
+    rmse <- sapply(fitname, function(fname) {
+        rmsd(d3[,fname], d3[,'event1'])
+    })
 
     print(7)
     DEparameters <- parlist
 
     #print(7.1)
+#####################This still needs to be vectorized#######################
 
-    if ((!simple) | (modeltype(parlist)=='TTT')) {
-       # print(7.2)
-        if (!is.list(newct)) {
-            newct <- list(newct)
+
+    for (i in 1:m) {
+        if ((!simple) | (mtype=='TTT')) {
+            # print(7.2)
+            if (!is.list(newct[[i]])) {
+                newct <- list(newct[[i]])
+            }
+
+            cardinaltemps(DEparameters[[i]]) <- newct[[i]]
         }
 
-        cardinaltemps(DEparameters) <- newct
+        #print(7.3)
+        startday(DEparameters[[i]]) <- newstart[i]
+        threshold(DEparameters[[i]]) <- newthreshold[i]
+
     }
 
-    #print(7.3)
-    startday(DEparameters) <- newstart
-    threshold(DEparameters) <- newthreshold
-
+    if (!is.list(modlist)) {
+        modlist <- list(modlist)
+    }
 
     print(8)
     fm <- new('FlowerModel',
-              parameters=list(DEparameters),
+              parameters=DEparameters,
               error=rmsd,
               phenology=d3,
-              olm=list(mod),
+              olm=modlist,
               crossvalidated=FALSE)
 
     return(fm)
