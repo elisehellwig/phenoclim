@@ -71,7 +71,7 @@ extractParameters <- function(estimate, parname, parlist, optlist) {
             length(optlist[[i]][["bestmem"]])
         })
 
-        value <- sapply(1:n, function(i) {
+        value <- lapply(1:n, function(i) {
             if (estimatect[i]) {
                 unname(optlist[[i]][["bestmem"]][CTid[i]:pl[i]])
             } else {
