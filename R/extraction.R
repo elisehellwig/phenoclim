@@ -15,7 +15,7 @@
 #' @export
 extractParameters <- function(estimate, parname, parlist, optlist) {
 
-    n <- length(modlist)
+    n <- length(optlist)
 
     #expand estimatestart
     if (length(estimate[[1]])==1 & n > 1) {

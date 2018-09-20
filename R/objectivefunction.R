@@ -32,7 +32,7 @@ objective <- function(parlist, phenology, temp, stage, CT, Start,
     #print('objective')
     #extract parameters from ParameterList object
     if (mclass=='FlowerModel') {
-        PL <- parlist
+        PL <- parlist[[listindex]]
         events <- paste0('event', 0:1)
         fnames <- c('year', events)
 
@@ -51,11 +51,11 @@ objective <- function(parlist, phenology, temp, stage, CT, Start,
     simple <- simplified(PL)
 
     #is the threshold estimated
-    if (!Threshold) { #Mclass=Flowermodel, DT2,4-5; TTT1-3
+    if (!Threshold[i]) { #Mclass=Flowermodel, DT2,4-5; TTT1-3
         th <- threshold(PL)[stage]
 
     } else {#Mclass=Flowermodel, DT1, 3-4
-        th <- Threshold
+        th <- Threshold[i]
     }
 
     if (is.na(th)) {
@@ -64,16 +64,16 @@ objective <- function(parlist, phenology, temp, stage, CT, Start,
 
 
     #is the start day estimated
-    if (!Start) { #FlowerModel: DT5, TTT3
+    if (!Start[i]) { #FlowerModel: DT5, TTT3
         s <- startday(PL)[stage]
 
     } else {
-        s <- Start
+        s <- Start[i]
     }
 
 
     #are the cardinal temps estimated
-    if (!CT) ct <- cardinaltemps(PL)[[stage]] else ct <- CT
+    if (!CT[i]) ct <- cardinaltemps(PL)[[stage]] else ct <- CT[i]
 
 
     #create data.frame with only the columns necessary
@@ -83,9 +83,8 @@ objective <- function(parlist, phenology, temp, stage, CT, Start,
     #minimized using the function DEoptim()
     fun <- function(x) {
         return(minrmse(x, fdat, temp, modeltype(PL), form(PL)[stage], stage,
-                       ct, s, th, simple[listindex],
-                       varying=varyingpars(PL), modclass = mclass(PL),
-                       firstevent=events[1]))
+                       ct, s, th, simple, varying=varyingpars(PL),
+                       modclass = mclass(PL), firstevent=events[1]))
     }
 
     return(fun)

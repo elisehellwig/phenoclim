@@ -140,6 +140,7 @@ parnum <- function(form) {
 #' @param Thresh logical, does the model threshold need to be
 #'     estimated?
 #' @return The length the bounds vectors need to be.
+#' @export
 boundlength <- function(form, CT, Start, Thresh) {
 
     #what is the maximum number of parameters any form requires?

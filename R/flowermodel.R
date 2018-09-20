@@ -82,11 +82,16 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
     })
 
 
-    ifelse(estimatestart & start==0,
-        stop('If you want to opimize the start day you cannot set the start day to be the harvest readiness date from the previous year.'), NULL)
+   badstart <- ifelse(estimatestart & start==0, TRUE, FALSE)
 
-    ifelse(estimatethresh & is.na(thresh),
-        stop('If you want to opimize the threshold you cannot run the base model (threshold=NA).'), NULL)
+    if (any(badstart)) {
+        stop('If you want to opimize the start day you cannot set the start day to be the harvest readiness date from the previous year.')}
+
+    badthresh <- ifelse(estimatethresh & is.na(thresh), TRUE, FALSE)
+
+    if (any(badthresh)) {
+        stop('If you want to opimize the threshold you cannot run the base model (threshold=NA).')
+    }
 
 
     #phenology data with only the year and event data.
@@ -128,16 +133,16 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
         #creating the appropriate length bounds for each thermal time form
         lboundlist <- lapply(1:m, function(i) {
-            bndlen <- boundlength(ttforms[i], estimateCT[i],
-                                  estimatelength[i])
+            bndlen <- boundlength(ttform[i], estimateCT[i], estimatestart[i],
+                                  estimatethresh[i])
 
             lbounds[1:bndlen]
         })
 
 
         uboundlist <- lapply(1:m, function(i) {
-            bndlen <- boundlength(ttforms[i], estimateCT[i],
-                                  estimatelength[i])
+            bndlen <- boundlength(ttform[i], estimateCT[i], estimatestart[i],
+                                  estimatethresh[i])
 
             ubounds[1:bndlen]
         })
@@ -191,10 +196,10 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
             paste0(mtype, ttform[i])
         })
 
-
+        ##############error is here##########################
         predictors <- as.data.frame(sapply(1:m, function(i) {
             thermalsum(newct[[i]], d$year, temps, mtype, newstart[i],
-                       newthreshold[i], vp, 'FlowerModel', d$event0)
+                       newthresh[i], vp, 'FlowerModel', d$event0)
         }))
 
 

@@ -108,6 +108,7 @@ tempclasscheck <- function(frm, temp) {
 #' @param modelclass character, specifies the class of the model being fit,
 #'     either 'PlantModel' or 'FlowerModel'
 #' @return logical, TRUE if everything goes well, an error if not.
+#' @export
 checktemps <- function(temp, pheno, forms, modelclass) {
 
     if (!checktempyears(pheno, temp, modelclass)[[1]]) {
