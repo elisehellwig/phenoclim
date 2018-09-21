@@ -107,11 +107,21 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
                                 leap-d$event0 + d$event1,
                                 d$event1 - d$event0)
 
-            modlist < lm(length0 ~ 1, d)
+            modlist <- lm(length0 ~ 1, data=d)
+
+            for (i in 1:m) {
+                varyingpars(parlist[[i]]) <- c('start','threshold')
+            }
+
 
         } else {
             #average flowering day lm
             modlist <- lm(event1 ~ 1, data=d)
+
+            for (i in 1:m) {
+                varyingpars(parlist[[i]]) <- NA
+            }
+
 
         }
 
@@ -121,7 +131,12 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
         fits <- round(unname(fitted(modlist)))
 
 #########need to fix  so it works with varying start day
-        newstart <- rep(1, m)
+        if (start %in% vp[1]) {
+            newstart <- rep(0, m)
+        } else {
+            newstart <- rep(1, m)
+        }
+
 
         #getting the new average bloom dates of the fits
         newthresh <- rep(round(unname(coef(modlist)[1])), m)
