@@ -117,7 +117,7 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
         #do your bounds have enough parameters?
         if (blen!=length(lbounds)) {
-            stop(paste0('The bounds have the wrong number of parameter values. ',
+          stop(paste0('The bounds have the wrong number of parameter values. ',
                         'Your bounds are of length ', length(lbounds),
                         ', and they should be of length ', blen, '.'))
         }
@@ -196,10 +196,9 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
             paste0(mtype, ttform[i])
         })
 
-        ##############error is here##########################
         predictors <- as.data.frame(sapply(1:m, function(i) {
-            thermalsum(newct[[i]], d$year, temps, mtype, newstart[i],
-                       newthresh[i], vp, 'FlowerModel', d$event0)
+            thermalsum(newct[[i]], d$year, temps, mtype, ttform[i],
+                       newstart[i], newthresh[i], vp, 'FlowerModel', d$event0)
         }))
 
 
@@ -229,7 +228,7 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
         fits <- as.data.frame(sapply(modlist, fitted))
 
        # print(4.3)
-    } else if (simple & modeltype(parlist)=='TTT') {
+    } else if (simple & mtype=='TTT') {
 
         #creates dummy data to force the creation of a linear model with
         #beta=1 and alpha=0
@@ -255,12 +254,11 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
         d3 <- cbind(d, fits)
     }
 
-#####################This still needs to be vectorized#######################
 
     #giving the fitted data a name
 
     fitname <- sapply(1:m, function(i) {
-        if (mtype=='DT' & simple[i]) {
+        if (mtype=='DT' & simple) {
             'DTsimple'
         } else {
             paste0('fit', mtype, ttform[i])
@@ -272,22 +270,20 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
     #print(fits)
 
 
-    rmse <- sapply(fitname, function(fname) {
-        rmsd(d3[,fname], d3[,'event1'])
+    rmsd <- sapply(fitname, function(fname) {
+        rmse(d3[,fname], d3[,'event1'])
     })
 
     print(7)
     DEparameters <- parlist
 
     #print(7.1)
-#####################This still needs to be vectorized#######################
-
 
     for (i in 1:m) {
         if ((!simple) | (mtype=='TTT')) {
             # print(7.2)
             if (!is.list(newct[[i]])) {
-                newct <- list(newct[[i]])
+                newct[[i]] <- list(newct[[i]])
             }
 
             cardinaltemps(DEparameters[[i]]) <- newct[[i]]
@@ -295,7 +291,7 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
         #print(7.3)
         startday(DEparameters[[i]]) <- newstart[i]
-        threshold(DEparameters[[i]]) <- newthreshold[i]
+        threshold(DEparameters[[i]]) <- newthresh[i]
 
     }
 
