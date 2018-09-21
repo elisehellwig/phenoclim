@@ -100,16 +100,31 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
     #average flowering day model
     if (mtype=='DT' & simple) {
 
-        #average flowering day lm
-        modlist <- lm(event1 ~ 1, data=d)
+        if ('start' %in% vp[1]) {
+            leap <- ifelse(is.leapyear(d$year), 366, 365)
+
+            d$length0 <- ifelse(d$event0>d$event1,
+                                leap-d$event0 + d$event1,
+                                d$event1 - d$event0)
+
+            modlist < lm(length0 ~ 1, d)
+
+        } else {
+            #average flowering day lm
+            modlist <- lm(event1 ~ 1, data=d)
+
+        }
+
+
 
         #extracting fitted data
-        fits <- round(unname(fitted(mod)))
+        fits <- round(unname(fitted(modlist)))
 
-        newstart <- 1
+#########need to fix  so it works with varying start day
+        newstart <- rep(1, m)
 
         #getting the new average bloom dates of the fits
-        newthreshold <- round(unname(coef(mod)[1]))
+        newthresh <- rep(round(unname(coef(modlist)[1])), m)
 
     } else { #everything but the DT simple model
 
@@ -257,16 +272,22 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
     #giving the fitted data a name
 
-    fitname <- sapply(1:m, function(i) {
-        if (mtype=='DT' & simple) {
-            'DTsimple'
-        } else {
-            paste0('fit', mtype, ttform[i])
-        }
-    })
+    if (mtype=='DT' & simple) {
+        fitname <- 'DTsimple'
+        names(d3)[ncol(d3)] <- fitname
 
-    nc3 <- ncol(d3)
-    names(d3)[(nc3-m+1):nc3] <- fitname
+    } else {
+        fitname <- sapply(1:m, function(i) {
+            paste0('fit', mtype, ttform[i])
+        })
+
+        nc3 <- ncol(d3)
+        names(d3)[(nc3-m+1):nc3] <- fitname
+
+    }
+
+
+
     #print(fits)
 
 
@@ -295,8 +316,12 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
     }
 
-    if (!is.list(modlist)) {
+    if (!(class(modlist)=='list')) {
         modlist <- list(modlist)
+    }
+
+    if (length(modlist)==1) {
+        modlist <- replicate(m, modlist[[1]], simplify = FALSE)
     }
 
     print(8)
