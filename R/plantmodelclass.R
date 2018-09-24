@@ -65,6 +65,16 @@ setGeneric('olm', function(object) standardGeneric('olm'))
 #' @export
 setGeneric('crossvalidated', function(object) standardGeneric('crossvalidated'))
 
+#' Crossvalidates a Plant or Flower Model object
+#'
+#' @param object an (non-crossvalidated) object of class PlantModel or
+#'     FlowerModel
+#' @return An object of class Plantmodel or FlowerModel with a crossvalidated
+#'     error.
+#' @export
+setGeneric('crossval', function(object) standardGeneric('crossval'))
+
+
 ###################################
 #sets stuff
 

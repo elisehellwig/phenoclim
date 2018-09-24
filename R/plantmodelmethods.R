@@ -97,6 +97,12 @@ setMethod("crossvalidated", "PlantModel",
           })
 
 
+#' Crossvalidates PlantModel
+#' @rdname crossval
+setMethod("crossval", "PlantModel",
+          function(object, ...) return(crossvalPlant(object)))
+
+
 ######Paremeterlist accessors
 
 #' Accesses the number of stages of a PlantModel object
