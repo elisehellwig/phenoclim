@@ -69,10 +69,13 @@ setGeneric('crossvalidated', function(object) standardGeneric('crossvalidated'))
 #'
 #' @param object an (non-crossvalidated) object of class PlantModel or
 #'     FlowerModel
+#' @param ... see other documentation
 #' @return An object of class Plantmodel or FlowerModel with a crossvalidated
 #'     error.
 #' @export
-setGeneric('crossval', function(object) standardGeneric('crossval'))
+setGeneric('crossval',
+           function(object, ...)
+               standardGeneric('crossval'))
 
 
 ###################################

@@ -87,7 +87,18 @@ setMethod("crossvalidated", "FlowerModel",
           })
 
 
-######Paremeterlist accessors
+#' Crossvalidate model
+#'
+#' @rdname crossval
+setMethod("crossval", "FlowerModel",
+          function(object, temps, k, seed, fun, lbounds, ubounds,
+                   iterations=100, cores=1L) {
+              return(crossvalTEST(object, temps, k, seed, fun, lbounds, ubounds,
+                           iterations, cores))
+          })
+
+
+# ParameterList accessors -------------------------------------------------
 
 #' Accesses the number of stages of a FlowerModel object
 #' @rdname stages
@@ -95,6 +106,8 @@ setMethod("stages", "FlowerModel",
           function(object) {
               return(object@parameters[[1]]@stages)
           })
+
+
 
 #' Accesses form of a FlowerModel object
 #' @rdname form

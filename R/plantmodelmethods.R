@@ -97,10 +97,26 @@ setMethod("crossvalidated", "PlantModel",
           })
 
 
-#' Crossvalidates PlantModel
+#' Crossvalidate model
+#'
+#' @param temps data.frame, contains all the temperature data.
+#' @param k numeric, number of folds for crossvalidation.
+#' @param seed numeric, the number to be used as the seed. Set to NA for no seed
+#'     set.
+#' @param fun character, the name of the function used to evaluate the model.
+#' @param lbounds numeric, lower bounds of parameters
+#' @param ubounds numeric, upper bounds of parameters.
+#' @param cores integer, number of cores to be used when fitting the models
+#' @param iterations numeric, number of iterations to be used when optimizing
+#'     paramters.
 #' @rdname crossval
 setMethod("crossval", "PlantModel",
-          function(object, ...) return(crossvalPlant(object)))
+          function(object, temps, k, seed, fun, lbounds, ubounds,
+                   iterations=100, cores=1L) {
+              return(crossvalTEST(object, temps, k, seed, fun, lbounds, ubounds,
+                           iterations, cores))
+          })
+
 
 
 ######Paremeterlist accessors
@@ -208,6 +224,8 @@ setMethod("mclass", "PlantModel",
 
               return(object@parameters[[1]]@mclass)
           })
+
+
 
 
 ################################################################
