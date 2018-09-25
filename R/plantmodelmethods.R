@@ -1,4 +1,4 @@
-#' @include plantmodelclass.R
+#' @include plantmodelclass.R crossval.R
 NULL
 
 # methods for the PlantModel class
@@ -113,8 +113,8 @@ setMethod("crossvalidated", "PlantModel",
 setMethod("crossval", "PlantModel",
           function(object, temps, k, seed, fun, lbounds, ubounds,
                    iterations=100, cores=1L) {
-              return(crossvalTEST(object, temps, k, seed, fun, lbounds, ubounds,
-                           iterations, cores))
+              return(crossvalPlant(object, temps, k, seed, fun, lbounds,
+                                   ubounds, iterations, cores))
           })
 
 

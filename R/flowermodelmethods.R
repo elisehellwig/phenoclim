@@ -1,4 +1,4 @@
-#' @include plantmodelclass.R flowermodelclass.R
+#' @include plantmodelclass.R flowermodelclass.R crossval.R
 
 # methods for the FlowerModel class
 
