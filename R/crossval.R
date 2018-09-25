@@ -193,7 +193,7 @@ crossvalFlower <- function(flower, temps, k, seed, fun='rmse', lbounds, ubounds,
         #print(trainmod[[1]])
 
         fit <-lapply(1:m, function(j) {
-            unname(predict(trainmod[[j]][[stage]], newdata=testdata[[j]]))
+            unname(predict(trainmod[[j]], newdata=testdata[[j]]))
         })
 
 
@@ -216,38 +216,10 @@ crossvalFlower <- function(flower, temps, k, seed, fun='rmse', lbounds, ubounds,
     print(8)
 
     error(flower) <- avgmeasure
-    crossvalidated(plant) <- TRUE
+    crossvalidated(flower) <- TRUE
 
     return(flower)
 
 }
 
 
-#' Crossvalidates the PlantModel Error
-#'
-#' Does k-fold crossvalidation on the error of a PlantModel object.
-#'
-#' @param flower flowermodel, the object to be crossvalidated
-#' @param k numeric, number of folds for crossvalidation.
-#' @param temps data.frame, contains all the temperature data.
-#' @param seed numeric, the number to be used as the seed. Set to NA for no seed
-#'     set.
-#' @param fun character, the name of the function used to evaluate the model.
-#' @param lbounds numeric, lower bounds of parameters
-#' @param ubounds numeric, upper bounds of parameters.
-#' @param cores integer, number of cores to be used when fitting the models
-#' @param iterations numeric, number of iterations to be used when optimizing
-#'     paramters.
-#' @return A PlantModel object with the error slot having the new crossvalidated
-#'     error
-#' @export
-crossvalTEST <- function(flower, temps, k, seed, fun='rmse', lbounds, ubounds,
-                          iterations=100, cores=1L) {
-
-    perror <- error(flower)
-   plant <- paste('This crossvalidation will have', k, 'folds and', seed,
-                  'will be the randomization seed. The current error is',
-                  perror, 'days.')
-    return(plant)
-
-}
