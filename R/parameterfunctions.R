@@ -72,7 +72,7 @@ checkpars <- function(pars, start, end, mclass, thresh=NA) {
 
     } else if (mclass=='FlowerModel') {
 
-        if (is.na(thresh)) {
+        if (is.na(thresh[1])) {
             tooLate <- any(ifelse(start>=end, TRUE, FALSE))
 
         } else {

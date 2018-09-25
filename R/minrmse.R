@@ -252,7 +252,7 @@ minrmse <- function(pars, fdat, tdat, modtype, form, stage, CT, S, TH, simple,
     s <- startthresh[[1]]
     th <- startthresh[[2]]
 
-    #print(simple)
+    #print(th)
 
     ##########sending pars to their respective functions####################
 
