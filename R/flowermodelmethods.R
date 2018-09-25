@@ -93,8 +93,8 @@ setMethod("crossvalidated", "FlowerModel",
 setMethod("crossval", "FlowerModel",
           function(object, temps, k, seed, fun, lbounds, ubounds,
                    iterations=100, cores=1L) {
-              return(crossvalTEST(object, temps, k, seed, fun, lbounds, ubounds,
-                           iterations, cores))
+              return(crossvalFlower(object, temps, k, seed, fun, lbounds,
+                                    ubounds, iterations, cores))
           })
 
 

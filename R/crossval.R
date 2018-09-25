@@ -131,9 +131,11 @@ crossvalPlant <- function(plant, temps, k, seed, fun='rmse', lbounds, ubounds,
 crossvalFlower <- function(flower, temps, k, seed, fun='rmse', lbounds, ubounds,
                           iterations=100, cores=1L) {
 
-    parlist <- parameters(plant)
+    parlist <- parameters(flower)
     m <- length(parlist)
-    p <- phenology(plant)
+    p <- phenology(flower)
+
+    print(1)
 
     if (is.numeric(seed)) {
         set.seed(seed)
@@ -147,20 +149,20 @@ crossvalFlower <- function(flower, temps, k, seed, fun='rmse', lbounds, ubounds,
 
     measure <- matrix(rep(NA, m*k), nrow=m)
 
-    # print(2)
+     print(2)
     for (i in 1:k) {
         train <- p[p$fold!=i, ]
         test <- p[p$fold==i, ]
 
         #print(train$year)
         #print(test$year)
-        #print(3)
+        print(3)
         fm <- flowermodel(train, temps, parlist, lbounds, ubounds, cores,
                          iterations)
         trainmod <- olm(fm)
         parlist <- parameters(fm)
         #print(lapply(trainmod, function(tm) tm[[1]]))
-        #print(4)
+        print(4)
         predictors <- lapply(1:m, function(h) {
             paste0(modeltype(parlist[[h]]), ttforms[h])
         })
@@ -171,13 +173,16 @@ crossvalFlower <- function(flower, temps, k, seed, fun='rmse', lbounds, ubounds,
             pl <- parlist[[j]]
             #print(cardinaltemps(pl)[stage])
 
-            #NOTE THIS NEEDS TO BE UPDATED TO REFLECT THE USE OF DATETIME
-            #INDEXING
-            as.data.frame(thermalsum(cardinaltemps(pl)[1], test, temps,
-                                     modeltype(pl), ttforms[j],
-                                     round(threshold(pl)),stage))
+            as.data.frame(thermalsum(cardinaltemps(pl)[[1]],
+                                     test$year, temps, modeltype(pl),
+                                     ttforms[j], round(startday(pl)),
+                                     round(threshold(pl)),
+                                     varyingpars(pl), 'FlowerModel',
+                                     test$event0))
         })
-        #print(5)
+
+
+        print(5)
         #print(parameters(pm))
         for (j in 1:m) {
             names(testdata[[j]]) <- predictors[[j]]
@@ -193,7 +198,7 @@ crossvalFlower <- function(flower, temps, k, seed, fun='rmse', lbounds, ubounds,
 
 
         #print(fit)
-        #print(7)
+        print(7)
         #str(fit)
 
 
@@ -208,12 +213,12 @@ crossvalFlower <- function(flower, temps, k, seed, fun='rmse', lbounds, ubounds,
 
     #print(measure)
     avgmeasure <- apply(measure, 1, mean)
-    #print(8)
+    print(8)
 
-    error(plant) <- avgmeasure
+    error(flower) <- avgmeasure
     crossvalidated(plant) <- TRUE
 
-    return(plant)
+    return(flower)
 
 }
 
