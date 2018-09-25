@@ -51,11 +51,11 @@ objective <- function(parlist, phenology, temp, stage, CT, Start,
     simple <- simplified(PL)
 
     #is the threshold estimated
-    if (!Threshold[i]) { #Mclass=Flowermodel, DT2,4-5; TTT1-3
+    if (!Threshold[listindex]) { #Mclass=Flowermodel, DT2,4-5; TTT1-3
         th <- threshold(PL)[stage]
 
     } else {#Mclass=Flowermodel, DT1, 3-4
-        th <- Threshold[i]
+        th <- Threshold[listindex]
     }
 
     if (is.na(th)) {
@@ -64,20 +64,25 @@ objective <- function(parlist, phenology, temp, stage, CT, Start,
 
 
     #is the start day estimated
-    if (!Start[i]) { #FlowerModel: DT5, TTT3
+    if (!Start[listindex]) { #FlowerModel: DT5, TTT3
         s <- startday(PL)[stage]
 
     } else {
-        s <- Start[i]
+        s <- Start[listindex]
     }
 
 
     #are the cardinal temps estimated
-    if (!CT[i]) ct <- cardinaltemps(PL)[[stage]] else ct <- CT[i]
-
+    if (!CT[listindex]) {
+        ct <- cardinaltemps(PL)[[stage]]
+    } else {
+        ct <- CT[listindex]
+    }
 
     #create data.frame with only the columns necessary
     fdat <- phenology[, fnames]
+
+    #print(th)
 
     #create a function that evaluates returns the rmse of the model that can be
     #minimized using the function DEoptim()
