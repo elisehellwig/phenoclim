@@ -387,3 +387,91 @@ gddsimple <- function(tdat, Tb, sum=TRUE) {
         return(dd)
     }
 }
+
+#' Calculates winter chill based on the basic chill unit
+#'
+#' This function calculates the amount of chill accumulated based on the 32F-45F (0C-7.2C) model.
+#'
+#' @param tvec numeric, a vector of temperatures used to calculate chill
+#' @param sum logical, should the accumulated chill be summed?
+#' @return A numeric vector of chill values or a single chill value if sum is
+#'     TRUE.
+#' @details This model is described in Luedeling, E. and Brown, P.H., 2011. A
+#'     global analysis of the comparability of winter chill models for fruit
+#'     and nut trees. International Journal of Biometeorology, 55(3),
+#'     pp.411-421.
+chillunit <- function(tvec, Tmax, sum=TRUE) {
+
+    ch <- ifelse(tvec<Tmax & tvec>0, 1, 0)
+
+    if (sum) {
+        ch <- sum(ch)
+    }
+
+    return(ch)
+}
+
+#' Calculates winter chill based on the Utah Model
+#'
+#' This function calculates the amount of chill accumulated based on the Utah
+#'     model.
+#'
+#' @param tvec numeric, a vector of temperatures used to calculate chill
+#' @param sum logical, should the accumulated chill be summed?
+#' @return A numeric vector of chill values or a single chill value if sum is
+#'     TRUE.
+#' @details This model is described in Luedeling, E. and Brown, P.H., 2011. A
+#'     global analysis of the comparability of winter chill models for fruit
+#'     and nut trees. International Journal of Biometeorology, 55(3),
+#'     pp.411-421.
+#' @export
+utah <- function(tvec, sum=TRUE) {
+    uch <- tvec
+
+    uch[tvec<=1.4] <- 0
+    uch[(tvec>1.4 & tvec<=2.4)] <- 0.5
+    uch[(tvec>2.4 & tvec<=9.1)] <- 1
+    uch[(tvec>9.1 & tvec<=12.4)] <- 0.5
+    uch[(tvec>12.4 & tvec<=15.9)] <- 0
+    uch[(tvec>15.9 & tvec<=18.0)] <- -0.5
+    uch[(tvec>18.0)] <- -1
+
+    if (sum) {
+        uch <- sum(uch)
+    }
+
+    return(uch)
+
+}
+
+#' Calculates winter chill based on the Utah Model
+#'
+#' This function calculates the amount of chill accumulated based on the Utah
+#'     model.
+#'
+#' @param tvec numeric, a vector of temperatures used to calculate chill
+#' @param sum logical, should the accumulated chill be summed?
+#' @return A numeric vector of chill values or a single chill value if sum is
+#'     TRUE.
+#' @details This model is described in at \url{http://fruitsandnuts.ucdavis.edu/Weather_Services/chilling_accumulation_models/about_chilling_units/}
+#'
+#' @export
+utahalt <- function(tvec, sum=TRUE) {
+    uch <- tvec
+
+    uch[tvec<=1.1] <- 0
+    uch[(tvec>1.1 & tvec<=2.2)] <- 0.5
+    uch[(tvec>2.2 & tvec<=8.9)] <- 1
+    uch[(tvec>8.9 & tvec<=12.2)] <- 0.5
+    uch[(tvec>12.2 & tvec<=15.6)] <- 0
+    uch[(tvec>15.6 & tvec<=18.3)] <- -0.5
+    uch[(tvec>18.3)] <- -1
+
+    if (sum) {
+        uch <- sum(uch)
+    }
+
+    return(uch)
+}
+
+
