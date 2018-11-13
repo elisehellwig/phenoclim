@@ -67,7 +67,8 @@ modeltypecheck <-  function(mt) {
 #'     correct. Otherwise it returns a vector with FALSE and an error message.
 tempclasscheck <- function(frm, temp) {
 
-    hrforms <- c('linear','flat','triangle','asymcur','anderson')
+    hrforms <- c('linear','flat','triangle','asymcur','anderson',
+                 'chillbasic', 'utah','utahalt')
     tempvars <- c('year','day')
 
 

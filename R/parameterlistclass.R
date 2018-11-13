@@ -7,8 +7,8 @@
 #'     are 'DT' for Day threshold and 'TTT' for thermal time threshold. See ____
 #'     for more information.
 #' @slot form character. The functional form of the thermal time accumulation
-#'     model. Current options are gdd, gddsimple, linear, flat, triangle, and
-#'     anderson.
+#'     model. Current options are gdd, gddsimple, linear, flat, triangle,
+#'     anderson, basicchill, utah or utahalt.
 #' @slot simplified logical. Is the model to be fit a simplified model?
 #' @slot cardinaltemps list. The cardinal temperatures for the model. This is a
 #'     list that should either be of length one or the length of the number of

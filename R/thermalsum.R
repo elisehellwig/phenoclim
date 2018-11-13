@@ -29,10 +29,11 @@ DTsum <- function(ctemps, yrs, tdat, form, startDate, threshDate, varying,
     #print('DTsum')
     #possible forms
    posforms <-  c('anderson','linear','flat','triangle','asymcur','gdd',
-                  'gddsimple')
+                  'gddsimple', 'chillbasic', 'utah','utahalt')
 
    if (!(form %in% posforms)) {
-       stop('form must be linear, flat, triangle, asymcur, anderson, gdd, or gddsimple.')
+       stop('form must be linear, flat, triangle, asymcur, anderson, gdd,
+            gddsimple, chillbasic, utah or utahalt.')
 
    }
 
@@ -125,12 +126,12 @@ TTTsum <- function(pars, yrs, tdat, form, startDate, thresh, varying, mclass) {
         tnames <- c('tmin','tmax')
 
    } else if (form %in% c('linear', 'flat', 'triangle', 'asymcur',
-                          'anderson')) {
+                          'anderson', 'chillbasic','utah','utahalt')) {
         tnames <- 'temp'
 
    } else {
         stop('type must be one of the following: gdd, gddsimple, linear
-             flat, triangle, asymcur, anderson')
+             flat, triangle, asymcur, anderson, chillbasic, utah, utahalt')
     }
 
 

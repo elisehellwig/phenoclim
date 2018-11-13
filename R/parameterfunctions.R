@@ -109,7 +109,9 @@ checkpars <- function(pars, start, end, mclass, thresh=NA) {
 parnum <- function(form) {
 
     #identify how many parameters a model should have based on its form
-    if (form %in% c('gdd', 'gddsimple','linear')) {
+    if (form %in% c('utah','utahalt','chillbasic')) {
+        n <- 0
+    } else if (form %in% c('gdd', 'gddsimple','linear')) {
         n <- 1
     } else if (form=='flat') {
         n <- 2
