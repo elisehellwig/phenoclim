@@ -17,8 +17,8 @@ are 'DT' for Day threshold and 'TTT' for thermal time threshold. See ____
 for more information.}
 
 \item{\code{form}}{character. The functional form of the thermal time accumulation
-model. Current options are gdd, gddsimple, linear, flat, triangle, and
-anderson.}
+model. Current options are gdd, gddsimple, linear, flat, triangle,
+anderson, basicchill, utah or utahalt.}
 
 \item{\code{simplified}}{logical. Is the model to be fit a simplified model?}
 
