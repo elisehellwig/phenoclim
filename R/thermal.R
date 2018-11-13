@@ -393,6 +393,7 @@ gddsimple <- function(tdat, Tb, sum=TRUE) {
 #' This function calculates the amount of chill accumulated based on the 32F-45F (0C-7.2C) model.
 #'
 #' @param tvec numeric, a vector of temperatures used to calculate chill
+#' @param Tmax numeric, the maximum temperature where trees accumulate chill.
 #' @param sum logical, should the accumulated chill be summed?
 #' @return A numeric vector of chill values or a single chill value if sum is
 #'     TRUE.
