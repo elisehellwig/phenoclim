@@ -70,11 +70,22 @@ DTsum <- function(ctemps, yrs, tdat, form, startDate, threshDate, varying,
     })
 
 
-    tsums <- sapply(1:length(yrs), function(i) {
-        #create list of parameters and data to send to do.call+form
-        plist <- parslist(templist[[i]], unlist(ctemps), sum=TRUE)
-        do.call(form, plist) #calculate the thermal time
-    })
+    if (form %in% c('utah', 'utahalt')) {
+        tsums <- sapply(1:length(yrs), function(i) {
+            #create list of parameters and data to send to do.call+form
+            plist <- parslist(templist[[i]], NA, sum=TRUE)
+            do.call(form, plist) #calculate the thermal time
+        })
+
+    } else {
+        tsums <- sapply(1:length(yrs), function(i) {
+            #create list of parameters and data to send to do.call+form
+            plist <- parslist(templist[[i]], unlist(ctemps), sum=TRUE)
+            do.call(form, plist) #calculate the thermal time
+        })
+    }
+
+
 
 
 	return(tsums)
@@ -139,6 +150,10 @@ TTTsum <- function(pars, yrs, tdat, form, startDate, thresh, varying, mclass) {
         td <- tdat[which(tdat$dt %within% modInterval[i]), ]
         td[order(td$dt), tnames]
     })
+
+    if (form %in% c('utah','utahalt')) {
+        pars <- NA
+    }
 
     #Calculating which day the plant will reach the thermal time threshold
     day <- predictevent(unlist(pars), templist, form, thresh)

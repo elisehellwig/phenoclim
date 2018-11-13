@@ -190,7 +190,10 @@ boundlength <- function(form, CT, Start, Thresh) {
 #' @return A list of parameters that can be passed to do.call
 parslist <- function(temps, pars, sum=FALSE) {
 
-    if (length(pars)==1) {
+    if (is.na(pars)) {
+        pl <- list(temps, sum)
+
+    } else if (length(pars)==1) {
         pl <- list(temps, pars, sum)
 
     } else if (length(pars)==2) {

@@ -9,6 +9,8 @@ chillbasic(tvec, Tmax, sum = TRUE)
 \arguments{
 \item{tvec}{numeric, a vector of temperatures used to calculate chill}
 
+\item{Tmax}{numeric, the maximum temperature where trees accumulate chill.}
+
 \item{sum}{logical, should the accumulated chill be summed?}
 }
 \value{

@@ -109,6 +109,16 @@ checktempyears <- function(phenology, temperature, modelclass) {
 
 ##############################################
 
+#' Finds the day the threshold is met
+#'
+#' This function calculates the thermal time or chill accumulated and then
+#'     identifies what day the thermal time or chill threshold is met.
+#'
+#' @param pars cardinal temperatures or NA for utah model
+#' @param temps vector of temperatures
+#' @param form the functional form of the thermal time or chill accumulation
+#' @param length the threshold that the model runs until
+#' @return
 predictevent <- function(pars, temps, form, length) {
 
     #changes form to asymcur since anderson form is just asymcur with cardinal
