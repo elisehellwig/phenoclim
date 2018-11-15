@@ -99,6 +99,7 @@ minrmseTTTsimplified <- function(pars, fdat, tdat, form, start, thresh, stage,
     endDate <- dayToDate(fdat$year, endDay, modclass)
 
 
+   # print(pars)
     if (checkpars(pars, start, endDate, modclass)) {#are parameters in
                                                         #ascending order, etc
 
@@ -106,14 +107,17 @@ minrmseTTTsimplified <- function(pars, fdat, tdat, form, start, thresh, stage,
         daymet <- thermalsum(pars, fdat$year, tdat, 'TTT', form, start, thresh,
                                       varying, modclass, startingevent)
 
+
         if (any(is.infinite(daymet))){ #were any of the thermal sums
             #that did not resolve
+            #print('a thermal sum did not resolve')
             rmsd <- Inf
         } else {
             rmsd <- rmse(daymet, fdat[,responsename]) #calculate rmse
         }
 
     } else {
+        #print('cardinal temps not in ascending order')
         rmsd <- Inf #if cardinal temps not in ascending order rmse is infinite
     }
 
@@ -252,6 +256,8 @@ minrmse <- function(pars, fdat, tdat, modtype, form, stage, CT, S, TH, simple,
     s <- startthresh[[1]]
     th <- startthresh[[2]]
 
+    #print(s)
+
     #print(th)
 
     ##########sending pars to their respective functions####################
@@ -264,6 +270,7 @@ minrmse <- function(pars, fdat, tdat, modtype, form, stage, CT, S, TH, simple,
                           modclass, startingevent)
 
     } else if (modtype == 'TTT' & simple) {
+        #print(ct)
         rmse <- minrmseTTTsimplified(ct, fdat, tdat, form, s, th, stage,
                                      varying, modclass, startingevent)
 

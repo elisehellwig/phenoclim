@@ -401,6 +401,7 @@ gddsimple <- function(tdat, Tb, sum=TRUE) {
 #'     global analysis of the comparability of winter chill models for fruit
 #'     and nut trees. International Journal of Biometeorology, 55(3),
 #'     pp.411-421.
+#' @export
 chillbasic <- function(tvec, Tmax, sum=TRUE) {
 
     ch <- ifelse(tvec<Tmax & tvec>0, 1, 0)

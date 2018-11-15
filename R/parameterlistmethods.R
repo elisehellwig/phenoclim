@@ -150,7 +150,7 @@ setValidity("ParameterList", function(object) {
 
         isnum <- sapply(ct, function(v) (is.numeric(v) | is.integer(v)) )
 
-        if (!all(isnum)) {
+        if ((!all(isnum)) & !(frm %in% c('utah', 'utahalt'))) {
             valid <-FALSE
             msg <- c(msg,
                      'Not all of your parameter values are numbers.')
@@ -158,6 +158,7 @@ setValidity("ParameterList", function(object) {
     }
 
     formparnum <- sapply(frm, function(ch) parnum(ch))
+    formparnum2 <- ifelse(frm %in% c('utah','utahalt'), 1, formparnum)
 
     if (any(ifelse(formparnum!=ctnum, TRUE, FALSE))) {
         valid <- FALSE

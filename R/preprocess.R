@@ -61,7 +61,7 @@ missingDays <- function(x, days, limits, hourly=FALSE) {
     }
 
     if (hourly) {
-        cols <- c('day','hour')
+        cols <- c('year','day','hour')
 
         if (is.leapyear(year) & length(days)==365) {
             days <- expand.grid(c(days,366), 1:24)
@@ -70,7 +70,7 @@ missingDays <- function(x, days, limits, hourly=FALSE) {
         }
 
     } else {
-        cols <- 'day'
+        cols <- c('year','day')
 
         if (is.leapyear(year) & length(days)==365) {
             days <- c(days, 366)
@@ -121,43 +121,43 @@ missingDays <- function(x, days, limits, hourly=FALSE) {
 #'     that are missing from the series.
 #'
 #' @param x A data.frame that contains the time series. It must have at least
-#'     two columns, one named 'year' with the year, and one named 'day' with
-#'     the julian day. If hours is TRUE, it needs a column
-#' @param years A numeric vector of years to check. If NA the function will
-#'     check all the years in the data.frame.
-#' @param limits A numeric vector of length two giving the minimum and
-#'     maximum julian day to check. If left NA, the function will check all
-#'     the days of the year.
-#' @param hours, Logical, determines whether the function will check whether
-#'     all the hourly observations are there
+#'     one column, named with the string in the datename argument.
+#' @param start POSIXct or chr, the beginning date time.
+#' @param end POSIXct or chr, the ending date time.
+#' @param hours Logical, determines whether the function will check whether
+#'     all the hourly observations are there.
+#' @param datename string, the name of the
+#' @param dtformat The format the date time string is in.
 #' @return This function returns TRUE if there are no missing observations
-#'     and returns a list of the days (and hours) of the missing observations
+#'     and returns a vector of the dates of the missing observations
 #'     if there are any.
 #' @export
-timeSeriesCheck <- function(x, years=NA, limits=NA, hours=FALSE) {
+timeSeriesCheck <- function(x, start=NA, end=NA, hours=FALSE, datename='dt',
+                            dtformat="%Y-%m-%d %H:%M:%OS") {
 
-    if (is.na(years)) {
-        years <- unique(x$year)
+    if (!is.POSIXct(start)) {
+        start <- as.POSIXct(start, format=dtformat)
     }
 
-    if (is.na(limits[[1]])) {
-        alldays <- 1:365
+    if (!is.POSIXct(end)) {
+        end <- as.POSIXct(end, format=dtformat)
+    }
 
+    if (hours) {
+        datetimes <- seq(start, end, by='hour')
     } else {
-        alldays <- limits[1]:limits[2]
+        datetimes <- seq(start, end, by='day')
     }
 
-    missing <- lapply(years, function(y) {
-        missingDays(x[x$year==y,], alldays, limits, hours)
-    })
+    missingDTs1 <- setdiff(as.character(datetimes), as.character(x[, datename]))
+    missingDTs2 <- as.POSIXct(setdiff(datetimes, x[, datename]),
+                              origin='1970-01-01')
 
-    names(missing) <- years
-    noneMissing <- sapply(missing, function(v) is.na(v))
 
-    if (all(noneMissing)) {
+    if (length(missingDTs2)==0) {
         return(TRUE)
     } else {
-        return(missing)
+        return(missingDTs2)
     }
 
 

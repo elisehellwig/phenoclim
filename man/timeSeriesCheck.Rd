@@ -4,26 +4,27 @@
 \alias{timeSeriesCheck}
 \title{Checks time series for missing entries}
 \usage{
-timeSeriesCheck(x, years = NA, limits = NA, hours = FALSE)
+timeSeriesCheck(x, start = NA, end = NA, hours = FALSE, datename = "dt",
+  dtformat = "\%Y-\%m-\%d \%H:\%M:\%OS")
 }
 \arguments{
 \item{x}{A data.frame that contains the time series. It must have at least
-two columns, one named 'year' with the year, and one named 'day' with
-the julian day. If hours is TRUE, it needs a column}
+one column, named with the string in the datename argument.}
 
-\item{years}{A numeric vector of years to check. If NA the function will
-check all the years in the data.frame.}
+\item{start}{POSIXct or chr, the beginning date time.}
 
-\item{limits}{A numeric vector of length two giving the minimum and
-maximum julian day to check. If left NA, the function will check all
-the days of the year.}
+\item{end}{POSIXct or chr, the ending date time.}
 
-\item{hours, }{Logical, determines whether the function will check whether
-all the hourly observations are there}
+\item{hours}{Logical, determines whether the function will check whether
+all the hourly observations are there.}
+
+\item{datename}{string, the name of the}
+
+\item{dtformat}{The format the date time string is in.}
 }
 \value{
 This function returns TRUE if there are no missing observations
-    and returns a list of the days (and hours) of the missing observations
+    and returns a vector of the dates of the missing observations
     if there are any.
 }
 \description{
