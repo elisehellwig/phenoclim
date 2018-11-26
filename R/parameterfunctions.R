@@ -45,23 +45,37 @@ pickEnding <- function(n) {
 #' @param end numeric, the day of the event to be predicted
 #' @param mclass character, the model class, "FlowerModel" or "PlantModel"
 #' @param thresh numeric, the threshold day for a DT model.
+#' @param form character, the functional form used to calculate thermal time.
 #' @return logical, TRUE if the cardinal temperatures are organized least to greatest, and start and thresh comes before predicted event. FALSE otherwise
-checkpars <- function(pars, start, end, mclass, thresh=NA) {
+checkpars <- function(pars, start, end, mclass, thresh=NA, form=NA) {
 
     #print('checkpars')
-   # print(start)
-   # print(thresh)
+    #print(start)
+    #print(thresh)
+    #print(pars)
+    #print(end)
     passcheck <- TRUE
+
 
      #check to see if there are more parameters than any of the models use
     if (length(pars)>4) {
         stop('There are no models with more than four parameters')
     }
 
-    parsort <-sort(pars)#put parameters in ascending order
+    #print(pars[1])
 
+    if (is.na(pars[1]) & form %in% c('utah','utahalt')) {
+        parsort <- NA
+    } else {
+        parsort <-sort(pars)#put parameters in ascending order
+    }
+
+
+    #print(pars)
+    #print(parsort)
     if (!identical(pars, parsort)) { #are parameters already in ascending
           passcheck <- FALSE
+          #print('issue with cts')
     }
 
 
@@ -190,7 +204,7 @@ boundlength <- function(form, CT, Start, Thresh) {
 #' @return A list of parameters that can be passed to do.call
 parslist <- function(temps, pars, sum=FALSE) {
 
-    if (is.na(pars)) {
+    if (is.na(pars[1])) {
         pl <- list(temps, sum)
 
     } else if (length(pars)==1) {

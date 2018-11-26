@@ -130,7 +130,6 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
         #extracting fitted data
         fits <- round(unname(fitted(modlist)))
 
-#########need to fix  so it works with varying start day
         if (start %in% vp[1]) {
             newstart <- rep(0, m)
         } else {
@@ -206,6 +205,8 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
         print(2)
 
 # Part 2: extract optimized parameters ------------------------------------
+        #print(estimatestart)
+        #print(optimlist)
 
         #extracting those parameters
         estimatelist <- list(estimatestart, estimatethresh, estimateCT)

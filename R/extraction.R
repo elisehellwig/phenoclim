@@ -17,6 +17,8 @@ extractParameters <- function(estimate, parname, parlist, optlist) {
 
     n <- length(optlist)
 
+    #print(optlist)
+
     #expand estimatestart
     if (length(estimate[[1]])==1 & n > 1) {
         estimatestart <- rep(estimate[[1]], n)
