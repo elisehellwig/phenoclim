@@ -462,11 +462,9 @@ utahalt <- function(tvec, sum=TRUE) {
     uch <- tvec
 
     uch[tvec<=1.1] <- 0
-    uch[(tvec>1.1 & tvec<=2.2)] <- 0.5
+    uch[(tvec>1.1 & tvec<=2.2)] <- uch[(tvec>1.1 & tvec<=2.2)]/1.1 - 1
     uch[(tvec>2.2 & tvec<=8.9)] <- 1
-    uch[(tvec>8.9 & tvec<=12.2)] <- 0.5
-    uch[(tvec>12.2 & tvec<=15.6)] <- 0
-    uch[(tvec>15.6 & tvec<=18.3)] <- -0.5
+    uch[(tvec>8.9 & tvec<=18.3)]<-uch[(tvec>8.9 & tvec<=18.3)]*(-10)/47 + 136/47
     uch[(tvec>18.3)] <- -1
 
     if (sum) {
