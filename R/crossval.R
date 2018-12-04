@@ -157,8 +157,16 @@ crossvalFlower <- function(flower, temps, k, seed, fun='rmse', lbounds, ubounds,
         #print(train$year)
         #print(test$year)
         print(3)
-        fm <- flowermodel(train, temps, parlist, lbounds, ubounds, cores,
-                         iterations)
+       # print(lbounds)
+    #    print(ubounds)
+
+        fm <- flowermodel(phenology=train,
+                          temps=temps,
+                          parlist=parlist,
+                          lbounds=lbounds,
+                          ubounds=ubounds,
+                          cores=cores,
+                          iterations=iterations)
         trainmod <- olm(fm)
         parlist <- parameters(fm)
         #print(lapply(trainmod, function(tm) tm[[1]]))
