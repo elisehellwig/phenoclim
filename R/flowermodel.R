@@ -57,6 +57,11 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
     #Checking to make sure all of the right variables and etc are present
     checktemps(temps, phenology, ttform, 'FlowerModel')
 
+    #checking to make sure there are no NAs in the flowering dates
+    if (any(is.na(phenology[,'event1']))) {
+        stop('There are NAs in the flowering event column (event1).')
+    }
+
     for (i in 1:m) {
         if (ttform[i]=='anderson') {
             cardinaltemps(parlist[[i]]) <-list(c(4,25,36))
