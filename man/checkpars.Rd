@@ -4,7 +4,7 @@
 \alias{checkpars}
 \title{Checks to see if parameters are in the correct order}
 \usage{
-checkpars(pars, start, end, mclass, thresh = NA)
+checkpars(pars, start, end, mclass, thresh = NA, form = NA)
 }
 \arguments{
 \item{pars}{a vector of cardinal temperatures, should be organized least to
@@ -17,6 +17,8 @@ greatest}
 \item{mclass}{character, the model class, "FlowerModel" or "PlantModel"}
 
 \item{thresh}{numeric, the threshold day for a DT model.}
+
+\item{form}{character, the functional form used to calculate thermal time.}
 }
 \value{
 logical, TRUE if the cardinal temperatures are organized least to greatest, and start and thresh comes before predicted event. FALSE otherwise

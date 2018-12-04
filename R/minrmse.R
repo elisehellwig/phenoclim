@@ -41,7 +41,7 @@ minrmseDT <- function(pars, fdat, tdat, form, start, thresh, stage, varying,
     #print(thresh)
 
     #if parameters are in ascending order and start is before predicted event
-    if (checkpars(pars, start, endDate, modclass, thresh)) {
+    if (checkpars(pars, start, endDate, modclass, thresh, form)) {
 
         #calculate the thermal sum for each year using the cardinal temps and
             #day threshold
@@ -99,8 +99,8 @@ minrmseTTTsimplified <- function(pars, fdat, tdat, form, start, thresh, stage,
     endDate <- dayToDate(fdat$year, endDay, modclass)
 
 
-   # print(pars)
-    if (checkpars(pars, start, endDate, modclass)) {#are parameters in
+    #print(checkpars(pars, start, endDate, modclass, form=form))
+    if (checkpars(pars, start, endDate, modclass, form=form)) {#are parameters in
                                                         #ascending order, etc
 
         #calculate day thermal time threshold is met
@@ -161,7 +161,7 @@ minrmseTTT <- function(pars, fdat, tdat, form, start, thresh, stage,
 
 
     #print(checkpars(pars, start, fdat[, responsename]))
-    if (!checkpars(pars, start, endDate, modclass)) { #are cardinal
+    if (!checkpars(pars, start, endDate, modclass, form=form)) { #are cardinal
                                                 #temperatures in ascending order
        rmsd <- Inf #if not, rmse is infinite
 
@@ -247,8 +247,12 @@ minrmse <- function(pars, fdat, tdat, modtype, form, stage, CT, S, TH, simple,
     #print('minrmse')
 
     ##########partitioning out the parameters####################
-    if (isTRUE(CT)) ct <- pars[(plen-ctlen+1):plen] else ct <- CT[1:ctlen]
+    if (isTRUE(CT)) {
+        ct <- pars[(plen-ctlen+1):plen]
 
+    } else  {
+        ct <- CT[1:ctlen]
+    }
 
     startthresh <- convertParameters(pars, modtype, S, TH, varying,
                                      fdat[,firstevent], fdat$year, modclass)
@@ -258,8 +262,9 @@ minrmse <- function(pars, fdat, tdat, modtype, form, stage, CT, S, TH, simple,
 
     #print(s)
 
-    #print(th)
+   # print(th)
 
+   # print(ct)
     ##########sending pars to their respective functions####################
 
 
