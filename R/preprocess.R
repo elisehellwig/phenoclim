@@ -135,29 +135,47 @@ missingDays <- function(x, days, limits, hourly=FALSE) {
 timeSeriesCheck <- function(x, start=NA, end=NA, hours=FALSE, datename='dt',
                             dtformat="%Y-%m-%d %H:%M:%OS") {
 
-    if (!is.POSIXct(start)) {
-        start <- as.POSIXct(start, format=dtformat)
-    }
-
-    if (!is.POSIXct(end)) {
-        end <- as.POSIXct(end, format=dtformat)
-    }
 
     if (hours) {
+        if (!is.POSIXct(x[1,datename])) {
+            x[,datename] <- as.POSIXct(x[,datename], format=dtformat)
+        }
+
+        if (!is.POSIXct(start)) {
+            start <- as.POSIXct(start, format=dtformat)
+        }
+
+        if (!is.POSIXct(end)) {
+            end <- as.POSIXct(end, format=dtformat)
+        }
+
         datetimes <- seq(start, end, by='hour')
+
     } else {
-        datetimes <- seq(start, end, by='day')
+        if (!is.Date(x[1,datename])) {
+            x[,datename] <- as.Date(x[,datename], format=dtformat)
+        }
+
+        if (!is.Date(start)) {
+            start <- as.Date(start, format=dtformat)
+        }
+
+        if (!is.Date(end)) {
+            end <- as.Date(end, format=dtformat)
+        }
+
+        datetimes <- seq(start, end, by=1)
     }
 
+   # print(head(as.character(datetimes)))
+  #  print(head(as.character(x[, datename])))
+
     missingDTs1 <- setdiff(as.character(datetimes), as.character(x[, datename]))
-    missingDTs2 <- as.POSIXct(setdiff(datetimes, x[, datename]),
-                              origin='1970-01-01')
 
-
-    if (length(missingDTs2)==0) {
+    if (length(missingDTs1)==0) {
         return(TRUE)
     } else {
-        return(missingDTs2)
+        return(missingDTs1)
     }
 
 
