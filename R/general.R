@@ -125,12 +125,16 @@ predictevent <- function(pars, temps, form, length) {
         #temps 4, 25, and 36
     if (form=='anderson') form <- 'asymcur'
 
+
+
     #calculates the thermal time sums
     gd <- lapply(temps, function(v) {
         plist <- parslist(v, pars) #puts the cardinal temps in the list format
         tt <- do.call(form, plist) #applies form function do them
         cumsum(tt) #creates cummulative sum
     })
+
+    #print(gd)
 
     #print(sapply(gd, function(v) max(v)))
 
