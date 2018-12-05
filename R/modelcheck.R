@@ -112,10 +112,11 @@ tempclasscheck <- function(frm, temp) {
 #' @export
 checktemps <- function(temp, pheno, forms, modelclass) {
 
-    if (!checktempyears(pheno, temp, modelclass)[[1]]) {
+    CTY <- checktempyears(pheno, temp, modelclass)
+
+    if (!CTY[[1]]) {
         stop(paste('You are missing temperature data for the following years',
-                   paste(checktempyears(pheno, temp, modelclass)[[2]],
-                         sep=", ")))
+                   paste0(CTY[[2]], collapse=", ")))
     }
 
     tempclasscheck(forms, temp)
