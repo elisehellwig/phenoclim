@@ -38,6 +38,7 @@ Collate:
     'plantmodel.R'
     'crossval.R'
     'diurnal_temperature.R'
+    'doublesum.R'
     'extractResults.R'
     'extraction.R'
     'flowermodelclass.R'
