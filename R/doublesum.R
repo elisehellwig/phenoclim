@@ -1,3 +1,6 @@
+#' @include thermalsum.R
+NULL
+
 #' Calculates chill and heat sums for the dual model
 #'
 #' Calculates sequential chill and heat sums to predict flowering for a series
@@ -21,19 +24,16 @@ doublesum <- function(pars, yrs, tdat, forms, startDate, thresh, varying,
                       mclass) {
 
 
-    if (mclass=='FlowerModel') {
-        endDate <- dayToDate(yrs+1, 184, 'FlowerModel')
+    endchill <- thermalsum(pars[[1]], yrs, tdat, 'TTT', forms[1], startDate,
+                            thresh[1], NA, 'FlowerModel')
 
-    } else {
-        endDate <- dayToDate(yrs, 365, 'PlantModel')
-    }
+    heatStartDate <- dayToDate(yrs, endchill+1, 'FlowerModel')
 
-    modInterval <- interval(startDate, endDate)
+    endheat <- thermalsum(pars[[2]], yrs, tdat, 'TTT', forms[2], heatStartDate,
+                          thresh[2], NA, 'FlowerModel')
 
-    if (length(modInterval)==1) {
-        modInterval <- rep(modInterval, length(yrs))
 
-    }
+    return(endheat)
 
 
 }
