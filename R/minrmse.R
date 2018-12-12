@@ -67,10 +67,10 @@ minrmseDT <- function(pars, fdat, tdat, form, start, thresh, stage, varying,
 
 #' Calculates simplified TTT model RMSE
 #'
-#' Calculates RMSE for the simplified model of day accumulation given a
+#' Calculates RMSE for the simplified thermal time threshold model given a
 #'     certain set of cardinal temperatures and day accumulation
-#'     length. Counts the amount of thermal time required to reach the season
-#'     length. This corresponds to model TTT1-3
+#'     length. Counts the amount of thermal time required to reach the threshold
+#'     This corresponds to model TTT1-3
 #'
 #' @param pars Cardinal temperatures
 #' @param fdat the data.frame containing the phenological information
@@ -125,6 +125,71 @@ minrmseTTTsimplified <- function(pars, fdat, tdat, form, start, thresh, stage,
     return(rmsd)
 
 }
+
+
+#' Calculates Dual model RMSE
+#'
+#' Calculates RMSE for the Dual thermal time threshold given a
+#'     certain set of cardinal temperatures and two thermal time thresholds,
+#'     one for chill and one for heat. This corresponds to model TTT1-3
+#'
+#' @param pars Cardinal temperatures
+#' @param fdat the data.frame containing the phenological information
+#' @param tdat list containing the temperature information
+#' @param form the functional form of the thermal time accumulation.
+#' @param start numeric, the day to start accumulating time or thermal time
+#'     towards the model threshold.
+#' @param thresh the threshold in thermal time that days are counted for.
+#' @param stage the number of the stage of the phenological model
+#' @param varying character, c('start', 'threshold') should either of these pars
+#'     vary from year to year.
+#' @param modclass character, type of model to be estimating, options are
+#'     'PlantModel' or 'FlowerModel'. If you have negative day values, you
+#'     probably want flower model.
+#' @param startingevent numeric, days first event happened each year.
+#' @return The RMSE value for a given set of cardinal temperatures and thermal
+#'     time accumulation length.
+minrmseDual <- function(pars, fdat, tdat, form, start, thresh, stage,
+                                 varying, modclass, startingevent=NA) {
+    # print('minrmseTTTsimp')
+
+    responsename <- responseVar(modclass, stage) #name of response variable
+
+    endDay <- fdat[,responsename]
+
+    endDate <- dayToDate(fdat$year, endDay, modclass)
+
+
+    cp <- sapply(seq_along(form), function(i) {
+        checkpars(pars[[i]], start, endDate, modclass, form=form[i])
+    })
+
+    #print(checkpars(pars, start, endDate, modclass, form=form))
+    if (all(cp)) {#are parameters in ascending order, etc
+
+        #calculate day thermal time threshold is met
+        daymet <- dualsum(pars, fdat$year, tdat, form, start, thresh,
+                             varying, modclass, startingevent)
+
+
+        if (any(is.infinite(daymet))){ #were any of the thermal sums
+            #that did not resolve
+            #print('a thermal sum did not resolve')
+            rmsd <- Inf
+        } else {
+            rmsd <- rmse(daymet, fdat[,responsename]) #calculate rmse
+        }
+
+    } else {
+        #print('cardinal temps not in ascending order')
+        rmsd <- Inf #if cardinal temps not in ascending order rmse is infinite
+    }
+
+
+    return(rmsd)
+
+}
+
 
 
 #' Calculates TTT model RMSE
@@ -282,8 +347,13 @@ minrmse <- function(pars, fdat, tdat, modtype, form, stage, CT, S, TH, simple,
     } else if (modtype == 'TTT') {
         rmse <- minrmseTTT(ct, fdat, tdat, form, s, th, stage, varying,
                            modclass, startingevent)
+
+    } else if (modtype == 'Dual') {
+        rmse <- minrmseDual(ct, fdat, tdat, form, s, th, stage, varying,
+                            modclass, startingevent)
+
     } else {
-        stop('Only options for modeltypes are TTT and DT.')
+        stop('Only options for modeltypes are TTT, DT, or Dual.')
     }
 
     return(rmse)
