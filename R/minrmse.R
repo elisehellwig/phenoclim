@@ -149,6 +149,7 @@ minrmseTTTsimplified <- function(pars, fdat, tdat, form, start, thresh, stage,
 #' @param startingevent numeric, days first event happened each year.
 #' @return The RMSE value for a given set of cardinal temperatures and thermal
 #'     time accumulation length.
+#' @export
 minrmseDual <- function(pars, fdat, tdat, form, start, thresh, stage,
                                  varying, modclass, startingevent=NA) {
     # print('minrmseTTTsimp')
