@@ -22,7 +22,7 @@ NULL
 #' @param startingevent numeric, days first event happened each year.
 #' @return The thermal sums for a given series of years.
 #' @export
-doublesum <- function(pars, yrs, tdat, forms, startDate, thresh, varying,
+dualsum <- function(pars, yrs, tdat, forms, startDate, thresh, varying,
                       mclass, startingevent=NA) {
 
 
