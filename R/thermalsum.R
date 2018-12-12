@@ -174,8 +174,8 @@ TTTsum <- function(pars, yrs, tdat, form, startDate, thresh, varying, mclass) {
 #' @param modtype character, specifies what type of model is being run. Can be
 #'     either DT (Day Threshold) or TTT (Thermal Time Threshold).
 #' @param form the functional form of the thermal time accumulation
-#' @param start POSIXct, the date to start accumulating time or thermal
-#'     time towards the model threshold.
+#' @param start POSIXct or numeric, the date or day to start accumulating time
+#'     or thermal time towards the model threshold.
 #' @param thresh the length of thermal time accumulation (either a date or
 #'      thermal time units).
 #' @param varying character, c('start', 'threshold') should either of these
