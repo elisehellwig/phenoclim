@@ -10,8 +10,8 @@ NULL
 #' @param yrs the years we have phenology data for.
 #' @param tdat list containing the temperature information
 #' @param forms the functional forms of the thermal time accumulation
-#' @param startDate POSIXct, the date to start accumulating time or thermal
-#'     time towards the model threshold.
+#' @param start POSIXct or numeric, the day or date to start accumulating time
+#'     or thermal time towards the model threshold.
 #' @param threshs numeric, the length of thermal time accumulation (in either
 #'     days or thermal time units).
 #' @param varying character, c('start', 'threshold') should either of these
@@ -22,7 +22,7 @@ NULL
 #' @param startingevent numeric, days first event happened each year.
 #' @return The thermal sums for a given series of years.
 #' @export
-dualsum <- function(pars, yrs, tdat, forms, startDate, thresh, varying,
+dualsum <- function(pars, yrs, tdat, forms, start, thresh, varying,
                       mclass, startingevent=NA) {
 
 
