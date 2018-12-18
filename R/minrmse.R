@@ -160,7 +160,6 @@ minrmseDual <- function(pars, fdat, tdat, form, start, thresh, stage,
 
     endDate <- dayToDate(fdat$year, endDay, modclass)
 
-
     cp <- sapply(seq_along(form), function(i) {
         checkpars(pars[[i]], start, endDate, modclass, form=form[i])
     })
@@ -304,7 +303,7 @@ minrmseTTT <- function(pars, fdat, tdat, form, start, thresh, stage,
 minrmse <- function(pars, fdat, tdat, modtype, form, stage, CT, S, TH, simple,
                     varying, modclass, firstevent, startingevent=NA) {
 
-    ctlen <- parnum(form) #what is the number of parameter values for the form
+    ctlen <- sapply(form, parnum) #what is the # of par values for the forms
     plen <- length(pars)
 
     #assigning parameter values to variables based on what parameters are
@@ -313,11 +312,19 @@ minrmse <- function(pars, fdat, tdat, modtype, form, stage, CT, S, TH, simple,
     #print('minrmse')
 
     ##########partitioning out the parameters####################
-    if (isTRUE(CT)) {
+    if (isTRUE(CT) & length(form)==1) {
         ct <- pars[(plen-ctlen+1):plen]
 
-    } else  {
+    } else if (isTRUE(CT) & length(form) > 1) {
+        ct <- list(pars[(plen-sum(ctlen)+1):(plen-ctlen[2])],
+                   pars[(plen-ctlen[2]+1):plen])
+
+    } else if (length(form)==1)  {
         ct <- CT[1:ctlen]
+
+    } else {
+        ct <- list(1:ctlen[1],
+                   (ctlen[1]+1):sum(ctlen))
     }
 
     startthresh <- convertParameters(pars, modtype, S, TH, varying,
