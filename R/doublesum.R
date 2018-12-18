@@ -25,20 +25,27 @@ NULL
 dualsum <- function(pars, yrs, tdat, forms, start, thresh, varying,
                       mclass, startingevent=NA) {
 
+    print('dualsum')
+    startDate <- dayToDate(yrs, start, 'FlowerModel')
+    #print(startDate)
 
-    endchill <- thermalsum(pars[[1]], yrs, tdat, 'TTT', forms[1], startDate,
+    chilldays <- thermalsum(pars[[1]], yrs, tdat, 'TTT', forms[1], start,
                             thresh[1], NA, 'FlowerModel', startingevent)
 
-    print(endchill)
+    print(chilldays)
+    chillduration <- duration(num=chilldays, units='days')
 
-    heatStartDate <- dayToDate(yrs, endchill+1, 'FlowerModel')
-    print(heatStartDate)
+    heatStartDate <- startDate + chillduration + duration(num=1, units='hours')
+
+    #heatStartDate <- dayToDate(yrs, endchill+1, 'FlowerModel')
+    #print(heatStartDate)
 
     heatdays <- thermalsum(pars[[2]], yrs, tdat, 'TTT', forms[2], heatStartDate,
                           thresh[2], NA, 'FlowerModel', startingevent)
 
+    print(heatdays)
 
-    endheat <- endchill + 1 + heatdays
+    endheat <- chilldays + heatdays
 
     return(endheat)
 
