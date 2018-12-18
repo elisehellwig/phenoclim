@@ -4,7 +4,7 @@
 \alias{dualsum}
 \title{Calculates chill and heat sums for the dual model}
 \usage{
-dualsum(pars, yrs, tdat, forms, startDate, thresh, varying, mclass,
+dualsum(pars, yrs, tdat, forms, start, thresh, varying, mclass,
   startingevent = NA)
 }
 \arguments{
@@ -16,8 +16,8 @@ dualsum(pars, yrs, tdat, forms, startDate, thresh, varying, mclass,
 
 \item{forms}{the functional forms of the thermal time accumulation}
 
-\item{startDate}{POSIXct, the date to start accumulating time or thermal
-time towards the model threshold.}
+\item{start}{POSIXct or numeric, the day or date to start accumulating time
+or thermal time towards the model threshold.}
 
 \item{varying}{character, c('start', 'threshold') should either of these
 pars vary from year to year.}
