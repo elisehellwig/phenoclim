@@ -46,6 +46,7 @@ dualsum <- function(pars, yrs, tdat, forms, start, thresh, varying,
     print(heatdays)
 
     endheat <- chilldays + heatdays
+    print(endheat)
 
     return(endheat)
 
