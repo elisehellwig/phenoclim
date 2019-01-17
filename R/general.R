@@ -55,6 +55,7 @@ length0 <- function(x) {
 #' @param modclass class of model, FlowerModel or PlantModel
 #' @param i the number of the phenology event to be extracted
 #' @return A vector with the julian days of the ith phenological event
+#' @export
 eventi <- function(dat, modclass, i) {
 
     if (modclass=='FlowerModel') {
@@ -77,21 +78,22 @@ eventi <- function(dat, modclass, i) {
 #' This function checks to make sure that for every year where there is
 #'     phenology data there is also temperature data.
 #'
-#' @param phenology data.frame, the data.frame containing the phenology data.
+#' @param pheno data.frame, the data.frame containing the phenology data.
 #' @param temperature, list, the list containing all the temperature data.
 #' @param modelclass character, is the model a FlowerModel or a PlantModel
 #' @return Logical. Returns TRUE if all years of phenology data also have
 #'     corresponding temperature data. Otherwise it returns the years that are
 #'     missing temperature data.
-checktempyears <- function(phenology, temperature, modelclass) {
+checktempyears <- function(pheno, temperature, modelclass) {
+
 
     if (modelclass=='FlowerModel') {
-        pyears1 <- unique(phenology[,'year'])
+        pyears1 <- unique(pheno[,'year'])
         pyears2 <- pyears1-1
         pyears <- union(pyears1, pyears2)
 
     } else {
-        pyears <- unique(phenology[,'year'])
+        pyears <- unique(pheno[,'year'])
     }
 
 
