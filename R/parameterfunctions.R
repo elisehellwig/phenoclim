@@ -291,26 +291,25 @@ showparlist <- function(object) {
     start <- round(object@startday)
     modclass <- object@mclass
 
-    if (modclass=='PlantModel') {
-       fromday <- ifelse(is.na(start), 'bloom', start)
-       tothresh <- ifelse(is.na(thresh), 'harvest', thresh)
-    } else {
-        fromday <- ifelse(is.na(start), 'harvest', start)
-        tothresh <- ifelse(is.na(thresh), 'bloom', thresh)
-    }
+    initday <- ifelse(modclass=='PlantModel','bloom','harvest')
+    endday <- ifelse(modclass=='PlantModel','harvest','bloom')
 
-
+    fromday <- ifelse(is.na(start), initday, start)
+    tothresh <- ifelse(is.na(thresh), endday, thresh)
 
     #ml <- paste('from', from, 'to', to)
 
     if ('start' %in% vp) {
-        s1 <- 'Model starts '
-        s2 <- ' days after harvest, '
-    } else {
 
         if (fromday %in% c('bloom','harvest')) {
             s1 <- 'Model starts at '
             s2 <- ', '
+        } else {
+            s1 <- 'Model starts '
+            s2 <- paste0(' days after ', initday,', ' )
+    } else {
+
+
 
         } else {
             s1 <- 'Model starts on the '
@@ -324,7 +323,11 @@ showparlist <- function(object) {
     if (('threshold' %in% vp)| mtype=='TTT') {
         s3 <- 'and runs for '
 
-        if (mtype=='DT') s4 <- ' days.\n' else s4 <- ' thermal time units.\n'
+        if (mtype=='DT') {
+            s4 <- ' days.\n'
+        } else {
+            s4 <- ' thermal time units.\n'
+        }
 
     } else  {
 
