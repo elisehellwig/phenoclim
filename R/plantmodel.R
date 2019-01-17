@@ -28,14 +28,10 @@ NULL
 #'     use to fit the model.
 #' @param iterations numeric, the number of iterations used in the differential
 #'     evolution optimization of the phenological parameters.
-#' @param ensemble logical, should an ensemble prediction be used?
-#' @param startday logical, is the day to start counting being optimized? (ie.
-#'     not using bloom as startday)
 #' @return A PlantModel object.
 #' @export
 plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
-                       cores=1L, iterations=200, ensemble=FALSE,
-                       startday=FALSE) {
+                       cores=1L, iterations=200) {
 
 
     stages <- stages(parlist[[1]]) #extract # of stages from the Parameterlist
@@ -43,19 +39,24 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
     events <- paste0('event', 1:n) #event column names
     lengthcols <- paste0('length',1:stages) #length column names
 
+    #start vector
+    start <- sapply(parlist, function(pl) startday(pl))
+
+    #model threshold vector
+    thresh <- sapply(parlist, function(pl) threshold(pl))
+
+    #which pars will vary
+    vp <- sapply(parlist, function(pl) varyingpars(pl))
+
     #are the models simplified?
     simple <- sapply(parlist, function(pl) simplified(pl))
+
+    #model type TTT or DT
+    mtype <- modeltype(parlist[[1]])
+
     ttforms <- lapply(parlist, function(pl) form(pl)) #list of functional forms
     m <- length(parlist) #number of functional forms
 
-    #list of length of modlengths, to check if startday should be T or F
-    modlens <- sapply(parlist, function(pl) length(threshold(pl)))
-    #do any of the modlengths have both start and end day (length=2)
-    startday2 <- any(ifelse(modlens>1, TRUE, FALSE))
-
-    if (!all(startday, startday2)) {
-        stop('If startday=TRUE, each modlength must be of length 2. If startday=FALSE, each modlength must be of length 1.')
-    }
 
     ij <- expand.grid(1:stages, 1:m) #unique combos of form numbers and stages
     names(ij) <- c('stage','pl') #giving columns names
@@ -66,7 +67,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
     })
 
     #Checking to make sure all of the right variables and etc are present
-    checktemps(temps, phenology, ttforms)
+    checktemps(temps, phenology, ttforms, 'PlantModel')
 
     for (i in 1:m) {
         for (j in 1:stages) {
@@ -98,7 +99,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
 
    #for which models are you estimating model length/threshold
-    estimatelength <- sapply(parlist, function(pl) {
+    estimatethresh <- sapply(parlist, function(pl) {
         if ('threshold' %in% parsOptimized(pl)) TRUE else FALSE
     })
 
@@ -108,7 +109,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
     #data frame with the length of the stages
     ldat <- as.data.frame(sapply(1:stages, function(i) {
-        eventi(pdat,i+1) - eventi(pdat, i)
+        eventi(pdat, 'PlantModel', i+1) - eventi(pdat, 'PlantModel', i)
         }))
 
     #naming the stage length columns
@@ -138,7 +139,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
     } else {
 
-        blen <- boundlength(ttforms, estimateCT, estimatelength, startday)
+        blen <- boundlength(ttforms, estimateCT, estimatethresh, startday)
 
         if (blen!=length(lbounds)) {
             stop(paste0('The bounds have the wrong number of parameter values. ',
@@ -150,7 +151,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
         functionlist <- lapply(1:m, function(j) {
                 lapply(1:stages, function(i) {
                     objective(parlist, d, temps,
-                              i, estimateCT,estimatelength, j, startday,
+                              i, estimateCT,estimatethresh, j, startday,
                               'PlantModel')
             })
         })
@@ -158,7 +159,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
         lboundlist <- lapply(1:m, function(i) {
             lapply(1:length(ttforms[[i]]), function(j) {
                 bndlen <- boundlength(ttforms[[i]][j], estimateCT[i],
-                                      estimatelength[i])
+                                      estimatethresh[i])
 
                 lbounds[1:bndlen]
             })
@@ -167,7 +168,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
         uboundlist <- lapply(1:m, function(i) {
             lapply(1:length(ttforms[[i]]), function(j) {
                 bndlen <- boundlength(ttforms[[i]][j], estimateCT[i],
-                                      estimatelength[i])
+                                      estimatethresh[i])
 
                 ubounds[1:bndlen]
             })
