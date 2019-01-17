@@ -160,11 +160,12 @@ minrmseDual <- function(pars, fdat, tdat, form, start, thresh, stage,
 
     endDate <- dayToDate(fdat$year, endDay, modclass)
 
+
     cp <- sapply(seq_along(form), function(i) {
         checkpars(pars[[i]], start, endDate, modclass, form=form[i])
     })
 
-    #print(checkpars(pars, start, endDate, modclass, form=form))
+    #print(cp)
     if (all(cp)) {#are parameters in ascending order, etc
 
         #calculate day thermal time threshold is met
@@ -303,7 +304,8 @@ minrmseTTT <- function(pars, fdat, tdat, form, start, thresh, stage,
 minrmse <- function(pars, fdat, tdat, modtype, form, stage, CT, S, TH, simple,
                     varying, modclass, firstevent, startingevent=NA) {
 
-    ctlen <- sapply(form, parnum) #what is the # of par values for the forms
+    ctlen <- unname(sapply(form, parnum)) #what is the number
+                                          # of par values for the forms
     plen <- length(pars)
 
     #assigning parameter values to variables based on what parameters are
@@ -323,8 +325,9 @@ minrmse <- function(pars, fdat, tdat, modtype, form, stage, CT, S, TH, simple,
         ct <- CT[1:ctlen]
 
     } else {
-        ct <- list(1:ctlen[1],
-                   (ctlen[1]+1):sum(ctlen))
+
+        ct <- c(pars[1:ctlen[1]],
+                pars[(ctlen[1]+1):sum(ctlen)])
     }
 
     startthresh <- convertParameters(pars, modtype, S, TH, varying,
