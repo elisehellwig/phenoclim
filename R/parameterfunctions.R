@@ -307,17 +307,13 @@ showparlist <- function(object) {
         } else {
             s1 <- 'Model starts '
             s2 <- paste0(' days after ', initday,', ' )
-    } else {
-
-
-
-        } else {
-            s1 <- 'Model starts on the '
-            ois <- pickEnding(fromday)
-            s2 <- paste0(ois, ' day of the year, ')
         }
 
+    } else {
 
+        s1 <- 'Model starts on the '
+        ois <- pickEnding(fromday)
+        s2 <- paste0(ois, ' day of the year, ')
     }
 
     if (('threshold' %in% vp)| mtype=='TTT') {
