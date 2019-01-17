@@ -46,7 +46,7 @@ objective <- function(parlist, phenology, temp, stage, CT, Start,
         stop('Model class must be either FlowerModel or PlantModel.')
     }
 
-    #what is the type of model (DT or TTT)
+    #what is the type of model (DT, TTT, or dual)
     modtype <- modeltype(PL)
     simple <- simplified(PL)
 
