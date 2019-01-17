@@ -4,10 +4,10 @@
 \alias{checktempyears}
 \title{Checks year presence in temperature list}
 \usage{
-checktempyears(phenology, temperature, modelclass)
+checktempyears(pheno, temperature, modelclass)
 }
 \arguments{
-\item{phenology}{data.frame, the data.frame containing the phenology data.}
+\item{pheno}{data.frame, the data.frame containing the phenology data.}
 
 \item{temperature, }{list, the list containing all the temperature data.}
 
