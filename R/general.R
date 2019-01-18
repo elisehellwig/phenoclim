@@ -54,7 +54,6 @@ length0 <- function(x) {
 #' @param dat the phenology data frame
 #' @param i the number of the phenology event to be extracted
 #' @return A vector with the julian days of the ith phenological event
-#' @export
 eventi <- function(dat, i) {
 
     d <- dat[,paste0('event',i)]
