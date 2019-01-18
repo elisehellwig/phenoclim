@@ -17,6 +17,14 @@ setMethod("stages", "ParameterList",
           })
 
 
+#' Accesses the number stages of a list of ParameterLists
+#' @rdname stages
+setMethod("stages", "list",
+          function(object) {
+              x <- sapply(object, function(ob) ob@stages)
+              return(x)
+          })
+
 #' Accesses the model type of a ParameterList object
 #' @rdname modeltype
 setMethod("modeltype", "ParameterList",
@@ -24,11 +32,29 @@ setMethod("modeltype", "ParameterList",
               return(object@modeltype)
           })
 
+
+#' Accesses the model type of a list of ParameterLists
+#' @rdname modeltype
+setMethod("modeltype", "list",
+          function(object) {
+              x <- sapply(object, function(ob) ob@modeltype)
+              return(x)
+          })
+
 #' Accesses the simplified parameter of a ParameterList object
 #' @rdname simplified
 setMethod("simplified", "ParameterList",
           function(object) {
               return(object@simplified)
+          })
+
+
+#' Accesses the simplified parameter of a list of ParameterLists
+#' @rdname simplified
+setMethod("simplified", "list",
+          function(object) {
+              x <- sapply(object, function(ob) ob@simplified)
+              return(x)
           })
 
 
@@ -40,6 +66,14 @@ setMethod("startday", "ParameterList",
           })
 
 
+#' Accesses the start day for a list of ParameterLists
+#' @rdname startday
+setMethod("startday", "list",
+          function(object) {
+              x <- sapply(object, function(ob) ob@startday)
+              return(x)
+          })
+
 #' Accesses the threshold vector of a ParameterList object
 #' @rdname threshold
 setMethod("threshold", "ParameterList",
@@ -48,6 +82,14 @@ setMethod("threshold", "ParameterList",
           })
 
 
+#' Accesses the threshold vector of a list of ParameterLists
+#' @rdname threshold
+setMethod("threshold", "list",
+          function(object) {
+              x <- sapply(object, function(ob) ob@threshold)
+              return(x)
+          })
+
 #' Accesses the varyingpars vector of a ParameterList object
 #' @rdname varyingpars
 setMethod("varyingpars", "ParameterList",
@@ -55,13 +97,29 @@ setMethod("varyingpars", "ParameterList",
               return(object@varyingpars)
           })
 
-#' Accesses the cardinaltemps list of a ParameterList object
+#' Accesses the varyingpars vector for a list of ParameterLists
+#' @rdname varyingpars
+setMethod("varyingpars", "list",
+          function(object) {
+              x <- sapply(object, function(ob) ob@varyingpars)
+              return(x)
+          })
+
+#' Accesses the cardinaltemps list of a ParameterLists object
 #' @rdname cardinaltemps
 setMethod("cardinaltemps", "ParameterList",
           function(object) {
               return(object@cardinaltemps)
           })
 
+
+#' Accesses the cardinaltemps list for a list of ParameterLists
+#' @rdname cardinaltemps
+setMethod("cardinaltemps", "list",
+          function(object) {
+              x <- lapply(object, function(ob) ob@cardinaltemps)
+              return(x)
+          })
 
 #' Accesses the form of a ParameterList object
 #' @rdname form
@@ -70,6 +128,13 @@ setMethod("form", "ParameterList",
               return(object@form)
           })
 
+#' Accesses the forms for a list of ParameterLists
+#' @rdname form
+setMethod("form", "list",
+          function(object) {
+              x <- sapply(object, function(ob) ob@form)
+              return(x)
+          })
 
 #' Accesses which parameters to estimate for the ParameterList object
 #' @rdname parsOptimized
@@ -78,11 +143,27 @@ setMethod("parsOptimized", "ParameterList",
               return(object@parsOptimized)
           })
 
+#' Accesses which parameters to estimate for a list of ParameterLists
+#' @rdname parsOptimized
+setMethod("parsOptimized", "list",
+          function(object) {
+              x <- sapply(object, function(ob) ob@parsOptimized)
+              return(x)
+          })
+
 #' Accesses whether model is for PlantModel or FlowerModel
 #' @rdname mclass
 setMethod("mclass", "ParameterList",
           function(object) {
               return(object@mclass)
+          })
+
+#' Accesses whether model is for PlantModel or FlowerModel
+#' @rdname mclass
+setMethod("mclass", "list",
+          function(object) {
+              x <- sapply(object, function(ob) ob@mclass)
+              return(x)
           })
 
 ##############################
@@ -221,10 +302,44 @@ setMethod('simplified<-', 'ParameterList',
               }
           })
 
+
+#' @rdname simplified-set
+setMethod('simplified<-', 'list',
+          function(object, value) {
+              if (length(value)==1 & length(object) > 1) {
+                  value <- rep(value, length(object))
+              }
+
+              for (i in 1:length(object)) {
+                  object[[i]]@simplified <- value[i]
+              }
+
+              if (validObject(object)) {
+                  return(object)
+              }
+          })
+
 #' @rdname cardinaltemps-set
 setMethod('cardinaltemps<-', 'ParameterList',
           function(object, value) {
               object@cardinaltemps <- value
+
+              if (validObject(object)) {
+                  return(object)
+              }
+          })
+
+
+#' @rdname cardinaltemps-set
+setMethod('cardinaltemps<-', 'list',
+          function(object, value) {
+              if (length(value)==1 & length(object) > 1) {
+                  value <- rep(list(value), length(object))
+              }
+
+              for (i in 1:length(object)) {
+                  object[[i]]@cardinaltemps <- value[[i]]
+              }
 
               if (validObject(object)) {
                   return(object)
@@ -242,10 +357,42 @@ setMethod('form<-', 'ParameterList',
               }
           })
 
+#' @rdname form-set
+setMethod('form<-', 'list',
+          function(object, value) {
+              if (length(value)==1 & length(object) > 1) {
+                  value <- rep(value, length(object))
+              }
+
+              for (i in 1:length(object)) {
+                  object[[i]]@form <- value[i]
+              }
+
+              if (validObject(object)) {
+                  return(object)
+              }
+          })
+
 #' @rdname stages-set
 setMethod('stages<-', 'ParameterList',
           function(object, value) {
               object@stages <- value
+
+              if (validObject(object)) {
+                  return(object)
+              }
+          })
+
+#' @rdname stages-set
+setMethod('stages<-', 'list',
+          function(object, value) {
+              if (length(value)==1 & length(object) > 1) {
+                  value <- rep(value, length(object))
+              }
+
+              for (i in 1:length(object)) {
+                  object[[i]]@stages <- value[i]
+              }
 
               if (validObject(object)) {
                   return(object)
@@ -264,6 +411,23 @@ setMethod('modeltype<-', 'ParameterList',
           })
 
 
+#' @rdname modeltype-set
+setMethod('modeltype<-', 'list',
+          function(object, value) {
+              if (length(value)==1 & length(object) > 1) {
+                  value <- rep(value, length(object))
+              }
+
+              for (i in 1:length(object)) {
+                  object[[i]]@modeltype <- value[i]
+              }
+
+              if (validObject(object)) {
+                  return(object)
+              }
+          })
+
+
 
 #' @rdname startday-set
 setMethod('startday<-', 'ParameterList',
@@ -274,7 +438,6 @@ setMethod('startday<-', 'ParameterList',
                   return(object)
               }
           })
-
 
 
 #' @rdname varyingpars-set
@@ -299,10 +462,28 @@ setMethod('parsOptimized<-', 'ParameterList',
           })
 
 
+
 #' @rdname mclass-set
 setMethod('mclass<-', 'ParameterList',
           function(object, value) {
               object@mclass <- value
+
+              if (validObject(object)) {
+                  return(object)
+              }
+          })
+
+
+#' @rdname mclass-set
+setMethod('mclass<-', 'list',
+          function(object, value) {
+              if (length(value)==1 & length(object) > 1) {
+                  value <- rep(value, length(object))
+              }
+
+              for (i in 1:length(object)) {
+                  object[[i]]@mclass <- value[i]
+              }
 
               if (validObject(object)) {
                   return(object)
