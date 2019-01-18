@@ -97,6 +97,10 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
         }
     })
 
+    #for which models are you estimating the start day?
+    estimatestart <- sapply(parlist, function(pl) {
+        if ('start' %in% parsOptimized(pl)) TRUE else FALSE
+    })
 
    #for which models are you estimating model length/threshold
     estimatethresh <- sapply(parlist, function(pl) {
@@ -109,7 +113,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
     #data frame with the length of the stages
     ldat <- as.data.frame(sapply(1:stages, function(i) {
-        eventi(pdat, 'PlantModel', i+1) - eventi(pdat, 'PlantModel', i)
+        eventi(pdat, i+1) - eventi(pdat, i)
         }))
 
     #naming the stage length columns
@@ -117,6 +121,13 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
     #joining the event and length data frames
     d <- data.frame(pdat, ldat)
+
+    #checkign to to make sure that thresh is not both set and also optimized
+    badthresh <- ifelse(estimatethresh & is.na(thresh), TRUE, FALSE)
+
+    if (any(badthresh)) {
+        stop('If you want to opimize the threshold you cannot run the base model (threshold=NA).')
+    }
 
 
     if (modeltype(parlist[[1]])=='DT' & simple[1]) { #average stage length model
@@ -139,7 +150,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
     } else {
 
-        blen <- boundlength(ttforms, estimateCT, estimatethresh, startday)
+        blen <- boundlength(ttforms, estimateCT, estimatestart, estimatethresh)
 
         if (blen!=length(lbounds)) {
             stop(paste0('The bounds have the wrong number of parameter values. ',
@@ -150,8 +161,8 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
         functionlist <- lapply(1:m, function(j) {
                 lapply(1:stages, function(i) {
-                    objective(parlist, d, temps,
-                              i, estimateCT,estimatethresh, j, startday,
+                    objective(parlist, d, temps, i, estimateCT,
+                              estimatestart, estimatethresh, j,
                               'PlantModel')
             })
         })
