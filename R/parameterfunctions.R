@@ -264,9 +264,13 @@ calclength <- function(ml, lims) {
 #' @return A data.frame with the columns type, form, length, lims, stage, Base,
 #'     Optimal, and Critical
 showparlist <- function(object) {
+    #extracting the information from the parlist object
     n <- object@stages #number of stages in a model
     vp <- object@varyingpars #varying parameters
     mtype <- object@modeltype #model type
+    thresh <- round(object@threshold) #model thresholds
+    start <- round(object@startday) #model start days
+    modclass <- object@mclass #model class.
 
     if (length(object@form)==n) { #extracting forms from parameterlist
         forms <- object@form
@@ -287,17 +291,37 @@ showparlist <- function(object) {
     #pars <- round(pars)
     names(pars) <- c('Base','Opt.','Crit.') #giving the columns names
 
-    thresh <- round(object@threshold)
-    start <- round(object@startday)
-    modclass <- object@mclass
 
-    initday <- ifelse(modclass=='PlantModel','bloom','harvest')
-    endday <- ifelse(modclass=='PlantModel','harvest','bloom')
 
-    fromday <- ifelse(is.na(start), initday, start)
-    tothresh <- ifelse(is.na(thresh), endday, thresh)
+    #creating vector of when each stage starts
+    if (!('start' %in% vp)) {
+        startvec <- paste('day', start)
+    } else if (modclass=='PlantModel') {
+        startvec <- paste(paste0('event', 1:n), '+', start)
+    } else {
+        startvec <- paste('event0' + start)
+    }
 
-    #ml <- paste('from', from, 'to', to)
+    #creating a vector of the thresholds for each stage
+    if (modclass=="PlantModel") {
+        if (mtype=='TTT') {
+            threshvec <- paste(thresh, 'TTU')
+        } else if ('threshold' %in% vp) {
+            totalthresh <- start+thresh
+            threshvec <- paste(paste0('event', 1:n), '+', totalthresh)
+        } else {
+            threshvec <- paste('day', thresh)
+        }
+
+    } else {
+        if (mtype=='TTT' | mtype=='Dual') {
+            threshvec <- paste(thresh, 'TTU', collapse = ', ')
+        } else if ('threshold' %in% ) {
+
+        }
+    }
+
+
 
     if ('start' %in% vp) {
 
@@ -344,7 +368,9 @@ showparlist <- function(object) {
                           type=rep(mtype, n),
                           form=forms,
                           simplified=object@simplified,
-                          class=rep(modclass, n))
+                          class=rep(modclass, n),
+                          start=1,
+                          thresh=1)
 
     lengthpars <- cbind(modspecs, pars) #putting stage length and parameter
                                             #information together
