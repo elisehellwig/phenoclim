@@ -34,6 +34,10 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
                        cores=1L, iterations=200) {
 
 
+
+# Part 1: Assembling model inputs -----------------------------------------
+
+
     stages <- stages(parlist[[1]]) #extract # of stages from the Parameterlist
     n <- stages+1 #number of events
     events <- paste0('event', 1:n) #event column names
@@ -130,6 +134,10 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
     }
 
 
+
+# Part 2: Running model optimization --------------------------------------
+
+
     if (modeltype(parlist[[1]])=='DT' & simple[1]) { #average stage length model
 
         lmlist <- lapply(1:stages, function(i) { #average stage length lm
@@ -211,32 +219,19 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
         #print(2)
 
-        #extracting those parameters
-        newlength <- lapply(1:m, function(i) {
-            if (estimatelength[i]) {
-                sapply(optimlist[[i]], function(ol) {
-                    unname(ol[["bestmem"]][1])
-                })
-            } else {
-                threshold(parlist[[i]])
-            }
-        })
+# Part 3: Extracting Optimized Parameters ---------------------------------
 
 
+        estimatelist <- list(estimatestart, estimatethresh, estimateCT)
 
-        newct <- lapply(1:m, function(i) {
-            if (estimatelength[i] & estimateCT[i]) {
-                lapply(optimlist[[i]], function(ol) {
-                    unname(ol[['bestmem']])[-1]
-                })
-            } else if (estimateCT[i] & !estimatelength[i]) {
-                lapply(optimlist[[i]], function(ol) {
-                    unname(ol[['bestmem']])
-                })
-            } else {
-                newct <- cardinaltemps(parlist[[i]])
-            }
-        })
+        newstart <- extractParameters(estimatelist, 'start', parlist,
+                                      optimlist)
+
+        newthresh <- extractParameters(estimatelist, 'threshold', parlist,
+                                       optimlist)
+
+        newct <- extractParameters(estimatelist, 'cardinaltemps', parlist,
+                                   optimlist)
 
         #creating predictors for stage length based on the parameters
 
@@ -252,12 +247,11 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
         predictors <- as.data.frame(sapply(1:nrow(ij), function(i) {
             s <- ij[i, 1]
             fm <- ij[i, 2]
-            thermalsum(newct[[fm]][[s]], d,
-                       temps,
-                       modeltype(parlist[[fm]]),
-                       ij[i,'form'],
-                       newlength[[fm]][s],
-                       s)
+            thermalsum(ctemps=newct[[fm]][[s]], years=d$year,
+                       tdat=temps, modtype=modeltype(parlist[[fm]]),
+                       form=ij[i,'form'], start=newstart[1],
+                       thresh=newthresh[1], mclass='PlantModel',
+                       d$event1)
         }))
 
         names(predictors) <- unlist(predictornames)
@@ -315,24 +309,9 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
     #print(fits)
 
-    if (ensemble) {
-        fitnames <- c(sapply(1:m, function(i) paste0('fit',
-                                                     modeltype(parlist[[i]]),
-                                                     ttforms[[i]][1],1)),
-                      'fitensemble')
-
-        rmse <- sapply(1:(m+1), function(i) {
-            sapply(1:stages, function(j) {
-                observed <- paste0('length',j)
-                rmsd(d3[,fitnames[i]], d3[,observed])
-            })
-        })
-
-
-    } else {
-        fitnames <- sapply(1:m, function(i) paste0('fit',
-                                                     modeltype(parlist[[i]]),
-                                                     ttforms[[i]][1],1))
+    fitnames <- sapply(1:m, function(i) paste0('fit',
+                                                modeltype(parlist[[i]]),
+                                                ttforms[[i]][1],1))
 
         rmsd <- sapply(1:m, function(i) {
             sapply(1:stages, function(j) {
@@ -340,7 +319,6 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
                 rmse(d3[,fitnames[i]], d3[,observed])
             })
         })
-    }
 
 
     #print(6)
