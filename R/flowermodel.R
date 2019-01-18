@@ -32,7 +32,11 @@ NULL
 flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
                        cores=1L, iterations=200) {
 
-    stages <- 1 #Number of stages in FlowerModel
+
+# Part 1: Assembling Model Inputs -----------------------------------------
+
+
+   stages <- 1 #Number of stages in FlowerModel
     n <- stages+1 #number of events
     m <- length(parlist)
     events <- paste0('event', 0:1) #event column names
@@ -101,6 +105,11 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
     #phenology data with only the year and event data.
     d <- phenology[, c('year', events)]
+
+
+
+# Part 2: Running model optimization --------------------------------------
+
 
     #average flowering day model
     if (mtype=='DT' & simple) {
@@ -209,7 +218,7 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
         print(2)
 
-# Part 2: extract optimized parameters ------------------------------------
+# Part 3: extract optimized parameters ------------------------------------
         #print(estimatestart)
         #print(optimlist)
 
