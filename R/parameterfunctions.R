@@ -265,19 +265,23 @@ calclength <- function(ml, lims) {
 #'     Optimal, and Critical
 showparlist <- function(object) {
     #extracting the information from the parlist object
+    #print(1)
     n <- object@stages #number of stages in a model
     vp <- object@varyingpars #varying parameters
     mtype <- object@modeltype #model type
+    #print(1.3)
     thresh <- round(object@threshold) #model thresholds
     start <- round(object@startday) #model start days
     modclass <- object@mclass #model class.
 
+    #print(1.5)
     if (length(object@form)==n) { #extracting forms from parameterlist
         forms <- object@form
     } else { #replicating name if there is only on form
-        forms <- rep(object@form, stages)
+        forms <- rep(object@form, n)
     }
 
+    #print(2)
     ctlist <- lapply(object@cardinaltemps, function(ct){ #reformating cardinal
         ct <- round(ct, 2)
         if (length(ct)==3) {                             #temperatures
@@ -291,7 +295,7 @@ showparlist <- function(object) {
     #pars <- round(pars)
     names(pars) <- c('Base','Opt.','Crit.') #giving the columns names
 
-
+    #print(3)
 
     #creating vector of when each stage starts
     if (!('start' %in% vp)) {
@@ -326,7 +330,7 @@ showparlist <- function(object) {
         }
     }
 
-
+    #print(4)
     #adding information from different stages
    modspecs <- data.frame(stage=1:n,
                           type=rep(mtype, n),
@@ -339,7 +343,7 @@ showparlist <- function(object) {
     lengthpars <- cbind(modspecs, pars) #putting stage length and parameter
                                             #information together
 
-    cat('TTU = Thermal Time Units. All other numbers are in days.')
+    cat('TTU = Thermal Time Units. All other numbers are in days.\n')
     return(lengthpars)
 }
 
