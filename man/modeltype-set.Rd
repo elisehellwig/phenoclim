@@ -4,11 +4,14 @@
 \name{modeltype<-}
 \alias{modeltype<-}
 \alias{modeltype<-,ParameterList-method}
+\alias{modeltype<-,list-method}
 \title{Setting the model type}
 \usage{
 modeltype(object) <- value
 
 \S4method{modeltype}{ParameterList}(object) <- value
+
+\S4method{modeltype}{list}(object) <- value
 }
 \arguments{
 \item{object}{An object of class ParameterList}

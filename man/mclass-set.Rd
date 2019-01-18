@@ -4,11 +4,14 @@
 \name{mclass<-}
 \alias{mclass<-}
 \alias{mclass<-,ParameterList-method}
+\alias{mclass<-,list-method}
 \title{Setting stages as PlantModels or a FlowerModels}
 \usage{
 mclass(object) <- value
 
 \S4method{mclass}{ParameterList}(object) <- value
+
+\S4method{mclass}{list}(object) <- value
 }
 \arguments{
 \item{object}{An object of class ParameterList}

@@ -5,6 +5,7 @@
 \name{startday}
 \alias{startday}
 \alias{startday,ParameterList-method}
+\alias{startday,list-method}
 \alias{startday,PlantModel-method}
 \alias{startday,PlantModel-method}
 \alias{startday,FlowerModel-method}
@@ -13,6 +14,8 @@
 startday(object)
 
 \S4method{startday}{ParameterList}(object)
+
+\S4method{startday}{list}(object)
 
 \S4method{startday}{PlantModel}(object)
 
@@ -31,6 +34,8 @@ A vector of the start days or NAs for starting at bloom for
 Returns  a vector of start days
 
 Accesses the start day of the ParameterList object
+
+Accesses the start day for a list of ParameterLists
 
 Accesses the start days of a plant object
 

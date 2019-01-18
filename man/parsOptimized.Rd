@@ -5,6 +5,7 @@
 \name{parsOptimized}
 \alias{parsOptimized}
 \alias{parsOptimized,ParameterList-method}
+\alias{parsOptimized,list-method}
 \alias{parsOptimized,PlantModel-method}
 \alias{parsOptimized,FlowerModel-method}
 \title{Returns the parameters to estimate}
@@ -12,6 +13,8 @@
 parsOptimized(object)
 
 \S4method{parsOptimized}{ParameterList}(object)
+
+\S4method{parsOptimized}{list}(object)
 
 \S4method{parsOptimized}{PlantModel}(object)
 
@@ -28,6 +31,8 @@ character, the names of the parameters to be estimated
 Returns the parameters to estimate
 
 Accesses which parameters to estimate for the ParameterList object
+
+Accesses which parameters to estimate for a list of ParameterLists
 
 Accesses what parameters are to be optimized
 

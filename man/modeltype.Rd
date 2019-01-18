@@ -5,6 +5,7 @@
 \name{modeltype}
 \alias{modeltype}
 \alias{modeltype,ParameterList-method}
+\alias{modeltype,list-method}
 \alias{modeltype,PlantModel-method}
 \alias{modeltype,FlowerModel-method}
 \title{Returns the model type}
@@ -12,6 +13,8 @@
 modeltype(object)
 
 \S4method{modeltype}{ParameterList}(object)
+
+\S4method{modeltype}{list}(object)
 
 \S4method{modeltype}{PlantModel}(object)
 
@@ -28,6 +31,8 @@ character, specifies what type of model the parameters are for.
 Returns the model type
 
 Accesses the model type of a ParameterList object
+
+Accesses the model type of a list of ParameterLists
 
 Accesses the model type of a PlantModel object
 

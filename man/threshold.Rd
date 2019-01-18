@@ -5,6 +5,7 @@
 \name{threshold}
 \alias{threshold}
 \alias{threshold,ParameterList-method}
+\alias{threshold,list-method}
 \alias{threshold,PlantModel-method}
 \alias{threshold,FlowerModel-method}
 \title{Returns the returns a vector of thresholds}
@@ -12,6 +13,8 @@
 threshold(object)
 
 \S4method{threshold}{ParameterList}(object)
+
+\S4method{threshold}{list}(object)
 
 \S4method{threshold}{PlantModel}(object)
 
@@ -27,6 +30,8 @@ The time or thermal time thresholds for the model.
 Returns the returns a vector of thresholds
 
 Accesses the threshold vector of a ParameterList object
+
+Accesses the threshold vector of a list of ParameterLists
 
 Accesses the model thresholds of a plant object
 

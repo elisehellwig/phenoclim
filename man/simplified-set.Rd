@@ -4,11 +4,14 @@
 \name{simplified<-}
 \alias{simplified<-}
 \alias{simplified<-,ParameterList-method}
+\alias{simplified<-,list-method}
 \title{Setting whether model is simplified}
 \usage{
 simplified(object) <- value
 
 \S4method{simplified}{ParameterList}(object) <- value
+
+\S4method{simplified}{list}(object) <- value
 }
 \arguments{
 \item{object}{An object of class ParameterList}

@@ -5,12 +5,15 @@
 \name{mclass}
 \alias{mclass}
 \alias{mclass,ParameterList-method}
+\alias{mclass,list-method}
 \alias{mclass,PlantModel-method}
 \title{Returns whether the model is a 'PlantModel' or a 'FlowerModel'}
 \usage{
 mclass(object)
 
 \S4method{mclass}{ParameterList}(object)
+
+\S4method{mclass}{list}(object)
 
 \S4method{mclass}{PlantModel}(object)
 }
@@ -22,6 +25,8 @@ character, whether the model is a PlantModel or a FlowerModel
 }
 \description{
 Returns whether the model is a 'PlantModel' or a 'FlowerModel'
+
+Accesses whether model is for PlantModel or FlowerModel
 
 Accesses whether model is for PlantModel or FlowerModel
 

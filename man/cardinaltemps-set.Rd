@@ -4,11 +4,14 @@
 \name{cardinaltemps<-}
 \alias{cardinaltemps<-}
 \alias{cardinaltemps<-,ParameterList-method}
+\alias{cardinaltemps<-,list-method}
 \title{Setting the cardinal temps}
 \usage{
 cardinaltemps(object) <- value
 
 \S4method{cardinaltemps}{ParameterList}(object) <- value
+
+\S4method{cardinaltemps}{list}(object) <- value
 }
 \arguments{
 \item{object}{An object of class ParameterList}

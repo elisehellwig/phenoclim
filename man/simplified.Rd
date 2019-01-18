@@ -5,6 +5,7 @@
 \name{simplified}
 \alias{simplified}
 \alias{simplified,ParameterList-method}
+\alias{simplified,list-method}
 \alias{simplified,PlantModel-method}
 \alias{simplified,FlowerModel-method}
 \title{Returns whether the model is simplified}
@@ -12,6 +13,8 @@
 simplified(object)
 
 \S4method{simplified}{ParameterList}(object)
+
+\S4method{simplified}{list}(object)
 
 \S4method{simplified}{PlantModel}(object)
 
@@ -27,6 +30,8 @@ logical, return whether the model to be fit is a simplified model
 Returns whether the model is simplified
 
 Accesses the simplified parameter of a ParameterList object
+
+Accesses the simplified parameter of a list of ParameterLists
 
 Accesses simplified parameter of a PlantModel object
 

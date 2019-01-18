@@ -4,11 +4,14 @@
 \name{varyingpars}
 \alias{varyingpars}
 \alias{varyingpars,ParameterList-method}
+\alias{varyingpars,list-method}
 \title{Returns the parameters that vary from year to year}
 \usage{
 varyingpars(object)
 
 \S4method{varyingpars}{ParameterList}(object)
+
+\S4method{varyingpars}{list}(object)
 }
 \arguments{
 \item{object}{An object of class ParameterList}
@@ -21,4 +24,6 @@ A vector of the parameters that will vary from year to year for
 Returns the parameters that vary from year to year
 
 Accesses the varyingpars vector of a ParameterList object
+
+Accesses the varyingpars vector for a list of ParameterLists
 }

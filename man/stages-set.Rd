@@ -4,11 +4,14 @@
 \name{stages<-}
 \alias{stages<-}
 \alias{stages<-,ParameterList-method}
+\alias{stages<-,list-method}
 \title{Setting the number of stages}
 \usage{
 stages(object) <- value
 
 \S4method{stages}{ParameterList}(object) <- value
+
+\S4method{stages}{list}(object) <- value
 }
 \arguments{
 \item{object}{An object of class ParameterList}

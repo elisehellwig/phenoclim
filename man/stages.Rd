@@ -5,6 +5,7 @@
 \name{stages}
 \alias{stages}
 \alias{stages,ParameterList-method}
+\alias{stages,list-method}
 \alias{stages,PlantModel-method}
 \alias{stages,FlowerModel-method}
 \title{Returns the number of stages in the model}
@@ -12,6 +13,8 @@
 stages(object)
 
 \S4method{stages}{ParameterList}(object)
+
+\S4method{stages}{list}(object)
 
 \S4method{stages}{PlantModel}(object)
 
@@ -27,6 +30,8 @@ The number of stages in the model
 Returns the number of stages in the model
 
 Accesses the number stages of a ParameterList object
+
+Accesses the number stages of a list of ParameterLists
 
 Accesses the number of stages of a PlantModel object
 

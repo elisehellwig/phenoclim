@@ -5,6 +5,7 @@
 \name{cardinaltemps}
 \alias{cardinaltemps}
 \alias{cardinaltemps,ParameterList-method}
+\alias{cardinaltemps,list-method}
 \alias{cardinaltemps,PlantModel-method}
 \alias{cardinaltemps,FlowerModel-method}
 \title{Returns the returns a list of cardinal temperatures}
@@ -12,6 +13,8 @@
 cardinaltemps(object)
 
 \S4method{cardinaltemps}{ParameterList}(object)
+
+\S4method{cardinaltemps}{list}(object)
 
 \S4method{cardinaltemps}{PlantModel}(object)
 
@@ -26,7 +29,9 @@ A list of cardinal temperatures, one for each stage of the model.
 \description{
 Returns the returns a list of cardinal temperatures
 
-Accesses the cardinaltemps list of a ParameterList object
+Accesses the cardinaltemps list of a ParameterLists object
+
+Accesses the cardinaltemps list for a list of ParameterLists
 
 Accesses the cardinal temperatures
 

@@ -5,6 +5,7 @@
 \name{form}
 \alias{form}
 \alias{form,ParameterList-method}
+\alias{form,list-method}
 \alias{form,PlantModel-method}
 \alias{form,FlowerModel-method}
 \title{Returns the functional form}
@@ -12,6 +13,8 @@
 form(object)
 
 \S4method{form}{ParameterList}(object)
+
+\S4method{form}{list}(object)
 
 \S4method{form}{PlantModel}(object)
 
@@ -28,6 +31,8 @@ character, the name of the functional form of the model of thermal
 Returns the functional form
 
 Accesses the form of a ParameterList object
+
+Accesses the forms for a list of ParameterLists
 
 Accesses form of a PlantModel object
 

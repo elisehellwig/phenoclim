@@ -4,11 +4,14 @@
 \name{form<-}
 \alias{form<-}
 \alias{form<-,ParameterList-method}
+\alias{form<-,list-method}
 \title{Setting the form}
 \usage{
 form(object) <- value
 
 \S4method{form}{ParameterList}(object) <- value
+
+\S4method{form}{list}(object) <- value
 }
 \arguments{
 \item{object}{An object of class ParameterList}
