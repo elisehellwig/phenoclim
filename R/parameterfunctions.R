@@ -316,52 +316,16 @@ showparlist <- function(object) {
     } else {
         if (mtype=='TTT' | mtype=='Dual') {
             threshvec <- paste(thresh, 'TTU', collapse = ', ')
-        } else if ('threshold' %in% ) {
 
+        } else if ('threshold' %in% vp) {
+            totalthresh <- start+thresh
+            threshvec <- paste(paste0('event', 1:n), '+', totalthresh)
+
+        } else {
+            threshvec <- paste(paste('day', thresh), collapse=', ')
         }
     }
 
-
-
-    if ('start' %in% vp) {
-
-        if (fromday %in% c('bloom','harvest')) {
-            s1 <- 'Model starts at '
-            s2 <- ', '
-        } else {
-            s1 <- 'Model starts '
-            s2 <- paste0(' days after ', initday,', ' )
-        }
-
-    } else {
-
-        s1 <- 'Model starts on the '
-        ois <- pickEnding(fromday)
-        s2 <- paste0(ois, ' day of the year, ')
-    }
-
-    if (('threshold' %in% vp)| mtype=='TTT') {
-        s3 <- 'and runs for '
-
-        if (mtype=='DT') {
-            s4 <- ' days.\n'
-        } else {
-            s4 <- ' thermal time units.\n'
-        }
-
-    } else  {
-
-        if (fromday %in% c('bloom','harvest')) {
-            s3 <- 'and runs until '
-            s4 <- '.\n'
-
-        } else {
-            s3 <- 'and runs until the '
-            oit <- pickEnding(tothresh)
-            s4 <- paste0(oit, ' day of the year.\n')
-        }
-
-    }
 
     #adding information from different stages
    modspecs <- data.frame(stage=1:n,
@@ -369,13 +333,13 @@ showparlist <- function(object) {
                           form=forms,
                           simplified=object@simplified,
                           class=rep(modclass, n),
-                          start=1,
-                          thresh=1)
+                          start=startvec,
+                          thresh=threshvec)
 
     lengthpars <- cbind(modspecs, pars) #putting stage length and parameter
                                             #information together
 
-    cat(paste0(s1, fromday, s2, s3, tothresh, s4))
+    cat('TTU = Thermal Time Units. All other numbers are in days.')
     return(lengthpars)
 }
 
