@@ -87,8 +87,10 @@ objective <- function(parlist, phenology, temp, stage, CT, Start,
     #create a function that evaluates returns the rmse of the model that can be
     #minimized using the function DEoptim()
     fun <- function(x) {
-        return(minrmse(x, fdat, temp, modeltype(PL), form(PL)[stage], stage,
-                       ct, s, th, simple, varying=varyingpars(PL),
+        return(minrmse(x, fdat=fdat, tdat=temp, modtype=modeltype(PL),
+                       form=form(PL)[stage], stage=stage,
+                       CT=ct, S=s, TH=th, simple=simple,
+                       varying=varyingpars(PL),
                        modclass = mclass(PL), firstevent=events[1]))
     }
 
