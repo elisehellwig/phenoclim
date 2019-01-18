@@ -180,7 +180,8 @@ minrmseTTT <- function(pars, fdat, tdat, form, start, thresh, stage,
         } else {
 
             #is the day met before the end of the stage in questions?
-            positive <- ifelse(daymet > eventi(fdat, modclass, stage),
+            stagei <- ifelse(modclass=='Plantmodel', stage+1, stage)
+            positive <- ifelse(daymet > eventi(fdat, stagei),
                                FALSE, TRUE)
 
             if (all(positive)) {  #if so create model to use day met to predict
