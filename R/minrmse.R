@@ -27,6 +27,7 @@ NULL
 #' @param startingevent numeric, days first event happened each year.
 #' @return The RMSE value for a given set of cardinal temperatures and thermal
 #'     time accumulation length.
+#' @export
 minrmseDT <- function(pars, fdat, tdat, form, start, thresh, stage, varying,
                       modclass, startingevent=NA) {
 
@@ -34,7 +35,7 @@ minrmseDT <- function(pars, fdat, tdat, form, start, thresh, stage, varying,
 
     responsename <- responseVar(modclass, stage)
 
-    endDay <- fdat[,responsename]
+    endDay <- fdat[,lastDay(modclass, stage)]
 
     endDate <- dayToDate(fdat$year, endDay, modclass)
 
@@ -94,8 +95,7 @@ minrmseTTTsimplified <- function(pars, fdat, tdat, form, start, thresh, stage,
 
     responsename <- responseVar(modclass, stage) #name of response variable
 
-    endDay <- fdat[,responsename]
-
+    endDay <- fdat[,lastDay(modclass, stage)]
     endDate <- dayToDate(fdat$year, endDay, modclass)
 
 
@@ -155,7 +155,7 @@ minrmseTTT <- function(pars, fdat, tdat, form, start, thresh, stage,
 
     #print('minrmseTTT')
     responsename <- responseVar(modclass, stage) #name of response variable
-    endDay <- fdat[,responsename]
+    endDay <- fdat[,lastDay(modclass, stage)]
 
     endDate <- dayToDate(fdat$year, endDay, modclass)
 
