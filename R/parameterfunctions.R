@@ -120,6 +120,7 @@ checkpars <- function(pars, start, end, mclass, thresh=NA, form=NA) {
 #'     and 'triangle'.
 #' @return The number of parameters required for the thermal time functional
 #'     form supplied.
+#' @export
 parnum <- function(form) {
 
     #identify how many parameters a model should have based on its form
