@@ -311,14 +311,17 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
     #print(fits)
 
-    fitnames <- sapply(1:m, function(i) paste0('fit',
-                                                modeltype(parlist[[i]]),
-                                                ttforms[[i]][1],1))
+    fitnames <- sapply(1:m, function(i) {
+        sapply(1:stages, function(j){
+            paste0('fit', modeltype(parlist[[i]]),
+                   ttforms[i],j)
+        })
+    })
 
         rmsd <- sapply(1:m, function(i) {
             sapply(1:stages, function(j) {
                 observed <- paste0('length',j)
-                rmse(d3[,fitnames[i]], d3[,observed])
+                rmse(d3[,fitnames[j,i]], d3[,observed])
             })
         })
 
@@ -332,8 +335,9 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
 
     for (i in 1:m) {
-        threshold(DEparameters[[i]]) <- newlength[[i]]
-        if ((!simple[1]) | (modeltype(parlist[[1]])=='TTT')) {
+        threshold(DEparameters[[i]]) <- newthresh[,i]
+
+        if ((!simple[i]) | (modeltype(parlist[[i]])=='TTT')) {
             cardinaltemps(DEparameters[[i]]) <- newct[[i]]
         }
     }
