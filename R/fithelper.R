@@ -162,6 +162,7 @@ formatParameters <- function(years, eventday, startday, threshold, modtype,
 #'     vector based on the type of model being run. If the day of the threshold
 #'     varies by year it is a 'Period' vector. If it does not, it is a POSIXct
 #'     date vector.
+#' @export
 convertParameters <- function(pars, modtype, S, TH, vp, eventvec, years,
                               modclass) {
 
