@@ -88,7 +88,7 @@ objective <- function(parlist, phenology, temp, stage, CT, Start,
     #minimized using the function DEoptim()
     fun <- function(x) {
         return(minrmse(x, fdat=fdat, tdat=temp, modtype=modeltype(PL),
-                       form=form(PL)[stage], stage=stage,
+                       form=form(PL), stage=stage,
                        CT=ct, S=s, TH=th, simple=simple,
                        varying=varyingpars(PL),
                        modclass = mclass(PL), firstevent=events[1]))
