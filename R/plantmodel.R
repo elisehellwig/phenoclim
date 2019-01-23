@@ -58,7 +58,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
     #model type TTT or DT
     mtype <- modeltype(parlist[[1]])
 
-    ttforms <- lapply(parlist, function(pl) form(pl)) #list of functional forms
+    ttforms <- sapply(parlist, function(pl) form(pl)) #list of functional forms
     m <- length(parlist) #number of functional forms
 
 
@@ -67,7 +67,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
     #extracting the appropriate form names
     ij$form <- sapply(1:nrow(ij), function(i) {
-        ttforms[[ij[i,2]]][ij[i,1]]
+        ttforms[ij$pl[i]]
     })
 
     #Checking to make sure all of the right variables and etc are present
@@ -75,7 +75,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
     for (i in 1:m) {
         for (j in 1:stages) {
-            if (ttforms[[i]][j]=='anderson') {
+            if (ttforms[i]=='anderson') {
                 cardinaltemps(parlist[[i]])[[j]] <- c(4,25,36)
         }
 
@@ -90,7 +90,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
         #are you estimating cardinal temperatures?
         if ('cardinaltemps' %in% parsOptimized(parlist[[i]])) {
 
-            if ('anderson' %in% ttforms[[i]]) { #is the form anderson?
+            if ('anderson' %in% ttforms[i]) { #is the form anderson?
                FALSE #if the form is anderson, you don't estimate cardinal temps
             } else {
                TRUE #otherwise estimateCT is true
@@ -176,21 +176,17 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
         })
 
         lboundlist <- lapply(1:m, function(i) {
-            lapply(1:length(ttforms[[i]]), function(j) {
-                bndlen <- boundlength(ttforms[[i]][j], estimateCT[i],
-                                      estimatethresh[i])
+            bndlen <- boundlength(ttforms[i], estimateCT[i], estimatestart[i],
+                                  estimatethresh[i])
 
-                lbounds[1:bndlen]
-            })
+            lbounds[1:bndlen]
         })
 
         uboundlist <- lapply(1:m, function(i) {
-            lapply(1:length(ttforms[[i]]), function(j) {
-                bndlen <- boundlength(ttforms[[i]][j], estimateCT[i],
-                                      estimatethresh[i])
+            bndlen <- boundlength(ttforms[i], estimateCT[i], estimatestart[i],
+                                  estimatethresh[i])
 
-                ubounds[1:bndlen]
-            })
+            ubounds[1:bndlen]
         })
 
         #optimizing the parameters
@@ -198,8 +194,8 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
             optimlist <- mclapply(1:m, function(i) {
                 lapply(1:stages, function(j) {
-                   DEoptim(functionlist[[i]][[j]], lower=lboundlist[[i]][[j]],
-                           upper=uboundlist[[i]][[j]],
+                   DEoptim(functionlist[[i]][[j]], lower=lboundlist[[i]],
+                           upper=uboundlist[[i]],
                            control=DEoptim.control(itermax=iterations,
                                                    trace=FALSE))$optim
                 })
@@ -221,6 +217,11 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
 # Part 3: Extracting Optimized Parameters ---------------------------------
 
+        #Stages are the rows and functional forms are the columns of the matrix:
+        #
+        #        linear  GDD
+        #stage 1    ?     ?
+        #stage 2    ?     ?
 
         estimatelist <- list(estimatestart, estimatethresh, estimateCT)
 
@@ -238,20 +239,21 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
        # print(3)
         predictornames <- lapply(1:m, function(i) {
             sapply(1:stages, function(j) {
-                paste0(modeltype(parlist[[i]]), ttforms[[i]][j], j)
+                paste0(modeltype(parlist[[i]]), ttforms[i], j)
             })
         })
 
 
 
         predictors <- as.data.frame(sapply(1:nrow(ij), function(i) {
-            s <- ij[i, 1]
-            fm <- ij[i, 2]
-            thermalsum(ctemps=newct[[fm]][[s]], years=d$year,
+            s <- ij[i, 'stage']
+            fm <- ij[i, 'pl']
+            thermalsum(ctemps=newct[[fm]][[s]], yrs=d$year,
                        tdat=temps, modtype=modeltype(parlist[[fm]]),
-                       form=ij[i,'form'], start=newstart[1],
-                       thresh=newthresh[1], mclass='PlantModel',
-                       d$event1)
+                       form=ij[i,'form'], start=newstart[s, fm],
+                       thresh=newthresh[s, fm], mclass='PlantModel',
+                       startingevent=d$event1,
+                       varying=varyingpars(parlist[[fm]]))
         }))
 
         names(predictors) <- unlist(predictornames)
