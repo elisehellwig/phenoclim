@@ -57,7 +57,7 @@ extractParameters <- function(estimate, parname, parlist, optlist) {
                 if (estimatestart[i]) {
                     unname(optlist[[i]][[j]][["bestmem"]][1])
                 } else {
-                    startday(parlist[[i]])
+                    startday(parlist[[i]])[j]
                 }
             })
         })
