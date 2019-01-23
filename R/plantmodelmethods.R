@@ -246,7 +246,7 @@ setValidity("PlantModel", function(object) {
         msg <- c(msg, modeltypecheck(mt)[1])
     }
 
-   if (!phenologycheck(n, pheno)[1]) {
+   if (!phenologycheck(n, pheno, FALSE)[1]) {
        valid <- FALSE
        msg <- c(msg, phenologycheck[-1])
    }
