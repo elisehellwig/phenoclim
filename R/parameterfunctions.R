@@ -46,7 +46,8 @@ pickEnding <- function(n) {
 #' @param mclass character, the model class, "FlowerModel" or "PlantModel"
 #' @param thresh numeric, the threshold day for a DT model.
 #' @param form character, the functional form used to calculate thermal time.
-#' @return logical, TRUE if the cardinal temperatures are organized least to greatest, and start and thresh comes before predicted event. FALSE otherwise
+#' @return logical, TRUE if the cardinal temperatures are organized least to greatest, and start and thresh comes before predicted event. FALSE otherwise.
+#' @export
 checkpars <- function(pars, start, end, mclass, thresh=NA, form=NA) {
 
     #print('checkpars')
@@ -81,7 +82,13 @@ checkpars <- function(pars, start, end, mclass, thresh=NA, form=NA) {
 
 
     if (mclass=='PlantModel') {
-        tooLate <- any(ifelse(start>end, TRUE, FALSE))
+
+        if (is.na(thresh[1])) {
+            tooLate <- any(ifelse(start>end , TRUE, FALSE))
+        } else {
+            tooLate <- any(ifelse(start>end | thresh > end, TRUE, FALSE))
+        }
+
 
 
     } else if (mclass=='FlowerModel') {
