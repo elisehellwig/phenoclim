@@ -21,7 +21,7 @@ greatest}
 \item{form}{character, the functional form used to calculate thermal time.}
 }
 \value{
-logical, TRUE if the cardinal temperatures are organized least to greatest, and start and thresh comes before predicted event. FALSE otherwise
+logical, TRUE if the cardinal temperatures are organized least to greatest, and start and thresh comes before predicted event. FALSE otherwise.
 }
 \description{
 Checks to see if parameters are in the correct order
