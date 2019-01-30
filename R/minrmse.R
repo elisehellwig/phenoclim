@@ -272,22 +272,22 @@ minrmse <- function(pars, fdat, tdat, modtype, form, stage, CT, S, TH, simple,
     if (modtype=='DT' & !simple) {
          #print(s)
          #print(th)
-        rmse <- minrmseDT(ct, fdat, tdat, form, s, th, stage, varying,
+        rmsd <- minrmseDT(ct, fdat, tdat, form, s, th, stage, varying,
                           modclass, startingevent)
 
     } else if (modtype == 'TTT' & simple) {
         #print(ct)
-        rmse <- minrmseTTTsimplified(ct, fdat, tdat, form, s, th, stage,
+        rmsd <- minrmseTTTsimplified(ct, fdat, tdat, form, s, th, stage,
                                      varying, modclass, startingevent)
 
     } else if (modtype == 'TTT') {
-        rmse <- minrmseTTT(ct, fdat, tdat, form, s, th, stage, varying,
+        rmsd <- minrmseTTT(ct, fdat, tdat, form, s, th, stage, varying,
                            modclass, startingevent)
     } else {
         stop('Only options for modeltypes are TTT and DT.')
     }
 
-    return(rmse)
+    return(rmsd)
 
 }
 
