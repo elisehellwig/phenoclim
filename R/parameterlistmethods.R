@@ -201,7 +201,7 @@ setValidity("ParameterList", function(object) {
         msg <- c(msg, 'At least one form is not one of the accepted forms.')
     }
 
-    if (!(modeltype(object) %in% c('DT','TTT'))) {
+    if (!(modeltype(object) %in% c('DT','TTT','Dual'))) {
         valid <- FALSE
         msg <- c(msg, 'The model type is not one of the accepted types.')
     }
