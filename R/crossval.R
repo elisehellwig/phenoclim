@@ -26,36 +26,37 @@ crossvalPlant <- function(plant, temps, k, seed, fun='rmse', lbounds, ubounds,
     parlist <- parameters(plant)
     m <- length(parlist)
     p <- phenology(plant)
-    stage <- 1
+    stage <- 1:stages(parlist)[1]
 
     if (is.numeric(seed)) {
         set.seed(seed)
     }
 
+    print(1)
     p$fold <- kfold(p, k=k)
 
 
-    ttforms <- sapply(parlist, function(pl) form(pl)[stage])
+    ttforms <- sapply(parlist, function(pl) form(pl))
 
 
     measure <- matrix(rep(NA, m*k), nrow=m)
 
-   # print(2)
+    print(2)
     for (i in 1:k) {
         train <- p[p$fold!=i, ]
         test <- p[p$fold==i, ]
 
         #print(train$year)
         #print(test$year)
-        #print(3)
+        print(3)
         pm <- plantmodel(train, temps, parlist, lbounds, ubounds, cores,
                          iterations)
         trainmod <- olm(pm)
         parlist <- parameters(pm)
         #print(lapply(trainmod, function(tm) tm[[1]]))
-        #print(4)
+        print(4)
         predictors <- lapply(1:m, function(h) {
-            paste0(modeltype(parlist[[h]])[stage], ttforms[h], stage)
+            paste0(modeltype(parlist[[h]]), ttforms[h], stage)
         })
 
         response <- paste0('length', stage)
@@ -66,8 +67,17 @@ crossvalPlant <- function(plant, temps, k, seed, fun='rmse', lbounds, ubounds,
 
             #NOTE THIS NEEDS TO BE UPDATED TO REFLECT THE USE OF DATETIME
             #INDEXING
-            as.data.frame(thermalsum(cardinaltemps(pl)[stage], test, temps,
-                         modeltype(pl), ttforms[j], round(threshold(pl)),stage))
+
+            sapply(stage, function(n) {
+                thermalsum(cardinaltemps(pl)[n],
+                           test$year,
+                           temps,
+                           modeltype(pl),
+                           ttforms[j],
+                           round(threshold(pl))[n],
+                           n)
+            })
+
         })
         #print(5)
         #print(parameters(pm))
