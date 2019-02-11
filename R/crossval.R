@@ -68,15 +68,30 @@ crossvalPlant <- function(plant, temps, k, seed, fun='rmse', lbounds, ubounds,
             #NOTE THIS NEEDS TO BE UPDATED TO REFLECT THE USE OF DATETIME
             #INDEXING
 
-            sapply(stage, function(n) {
+
+            StartThresh <- lapply(stage, function(s) {
+                formatParameters(test[,'year'],
+                                 test[,paste0('event',s)],
+                                 startday(pl)[s],
+                                 threshold(pl)[s],
+                                 modeltype(pl),
+                                 'PlantModel',
+                                 varyingpars(pl))
+            })
+
+
+            as.data.frame(sapply(stage, function(n) {
                 thermalsum(cardinaltemps(pl)[n],
                            test$year,
                            temps,
                            modeltype(pl),
                            ttforms[j],
-                           round(threshold(pl))[n],
-                           n)
-            })
+                           StartThresh[[n]][[1]],
+                           StartThresh[[n]][[2]],
+                           varyingpars(pl),
+                           'PlantModel',
+                           test[, paste0('event', n)])
+            }))
 
         })
         #print(5)
