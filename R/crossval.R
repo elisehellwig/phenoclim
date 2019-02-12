@@ -56,7 +56,8 @@ crossvalPlant <- function(plant, temps, k, seed, fun='rmse', lbounds, ubounds,
         pm <- plantmodel(train, temps, parlist, lbounds, ubounds, cores,
                          iterations)
         trainmod <- olm(pm)
-        parlist <- parameters(pm)
+        parlist <- parameters(pm)#THIS IS WHERE THE ERROR IS
+        #FIX THE VALIDITY METHOD
         #print(lapply(trainmod, function(tm) tm[[1]]))
         print(4)
         predictors <- lapply(1:m, function(h) {
