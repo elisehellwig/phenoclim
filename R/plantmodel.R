@@ -189,6 +189,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
             ubounds[1:bndlen]
         })
 
+
         #optimizing the parameters
         if (cores > 1) {
 
@@ -205,8 +206,8 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
             optimlist <- lapply(1:m, function(i) {
                 lapply(1:stages, function(j) {
-                    DEoptim(functionlist[[i]][[j]], lower=lboundlist[[i]][[j]],
-                            upper=uboundlist[[i]][[j]],
+                    DEoptim(functionlist[[i]][[j]], lower=lboundlist[[i]],
+                            upper=uboundlist[[i]],
                             control=DEoptim.control(itermax=iterations,
                                                     trace=FALSE))$optim
                 })
@@ -330,15 +331,17 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
 
 
-  #  print(7)
+    #print(7)
     DEparameters <- parlist
 
+    #print(DEparameters)
 
     for (i in 1:m) {
         threshold(DEparameters[[i]]) <- newthresh[,i]
 
         if ((!simple[i]) | (modeltype(parlist[[i]])=='TTT')) {
-            cardinaltemps(DEparameters[[i]]) <- newct[[i]]
+            #print(newct[[i]])
+            cardinaltemps(DEparameters[[i]]) <- newct[[i]] #this is the issue
         }
     }
 
