@@ -16,10 +16,9 @@
 extractParameters <- function(estimate, parname, parlist, optlist) {
 
 
-    nstage <- stages(parlist) #number of stages for each functional form
-    nform <- length(nstage) #number of functional forms
+    nstage <- stages(parlist[[1]]) #number of stages for each functional form
+    nform <- length(parlist) #number of functional forms
 
-    #print(optlist)
 
     #expand estimatestart
     if (length(estimate[[1]])==1 & nform > 1) {
@@ -53,7 +52,7 @@ extractParameters <- function(estimate, parname, parlist, optlist) {
     #extract start values
     if (parname=='start') {
         value <- sapply(1:nform, function(i) {
-            sapply(1:nstage[i], function(j) {
+            sapply(1:nstage, function(j) {
                 if (estimatestart[i]) {
                     unname(optlist[[i]][[j]][["bestmem"]][1])
                 } else {
@@ -66,7 +65,7 @@ extractParameters <- function(estimate, parname, parlist, optlist) {
     } else if (parname=='threshold') {
 
         value <- sapply(1:nform, function(i) {
-            sapply(1:nstage[i], function(j) {
+            sapply(1:nstage, function(j) {
                 if (estimatestart[i] & estimatethresh[i]) {
                     unname(optlist[[i]][[j]][["bestmem"]][2])
                 } else if (estimatethresh[i]) {
@@ -77,20 +76,21 @@ extractParameters <- function(estimate, parname, parlist, optlist) {
             })
         })
 
+
         #extract cardinal temperatures
     } else if (parname=='cardinaltemps') {
 
         CTid <- estimatestart + estimatethresh + 1
 
         pl <- sapply(1:nform, function(i) {
-            sapply(1:nstage[i], function(j) {
+            sapply(1:nstage, function(j) {
                 length(optlist[[i]][[j]][["bestmem"]])
             })
 
         })
 
         value <- lapply(1:nform, function(i) {
-            lapply(1:nstage[i], function(j) {
+            lapply(1:nstage, function(j) {
                 if (estimatect[i]) {
                     unname(optlist[[i]][[j]][["bestmem"]][CTid[i]:pl[j,i]])
                 } else {
