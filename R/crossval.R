@@ -39,7 +39,9 @@ crossvalPlant <- function(plant, temps, k, seed, fun='rmse', lbounds, ubounds,
     ttforms <- sapply(parlist, function(pl) form(pl))
 
 
-    measure <- matrix(rep(NA, m*k), nrow=m)
+    measure <- lapply(1:m, function(n) {
+        matrix(rep(NA, max(stage)*k), nrow=max(stage))
+    })
 
     print(2)
     for (i in 1:k) {
@@ -65,10 +67,6 @@ crossvalPlant <- function(plant, temps, k, seed, fun='rmse', lbounds, ubounds,
             pl <- parlist[[j]]
             #print(cardinaltemps(pl)[stage])
 
-            #NOTE THIS NEEDS TO BE UPDATED TO REFLECT THE USE OF DATETIME
-            #INDEXING
-
-
             StartThresh <- lapply(stage, function(s) {
                 formatParameters(test[,'year'],
                                  test[,paste0('event',s)],
@@ -80,17 +78,17 @@ crossvalPlant <- function(plant, temps, k, seed, fun='rmse', lbounds, ubounds,
             })
 
 
-            as.data.frame(sapply(stage, function(n) {
-                thermalsum(cardinaltemps(pl)[n],
+            as.data.frame(sapply(stage, function(s) {
+                thermalsum(cardinaltemps(pl)[s],
                            test$year,
                            temps,
                            modeltype(pl),
                            ttforms[j],
-                           StartThresh[[n]][[1]],
-                           StartThresh[[n]][[2]],
+                           StartThresh[[s]][[1]],
+                           StartThresh[[s]][[2]],
                            varyingpars(pl),
                            'PlantModel',
-                           test[, paste0('event', n)])
+                           test[, paste0('event', s)])
             }))
 
         })
@@ -105,9 +103,16 @@ crossvalPlant <- function(plant, temps, k, seed, fun='rmse', lbounds, ubounds,
         #print(trainmod[[1]])
 
         fit <-lapply(1:m, function(j) {
-            unname(predict(trainmod[[j]][[stage]], newdata=testdata[[j]]))
+            as.data.frame(sapply(stage, function(s) {
+                unname(predict(trainmod[[j]][[s]],
+                               newdata=testdata[[j]]))
+            }))
+
         })
 
+        for (j in 1:m) {
+            names(fit[[j]]) <- predictors[[j]]
+        }
 
         #print(fit)
         #print(7)
