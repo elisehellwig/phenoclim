@@ -39,9 +39,11 @@ crossvalPlant <- function(plant, temps, k, seed, fun='rmse', lbounds, ubounds,
     ttforms <- sapply(parlist, function(pl) form(pl))
 
 
-    measure <- lapply(1:m, function(n) {
-        matrix(rep(NA, max(stage)*k), nrow=max(stage))
-    })
+    measure <- array(NA, c(max(stage), m, k))
+
+    #<- lapply(1:m, function(n) {
+     #   matrix(rep(NA, max(stage)*k), nrow=max(stage))
+    #})
 
     print(2)
     for (i in 1:k) {
@@ -92,13 +94,13 @@ crossvalPlant <- function(plant, temps, k, seed, fun='rmse', lbounds, ubounds,
             }))
 
         })
-        #print(5)
+        print(5)
         #print(parameters(pm))
         for (j in 1:m) {
             names(testdata[[j]]) <- predictors[[j]]
         }
 
-        #print(testdata)
+        print(testdata)
 
         #print(trainmod[[1]])
 
@@ -114,13 +116,18 @@ crossvalPlant <- function(plant, temps, k, seed, fun='rmse', lbounds, ubounds,
             names(fit[[j]]) <- predictors[[j]]
         }
 
-        #print(fit)
-        #print(7)
+        print(fit)
+        print(7)
         #str(fit)
 
 
-        measure[,i] <- sapply(1:m, function(j) {
-            do.call(fun, list(fit[[j]], test[,response]))
+        do.call(fun, list())
+
+        measure[,,i] <- sapply(1:m, function(j) {
+            sapply(stage, function(s) {
+                do.call(fun, list(fit[[j]][,s],
+                                  test[,response[s]]))
+            })
         })
 
 
@@ -128,9 +135,9 @@ crossvalPlant <- function(plant, temps, k, seed, fun='rmse', lbounds, ubounds,
     }
 
 
-    #print(measure)
-    avgmeasure <- apply(measure, 1, mean)
-    #print(8)
+    print(measure)
+    avgmeasure <- apply(measure, c(1,2), mean)
+    print(8)
 
     error(plant) <- avgmeasure
     crossvalidated(plant) <- TRUE
