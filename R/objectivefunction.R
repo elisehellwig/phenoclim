@@ -82,8 +82,6 @@ objective <- function(parlist, phenology, temp, stage, CT, Start,
     #create data.frame with only the columns necessary
     fdat <- phenology[, fnames]
 
-    #print(th)
-
     #create a function that evaluates returns the rmse of the model that can be
     #minimized using the function DEoptim()
     fun <- function(x) {
