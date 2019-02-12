@@ -224,19 +224,15 @@ setValidity("ParameterList", function(object) {
                  NA.')
     }
 
-    ensemblefrm <- which(frm=='ensemble')
     ctnum <- sapply(ct, function(v) length(v))
+    isnum <- sapply(ct, function(v) (is.numeric(v) | is.integer(v)) )
 
-    if (length(ensemblefrm)!=length(ct)) {
-
-        isnum <- sapply(ct, function(v) (is.numeric(v) | is.integer(v)) )
-
-        if ((!all(isnum)) & !(frm %in% c('utah', 'utahalt'))) {
-            valid <-FALSE
-            msg <- c(msg,
-                     'Not all of your parameter values are numbers.')
-        }
+    if ((!all(isnum)) & !(frm %in% c('utah', 'utahalt'))) {
+        valid <-FALSE
+        msg <- c(msg,
+                 'Not all of your parameter values are numbers.')
     }
+
 
     formparnum <- sapply(frm, function(ch) parnum(ch))
     formparnum2 <- ifelse(frm %in% c('utah','utahalt'), 1, formparnum)
