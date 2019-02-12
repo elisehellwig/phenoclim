@@ -32,7 +32,7 @@ crossvalPlant <- function(plant, temps, k, seed, fun='rmse', lbounds, ubounds,
         set.seed(seed)
     }
 
-    print(1)
+    #print(1)
     p$fold <- kfold(p, k=k)
 
 
@@ -45,21 +45,26 @@ crossvalPlant <- function(plant, temps, k, seed, fun='rmse', lbounds, ubounds,
      #   matrix(rep(NA, max(stage)*k), nrow=max(stage))
     #})
 
-    print(2)
+    #print(2)
     for (i in 1:k) {
         train <- p[p$fold!=i, ]
         test <- p[p$fold==i, ]
 
         #print(train$year)
         #print(test$year)
-        print(3)
+        #print(3)
+        #THIS IS WHERE THE ERROR IS
+        #FIX THE VALIDITY METHOD
+        #print(parsOptimized(plant))
         pm <- plantmodel(train, temps, parlist, lbounds, ubounds, cores,
                          iterations)
+
+        #print(3.5)
+        #print(parsOptimized(pmDT))
         trainmod <- olm(pm)
-        parlist <- parameters(pm)#THIS IS WHERE THE ERROR IS
-        #FIX THE VALIDITY METHOD
+        parlist <- parameters(pm)
         #print(lapply(trainmod, function(tm) tm[[1]]))
-        print(4)
+        #print(4)
         predictors <- lapply(1:m, function(h) {
             paste0(modeltype(parlist[[h]]), ttforms[h], stage)
         })
@@ -95,13 +100,13 @@ crossvalPlant <- function(plant, temps, k, seed, fun='rmse', lbounds, ubounds,
             }))
 
         })
-        print(5)
+        #print(5)
         #print(parameters(pm))
         for (j in 1:m) {
             names(testdata[[j]]) <- predictors[[j]]
         }
 
-        print(testdata)
+        #print(testdata)
 
         #print(trainmod[[1]])
 
@@ -117,12 +122,9 @@ crossvalPlant <- function(plant, temps, k, seed, fun='rmse', lbounds, ubounds,
             names(fit[[j]]) <- predictors[[j]]
         }
 
-        print(fit)
-        print(7)
+       # print(fit)
+        #print(7)
         #str(fit)
-
-
-        do.call(fun, list())
 
         measure[,,i] <- sapply(1:m, function(j) {
             sapply(stage, function(s) {
@@ -136,9 +138,9 @@ crossvalPlant <- function(plant, temps, k, seed, fun='rmse', lbounds, ubounds,
     }
 
 
-    print(measure)
+   # print(measure)
     avgmeasure <- apply(measure, c(1,2), mean)
-    print(8)
+    #print(8)
 
     error(plant) <- avgmeasure
     crossvalidated(plant) <- TRUE
