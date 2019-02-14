@@ -9,7 +9,8 @@ Imports:
     DEoptim,
     parallel,
     dismo,
-    lubridate
+    lubridate,
+    chillR
 Authors@R: person("Elise", "Hellwig",
                   email = "echellwig@ucdavis.edu", role = c("aut", "cre"))
 URL: https://bitbucket.org/echellwig/phenoclim
