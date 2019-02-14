@@ -110,7 +110,8 @@ setValidity("ParameterList", function(object) {
     frm <- object@form
     strt <- object@startday
     forms <- c('gdd', 'gddsimple','linear','flat', 'asymcur','anderson',
-               'triangle', 'trapezoid', 'chillbasic','utah','utahalt')
+               'triangle', 'trapezoid', 'chillbasic','utah','utah_original',
+               'chillPortions')
     vp <- c('start','threshold',NA)
     varpars <- object@varyingpars
     lens <- c(length(ct), length(object@threshold), length(strt))

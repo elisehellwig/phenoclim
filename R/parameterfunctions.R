@@ -125,16 +125,16 @@ parnum <- function(form) {
     #identify how many parameters a model should have based on its form
 
     if (form %in% c('gdd', 'gddsimple','linear','chillbasic',
-                           'utah','utahalt')) {
+                           'utah','utahalt','chillPortions')) {
         n <- 1
     } else if (form=='flat') {
         n <- 2
-    } else if (form %in% c('anderson', 'asymcur', 'triangle', 'ensemble')) {
+    } else if (form %in% c('anderson', 'asymcur', 'triangle')) {
         n <- 3
     } else if (form=='trapezoid') {
         n <- 4
     } else {
-        stop('form must be either gdd, gddsimple, linear, flat, asymcur, anderson, triangle, or trapezoid, or ensemble.')
+        stop('form must be either gdd, gddsimple, linear, flat, asymcur, anderson, triangle, chillbasic, utah, utah_original or chillPortions.')
     }
 
     return(n)
