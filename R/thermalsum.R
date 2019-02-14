@@ -72,7 +72,7 @@ DTsum <- function(ctemps, yrs, tdat, form, startDate, threshDate, varying,
     })
 
 
-    if (form %in% c('utah', 'utahalt')) {
+    if (form %in% c('utah', 'utahalt','chillPortions')) {
         tsums <- sapply(1:length(yrs), function(i) {
             #create list of parameters and data to send to do.call+form
             plist <- parslist(templist[[i]], NA, sum=TRUE)
@@ -155,7 +155,7 @@ TTTsum <- function(pars, yrs, tdat, form, startDate, thresh, varying, mclass) {
         td[order(td$dt), tnames]
     })
 
-    if (form %in% c('utah','utahalt')) {
+    if (form %in% c('utah','utah_original','chillPortions')) {
         pars <- NA
     }
 
