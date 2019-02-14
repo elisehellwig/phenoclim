@@ -213,8 +213,8 @@ thermalsum <- function(ctemps, yrs, tdat, modtype, form, start, thresh,
 
     }
 
-    print(start)
-    print(thresh)
+    #print(start)
+    #print(thresh)
 
     if (modtype=='DT') {
         ths <- DTsum(ctemps, yrs, tdat, form, start, thresh, varying, mclass)
