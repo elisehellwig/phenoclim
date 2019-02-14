@@ -68,7 +68,7 @@ modeltypecheck <-  function(mt) {
 tempclasscheck <- function(frm, temp) {
 
     hrforms <- c('linear','flat','triangle','asymcur','anderson',
-                 'chillbasic', 'utah','utah_original')
+                 'chillbasic', 'utah','utah_original', 'chillPortions')
     tempvars <- c('year','day')
 
 

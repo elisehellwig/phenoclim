@@ -64,7 +64,7 @@ checkpars <- function(pars, start, end, mclass, thresh=NA, form=NA) {
 
     #print(pars[1])
 
-    if (is.na(pars[1]) & form %in% c('utah','utahalt')) {
+    if (is.na(pars[1]) & form %in% c('utah','utah_original','chillPortions')) {
         parsort <- NA
     } else {
         parsort <-sort(pars)#put parameters in ascending order
