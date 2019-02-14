@@ -475,3 +475,29 @@ utahalt <- function(tvec, sum=TRUE) {
 }
 
 
+
+#' Calculates winter chill based on the Chill Portions model
+#'
+#' This function calculates the amount of chill accumulated based on the Chill
+#'     Portions model.
+#'
+#' @param tvec numeric, a vector of hourly temperatures used to calculate
+#'     chill
+#' @param sum logical, should the accumulated chill be summed?
+#' @return A numeric vector of chill values or a single chill value if sum is
+#'     TRUE.
+#' @details This model is described in at \url{http://fruitsandnuts.ucdavis.edu/Weather_Services/chilling_accumulation_models/about_chilling_units/}
+#'
+#' @export
+chillPortions <- function(tvec, sum=TRUE) {
+
+    portions <- Dynamic_Model(tvec, summ=FALSE)
+
+    if (sum) {
+        portions <- sum(portions)
+    }
+
+    return(portions)
+}
+
+
