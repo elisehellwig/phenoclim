@@ -427,7 +427,7 @@ chillbasic <- function(tvec, Tmax, sum=TRUE) {
 #'     and nut trees. International Journal of Biometeorology, 55(3),
 #'     pp.411-421.
 #' @export
-utah <- function(tvec, sum=TRUE) {
+utah_original <- function(tvec, sum=TRUE) {
     uch <- tvec
 
     uch[tvec<=1.4] <- 0
@@ -448,8 +448,10 @@ utah <- function(tvec, sum=TRUE) {
 
 #' Calculates winter chill based on the Utah Model
 #'
-#' This function calculates the amount of chill accumulated based on the Utah
-#'     model.
+#' This function calculates the amount of chill accumulated based on a
+#'     smoothed version of the Utah model. This is because the original Utah
+#'     model was not suitable for optimization.
+#'
 #'
 #' @param tvec numeric, a vector of temperatures used to calculate chill
 #' @param sum logical, should the accumulated chill be summed?
@@ -458,7 +460,7 @@ utah <- function(tvec, sum=TRUE) {
 #' @details This model is described in at \url{http://fruitsandnuts.ucdavis.edu/Weather_Services/chilling_accumulation_models/about_chilling_units/}
 #'
 #' @export
-utahalt <- function(tvec, sum=TRUE) {
+utah <- function(tvec, sum=TRUE) {
     uch <- tvec
 
     uch[tvec<=1.1] <- 0
