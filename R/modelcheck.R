@@ -44,11 +44,11 @@ modeltypecheck <-  function(mt) {
 
     mt <- unlist(mt) #unlist the model types
 
-    if (all(ifelse(mt %in% c('DT', 'TTT'), TRUE, FALSE))) {
+    if (all(ifelse(mt %in% c('DT', 'TTT', 'Dual'), TRUE, FALSE))) {
         return(TRUE)
 
     } else {
-        msg <- c(FALSE, "modeltype must be either 'DT' or 'TTT'.")
+        msg <- c(FALSE, "modeltype must be either 'DT', 'TTT' or 'Dual'.")
         return(msg)
 
     }
@@ -68,7 +68,7 @@ modeltypecheck <-  function(mt) {
 tempclasscheck <- function(frm, temp) {
 
     hrforms <- c('linear','flat','triangle','asymcur','anderson',
-                 'chillbasic', 'utah','utahalt')
+                 'chillbasic', 'utah','utah_original', 'chillPortions')
     tempvars <- c('year','day')
 
 

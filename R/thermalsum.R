@@ -29,11 +29,12 @@ DTsum <- function(ctemps, yrs, tdat, form, startDate, threshDate, varying,
     #print('DTsum')
     #possible forms
    posforms <-  c('anderson','linear','flat','triangle','asymcur','gdd',
-                  'gddsimple', 'chillbasic', 'utah','utahalt')
+                  'gddsimple', 'chillbasic', 'utah','utah_original',
+                  'chillPortions')
 
    if (!(form %in% posforms)) {
        stop('form must be linear, flat, triangle, asymcur, anderson, gdd,
-            gddsimple, chillbasic, utah or utahalt.')
+            gddsimple, chillbasic, utah, utah_original or chillPortions.')
 
    }
 
@@ -71,7 +72,7 @@ DTsum <- function(ctemps, yrs, tdat, form, startDate, threshDate, varying,
     })
 
 
-    if (form %in% c('utah', 'utahalt')) {
+    if (form %in% c('utah', 'utahalt','chillPortions')) {
         tsums <- sapply(1:length(yrs), function(i) {
             #create list of parameters and data to send to do.call+form
             plist <- parslist(templist[[i]], NA, sum=TRUE)
@@ -138,12 +139,14 @@ TTTsum <- function(pars, yrs, tdat, form, startDate, thresh, varying, mclass) {
         tnames <- c('tmin','tmax')
 
    } else if (form %in% c('linear', 'flat', 'triangle', 'asymcur',
-                          'anderson', 'chillbasic','utah','utahalt')) {
+                          'anderson', 'chillbasic','utah','utah_original',
+                          'chillPortions')) {
         tnames <- 'temp'
 
    } else {
         stop('type must be one of the following: gdd, gddsimple, linear
-             flat, triangle, asymcur, anderson, chillbasic, utah, utahalt')
+             flat, triangle, asymcur, anderson, chillbasic, utah,
+             utah_original or chillPortions.')
     }
 
 
@@ -152,7 +155,7 @@ TTTsum <- function(pars, yrs, tdat, form, startDate, thresh, varying, mclass) {
         td[order(td$dt), tnames]
     })
 
-    if (form %in% c('utah','utahalt')) {
+    if (form %in% c('utah','utah_original','chillPortions')) {
         pars <- NA
     }
 
@@ -174,8 +177,8 @@ TTTsum <- function(pars, yrs, tdat, form, startDate, thresh, varying, mclass) {
 #' @param modtype character, specifies what type of model is being run. Can be
 #'     either DT (Day Threshold) or TTT (Thermal Time Threshold).
 #' @param form the functional form of the thermal time accumulation
-#' @param start POSIXct, the date to start accumulating time or thermal
-#'     time towards the model threshold.
+#' @param start POSIXct or numeric, the date or day to start accumulating time
+#'     or thermal time towards the model threshold.
 #' @param thresh the length of thermal time accumulation (either a date or
 #'      thermal time units).
 #' @param varying character, c('start', 'threshold') should either of these

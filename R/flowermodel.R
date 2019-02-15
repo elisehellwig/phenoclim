@@ -216,7 +216,7 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
         }
 
 
-        print(2)
+        #print(2)
 
 # Part 3: extract optimized parameters ------------------------------------
         #print(estimatestart)
@@ -236,7 +236,7 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
         #creating predictors for stage length based on the parameters
 
-        print(3)
+        #print(3)
         predictornames <- lapply(1:m, function(i) {
             paste0(mtype, ttform[i])
         })
@@ -258,7 +258,7 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
 # Part 3: Run Model -------------------------------------------------------
 
 
-    print(4)
+    #print(4)
 
     if (!simple) {
         #print(d2[,predictornames])
@@ -290,7 +290,7 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
     }
 
-    print(5)
+    #print(5)
 
     #adding the fitted data to the dataframe
     if (exists('d2')) {
@@ -325,7 +325,7 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
         rmse(d3[,fname], d3[,'event1'])
     })
 
-    print(7)
+    #print(7)
     DEparameters <- parlist
 
     #print(7.1)
@@ -354,7 +354,7 @@ flowermodel <- function(phenology, temps, parlist, lbounds, ubounds,
         modlist <- replicate(m, modlist[[1]], simplify = FALSE)
     }
 
-    print(8)
+    #print(8)
     fm <- new('FlowerModel',
               parameters=DEparameters,
               error=rmsd,

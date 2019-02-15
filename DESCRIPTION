@@ -1,7 +1,7 @@
 Package: phenoclim
 Type: Package
 Title: Phenological Analysis in R
-Version: 0.8.1
+Version: 0.9.0
 Imports:
     plyr,
     reshape2,
@@ -9,13 +9,14 @@ Imports:
     DEoptim,
     parallel,
     dismo,
-    lubridate
+    lubridate,
+    chillR
 Authors@R: person("Elise", "Hellwig",
                   email = "echellwig@ucdavis.edu", role = c("aut", "cre"))
 URL: https://bitbucket.org/echellwig/phenoclim
 Description: Cleans temperature data, uses it to calculate chill and thermal 
     time with a set number of thermal time models, optimizes thermal time 
-    cardinal temperatures uses the TT and HT model to predict harvest and 
+    cardinal temperatures uses the TT, HT, and Dual sum models to predict harvest and 
     flowering.
 License: GPL-3
 LazyData: TRUE
