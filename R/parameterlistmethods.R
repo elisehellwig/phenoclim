@@ -191,7 +191,8 @@ setValidity("ParameterList", function(object) {
     frm <- object@form
     strt <- object@startday
     forms <- c('gdd', 'gddsimple','linear','flat', 'asymcur','anderson',
-               'triangle', 'trapezoid', 'chillbasic','utah','utahalt')
+               'triangle', 'trapezoid', 'chillbasic','utah','utah_original',
+               'chillPortions')
     vp <- c('start','threshold',NA)
     varpars <- object@varyingpars
     lens <- c(length(ct), length(object@threshold), length(strt))
@@ -227,11 +228,13 @@ setValidity("ParameterList", function(object) {
     ctnum <- sapply(ct, function(v) length(v))
     isnum <- sapply(ct, function(v) (is.numeric(v) | is.integer(v)) )
 
-    if ((!all(isnum)) & !(frm %in% c('utah', 'utahalt'))) {
-        valid <-FALSE
-        msg <- c(msg,
-                 'Not all of your parameter values are numbers.')
-    }
+
+    if ((!all(isnum)) & !(frm %in% c('utah', 'utah_original',
+                                     'chillPortions'))) {
+            valid <-FALSE
+            msg <- c(msg,
+                     'Not all of your parameter values are numbers.')
+        }
 
 
     formparnum <- sapply(frm, function(ch) parnum(ch))
