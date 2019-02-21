@@ -4,7 +4,7 @@
 \alias{dualsum}
 \title{Calculates chill and heat sums for the dual model}
 \usage{
-dualsum(pars, yrs, tdat, forms, start, thresh, varying, mclass,
+dualsum(pars, yrs, tdat, forms, start, thresholds, varying, mclass,
   startingevent = NA)
 }
 \arguments{
@@ -19,6 +19,9 @@ dualsum(pars, yrs, tdat, forms, start, thresh, varying, mclass,
 \item{start}{POSIXct or numeric, the day or date to start accumulating time
 or thermal time towards the model threshold.}
 
+\item{thresholds}{numeric, the length of thermal time accumulation (in
+either days or thermal time units).}
+
 \item{varying}{character, c('start', 'threshold') should either of these
 pars vary from year to year.}
 
@@ -27,9 +30,6 @@ pars vary from year to year.}
 probably want flower model.}
 
 \item{startingevent}{numeric, days first event happened each year.}
-
-\item{threshs}{numeric, the length of thermal time accumulation (in either
-days or thermal time units).}
 }
 \value{
 The thermal sums for a given series of years.
