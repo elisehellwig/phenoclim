@@ -1,6 +1,24 @@
 
 #---- thermalfunctions ----
 
+#' @name Forms
+#' @rdname Forms
+#' @title Functions that calculate thermal time (chill or heat)
+#' @param Tvec A vector of hourly temperatures, in degrees C.
+#' @param tdat A matrix of minimum and maximum daily temperatures, in degrees
+#'     C.
+#' @param Tb The base cardinal temperature of the model.
+#' @param To The optimal cardinal temperature of the model.
+#' @param Ts The subcritical cardinal temperature of the model.
+#' @param Tc The critical cardinal temperature of the model.
+#' @param Tmax numeric, the maximum temperature where trees accumulate chill.
+#' @param sum Logical, should the vector of thermal times be returned as a
+#'     sum?
+#' @return Either the number or vector of numbers representing the thermal
+#'     time calculated
+NULL
+
+
 #' Calculates thermal time based on the flat model
 #'
 #' This function calculates thermal time in growing degree hours from a
@@ -25,6 +43,7 @@
 #' temp <- seq(-5, 50)
 #' gdh <- flat(temp, 4, 25, sum=FALSE)
 #' plot(gdh ~ temp)
+#' @rdname Forms
 #' @export
 flat <- function(Tvec, Tb, To, sum=TRUE) {
 	#see notebook
@@ -85,6 +104,7 @@ flat <- function(Tvec, Tb, To, sum=TRUE) {
 #' temp <- seq(-5, 50)
 #' gdh <- asymcur(temp, 4, 25, 36, sum=FALSE)
 #' plot(gdh ~ temp)
+#' @rdname Forms
 #' @export
 asymcur <- function(Tvec, Tb, To, Tc, sum=TRUE) {
 	#from Anderson et al. 1986
@@ -119,34 +139,6 @@ asymcur <- function(Tvec, Tb, To, Tc, sum=TRUE) {
 }
 
 
-#this function is not working
-# beta <- function(Th, Tb, To, Tc, a=0, b=30) {
-# 	#from Marra 2002
-# 	#x is current temp
-# 	#Tb is base temperature
-# 	#To is optimal temperature
-# 	#Tc is critical temperature
-#
-# 	c <- To
-# 	d <- Tb - Tc
-# 	e <- 2 - (Tb/To)
-# 	f <- Tc/To
-# 	m <- e - 1/e + f - 2
-# 	n <- f - 1/e + f - 2
-#
-#
-# 	q <- (Th - c + d*m)/d
-# 	print((1-q))
-#
-# 	y = a + b*(q^(e-1)) * ((1-q)^(f-1)) / ((m^(e-1)) * (n^(f-1)))
-#
-# 	#tsum <- sum(y)
-# 	return(y)
-#
-# }
-
-
-
 #' Calculates thermal time based on the trapezoid model
 #'
 #' This function calculates thermal time in growing degree hours from a
@@ -178,6 +170,7 @@ asymcur <- function(Tvec, Tb, To, Tc, sum=TRUE) {
 #' temp <- seq(-5, 50)
 #' gdh <- trapezoid(temp, 4, 25, 36, 40, sum=FALSE)
 #' plot(gdh ~ temp)
+#' @rdname Forms
 #' @export
 trapezoid <- function(Tvec, Tb, To, Ts, Tc, sum=TRUE) {
 	#Th is a vector of hourly temperatures
@@ -227,6 +220,7 @@ trapezoid <- function(Tvec, Tb, To, Ts, Tc, sum=TRUE) {
 #' temp <- seq(-5, 50)
 #' gdh <- linear(temp, 4, sum=FALSE)
 #' plot(gdh ~ temp)
+#' @rdname Forms
 #' @export
 linear <- function(Tvec, Tb, sum=TRUE) {
 
@@ -274,6 +268,7 @@ linear <- function(Tvec, Tb, sum=TRUE) {
 #' temp <- seq(-5, 50)
 #' gdh <- triangle(temp, 4, 25, 36, sum=FALSE)
 #' plot(gdh ~ temp)
+#' @rdname Forms
 #' @export
 triangle <- function(Tvec, Tb, To, Tc, sum=TRUE) {
 
@@ -320,6 +315,7 @@ triangle <- function(Tvec, Tb, To, Tc, sum=TRUE) {
 #' temp <- data.frame(tmin=runif(10, 0, 10), tmax=runif(10, 13, 25))
 #' gdd(temp, 4, sum=TRUE)
 #' gdd(temp, 4, sum=FALSE)
+#' @rdname Forms
 #' @export
 gdd <- function(tdat, Tb, sum=TRUE) {
     #Tmat is a matrix where the columns are Tmin and Tmax for each of the days
@@ -373,6 +369,7 @@ gdd <- function(tdat, Tb, sum=TRUE) {
 #' temp <- data.frame(tmin=runif(10, 0, 10), tmax=runif(10, 13, 25))
 #' gddsimple(temp, 4, sum=TRUE)
 #' gddsimple(temp, 4, sum=FALSE)
+#' @rdname Forms
 #' @export
 gddsimple <- function(tdat, Tb, sum=TRUE) {
     Tavg <- (tdat[,'tmin'] + tdat[,'tmax'])/2
@@ -392,7 +389,7 @@ gddsimple <- function(tdat, Tb, sum=TRUE) {
 #'
 #' This function calculates the amount of chill accumulated based on the 32F-45F (0C-7.2C) model.
 #'
-#' @param tvec numeric, a vector of temperatures used to calculate chill
+#' @param Tvec numeric, a vector of temperatures used to calculate chill
 #' @param Tmax numeric, the maximum temperature where trees accumulate chill.
 #' @param sum logical, should the accumulated chill be summed?
 #' @return A numeric vector of chill values or a single chill value if sum is
@@ -401,10 +398,11 @@ gddsimple <- function(tdat, Tb, sum=TRUE) {
 #'     global analysis of the comparability of winter chill models for fruit
 #'     and nut trees. International Journal of Biometeorology, 55(3),
 #'     pp.411-421.
+#' @rdname Forms
 #' @export
-chillbasic <- function(tvec, Tmax, sum=TRUE) {
+chillbasic <- function(Tvec, Tmax, sum=TRUE) {
 
-    ch <- ifelse(tvec<Tmax & tvec>0, 1, 0)
+    ch <- ifelse(Tvec<Tmax & Tvec>0, 1, 0)
 
     if (sum) {
         ch <- sum(ch)
@@ -418,7 +416,7 @@ chillbasic <- function(tvec, Tmax, sum=TRUE) {
 #' This function calculates the amount of chill accumulated based on the Utah
 #'     model.
 #'
-#' @param tvec numeric, a vector of temperatures used to calculate chill
+#' @param Tvec numeric, a vector of temperatures used to calculate chill
 #' @param sum logical, should the accumulated chill be summed?
 #' @return A numeric vector of chill values or a single chill value if sum is
 #'     TRUE.
@@ -426,17 +424,18 @@ chillbasic <- function(tvec, Tmax, sum=TRUE) {
 #'     global analysis of the comparability of winter chill models for fruit
 #'     and nut trees. International Journal of Biometeorology, 55(3),
 #'     pp.411-421.
+#' @rdname Forms
 #' @export
-utah_original <- function(tvec, sum=TRUE) {
-    uch <- tvec
+utah_original <- function(Tvec, sum=TRUE) {
+    uch <- Tvec
 
-    uch[tvec<=1.4] <- 0
-    uch[(tvec>1.4 & tvec<=2.4)] <- 0.5
-    uch[(tvec>2.4 & tvec<=9.1)] <- 1
-    uch[(tvec>9.1 & tvec<=12.4)] <- 0.5
-    uch[(tvec>12.4 & tvec<=15.9)] <- 0
-    uch[(tvec>15.9 & tvec<=18.0)] <- -0.5
-    uch[(tvec>18.0)] <- -1
+    uch[Tvec<=1.4] <- 0
+    uch[(Tvec>1.4 & Tvec<=2.4)] <- 0.5
+    uch[(Tvec>2.4 & Tvec<=9.1)] <- 1
+    uch[(Tvec>9.1 & Tvec<=12.4)] <- 0.5
+    uch[(Tvec>12.4 & Tvec<=15.9)] <- 0
+    uch[(Tvec>15.9 & Tvec<=18.0)] <- -0.5
+    uch[(Tvec>18.0)] <- -1
 
     if (sum) {
         uch <- sum(uch)
@@ -453,21 +452,22 @@ utah_original <- function(tvec, sum=TRUE) {
 #'     model was not suitable for optimization.
 #'
 #'
-#' @param tvec numeric, a vector of temperatures used to calculate chill
+#' @param Tvec numeric, a vector of temperatures used to calculate chill
 #' @param sum logical, should the accumulated chill be summed?
 #' @return A numeric vector of chill values or a single chill value if sum is
 #'     TRUE.
 #' @details This model is described in at \url{http://fruitsandnuts.ucdavis.edu/Weather_Services/chilling_accumulation_models/about_chilling_units/}
 #'
+#' @rdname Forms
 #' @export
-utah <- function(tvec, sum=TRUE) {
-    uch <- tvec
+utah <- function(Tvec, sum=TRUE) {
+    uch <- Tvec
 
-    uch[tvec<=1.1] <- 0
-    uch[(tvec>1.1 & tvec<=2.2)] <- uch[(tvec>1.1 & tvec<=2.2)]/1.1 - 1
-    uch[(tvec>2.2 & tvec<=8.9)] <- 1
-    uch[(tvec>8.9 & tvec<=18.3)]<-uch[(tvec>8.9 & tvec<=18.3)]*(-10)/47 + 136/47
-    uch[(tvec>18.3)] <- -1
+    uch[Tvec<=1.1] <- 0
+    uch[(Tvec>1.1 & Tvec<=2.2)] <- uch[(Tvec>1.1 & Tvec<=2.2)]/1.1 - 1
+    uch[(Tvec>2.2 & Tvec<=8.9)] <- 1
+    uch[(Tvec>8.9 & Tvec<=18.3)]<-uch[(Tvec>8.9 & Tvec<=18.3)]*(-10)/47 + 136/47
+    uch[(Tvec>18.3)] <- -1
 
     if (sum) {
         uch <- sum(uch)
@@ -483,17 +483,17 @@ utah <- function(tvec, sum=TRUE) {
 #' This function calculates the amount of chill accumulated based on the Chill
 #'     Portions model.
 #'
-#' @param tvec numeric, a vector of hourly temperatures used to calculate
+#' @param Tvec numeric, a vector of hourly temperatures used to calculate
 #'     chill
 #' @param sum logical, should the accumulated chill be summed?
 #' @return A numeric vector of chill values or a single chill value if sum is
 #'     TRUE.
 #' @details This model is described in at \url{http://fruitsandnuts.ucdavis.edu/Weather_Services/chilling_accumulation_models/about_chilling_units/}
-#'
+#' @rdname Forms
 #' @export
-chillPortions <- function(tvec, sum=TRUE) {
+chillPortions <- function(Tvec, sum=TRUE) {
 
-    portions <- Dynamic_Model(tvec, summ=FALSE)
+    portions <- Dynamic_Model(Tvec, summ=FALSE)
 
     if (sum) {
         portions <- sum(portions)
