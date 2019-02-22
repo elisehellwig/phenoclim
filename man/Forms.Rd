@@ -59,6 +59,10 @@ C.}
 \value{
 A vector of numbers representing the chill or heat calculated.
 }
+\description{
+These functions calculate thermal time (chill and heat) for a
+    given vector or matrix of temperatures in degrees C.
+}
 \details{
 The functional form of the flat thermal time model is as follows:
     \deqn{GDH = \begin{cases}

@@ -5,7 +5,8 @@
 #' @rdname Forms
 #' @title Functional forms for thermal time calculation
 #'
-#'
+#' @description These functions calculate thermal time (chill and heat) for a
+#'     given vector or matrix of temperatures in degrees C.
 #'
 #' @param Tvec A vector of hourly temperatures, in degrees C.
 #' @param tdat A matrix of minimum and maximum daily temperatures, in degrees
