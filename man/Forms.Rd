@@ -13,7 +13,7 @@
 \alias{utah_original}
 \alias{utah}
 \alias{chillPortions}
-\title{Functions that calculate thermal time (chill or heat)}
+\title{Functional forms for thermal time calculation}
 \usage{
 flat(Tvec, Tb, To, sum = TRUE)
 
@@ -55,170 +55,9 @@ sum?}
 C.}
 
 \item{Tmax}{numeric, the maximum temperature where trees accumulate chill.}
-
-\item{Tvec}{A vector of hourly temperatures, in degrees C.}
-
-\item{Tb}{The base cardinal temperature of the model.}
-
-\item{To}{The optimal cardinal temperature of the model.}
-
-\item{sum}{Logical, should the vector of thermal times be returned as a
-sum?}
-
-\item{Tvec}{A vector of hourly temperatures, in degrees C.}
-
-\item{Tb}{The base cardinal temperature of the model.}
-
-\item{To}{The optimal cardinal temperature of the model.}
-
-\item{Tc}{The critical cardinal temperature of the model.}
-
-\item{sum}{Logical, should the vector of thermal times be returned as a
-sum?}
-
-\item{Tvec}{A vector of hourly temperatures, in degrees C.}
-
-\item{Tb}{The base cardinal temperature of the model.}
-
-\item{To}{The optimal cardinal temperature of the model.}
-
-\item{Ts}{The subcritical cardinal temperature of the model.}
-
-\item{Tc}{The critical cardinal temperature of the model.}
-
-\item{sum}{Logical, should the vector of thermal times be returned as a
-sum?}
-
-\item{Tvec}{A vector of hourly temperatures, in degrees C.}
-
-\item{Tb}{The base cardinal temperature of the model.}
-
-\item{sum}{Logical, should the vector of thermal times be returned as a
-sum?}
-
-\item{Tvec}{A vector of hourly temperatures, in degrees C.}
-
-\item{Tb}{The base cardinal temperature of the model.}
-
-\item{To}{The optimal cardinal temperature of the model.}
-
-\item{Tc}{The critical cardinal temperature of the model.}
-
-\item{sum}{Logical, should the vector of thermal times be returned as a
-sum?}
-
-\item{tdat}{A matrix of minimum and maximum daily temperatures, in degrees
-C.}
-
-\item{Tb}{The base cardinal temperature of the model.}
-
-\item{sum}{Logical, should the vector of thermal times be returned as a
-sum?}
-
-\item{tdat}{A matrix of minimum and maximum daily temperatures, in degrees
-C.}
-
-\item{Tb}{The base cardinal temperature of the model.}
-
-\item{sum}{Logical, should the vector of thermal times be returned as a
-sum?}
-
-\item{Tvec}{numeric, a vector of temperatures used to calculate chill}
-
-\item{Tmax}{numeric, the maximum temperature where trees accumulate chill.}
-
-\item{sum}{logical, should the accumulated chill be summed?}
-
-\item{Tvec}{numeric, a vector of temperatures used to calculate chill}
-
-\item{sum}{logical, should the accumulated chill be summed?}
-
-\item{Tvec}{numeric, a vector of temperatures used to calculate chill}
-
-\item{sum}{logical, should the accumulated chill be summed?}
-
-\item{Tvec}{numeric, a vector of hourly temperatures used to calculate
-chill}
-
-\item{sum}{logical, should the accumulated chill be summed?}
 }
 \value{
-Either the number or vector of numbers representing the thermal
-    time calculated
-
-either the number or vector of numbers representing the thermal
-    time calculated
-
-either the number or vector of numbers representing the thermal
-    time calculated
-
-either the number or vector of numbers representing the thermal
-    time calculated
-
-either the number or vector of numbers representing the thermal
-    time calculated
-
-either the number or vector of numbers representing the thermal
-    time calculated
-
-either the number or vector of numbers representing the thermal
-    time calculated
-
-either the number or vector of numbers representing the thermal
-    time calculated
-
-A numeric vector of chill values or a single chill value if sum is
-    TRUE.
-
-A numeric vector of chill values or a single chill value if sum is
-    TRUE.
-
-A numeric vector of chill values or a single chill value if sum is
-    TRUE.
-
-A numeric vector of chill values or a single chill value if sum is
-    TRUE.
-}
-\description{
-This function calculates thermal time in growing degree hours from a
-    vector of temperatures (in degrees C) based on the Flat model
-    described below.
-
-This function calculates thermal time in growing degree hours from a
-    vector of temperatures (in degrees C) based on the Anderson
-    \emph{et al.} (1986) model of thermal time described below.
-
-This function calculates thermal time in growing degree hours from a
-    vector of temperatures (in degrees C) based on the trapezoid
-    model of thermal time described below.
-
-This function calculates thermal time in growing degree hours from a
-    vector of temperatures (in degrees C) based on the linear model
-    described below.
-
-This function calculates thermal time in growing degree hours from a
-    vector of temperatures (in degrees C) based on the triangle
-    model of thermal time described below.
-
-This function calculates thermal time in growing degree days from a
-    vector of temperatures (in degrees C) based on the model
-    described below.
-
-This function calculates thermal time in growing degree days from a
-    vector of temperatures (in degrees C) based on the model
-    described below.
-
-This function calculates the amount of chill accumulated based on the 32F-45F (0C-7.2C) model.
-
-This function calculates the amount of chill accumulated based on the Utah
-    model.
-
-This function calculates the amount of chill accumulated based on a
-    smoothed version of the Utah model. This is because the original Utah
-    model was not suitable for optimization.
-
-This function calculates the amount of chill accumulated based on the Chill
-    Portions model.
+A vector of numbers representing the chill or heat calculated.
 }
 \details{
 The functional form of the flat thermal time model is as follows:
@@ -230,8 +69,8 @@ The functional form of the flat thermal time model is as follows:
     where \eqn{T} is the hourly temperature, \eqn{T_b} is the base
     temperature and \eqn{T_o} is the optimal temperature.
 
-The functional form of the Anderson thermal time model is as
-    follows:
+The functional form of the Anderson thermal time model (Anderson
+    \emph{et al.} 1986) is as follows:
     \deqn{ GDH = \begin{cases}
         0 & T\leq T_b \\
         \frac{T_o-T_a}{2} \left[1+\cos\left(\pi + \pi \cdot \frac{T-T_b}{T_o-T_b}\right) \right] & T_b\leq T\leq T_o \\
@@ -290,7 +129,7 @@ The functional form of the flat thermal time model is as follows:
     where \eqn{T_min} is the daily minimum temperature, \eqn{T_max} is the
     daily maximum temperature, and \eqn{T_b} is the base temperature.
 
-The functional form of the flat thermal time model is as follows:
+The functional form of the simple gdd thermal time model is as follows:
     \deqn{GDD = \begin{cases}
         0 & T_{avg}\leq T_b \\
         T - T_{avg} & T_b \leq T_{avg}\\
@@ -298,40 +137,37 @@ The functional form of the flat thermal time model is as follows:
     where \eqn{T_{avg}} is the average daily temperature, and \eqn{T_b} is
     the base temperature.
 
-This model is described in Luedeling, E. and Brown, P.H., 2011. A
-    global analysis of the comparability of winter chill models for fruit
-    and nut trees. International Journal of Biometeorology, 55(3),
-    pp.411-421.
+This function calculates the amount of chill accumulated based on the 32F-45F (0C-7.2C) model. The model is described in Luedeling, E. and Brown,
+    P.H., 2011. A global analysis of the comparability of winter chill
+    models for fruit and nut trees. International Journal of Biometeorology,
+     55(3), pp.411-421.
 
 This model is described in Luedeling, E. and Brown, P.H., 2011. A
     global analysis of the comparability of winter chill models for fruit
     and nut trees. International Journal of Biometeorology, 55(3),
     pp.411-421.
 
-This model is described in at \url{http://fruitsandnuts.ucdavis.edu/Weather_Services/chilling_accumulation_models/about_chilling_units/}
+The utah() function is a smoothed version of the model described
+    at \url{http://fruitsandnuts.ucdavis.edu/Weather_Services/chilling_accumulation_models/about_chilling_units/}. This was done to ensure optimization
+    procedures using this model would converge.
 
-This model is described in at \url{http://fruitsandnuts.ucdavis.edu/Weather_Services/chilling_accumulation_models/about_chilling_units/}
+The chillPortions model is described in at \url{http://fruitsandnuts.ucdavis.edu/Weather_Services/chilling_accumulation_models/about_chilling_units/}
 }
 \examples{
 temp <- seq(-5, 50)
 gdh <- flat(temp, 4, 25, sum=FALSE)
 plot(gdh ~ temp)
-temp <- seq(-5, 50)
 gdh <- asymcur(temp, 4, 25, 36, sum=FALSE)
 plot(gdh ~ temp)
-temp <- seq(-5, 50)
 gdh <- trapezoid(temp, 4, 25, 36, 40, sum=FALSE)
 plot(gdh ~ temp)
-temp <- seq(-5, 50)
 gdh <- linear(temp, 4, sum=FALSE)
 plot(gdh ~ temp)
-temp <- seq(-5, 50)
 gdh <- triangle(temp, 4, 25, 36, sum=FALSE)
 plot(gdh ~ temp)
 temp <- data.frame(tmin=runif(10, 0, 10), tmax=runif(10, 13, 25))
 gdd(temp, 4, sum=TRUE)
 gdd(temp, 4, sum=FALSE)
-temp <- data.frame(tmin=runif(10, 0, 10), tmax=runif(10, 13, 25))
 gddsimple(temp, 4, sum=TRUE)
 gddsimple(temp, 4, sum=FALSE)
 }
