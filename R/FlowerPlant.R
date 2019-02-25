@@ -34,6 +34,7 @@ responseVar <- function(ModelClass, stage) {
 #'
 #' @param y numeric a vector of years
 #' @return A numeric vector of the lengths of the years inputted.
+#' @export
 yearlength <- function(y) {
 
     yl <- ifelse(leap_year(y), 366, 365)
