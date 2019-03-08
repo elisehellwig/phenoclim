@@ -61,17 +61,7 @@ extractParameters <- function(estimate, parname, parlist, optlist) {
             })
         })
 
-        if (is.null(dim(value))) {
-
-            if (nstage>1) {
-                value <- as.matrix(value, nrow=nstage)
-            } else if (nform>1) {
-                value <- as.matrix(value, ncol=nform)
-            } else {
-                value <- as.matrix(value)
-            }
-
-        }
+        value <- convertToMatrix(value, nstage, nform)
 
         #extract threshold values
     } else if (parname=='threshold') {
@@ -88,18 +78,7 @@ extractParameters <- function(estimate, parname, parlist, optlist) {
             })
         })
 
-        if (is.null(dim(value))) {
-
-            if (nstage>1) {
-                value <- as.matrix(value, nrow=nstage)
-            } else if (nform>1) {
-                value <- as.matrix(value, ncol=nform)
-            } else {
-                value <- as.matrix(value)
-            }
-
-        }
-
+        value <- convertToMatrix(value, nstage, nform)
 
         #extract cardinal temperatures
     } else if (parname=='cardinaltemps') {
