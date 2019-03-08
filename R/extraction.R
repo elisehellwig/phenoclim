@@ -11,9 +11,11 @@
 #'     'start', 'threshold', or 'cardinaltemps'
 #' @param parlist list, list of parameterlists
 #' @param optlist list, list of optim function outputs
+#' @param model character, PlantModel or FlowerModel
 #' @return the value of the selected parameter
 #' @export
-extractParameters <- function(estimate, parname, parlist, optlist) {
+extractParameters <- function(estimate, parname, parlist, optlist,
+                              model='PlantModel') {
 
 
     nstage <- stages(parlist[[1]]) #number of stages for each functional form
@@ -61,7 +63,11 @@ extractParameters <- function(estimate, parname, parlist, optlist) {
             })
         })
 
-        value <- convertToMatrix(value, nstage, nform)
+        if (model=='PlantModel') {
+            value <- convertToMatrix(value, nstage, nform)
+        }
+
+
 
         #extract threshold values
     } else if (parname=='threshold') {
@@ -78,7 +84,9 @@ extractParameters <- function(estimate, parname, parlist, optlist) {
             })
         })
 
-        value <- convertToMatrix(value, nstage, nform)
+        if (model=='PlantModel') {
+            value <- convertToMatrix(value, nstage, nform)
+        }
 
         #extract cardinal temperatures
     } else if (parname=='cardinaltemps') {
