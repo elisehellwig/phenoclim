@@ -319,12 +319,15 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
         })
     })
 
-        rmsd <- sapply(1:m, function(i) {
-            sapply(1:stages, function(j) {
-                observed <- paste0('length',j)
-                rmse(d3[,fitnames[j,i]], d3[,observed])
-            })
+    fitnames <- convertToMatrix(fitnames, stages, m)
+
+
+    rmsd <- sapply(1:m, function(i) {
+        sapply(1:stages, function(j) {
+            observed <- paste0('length',j)
+            rmse(d3[,fitnames[j,i]], d3[,observed])
         })
+    })
 
 
     #print(6)
@@ -341,8 +344,11 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
 
         if ((!simple[i]) | (modeltype(parlist[[i]])=='TTT')) {
             #print(newct[[i]])
-            cardinaltemps(DEparameters[[i]]) <- newct[[i]] #this is the issue
-        }
+            for (j in 1:stages) {
+                cardinaltemps(DEparameters[[i]]) <- newct[[i]][[j]] # issue
+            }
+
+         }
     }
 
 
