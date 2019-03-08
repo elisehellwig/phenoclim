@@ -197,3 +197,34 @@ convertParameters <- function(pars, modtype, S, TH, vp, eventvec, years,
 
     return(STHlist)
 }
+
+#' Converts vectors to matrices
+#'
+#' This function converts vectors to matrices with the appropriate number of
+#'     rows or columns depending on the number of stages and functional forms
+#'     in a model.
+#'
+#' @param x numeric, object to be converted to a matrix
+#' @param nstage numeric, number of stages in the model
+#' @param nform numeric, number of forms in the model
+#' @return a matrix with the appropriate number of rows and columns
+convertToMatrix <- function(x, nstage, nform) {
+
+    if (is.null(dim(x))) {
+
+        if (nstage>1) {
+            value <- as.matrix(x, nrow=nstage)
+        } else if (nform>1) {
+            value <- as.matrix(x, ncol=nform)
+        } else {
+            value <- as.matrix(x)
+        }
+
+    } else {
+        value <- x
+    }
+
+    return(value)
+}
+
+
