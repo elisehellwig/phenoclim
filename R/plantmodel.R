@@ -340,6 +340,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
     #print(DEparameters)
 
     for (i in 1:m) {
+        startday(DEparameters[[i]]) <- newstart[,i]
         threshold(DEparameters[[i]]) <- newthresh[,i]
 
         if ((!simple[i]) | (modeltype(parlist[[i]])=='TTT')) {
