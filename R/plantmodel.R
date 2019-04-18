@@ -346,7 +346,12 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
         if ((!simple[i]) | (modeltype(parlist[[i]])=='TTT')) {
             #print(newct[[i]])
             for (j in 1:stages) {
-                cardinaltemps(DEparameters[[i]]) <- newct[[i]][[j]] # issue
+                if (!is.list(newct[[i]][[j]])) {
+                    newCTlist <- list(newct[[i]][[j]])
+                } else {
+                    newCTlist <- newct[[i]][[j]]
+                }
+                cardinaltemps(DEparameters[[i]]) <- newCTlist # issue
             }
 
          }
