@@ -100,6 +100,10 @@ extractParameters <- function(estimate, parname, parlist, optlist,
 
         })
 
+        if (!is.matrix(pl)) {
+            pl <- as.matrix(pl, nrow=nstage, ncol=nform)
+        }
+
         value <- lapply(1:nform, function(i) {
             lapply(1:nstage, function(j) {
                 if (estimatect[i]) {
