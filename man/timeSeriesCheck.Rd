@@ -4,8 +4,8 @@
 \alias{timeSeriesCheck}
 \title{Checks time series for missing entries}
 \usage{
-timeSeriesCheck(x, start = NA, end = NA, hours = FALSE, datename = "dt",
-  dtformat = "\%Y-\%m-\%d \%H:\%M:\%OS")
+timeSeriesCheck(x, start = NA, end = NA, hours = FALSE,
+  datename = "dt", dtformat = "\%Y-\%m-\%d \%H:\%M:\%OS")
 }
 \arguments{
 \item{x}{A data.frame that contains the time series. It must have at least

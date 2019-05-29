@@ -4,8 +4,8 @@
 \alias{thermalsum}
 \title{Calculates thermal time sums}
 \usage{
-thermalsum(ctemps, yrs, tdat, modtype, form, start, thresh, varying, mclass,
-  startingevent = NA)
+thermalsum(ctemps, yrs, tdat, modtype, form, start, thresh, varying,
+  mclass, startingevent = NA)
 }
 \arguments{
 \item{ctemps}{Cardinal temperatures}

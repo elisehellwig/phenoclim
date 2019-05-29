@@ -10,11 +10,11 @@
 \usage{
 crossval(object, ...)
 
-\S4method{crossval}{PlantModel}(object, temps, k, seed, fun, lbounds, ubounds,
-  iterations = 100, cores = 1L)
+\S4method{crossval}{PlantModel}(object, temps, k, seed, fun, lbounds,
+  ubounds, iterations = 100, cores = 1L)
 
-\S4method{crossval}{FlowerModel}(object, temps, k, seed, fun, lbounds, ubounds,
-  iterations = 100, cores = 1L)
+\S4method{crossval}{FlowerModel}(object, temps, k, seed, fun, lbounds,
+  ubounds, iterations = 100, cores = 1L)
 }
 \arguments{
 \item{object}{an (non-crossvalidated) object of class PlantModel or

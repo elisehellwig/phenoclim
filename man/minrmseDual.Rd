@@ -4,8 +4,8 @@
 \alias{minrmseDual}
 \title{Calculates Dual model RMSE}
 \usage{
-minrmseDual(pars, fdat, tdat, form, start, thresh, stage, varying, modclass,
-  startingevent = NA)
+minrmseDual(pars, fdat, tdat, form, start, thresh, stage, varying,
+  modclass, startingevent = NA)
 }
 \arguments{
 \item{pars}{Cardinal temperatures}

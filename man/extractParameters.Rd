@@ -4,7 +4,8 @@
 \alias{extractParameters}
 \title{Extracts Parameters from optimization}
 \usage{
-extractParameters(estimate, parname, parlist, optlist)
+extractParameters(estimate, parname, parlist, optlist,
+  model = "PlantModel")
 }
 \arguments{
 \item{estimate}{list, list of the following logical vectors: estimatestart,
@@ -16,6 +17,8 @@ estimatethresh, estimateCT}
 \item{parlist}{list, list of parameterlists}
 
 \item{optlist}{list, list of optim function outputs}
+
+\item{model}{character, PlantModel or FlowerModel}
 }
 \value{
 the value of the selected parameter

@@ -20,7 +20,7 @@ Description: Cleans temperature data, uses it to calculate chill and thermal
     flowering.
 License: GPL-3
 LazyData: TRUE
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
 Collate: 
     'FlowerPlant.R'
     'parameterfunctions.R'

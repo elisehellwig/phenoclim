@@ -4,9 +4,9 @@
 \alias{parameterlist}
 \title{Creates ParameterList object}
 \usage{
-parameterlist(n, mt, simple, ff, ct, modelthreshold, start, varyingparameters,
-  optimized = c("cardinaltemps", "threshold", "start"),
-  ModelClass = "PlantModel")
+parameterlist(n, mt, simple, ff, ct, modelthreshold, start,
+  varyingparameters, optimized = c("cardinaltemps", "threshold",
+  "start"), ModelClass = "PlantModel")
 }
 \arguments{
 \item{n}{integer, the number of stages in the model.}

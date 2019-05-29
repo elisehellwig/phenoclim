@@ -7,7 +7,6 @@
 \alias{startday,ParameterList-method}
 \alias{startday,list-method}
 \alias{startday,PlantModel-method}
-\alias{startday,PlantModel-method}
 \alias{startday,FlowerModel-method}
 \title{Returns  a vector of start days}
 \usage{
