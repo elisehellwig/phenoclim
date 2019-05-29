@@ -3,6 +3,9 @@
 
 The goal of phenoclim is to assist you in optimizing and fitting a variety of phenological models. In particular, this package implements models from (citation). The package also comes with a small generated phenological data set to use for examples.
 
+## Important Note
+You can only have 1 observation per year. I will fix this eventually, but that is how it is as of now.
+
 ## Parameters for Modeling Flowering
 
 In order to specify the type of model you would like to run you will need to specify four parameters. First is whether you would like to run a Chill/Heat sum threshold model or a time threshold model. Then based on that you have the following choices. When we refer to variable parameters (variablepars) we mean that the day of the year which that event occurs varies from year to year based on the start or end dates of the phenological stage in question. Note: this is different than estimating a parameter. You can either estimate or not estimate both varying and non-varying parameters. Parameters go in the order (if present) [start, threshold, cardinaltemperatures]
