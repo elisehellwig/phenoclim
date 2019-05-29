@@ -67,6 +67,7 @@ DTsum <- function(ctemps, yrs, tdat, form, startDate, threshDate, varying,
 
     })
 
+    ### This is the issue######
     templist <- lapply(1:length(yrs), function(i) {
         tdat[which(tdat$dt %within% modInterval[i]), tnames]
     })
