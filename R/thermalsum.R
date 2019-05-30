@@ -122,13 +122,14 @@ DTsum <- function(ctemps, yrloc, tdat, form, startDate, threshDate, varying,
 #'     'PlantModel' or 'FlowerModel'. If you have negative day values, you
 #'     probably want flower model.
 #' @return The thermal sums for a given series of years.
-TTTsum <- function(pars, yrs, tdat, form, startDate, thresh, varying, mclass) {
+TTTsum <- function(pars, yrloc, tdat, form, startDate, thresh, varying, mclass) {
 
     #print(str(pars))
 
     #print('TTTsum')
 
     nobs <- nrow(yrloc)
+    yrs <- yrloc[,'year']
 
 
     if (mclass=='FlowerModel') {
