@@ -44,8 +44,7 @@ DTsum <- function(ctemps, yrloc, tdat, form, startDate, threshDate, varying,
    #print(head(endDate))
     modInterval <- interval(startDate, threshDate)
     #print(3)
-    print(length(modInterval))
-    print(nobs)
+    #print(length(modInterval))
 
     if (length(modInterval)==1) {
         modInterval <- rep(modInterval, nobs)
@@ -63,6 +62,7 @@ DTsum <- function(ctemps, yrloc, tdat, form, startDate, threshDate, varying,
     } else {
         tnames <- 'temp'
     }
+
 
 
 
