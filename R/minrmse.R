@@ -46,8 +46,8 @@ minrmseDT <- function(pars, fdat, tdat, form, start, thresh, stage, varying,
 
         #calculate the thermal sum for each year using the cardinal temps and
             #day threshold
-        tsums <- thermalsum(pars, fdat$year, tdat, 'DT', form, start, thresh,
-                            varying, modclass, startingevent)
+        tsums <- thermalsum(pars, fdat[c('year', 'loc')], tdat, 'DT', form,
+                            start, thresh, varying, modclass, startingevent)
 
         #use that data as a predictor in a model to predict stage length
         mod <- lm(fdat[,responsename] ~ tsums)
@@ -104,8 +104,8 @@ minrmseTTTsimplified <- function(pars, fdat, tdat, form, start, thresh, stage,
                                                         #ascending order, etc
 
         #calculate day thermal time threshold is met
-        daymet <- thermalsum(pars, fdat$year, tdat, 'TTT', form, start, thresh,
-                                      varying, modclass, startingevent)
+        daymet <- thermalsum(pars, fdat[c('year', 'loc')], tdat, 'TTT', form,
+                             start, thresh, varying, modclass, startingevent)
 
 
         if (any(is.infinite(daymet))){ #were any of the thermal sums
@@ -169,8 +169,8 @@ minrmseDual <- function(pars, fdat, tdat, form, start, thresh, stage,
     if (all(cp)) {#are parameters in ascending order, etc
 
         #calculate day thermal time threshold is met
-        daymet <- dualsum(pars, fdat$year, tdat, form, start, thresh,
-                             varying, modclass, startingevent)
+        daymet <- dualsum(pars, fdat[c('year', 'loc')], tdat, form, start,
+                          thresh, varying, modclass, startingevent)
 
 
         if (any(is.infinite(daymet))){ #were any of the thermal sums
@@ -235,8 +235,8 @@ minrmseTTT <- function(pars, fdat, tdat, form, start, thresh, stage,
     }  else {
 
         #calculate day thermal time threshold is met
-        daymet <- thermalsum(pars, fdat$year, tdat, 'TTT', form, start, thresh,
-                             varying, modclass, startingevent)
+        daymet <- thermalsum(pars, fdat[c('year', 'loc')], tdat, 'TTT', form,
+                             start, thresh, varying, modclass, startingevent)
         #print(daymet)
 
         if (any(is.infinite(daymet))) {
