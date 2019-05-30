@@ -69,7 +69,14 @@ DTsum <- function(ctemps, yrloc, tdat, form, startDate, threshDate, varying,
     templist <- lapply(1:nobs, function(i) {
         trows <- which(tdat$dt %within% modInterval[i] &
                     tdat$loc==yrloc[i,'loc'])
-        tdat[trows, tnames]
+
+        if (form %in% c('gdd','gddsimple')) {
+            uniIDs <- seq(1, length(trows), by=24)
+            tdat[trows[uniIDs], tnames]
+        } else {
+            tdat[trows, tnames]
+        }
+
     })
 
 
@@ -157,7 +164,14 @@ TTTsum <- function(pars, yrs, tdat, form, startDate, thresh, varying, mclass) {
     templist <- lapply(1:nobs, function(i) {
         trows <- which(tdat$dt %within% modInterval[i] &
                            tdat$loc==yrloc[i,'loc'])
-        tdat[trows, tnames]
+
+        if (form %in% c('gdd','gddsimple')) {
+            uniIDs <- seq(1, length(trows), by=24)
+            tdat[trows[uniIDs], tnames]
+        } else {
+            tdat[trows, tnames]
+        }
+
     })
 
     if (form %in% c('utah','utah_original','chillPortions')) {
