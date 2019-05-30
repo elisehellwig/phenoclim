@@ -4,13 +4,13 @@
 \alias{dualsum}
 \title{Calculates chill and heat sums for the dual model}
 \usage{
-dualsum(pars, yrs, tdat, forms, start, thresholds, varying, mclass,
+dualsum(pars, yrloc, tdat, forms, start, thresholds, varying, mclass,
   startingevent = NA)
 }
 \arguments{
 \item{pars}{Cardinal temperatures}
 
-\item{yrs}{the years we have phenology data for.}
+\item{yrloc}{data.frame, the year/locations we have phenology data for.}
 
 \item{tdat}{list containing the temperature information}
 

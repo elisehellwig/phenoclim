@@ -4,13 +4,13 @@
 \alias{thermalsum}
 \title{Calculates thermal time sums}
 \usage{
-thermalsum(ctemps, yrs, tdat, modtype, form, start, thresh, varying,
+thermalsum(ctemps, yrloc, tdat, modtype, form, start, thresh, varying,
   mclass, startingevent = NA)
 }
 \arguments{
 \item{ctemps}{Cardinal temperatures}
 
-\item{yrs}{numeric, the years we have phenology data for.}
+\item{yrloc}{data.frame, the year/locations we have phenology data for.}
 
 \item{tdat}{list containing the temperature information}
 

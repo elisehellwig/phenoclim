@@ -9,8 +9,6 @@ TTTsum(pars, yrs, tdat, form, startDate, thresh, varying, mclass)
 \arguments{
 \item{pars}{Cardinal temperatures}
 
-\item{yrs}{the years we have phenology data for.}
-
 \item{tdat}{list containing the temperature information}
 
 \item{form}{the functional form of the thermal time accumulation}
@@ -27,6 +25,8 @@ pars vary from year to year.}
 \item{mclass}{character, class of model to be estimating, options are
 'PlantModel' or 'FlowerModel'. If you have negative day values, you
 probably want flower model.}
+
+\item{yrloc}{data.frame, the year/locations we have phenology data for.}
 }
 \value{
 The thermal sums for a given series of years.

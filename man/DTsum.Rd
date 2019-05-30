@@ -4,14 +4,14 @@
 \alias{DTsum}
 \title{Calculates thermal time sums for DT model}
 \usage{
-DTsum(ctemps, yrs, tdat, form, startDate, threshDate, varying, mclass)
+DTsum(ctemps, yrloc, tdat, form, startDate, threshDate, varying, mclass)
 }
 \arguments{
 \item{ctemps}{Cardinal temperatures}
 
-\item{yrs}{the years we have phenology data for.}
+\item{yrloc}{data.frame, the year/locations we have phenology data for.}
 
-\item{tdat}{list containing the temperature information}
+\item{tdat}{data.frame containing the temperature information}
 
 \item{form}{the functional form of the thermal time accumulation}
 
