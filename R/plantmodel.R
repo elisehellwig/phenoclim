@@ -249,7 +249,7 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
         predictors <- as.data.frame(sapply(1:nrow(ij), function(i) {
             s <- ij[i, 'stage']
             fm <- ij[i, 'pl']
-            thermalsum(ctemps=newct[[fm]][[s]], yrs=d$year,
+            thermalsum(ctemps=newct[[fm]][[s]], yrloc=d[,c('year','loc')],
                        tdat=temps, modtype=modeltype(parlist[[fm]]),
                        form=ij[i,'form'], start=newstart[s, fm],
                        thresh=newthresh[s, fm], mclass='PlantModel',
