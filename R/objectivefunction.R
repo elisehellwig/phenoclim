@@ -34,13 +34,13 @@ objective <- function(parlist, phenology, temp, stage, CT, Start,
     if (mclass=='FlowerModel') {
         PL <- parlist[[listindex]]
         events <- paste0('event', 0:1)
-        fnames <- c('year', events)
+        fnames <- c('year', 'loc', events)
 
     } else if (mclass=='PlantModel') {
         PL <- parlist[[listindex]]
 
         events <- paste0('event', stage:(stage+1))
-        fnames <- c('year', events, paste0('length', stage))
+        fnames <- c('year', 'loc', events, paste0('length', stage))
 
     } else {
         stop('Model class must be either FlowerModel or PlantModel.')

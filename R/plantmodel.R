@@ -112,8 +112,8 @@ plantmodel <- function(phenology, temps, parlist, lbounds, ubounds,
     })
 
 
-    #phenology data with only the year and event data.
-    pdat <- phenology[, c('year', events)]
+    #phenology data with only the year location and event data.
+    pdat <- phenology[, c('year', 'loc', events)]
 
     #data frame with the length of the stages
     ldat <- as.data.frame(sapply(1:stages, function(i) {
