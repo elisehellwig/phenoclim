@@ -9,8 +9,8 @@ NULL
 #' a series of years.
 #'
 #' @param ctemps Cardinal temperatures
-#' @param yrs the years we have phenology data for.
-#' @param tdat list containing the temperature information
+#' @param yrloc data.frame, the year/locations we have phenology data for.
+#' @param tdat data.frame containing the temperature information
 #' @param form the functional form of the thermal time accumulation
 #' @param startDate POSIXct, the date to start accumulating time or thermal
 #'     time towards the model threshold.
@@ -22,9 +22,10 @@ NULL
 #'     'PlantModel' or 'FlowerModel'. If you have negative day values, you
 #'     probably want flower model.
 #' @return The thermal sums for a given series of years.
-DTsum <- function(ctemps, yrs, tdat, form, startDate, threshDate, varying,
+DTsum <- function(ctemps, yrloc, tdat, form, startDate, threshDate, varying,
                   mclass) {
 
+    nobs <- nrow(yrloc)
 
     #print('DTsum')
     #possible forms
@@ -46,9 +47,9 @@ DTsum <- function(ctemps, yrs, tdat, form, startDate, threshDate, varying,
     #print(modInterval)
 
     if (length(modInterval)==1) {
-        modInterval <- rep(modInterval, length(yrs))
+        modInterval <- rep(modInterval, nobs)
 
-    } else if (!(length(modInterval)==length(yrs))) {
+    } else if (!(length(modInterval)==nobs)) {
         stop('modInterval must be either length one or have a length equal to the number of years in the data.')
     }
 
@@ -63,25 +64,24 @@ DTsum <- function(ctemps, yrs, tdat, form, startDate, threshDate, varying,
     }
 
 
-    ids <- lapply(1:length(yrs), function(i) {
-
-    })
 
     ### This is the issue######
-    templist <- lapply(1:length(yrs), function(i) {
-        tdat[which(tdat$dt %within% modInterval[i]), tnames]
+    templist <- lapply(1:nobs, function(i) {
+        trows <- which(tdat$dt %within% modInterval[i] &
+                    tdat$loc==yrloc[i,'loc'])
+        tdat[trows, tnames]
     })
 
 
     if (form %in% c('utah', 'utahalt','chillPortions')) {
-        tsums <- sapply(1:length(yrs), function(i) {
+        tsums <- sapply(1:nobs, function(i) {
             #create list of parameters and data to send to do.call+form
             plist <- parslist(templist[[i]], NA, sum=TRUE)
             do.call(form, plist) #calculate the thermal time
         })
 
     } else {
-        tsums <- sapply(1:length(yrs), function(i) {
+        tsums <- sapply(1:nobs, function(i) {
             #create list of parameters and data to send to do.call+form
             plist <- parslist(templist[[i]], unlist(ctemps), sum=TRUE)
             do.call(form, plist) #calculate the thermal time
@@ -101,7 +101,7 @@ DTsum <- function(ctemps, yrs, tdat, form, startDate, threshDate, varying,
 #' flowering for a series of years.
 #'
 #' @param pars Cardinal temperatures
-#' @param yrs the years we have phenology data for.
+#' @param yrloc data.frame, the year/locations we have phenology data for.
 #' @param tdat list containing the temperature information
 #' @param form the functional form of the thermal time accumulation
 #' @param startDate POSIXct, the date to start accumulating time or thermal
@@ -120,6 +120,9 @@ TTTsum <- function(pars, yrs, tdat, form, startDate, thresh, varying, mclass) {
 
     #print('TTTsum')
 
+    nobs <- nrow(yrloc)
+
+
     if (mclass=='FlowerModel') {
         endDate <- dayToDate(yrs+1, 184, 'FlowerModel')
 
@@ -130,7 +133,7 @@ TTTsum <- function(pars, yrs, tdat, form, startDate, thresh, varying, mclass) {
     modInterval <- interval(startDate, endDate)
 
     if (length(modInterval)==1) {
-        modInterval <- rep(modInterval, length(yrs))
+        modInterval <- rep(modInterval, nobs)
 
     }
 
@@ -151,9 +154,10 @@ TTTsum <- function(pars, yrs, tdat, form, startDate, thresh, varying, mclass) {
     }
 
 
-    templist <- lapply(1:length(yrs), function(i) {
-        td <- tdat[which(tdat$dt %within% modInterval[i]), ]
-        td[order(td$dt), tnames]
+    templist <- lapply(1:nobs, function(i) {
+        trows <- which(tdat$dt %within% modInterval[i] &
+                           tdat$loc==yrloc[i,'loc'])
+        tdat[trows, tnames]
     })
 
     if (form %in% c('utah','utah_original','chillPortions')) {
@@ -173,7 +177,7 @@ TTTsum <- function(pars, yrs, tdat, form, startDate, thresh, varying, mclass) {
 #' Calculates thermal time sums for either the TTT or DT time model
 #'
 #' @param ctemps Cardinal temperatures
-#' @param yrs numeric, the years we have phenology data for.
+#' @param yrloc data.frame, the year/locations we have phenology data for.
 #' @param tdat list containing the temperature information
 #' @param modtype character, specifies what type of model is being run. Can be
 #'     either DT (Day Threshold) or TTT (Thermal Time Threshold).
@@ -189,7 +193,7 @@ TTTsum <- function(pars, yrs, tdat, form, startDate, thresh, varying, mclass) {
 #' @param startingevent numeric, days first event happened each year.
 #' @return The thermal sums for a given series of years.
 #' @export
-thermalsum <- function(ctemps, yrs, tdat, modtype, form, start, thresh,
+thermalsum <- function(ctemps, yrloc, tdat, modtype, form, start, thresh,
                        varying, mclass, startingevent=NA) {
 
    # print('thermalsum')
@@ -221,10 +225,10 @@ thermalsum <- function(ctemps, yrs, tdat, modtype, form, start, thresh,
     #print(thresh)
 
     if (modtype=='DT') {
-        ths <- DTsum(ctemps, yrs, tdat, form, start, thresh, varying, mclass)
+        ths <- DTsum(ctemps, yrloc, tdat, form, start, thresh, varying, mclass)
 
     } else if (modtype=='TTT') {
-        ths <- TTTsum(ctemps, yrs, tdat, form, start, thresh, varying, mclass)
+        ths <- TTTsum(ctemps, yrloc, tdat, form, start, thresh, varying, mclass)
         #print(ths)
 
     } else {
