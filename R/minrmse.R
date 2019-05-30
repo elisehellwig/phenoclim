@@ -229,6 +229,7 @@ minrmseTTT <- function(pars, fdat, tdat, form, start, thresh, stage,
     #print(checkpars(pars, start, fdat[, responsename]))
     if (!checkpars(pars, start, endDate, modclass, form=form)) { #are cardinal
                                                 #temperatures in ascending order
+       #print('first inf')
        rmsd <- Inf #if not, rmse is infinite
 
 
@@ -241,14 +242,16 @@ minrmseTTT <- function(pars, fdat, tdat, form, start, thresh, stage,
 
         if (any(is.infinite(daymet))) {
             rmsd <- Inf #if any year, the threshold is not met, rmse is inf
+            #print('second inf')
 
 
         } else {
 
             #is the day met before the end of the stage in questions?
-            stagei <- ifelse(modclass=='Plantmodel', stage+1, stage)
+            stagei <- ifelse(modclass=='PlantModel', stage+1, stage)
             positive <- ifelse(daymet > eventi(fdat, stagei),
                                FALSE, TRUE)
+
 
             if (all(positive)) {  #if so create model to use day met to predict
                                     #stage length
@@ -258,6 +261,7 @@ minrmseTTT <- function(pars, fdat, tdat, form, start, thresh, stage,
 
             } else {
                 rmsd <- Inf #if not, rmse is infinite
+                #print('third inf')
             }
 
         }
