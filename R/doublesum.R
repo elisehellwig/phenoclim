@@ -7,7 +7,7 @@ NULL
 #'     of years.
 #'
 #' @param pars Cardinal temperatures
-#' @param yrs the years we have phenology data for.
+#' @param yrloc data.frame, the year/locations we have phenology data for.
 #' @param tdat list containing the temperature information
 #' @param forms the functional forms of the thermal time accumulation
 #' @param start POSIXct or numeric, the day or date to start accumulating time
@@ -22,14 +22,15 @@ NULL
 #' @param startingevent numeric, days first event happened each year.
 #' @return The thermal sums for a given series of years.
 #' @export
-dualsum <- function(pars, yrs, tdat, forms, start, thresholds, varying,
+dualsum <- function(pars, yrloc, tdat, forms, start, thresholds, varying,
                       mclass, startingevent=NA) {
 
+    yrs <- yrloc[,'year']
     #print('dualsum')
     startDate <- dayToDate(yrs, start, 'FlowerModel')
     #print(startDate)
 
-    chilldays <- thermalsum(pars[[1]], yrs, tdat, 'TTT', forms[1], start,
+    chilldays <- thermalsum(pars[[1]], yrloc, tdat, 'TTT', forms[1], start,
                             thresholds[1], NA, 'FlowerModel', startingevent)
 
     #print(chilldays)
@@ -40,8 +41,9 @@ dualsum <- function(pars, yrs, tdat, forms, start, thresholds, varying,
     #heatStartDate <- dayToDate(yrs, endchill+1, 'FlowerModel')
     #print(heatStartDate)
 
-    heatdays <- thermalsum(pars[[2]], yrs, tdat, 'TTT', forms[2], heatStartDate,
-                           thresholds[2], NA, 'FlowerModel', startingevent)
+    heatdays <- thermalsum(pars[[2]], yrloc, tdat, 'TTT', forms[2],
+                           heatStartDate, thresholds[2], NA, 'FlowerModel',
+                           startingevent)
 
    # print(heatdays)
 
