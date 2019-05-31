@@ -217,6 +217,8 @@ thermalsum <- function(ctemps, yrloc, tdat, modtype, form, start, thresh,
     #print(start)
     #print(thresh)
 
+    yrs <- yrloc[,'year']
+
     if (is.numeric(start) | (!isDateTime(thresh) & modtype=='DT')) {
 
         if (is.na(startingevent[1])) {
