@@ -4,7 +4,7 @@
 The goal of phenoclim is to assist you in optimizing and fitting a variety of phenological models. In particular, this package implements models from (citation). The package also comes with a small generated phenological data set to use for examples.
 
 ## Important Note
-You can only have 1 observation per year. I will fix this eventually, but that is how it is as of now.
+You can only have 1 observation per year/location. 
 
 ## Parameters for Modeling Flowering
 
@@ -47,10 +47,48 @@ In order to specify the type of model you would like to run you will need to spe
     * threshold = Y
 
 
-## Parameters for Modeling Stage Length
+## Parameters for Modeling Stage/Season Length
+
+These types of models are generally used to model the length of fruit development in fruit and nut trees (DT models) and lengths of developmental stages for annuals (TTT).
     
+### Time (Day) Threshold Model (modeltype=DT)
 
+1. Start counting thermal time at bloom/leaf-out. Count thermal time for X days. Use the thermal time accumulated to predict season length. Parameters:
+    * variablepars = c('start', 'threshold')
+    * startday = 0
+    * threshold = X
+2.  Start counting thermal time at bloom/leaf-out. Count thermal time until X day. Use the thermal time accumulated to predict season length. Parameters:
+    * variablepars = c('start')
+    * startday = 0
+    * threshold = X
+3.  Start counting thermal time X days after bloom/leaf-out. Count thermal time for Y day. Use the thermal time accumulated to predict season length. Parameters:
+    * variablepars = c('start', 'threshold')
+    * startday = X
+    * threshold = Y
+4.  Start counting thermal time X days after bloom/leaf-out. Count thermal time until Y day of the year. Use the thermal time accumulated to predict season length. Parameters:
+    * variablepars = c('start')
+    * startday = X
+    * threshold = Y
+5.  Start counting thermal time X day of the year. Count thermal time until Y day of the year. Use the thermal time accumulated to predict season length. Parameters:
+    * variablepars = NA
+    * startday = X
+    * threshold = Y
 
+### Thermal Time Threshold Model (modeltype=TTT)
+Note: If you want the day the model hits the thermal time threshold to be the predicted end of stage/season length, set simplified=TRUE.
+
+1. Start counting days at bloom/leaf-out. Count days until you have accumulated X amount of thermal time. Use the days counted to predict flowering. Parameters:
+    * variablepars = c('start')
+    * start = 0
+    * threshold = X
+2. Start counting days X days after bloom/leaf-out. Count days until you have accumulated Y amount of thermal time. Use the days counted to predict flowering. Parameters:
+    * variablepars = c('start')
+    * start = X
+    * threshold = Y
+3. Start counting days on X day of the year. Count days until you have accumulated Y amount of thermal time. Use the days counted to predict flowering. Parameters:
+    * variablepars = NA
+    * startday = X
+    * threshold = Y
 
 
 ## Example
