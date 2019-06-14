@@ -27,6 +27,8 @@ DTsum <- function(ctemps, yrloc, tdat, form, startDate, threshDate, varying,
 
     nobs <- nrow(yrloc)
 
+    #print(yrloc)
+
     #print('DTsum')
     #possible forms
    posforms <-  c('anderson','linear','flat','triangle','asymcur','gdd',
@@ -72,6 +74,7 @@ DTsum <- function(ctemps, yrloc, tdat, form, startDate, threshDate, varying,
                     tdat$loc==yrloc[i,'loc'])
 
         if (form %in% c('gdd','gddsimple')) {
+           # print(length(trows))
             uniIDs <- seq(1, length(trows), by=24)
             tdat[trows[uniIDs], tnames]
         } else {
