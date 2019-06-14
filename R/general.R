@@ -24,6 +24,17 @@ is.leapyear <- function(year){
 #'
 #' @param x vector, the object you want to test
 #' @return logical, is the object one of the date time classes specified above.
+#'
+#' @examples
+#' dt <- c("1997-01-01 02:00:00", "1997-02-10 08:00:00")
+#' isDateTime(dt)
+#'
+#' dt <- as.POSIXct(dt, format="%Y-%m-%d %H:%M:%OS")
+#' isDateTime(dt)
+#'
+#' days(1)
+#' isDateTime(days(1))
+#'
 #' @export
 isDateTime <- function(x) {
 
@@ -54,6 +65,18 @@ length0 <- function(x) {
 #' @param dat the phenology data frame
 #' @param i the number of the phenology event to be extracted
 #' @return A vector with the julian days of the ith phenological event
+#' @examples
+#'
+#' set.seed(193)
+#' p <- data.frame(year=1990:2000,
+#'                 event1=sample(30:60, 11),
+#'                 event2=sample(80:110, 11),
+#'                 event3=sample(120:150, 11),
+#'                 event4=sample(160:190, 11))
+#'
+#' (e1 <- eventi(p, 1))
+#' (e3 <- eventi(p, 3))
+#'
 #' @export
 eventi <- function(dat, i) {
 
