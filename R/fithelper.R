@@ -59,9 +59,9 @@ dayToDate <- function(years, days, modclass, varying, hours=NA,
 
     }
 
-
     posix <- as.POSIXct(dateTimeString, "%Y-%m-%d %H:%M:%OS",
                         tz=timezone)
+
 
     return(posix)
 
@@ -88,6 +88,7 @@ dayToDate <- function(years, days, modclass, varying, hours=NA,
 #'     vector based on the type of model being run. If the day of the threshold
 #'     varies by year it is a 'Period' vector. If it does not, it is a POSIXct
 #'     date vector.
+#' @export
 formatParameters <- function(years, eventday, startday, threshold, modtype,
                              modclass, varying) {
 
